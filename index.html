@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=1920" />
+    <title>产业招商平台</title>
+    <script>
+      (function () {
+        var html = document.documentElement;
+        var setRootFontSize = function () {
+          var w = window.innerWidth;
+          if (w > 1920) w = 1920;
+          html.style.fontSize = (w / 19.2) + 'px';
+        };
+        setRootFontSize();
+        window.addEventListener('resize', setRootFontSize);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

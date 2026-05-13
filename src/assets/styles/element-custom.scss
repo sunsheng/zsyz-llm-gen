@@ -1,0 +1,69 @@
+// ============================================
+// Element Plus 主题覆盖
+// ============================================
+
+:root {
+  // 主色
+  --el-color-primary: #{$color-primary};
+  --el-color-primary-light-3: #{$color-primary-light-3};
+  --el-color-primary-light-5: #{$color-primary-light-5};
+  --el-color-primary-light-7: #{$color-primary-light-7};
+  --el-color-primary-light-8: #D9ECFF;
+  --el-color-primary-light-9: #{$color-primary-light-9};
+  --el-color-primary-dark-2: #{$color-primary-dark};
+
+  // 圆角
+  --el-border-radius-base: #{$radius-base};
+  --el-border-radius-small: #{$radius-sm};
+  --el-border-radius-round: 20px;
+
+  // 字体
+  --el-font-family: #{$font-family};
+  --el-font-size-base: #{$font-size-base};
+
+  // 阴影
+  --el-box-shadow-light: #{$shadow-card};
+  --el-box-shadow: #{$shadow-dropdown};
+
+  // 表格
+  --el-table-header-bg-color: #FAFAFA;
+  --el-table-row-hover-bg-color: #{$bg-hover};
+  --el-table-border-color: #{$border-color-lighter};
+
+  // 边框
+  --el-border-color: #{$border-color};
+  --el-border-color-light: #{$border-color-light};
+  --el-border-color-lighter: #{$border-color-lighter};
+}
+
+// 表格全局默认样式覆盖
+.el-table {
+  --el-table-header-text-color: #{$text-primary};
+  --el-table-header-font-weight: #{$font-weight-semibold};
+}
+
+.el-button--primary {
+  --el-button-bg-color: #{$color-primary};
+  --el-button-border-color: #{$color-primary};
+  &:hover,
+  &:focus {
+    --el-button-hover-bg-color: #{$color-primary-dark};
+    --el-button-hover-border-color: #{$color-primary-dark};
+  }
+}
+
+// Dialog 样式微调
+.el-dialog {
+  border-radius: #{$radius-lg};
+}
+
+// Menu 激活态
+.el-menu-item.is-active {
+  color: #{$color-primary} !important;
+}
+
+// NProgress (通过 JS 配置颜色，这里仅做备用)
+#nprogress .bar {
+  background: #{$color-primary} !important;
+  height: 3px !important;
+}

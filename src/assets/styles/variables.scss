@@ -1,0 +1,100 @@
+// ============================================
+// 产业招商平台 - 设计令牌变量 (Design Tokens)
+// ============================================
+
+// --- 品牌色 ---
+$color-primary: #1889E8;
+$color-primary-dark: #0970F0;
+$color-primary-light-3: #79BBFF;
+$color-primary-light-5: #A0CFFF;
+$color-primary-light-7: #C6E2FF;
+$color-primary-light-9: #ECF5FF;
+
+// --- 功能色 ---
+$color-success: #67C23A;
+$color-warning: #E6A23C;
+$color-danger: #F56C6C;
+$color-info: #909399;
+
+// --- 背景色 ---
+$bg-page: #F6F7FB;
+$bg-card: #FFFFFF;
+$bg-hover: #F5F7FA;
+$bg-mask: rgba(0, 0, 0, 0.5);
+
+// --- 文字色 ---
+$text-primary: #303133;
+$text-regular: #606266;
+$text-secondary: #909399;
+$text-placeholder: #C0C4CC;
+
+// --- 边框色 ---
+$border-color: #DCDFE6;
+$border-color-light: #E4E7ED;
+$border-color-lighter: #EBEEF5;
+
+// --- 阴影 ---
+$shadow-card: 0 2px 12px 0 rgba(0, 0, 0, 0.06);
+$shadow-dropdown: 0 4px 16px 0 rgba(0, 0, 0, 0.08);
+$shadow-dialog: 0 8px 24px 0 rgba(0, 0, 0, 0.12);
+
+// --- 圆角 ---
+$radius-base: 4px;
+$radius-sm: 2px;
+$radius-lg: 8px;
+$radius-round: 50%;
+
+// --- 字体 ---
+$font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+$font-size-xs: 12px;
+$font-size-sm: 13px;
+$font-size-base: 14px;
+$font-size-md: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 20px;
+$font-size-xxl: 24px;
+$font-size-title: 28px;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// --- 间距 ---
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-base: 16px;
+$spacing-lg: 20px;
+$spacing-xl: 24px;
+$spacing-xxl: 32px;
+
+// --- 布局尺寸 ---
+$header-height: 56px;
+$sidebar-width: 220px;
+$sidebar-collapsed-width: 64px;
+
+// --- 图表配色 ---
+$chart-colors: (
+  '#1889E8',
+  '#36CBCB',
+  '#4ECB73',
+  '#FBD437',
+  '#F2637B',
+  '#975FE5'
+);
+
+// --- 过渡 ---
+$transition-fast: 150ms ease-out;
+$transition-base: 300ms ease-out;
+$transition-slow: 500ms ease-out;
+$transition-sidebar: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+// --- 企业标签颜色 ---
+$tag-industry-bg: #ECF5FF;
+$tag-industry-color: #1889E8;
+$tag-scale-bg: #F0F9EB;
+$tag-scale-color: #67C23A;
+$tag-status-bg: #FDF6EC;
+$tag-status-color: #E6A23C;
+$tag-qualify-bg: #FEF0F0;
+$tag-qualify-color: #F56C6C;
