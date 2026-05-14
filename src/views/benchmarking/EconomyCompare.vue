@@ -8,7 +8,7 @@
 
     <div class="filter-section">
       <SearchFilterBar
-        searchPlaceholder="搜索城市名称"
+        search-placeholder="搜索城市名称"
         :filters="filterFields"
         @search="handleSearch"
         @filter="handleFilter"
@@ -42,7 +42,9 @@
         <el-table-column prop="gdp" label="GDP(亿元)" width="120" sortable />
         <el-table-column prop="growth" label="GDP增速(%)" width="120" sortable>
           <template #default="{ row }">
-            <span :style="{ color: row.growth >= 5 ? '#67C23A' : '#F56C6C' }">{{ row.growth }}%</span>
+            <span :style="{ color: row.growth >= 5 ? '#67C23A' : '#F56C6C' }"
+              >{{ row.growth }}%</span
+            >
           </template>
         </el-table-column>
         <el-table-column prop="perCapita" label="人均GDP(万元)" width="140" sortable />
@@ -64,11 +66,16 @@ import BaseChart from '@/components/charts/BaseChart.vue'
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
 const filterFields = [
-  { key: 'year', label: '年份', type: 'select' as const, options: [
-    { label: '2024年', value: '2024' },
-    { label: '2023年', value: '2023' },
-    { label: '2022年', value: '2022' }
-  ]}
+  {
+    key: 'year',
+    label: '年份',
+    type: 'select' as const,
+    options: [
+      { label: '2024年', value: '2024' },
+      { label: '2023年', value: '2023' },
+      { label: '2022年', value: '2022' },
+    ],
+  },
 ]
 
 const tableData = ref<any[]>([])
@@ -79,7 +86,7 @@ const structureOption = ref({})
 
 onMounted(() => {
   const cities = ['杭州市', '宁波市', '苏州市', '南京市', '成都市', '武汉市', '长沙市', '合肥市']
-  tableData.value = cities.map(city => ({
+  tableData.value = cities.map((city) => ({
     city,
     gdp: Math.floor(Math.random() * 8000 + 6000),
     growth: +(Math.random() * 6 + 3).toFixed(1),
@@ -87,7 +94,7 @@ onMounted(() => {
     primary: +(Math.random() * 3 + 2).toFixed(1),
     secondary: +(Math.random() * 15 + 35).toFixed(1),
     tertiary: +(Math.random() * 15 + 50).toFixed(1),
-    fiscal: Math.floor(Math.random() * 1500 + 500)
+    fiscal: Math.floor(Math.random() * 1500 + 500),
   }))
 
   gdpBarOption.value = {
@@ -96,7 +103,7 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: cities },
     yAxis: { type: 'value' },
-    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map(d => d.gdp) }]
+    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map((d) => d.gdp) }],
   }
 
   growthBarOption.value = {
@@ -105,7 +112,7 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: cities },
     yAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
-    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map(d => d.growth) }]
+    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map((d) => d.growth) }],
   }
 
   perCapitaOption.value = {
@@ -114,7 +121,7 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: cities },
     yAxis: { type: 'value' },
-    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map(d => d.perCapita) }]
+    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map((d) => d.perCapita) }],
   }
 
   structureOption.value = {
@@ -125,10 +132,10 @@ onMounted(() => {
     xAxis: { type: 'category', data: cities },
     yAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
     series: [
-      { name: '一产', type: 'bar', stack: 'total', data: tableData.value.map(d => d.primary) },
-      { name: '二产', type: 'bar', stack: 'total', data: tableData.value.map(d => d.secondary) },
-      { name: '三产', type: 'bar', stack: 'total', data: tableData.value.map(d => d.tertiary) }
-    ]
+      { name: '一产', type: 'bar', stack: 'total', data: tableData.value.map((d) => d.primary) },
+      { name: '二产', type: 'bar', stack: 'total', data: tableData.value.map((d) => d.secondary) },
+      { name: '三产', type: 'bar', stack: 'total', data: tableData.value.map((d) => d.tertiary) },
+    ],
   }
 })
 
@@ -151,21 +158,21 @@ function handleReset() {}
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

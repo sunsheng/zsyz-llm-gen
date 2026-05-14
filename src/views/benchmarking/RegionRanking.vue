@@ -8,7 +8,7 @@
 
     <div class="filter-section">
       <SearchFilterBar
-        searchPlaceholder="搜索城市名称"
+        search-placeholder="搜索城市名称"
         :filters="filterFields"
         @search="handleSearch"
         @filter="handleFilter"
@@ -32,7 +32,19 @@
       <el-table :data="filteredData" stripe border style="width: 100%">
         <el-table-column prop="rank" label="排名" width="80">
           <template #default="{ row }">
-            <span :style="{ fontWeight: row.rank <= 3 ? 700 : 400, color: row.rank === 1 ? '#FBD437' : row.rank === 2 ? '#C0C4CC' : row.rank === 3 ? '#CD853F' : '' }">
+            <span
+              :style="{
+                fontWeight: row.rank <= 3 ? 700 : 400,
+                color:
+                  row.rank === 1
+                    ? '#FBD437'
+                    : row.rank === 2
+                      ? '#C0C4CC'
+                      : row.rank === 3
+                        ? '#CD853F'
+                        : '',
+              }"
+            >
               {{ row.rank }}
             </span>
           </template>
@@ -45,7 +57,7 @@
         <el-table-column prop="talentScore" label="人才密度" width="100" sortable />
         <el-table-column prop="totalScore" label="综合评分" width="100" sortable>
           <template #default="{ row }">
-            <span style="font-weight: 700; color: #1889E8">{{ row.totalScore }}</span>
+            <span style="font-weight: 700; color: #1889e8">{{ row.totalScore }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -64,12 +76,17 @@ import PaginationBar from '@/components/common/PaginationBar.vue'
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
 const filterFields = [
-  { key: 'dimension', label: '排序维度', type: 'select' as const, options: [
-    { label: '综合评分', value: 'total' },
-    { label: '经济实力', value: 'economy' },
-    { label: '产业水平', value: 'industry' },
-    { label: '创新能力', value: 'innovation' }
-  ]}
+  {
+    key: 'dimension',
+    label: '排序维度',
+    type: 'select' as const,
+    options: [
+      { label: '综合评分', value: 'total' },
+      { label: '经济实力', value: 'economy' },
+      { label: '产业水平', value: 'industry' },
+      { label: '创新能力', value: 'innovation' },
+    ],
+  },
 ]
 
 const allData = ref<any[]>([])
@@ -88,18 +105,37 @@ const filteredData = computed(() => {
 })
 
 onMounted(() => {
-  const cities = ['杭州市', '宁波市', '苏州市', '南京市', '成都市', '武汉市', '长沙市', '合肥市', '青岛市', '郑州市', '西安市', '重庆市']
-  allData.value = cities.map(city => ({
-    city,
-    economyScore: Math.floor(Math.random() * 20 + 70),
-    industryScore: Math.floor(Math.random() * 25 + 65),
-    innovationScore: Math.floor(Math.random() * 20 + 68),
-    investScore: Math.floor(Math.random() * 20 + 66),
-    talentScore: Math.floor(Math.random() * 25 + 60)
-  })).map(d => ({
-    ...d,
-    totalScore: Math.floor((d.economyScore + d.industryScore + d.innovationScore + d.investScore + d.talentScore) / 5)
-  })).sort((a, b) => b.totalScore - a.totalScore).map((item, i) => ({ ...item, rank: i + 1 }))
+  const cities = [
+    '杭州市',
+    '宁波市',
+    '苏州市',
+    '南京市',
+    '成都市',
+    '武汉市',
+    '长沙市',
+    '合肥市',
+    '青岛市',
+    '郑州市',
+    '西安市',
+    '重庆市',
+  ]
+  allData.value = cities
+    .map((city) => ({
+      city,
+      economyScore: Math.floor(Math.random() * 20 + 70),
+      industryScore: Math.floor(Math.random() * 25 + 65),
+      innovationScore: Math.floor(Math.random() * 20 + 68),
+      investScore: Math.floor(Math.random() * 20 + 66),
+      talentScore: Math.floor(Math.random() * 25 + 60),
+    }))
+    .map((d) => ({
+      ...d,
+      totalScore: Math.floor(
+        (d.economyScore + d.industryScore + d.innovationScore + d.investScore + d.talentScore) / 5,
+      ),
+    }))
+    .sort((a, b) => b.totalScore - a.totalScore)
+    .map((item, i) => ({ ...item, rank: i + 1 }))
   total.value = allData.value.length
 
   const top8 = allData.value.slice(0, 8)
@@ -108,40 +144,48 @@ onMounted(() => {
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'value', max: 100 },
-    yAxis: { type: 'category', data: top8.map(d => d.city).reverse() },
-    series: [{ type: 'bar', barWidth: '50%', data: top8.map(d => d.totalScore).reverse() }]
+    yAxis: { type: 'category', data: top8.map((d) => d.city).reverse() },
+    series: [{ type: 'bar', barWidth: '50%', data: top8.map((d) => d.totalScore).reverse() }],
   }
 
   radarOption.value = {
     color: chartColors,
     tooltip: {},
-    legend: { data: top8.slice(0, 3).map(d => d.city) },
+    legend: { data: top8.slice(0, 3).map((d) => d.city) },
     radar: {
       indicator: [
         { name: '经济实力', max: 100 },
         { name: '产业水平', max: 100 },
         { name: '创新能力', max: 100 },
         { name: '招商环境', max: 100 },
-        { name: '人才密度', max: 100 }
+        { name: '人才密度', max: 100 },
       ],
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: top8.slice(0, 3).map(d => ({
-        name: d.city,
-        value: [d.economyScore, d.industryScore, d.innovationScore, d.investScore, d.talentScore],
-        areaStyle: { opacity: 0.2 }
-      }))
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: top8.slice(0, 3).map((d) => ({
+          name: d.city,
+          value: [d.economyScore, d.industryScore, d.innovationScore, d.investScore, d.talentScore],
+          areaStyle: { opacity: 0.2 },
+        })),
+      },
+    ],
   }
 })
 
-function handleSearch(kw: string) { keyword.value = kw }
+function handleSearch(kw: string) {
+  keyword.value = kw
+}
 function handleFilter(_filters: Record<string, unknown>) {}
-function handleReset() { keyword.value = '' }
-function handlePageChange(page: number) { currentPage.value = page }
+function handleReset() {
+  keyword.value = ''
+}
+function handlePageChange(page: number) {
+  currentPage.value = page
+}
 </script>
 
 <style lang="scss" scoped>
@@ -158,21 +202,21 @@ function handlePageChange(page: number) { currentPage.value = page }
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

@@ -24,27 +24,26 @@ const appStore = useAppStore()
 
 <style lang="scss" scoped>
 .main-layout {
-  width: 100%;
-  height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100vh;
   overflow: hidden;
 }
 
 .main-layout__body {
-  flex: 1;
   display: flex;
-  overflow: hidden;
+  flex: 1;
   padding-top: $header-height;
+  overflow: hidden;
 }
 
 .main-layout__content {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  margin-left: $sidebar-width;
-  transition: $transition-sidebar;
   min-width: 0;
+  margin-left: $sidebar-width;
+  overflow: hidden auto;
+  transition: $transition-sidebar;
 
   &.is-collapsed {
     margin-left: $sidebar-collapsed-width;
@@ -53,7 +52,9 @@ const appStore = useAppStore()
 
 .fade-slide-enter-active,
 .fade-slide-leave-active {
-  transition: opacity 300ms ease-out, transform 300ms ease-out;
+  transition:
+    opacity 300ms ease-out,
+    transform 300ms ease-out;
 }
 
 .fade-slide-enter-from {

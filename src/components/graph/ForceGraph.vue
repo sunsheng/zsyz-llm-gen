@@ -1,5 +1,5 @@
 <template>
-  <div ref="containerRef" class="force-graph" />
+  <div ref="containerRef" class="force-graph"></div>
 </template>
 
 <script setup lang="ts">
@@ -7,17 +7,20 @@ import { ref, onMounted, watch } from 'vue'
 import type { GraphNodeData, GraphEdgeData } from '@/composables/useForceGraph'
 import type * as d3types from 'd3'
 
-const props = withDefaults(defineProps<{
-  nodes?: GraphNodeData[]
-  edges?: GraphEdgeData[]
-  width?: number
-  height?: number
-}>(), {
-  nodes: () => [],
-  edges: () => [],
-  width: 800,
-  height: 600
-})
+const props = withDefaults(
+  defineProps<{
+    nodes?: GraphNodeData[]
+    edges?: GraphEdgeData[]
+    width?: number
+    height?: number
+  }>(),
+  {
+    nodes: () => [],
+    edges: () => [],
+    width: 800,
+    height: 600,
+  },
+)
 
 const emit = defineEmits<{
   nodeClick: [node: GraphNodeData]
@@ -37,17 +40,21 @@ async function render() {
   const width = container.clientWidth || props.width
   const height = container.clientHeight || props.height
 
+  // Stop previous simulation
+  if (simulation) {
+    simulation.stop()
+    simulation = null
+  }
+
   d3.select(container).selectAll('svg').remove()
 
-  const svg = d3.select(container)
-    .append('svg')
-    .attr('width', width)
-    .attr('height', height)
+  const svg = d3.select(container).append('svg').attr('width', width).attr('height', height)
 
   svgSelection = svg
 
   // Zoom
-  const zoom = d3.zoom<SVGSVGElement, unknown>()
+  const zoom = d3
+    .zoom<SVGSVGElement, unknown>()
     .scaleExtent([0.3, 4])
     .on('zoom', (event) => {
       g.attr('transform', event.transform)
@@ -56,17 +63,23 @@ async function render() {
 
   const g = svg.append('g')
 
+  // Deep-copy edges so D3 forceLink mutation doesn't affect props
+  const edgesCopy = props.edges.map((e) => ({ ...e, source: e.source, target: e.target }))
+
   // Edges
-  const link = g.append('g')
+  const link = g
+    .append('g')
     .selectAll('line')
-    .data(props.edges)
+    .data(edgesCopy)
     .join('line')
     .attr('stroke', '#C0C4CC')
     .attr('stroke-opacity', 0.6)
     .attr('stroke-width', (d: GraphEdgeData) => 1 + (d.weight || 0.5) * 3)
 
   // Arrow markers
-  svg.append('defs').selectAll('marker')
+  svg
+    .append('defs')
+    .selectAll('marker')
     .data(['arrow'])
     .join('marker')
     .attr('id', 'arrow')
@@ -81,22 +94,23 @@ async function render() {
     .attr('fill', '#C0C4CC')
 
   const categoryColors: Record<string, string> = {
-    '上游': '#36CBCB',
-    '中游': '#1889E8',
-    '下游': '#4ECB73',
-    '龙头企业': '#F2637B',
-    '核心企业': '#1889E8',
-    '配套企业': '#4ECB73',
-    '投资机构': '#975FE5',
-    '人工智能': '#1889E8',
-    '新能源': '#36CBCB',
-    '生物医药': '#4ECB73',
-    '先进制造': '#FBD437',
-    '新材料': '#975FE5'
+    上游: '#36CBCB',
+    中游: '#1889E8',
+    下游: '#4ECB73',
+    龙头企业: '#F2637B',
+    核心企业: '#1889E8',
+    配套企业: '#4ECB73',
+    投资机构: '#975FE5',
+    人工智能: '#1889E8',
+    新能源: '#36CBCB',
+    生物医药: '#4ECB73',
+    先进制造: '#FBD437',
+    新材料: '#975FE5',
   }
 
   // Nodes
-  const node = g.append('g')
+  const node = g
+    .append('g')
     .selectAll('g')
     .data(props.nodes)
     .join('g')
@@ -104,15 +118,17 @@ async function render() {
     .on('click', (_event: MouseEvent, d: GraphNodeData) => {
       emit('nodeClick', d)
       // Small ripple animation on click
-      const nodeR = 6 + (Number(d.importance || 50)) / 20
-      const ripple = d3.select(_event.currentTarget as SVGGElement)
+      const nodeR = 6 + Number(d.importance || 50) / 20
+      const ripple = d3
+        .select(_event.currentTarget as SVGGElement)
         .append('circle')
         .attr('r', nodeR)
         .attr('fill', 'none')
         .attr('stroke', categoryColors[d.category || ''] || '#1889E8')
         .attr('stroke-width', 2)
         .attr('opacity', 0.8)
-      ripple.transition()
+      ripple
+        .transition()
         .duration(500)
         .attr('r', nodeR + 20)
         .attr('opacity', 0)
@@ -122,11 +138,13 @@ async function render() {
       emit('nodeHover', d)
       const connectedIds = new Set<string>()
       connectedIds.add(d.id)
-      props.edges.forEach(e => {
-        if (e.source === d.id || (typeof e.source === 'object' && (e.source as { id: string }).id === d.id)) connectedIds.add(typeof e.target === 'string' ? e.target : (e.target as { id: string }).id)
-        if (e.target === d.id || (typeof e.target === 'object' && (e.target as { id: string }).id === d.id)) connectedIds.add(typeof e.source === 'string' ? e.source : (e.source as { id: string }).id)
+      props.edges.forEach((e) => {
+        const srcId = typeof e.source === 'string' ? e.source : (e.source as { id: string }).id
+        const tgtId = typeof e.target === 'string' ? e.target : (e.target as { id: string }).id
+        if (srcId === d.id) connectedIds.add(tgtId)
+        if (tgtId === d.id) connectedIds.add(srcId)
       })
-      node.attr('opacity', (n: GraphNodeData) => connectedIds.has(n.id) ? 1 : 0.2)
+      node.attr('opacity', (n: GraphNodeData) => (connectedIds.has(n.id) ? 1 : 0.2))
       link.attr('opacity', (e: GraphEdgeData) => {
         const srcId = typeof e.source === 'string' ? e.source : (e.source as { id: string }).id
         const tgtId = typeof e.target === 'string' ? e.target : (e.target as { id: string }).id
@@ -138,65 +156,91 @@ async function render() {
       node.attr('opacity', 1)
       link.attr('opacity', 0.6)
     })
-    .call(d3.drag<SVGGElement, GraphNodeData>()
-      .on('start', (event: { active: boolean }, d: GraphNodeData & { fx?: number | null; fy?: number | null }) => {
-        if (!event.active && simulation) simulation.alphaTarget(0.3).restart()
-        d.fx = d.x as number | null
-        d.fy = d.y as number | null
-      })
-      .on('drag', (event: { x: number; y: number }, d: GraphNodeData & { fx?: number | null; fy?: number | null }) => {
-        d.fx = event.x
-        d.fy = event.y
-      })
-      .on('end', (event: { active: boolean }, d: GraphNodeData & { fx?: number | null; fy?: number | null }) => {
-        if (!event.active && simulation) simulation.alphaTarget(0)
-        d.fx = null
-        d.fy = null
-      }))
+    .call(
+      d3
+        .drag<SVGGElement, GraphNodeData>()
+        .on(
+          'start',
+          (
+            event: { active: boolean },
+            d: GraphNodeData & { fx?: number | null; fy?: number | null },
+          ) => {
+            if (!event.active && simulation) simulation.alphaTarget(0.3).restart()
+            d.fx = d.x as number | null
+            d.fy = d.y as number | null
+          },
+        )
+        .on(
+          'drag',
+          (
+            event: { x: number; y: number },
+            d: GraphNodeData & { fx?: number | null; fy?: number | null },
+          ) => {
+            d.fx = event.x
+            d.fy = event.y
+          },
+        )
+        .on(
+          'end',
+          (
+            event: { active: boolean },
+            d: GraphNodeData & { fx?: number | null; fy?: number | null },
+          ) => {
+            if (!event.active && simulation) simulation.alphaTarget(0)
+            d.fx = null
+            d.fy = null
+          },
+        ),
+    )
 
   // Circle
-  node.append('circle')
-    .attr('r', (d: GraphNodeData) => 6 + (Number(d.importance || 50)) / 20)
+  node
+    .append('circle')
+    .attr('r', (d: GraphNodeData) => 6 + Number(d.importance || 50) / 20)
     .attr('fill', (d: GraphNodeData) => categoryColors[d.category || ''] || '#1889E8')
     .attr('stroke', '#fff')
     .attr('stroke-width', 2)
 
   // Label
-  node.append('text')
+  node
+    .append('text')
     .text((d: GraphNodeData) => d.name)
     .attr('font-size', 11)
     .attr('dx', 14)
     .attr('dy', 4)
     .attr('fill', '#303133')
 
-  // Force simulation — tuned to keep nodes within visible area
-  simulation = d3.forceSimulation(props.nodes as unknown as d3types.SimulationNodeDatum[])
-    .force('link', d3.forceLink(props.edges as unknown as d3types.SimulationLinkDatum<d3types.SimulationNodeDatum>[]).id((d: unknown) => (d as GraphNodeData).id).distance(80))
+  // Force simulation
+  simulation = d3
+    .forceSimulation(props.nodes as unknown as d3types.SimulationNodeDatum[])
+    .force(
+      'link',
+      d3
+        .forceLink(
+          edgesCopy as unknown as d3types.SimulationLinkDatum<d3types.SimulationNodeDatum>[],
+        )
+        .id((d: unknown) => (d as GraphNodeData).id)
+        .distance(80),
+    )
     .force('charge', d3.forceManyBody().strength(-120).distanceMax(200))
     .force('center', d3.forceCenter(width / 2, height / 2))
     .force('collision', d3.forceCollide().radius(30))
-    .force('x', d3.forceX(width / 2).strength(0.05))
-    .force('y', d3.forceY(height / 2).strength(0.05))
 
   simulation.on('tick', () => {
-    // Constrain nodes within SVG bounds
-    const padding = 40
-    props.nodes.forEach((n: GraphNodeData & { x?: number; y?: number; fx?: number | null; fy?: number | null }) => {
-      if (n.fx != null) return
-      n.x = Math.max(padding, Math.min(width - padding, n.x || 0))
-      n.y = Math.max(padding, Math.min(height - padding, n.y || 0))
-    })
-
     link
-      .attr('x1', (d: unknown) => ((d as { source: { x: number } }).source.x))
-      .attr('y1', (d: unknown) => ((d as { source: { y: number } }).source.y))
-      .attr('x2', (d: unknown) => ((d as { target: { x: number } }).target.x))
-      .attr('y2', (d: unknown) => ((d as { target: { y: number } }).target.y))
+      .attr('x1', (d: unknown) => (d as { source: { x: number } }).source.x)
+      .attr('y1', (d: unknown) => (d as { source: { y: number } }).source.y)
+      .attr('x2', (d: unknown) => (d as { target: { x: number } }).target.x)
+      .attr('y2', (d: unknown) => (d as { target: { y: number } }).target.y)
 
     node.attr('transform', (d: unknown) => {
       const n = d as { x: number; y: number }
       return `translate(${n.x},${n.y})`
     })
+  })
+
+  simulation.on('end', () => {
+    // Simulation settled — no more movement until user interacts
   })
 }
 
@@ -206,7 +250,7 @@ onMounted(() => {
 
 watch([() => props.nodes, () => props.edges], () => {
   render()
-}, { deep: true })
+})
 
 defineExpose({ render })
 </script>
@@ -216,7 +260,7 @@ defineExpose({ render })
   width: 100%;
   height: 100%;
   min-height: 400px;
-  background: #FAFCFF;
+  background: #fafcff;
 
   :deep(svg) {
     display: block;

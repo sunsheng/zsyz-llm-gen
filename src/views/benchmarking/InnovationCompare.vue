@@ -36,7 +36,7 @@
         <el-table-column prop="highTechCount" label="高新企业数" width="120" sortable />
         <el-table-column prop="innovationScore" label="创新指数" width="100" sortable>
           <template #default="{ row }">
-            <span style="font-weight: 600; color: #1889E8">{{ row.innovationScore }}</span>
+            <span style="font-weight: 600; color: #1889e8">{{ row.innovationScore }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -59,14 +59,14 @@ const highTechOption = ref({})
 
 onMounted(() => {
   const cities = ['杭州市', '宁波市', '苏州市', '南京市', '成都市', '武汉市']
-  tableData.value = cities.map(city => ({
+  tableData.value = cities.map((city) => ({
     city,
     rdRatio: +(Math.random() * 2 + 2.5).toFixed(1),
     rdAmount: Math.floor(Math.random() * 800 + 200),
     patentCount: Math.floor(Math.random() * 50000 + 10000),
     inventionCount: Math.floor(Math.random() * 15000 + 3000),
     highTechCount: Math.floor(Math.random() * 5000 + 1000),
-    innovationScore: Math.floor(Math.random() * 20 + 70)
+    innovationScore: Math.floor(Math.random() * 20 + 70),
   }))
 
   radarOption.value = {
@@ -79,18 +79,20 @@ onMounted(() => {
         { name: '专利密度', max: 100 },
         { name: '高新企业', max: 100 },
         { name: '人才密度', max: 100 },
-        { name: '成果转化', max: 100 }
+        { name: '成果转化', max: 100 },
       ],
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: [
-        { name: '本地', value: [82, 78, 85, 80, 76], areaStyle: { opacity: 0.2 } },
-        { name: '对标均值', value: [70, 72, 75, 68, 65], areaStyle: { opacity: 0.1 } }
-      ]
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: [
+          { name: '本地', value: [82, 78, 85, 80, 76], areaStyle: { opacity: 0.2 } },
+          { name: '对标均值', value: [70, 72, 75, 68, 65], areaStyle: { opacity: 0.1 } },
+        ],
+      },
+    ],
   }
 
   rdBarOption.value = {
@@ -100,8 +102,13 @@ onMounted(() => {
     xAxis: { type: 'category', data: cities },
     yAxis: { type: 'value' },
     series: [
-      { name: 'R&D投入(亿元)', type: 'bar', barWidth: '40%', data: tableData.value.map(d => d.rdAmount) }
-    ]
+      {
+        name: 'R&D投入(亿元)',
+        type: 'bar',
+        barWidth: '40%',
+        data: tableData.value.map((d) => d.rdAmount),
+      },
+    ],
   }
 
   patentBarOption.value = {
@@ -112,9 +119,19 @@ onMounted(() => {
     xAxis: { type: 'category', data: cities },
     yAxis: { type: 'value' },
     series: [
-      { name: '专利授权', type: 'bar', barWidth: '25%', data: tableData.value.map(d => d.patentCount) },
-      { name: '发明专利', type: 'bar', barWidth: '25%', data: tableData.value.map(d => d.inventionCount) }
-    ]
+      {
+        name: '专利授权',
+        type: 'bar',
+        barWidth: '25%',
+        data: tableData.value.map((d) => d.patentCount),
+      },
+      {
+        name: '发明专利',
+        type: 'bar',
+        barWidth: '25%',
+        data: tableData.value.map((d) => d.inventionCount),
+      },
+    ],
   }
 
   highTechOption.value = {
@@ -123,7 +140,7 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: cities },
     yAxis: { type: 'value' },
-    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map(d => d.highTechCount) }]
+    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map((d) => d.highTechCount) }],
   }
 })
 </script>
@@ -139,21 +156,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

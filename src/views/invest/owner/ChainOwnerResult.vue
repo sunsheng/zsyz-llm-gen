@@ -12,7 +12,9 @@
         <el-table-column prop="ownerName" label="链主企业" width="120" />
         <el-table-column prop="matchScore" label="匹配度" width="90">
           <template #default="{ row }">
-            <span :style="{ color: row.matchScore >= 80 ? '#67C23A' : '#E6A23C', fontWeight: 600 }">{{ row.matchScore }}%</span>
+            <span :style="{ color: row.matchScore >= 80 ? '#67C23A' : '#E6A23C', fontWeight: 600 }"
+              >{{ row.matchScore }}%</span
+            >
           </template>
         </el-table-column>
         <el-table-column prop="driveIndex" label="带动指数" width="100" />
@@ -56,9 +58,9 @@ onMounted(() => {
   padding: 20px;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

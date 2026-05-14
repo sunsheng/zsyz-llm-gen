@@ -52,7 +52,7 @@ const layers = ref<any[]>([])
 const legendItems = [
   { label: '健康企业', color: '#67C23A' },
   { label: '预警企业', color: '#E6A23C' },
-  { label: '风险企业', color: '#F56C6C' }
+  { label: '风险企业', color: '#F56C6C' },
 ]
 const regionBarOption = ref({})
 const industryPieOption = ref({})
@@ -71,8 +71,8 @@ onMounted(() => {
     series: [
       { name: '健康', type: 'bar', stack: 'total', data: [186, 152, 128, 98, 86, 112, 76, 68] },
       { name: '预警', type: 'bar', stack: 'total', data: [32, 28, 24, 18, 16, 22, 14, 12] },
-      { name: '风险', type: 'bar', stack: 'total', data: [12, 10, 8, 6, 5, 8, 4, 3] }
-    ]
+      { name: '风险', type: 'bar', stack: 'total', data: [12, 10, 8, 6, 5, 8, 4, 3] },
+    ],
   }
 
   const distData = getMockEnterpriseDistribution()
@@ -80,13 +80,15 @@ onMounted(() => {
     color: chartColors,
     tooltip: { trigger: 'item' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie',
-      radius: ['40%', '70%'],
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: distData
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: distData,
+      },
+    ],
   }
 })
 </script>
@@ -110,15 +112,15 @@ onMounted(() => {
   gap: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 </style>

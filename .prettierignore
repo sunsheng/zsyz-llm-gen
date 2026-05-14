@@ -1,0 +1,6 @@
+dist
+node_modules
+*.local
+package-lock.json
+src/auto-imports.d.ts
+src/components.d.ts

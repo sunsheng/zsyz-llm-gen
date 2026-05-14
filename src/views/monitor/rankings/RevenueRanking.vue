@@ -8,7 +8,7 @@
 
     <div class="filter-section">
       <SearchFilterBar
-        searchPlaceholder="搜索企业名称"
+        search-placeholder="搜索企业名称"
         :filters="filterFields"
         @search="handleSearch"
         @filter="handleFilter"
@@ -28,7 +28,12 @@
       <el-table :data="filteredData" stripe border style="width: 100%">
         <el-table-column prop="rank" label="排名" width="80">
           <template #default="{ row }">
-            <span :style="{ fontWeight: row.rank <= 3 ? 700 : 400, color: row.rank <= 3 ? '#1889E8' : '' }">
+            <span
+              :style="{
+                fontWeight: row.rank <= 3 ? 700 : 400,
+                color: row.rank <= 3 ? '#1889E8' : '',
+              }"
+            >
               {{ row.rank }}
             </span>
           </template>
@@ -65,17 +70,27 @@ import { getMockRevenueRanking } from '@/api/mock/monitor'
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
 const filterFields = [
-  { key: 'industry', label: '行业', type: 'select' as const, options: [
-    { label: '高端装备制造', value: '1' },
-    { label: '新材料', value: '2' },
-    { label: '生物医药', value: '3' },
-    { label: '电子信息', value: '4' }
-  ]},
-  { key: 'city', label: '城市', type: 'select' as const, options: [
-    { label: '杭州市', value: '1' },
-    { label: '宁波市', value: '2' },
-    { label: '温州市', value: '3' }
-  ]}
+  {
+    key: 'industry',
+    label: '行业',
+    type: 'select' as const,
+    options: [
+      { label: '高端装备制造', value: '1' },
+      { label: '新材料', value: '2' },
+      { label: '生物医药', value: '3' },
+      { label: '电子信息', value: '4' },
+    ],
+  },
+  {
+    key: 'city',
+    label: '城市',
+    type: 'select' as const,
+    options: [
+      { label: '杭州市', value: '1' },
+      { label: '宁波市', value: '2' },
+      { label: '温州市', value: '3' },
+    ],
+  },
 ]
 
 const allData = ref<any[]>([])
@@ -103,14 +118,20 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'value' },
     yAxis: { type: 'category', data: top10.map((r: any) => r.name).reverse(), inverse: false },
-    series: [{ type: 'bar', barWidth: '50%', data: top10.map((r: any) => r.value).reverse() }]
+    series: [{ type: 'bar', barWidth: '50%', data: top10.map((r: any) => r.value).reverse() }],
   }
 })
 
-function handleSearch(kw: string) { keyword.value = kw }
+function handleSearch(kw: string) {
+  keyword.value = kw
+}
 function handleFilter(_filters: Record<string, unknown>) {}
-function handleReset() { keyword.value = '' }
-function handlePageChange(page: number) { currentPage.value = page }
+function handleReset() {
+  keyword.value = ''
+}
+function handlePageChange(page: number) {
+  currentPage.value = page
+}
 </script>
 
 <style lang="scss" scoped>
@@ -127,24 +148,24 @@ function handlePageChange(page: number) { currentPage.value = page }
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel.full-width {
   grid-column: 1 / -1;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

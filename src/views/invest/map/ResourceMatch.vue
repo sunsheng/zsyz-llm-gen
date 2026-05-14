@@ -20,11 +20,15 @@
             </div>
             <div class="match-item">
               <span class="match-item__label">高匹配度</span>
-              <span class="match-item__value" style="color: #67C23A">{{ matchData.highMatches }}家</span>
+              <span class="match-item__value" style="color: #67c23a"
+                >{{ matchData.highMatches }}家</span
+              >
             </div>
             <div class="match-item">
               <span class="match-item__label">匹配率</span>
-              <span class="match-item__value" style="color: #1889E8">{{ matchData.matchRate }}%</span>
+              <span class="match-item__value" style="color: #1889e8"
+                >{{ matchData.matchRate }}%</span
+              >
             </div>
           </div>
           <el-divider />
@@ -60,8 +64,8 @@ onMounted(() => {
   const data = getMockMapTargets()
   matchDetails.value = data
   matchData.totalMatches = data.length
-  matchData.highMatches = data.filter(d => d.matchScore >= 80).length
-  matchData.matchRate = Math.floor(matchData.highMatches / matchData.totalMatches * 100)
+  matchData.highMatches = data.filter((d) => d.matchScore >= 80).length
+  matchData.matchRate = Math.floor((matchData.highMatches / matchData.totalMatches) * 100)
 })
 </script>
 
@@ -75,23 +79,23 @@ onMounted(() => {
   gap: 20px;
 }
 .map-area {
+  height: 600px;
+  overflow: hidden;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  overflow: hidden;
-  height: 600px;
 }
 .detail-section {
+  padding: 16px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 16px;
 }
 .section-title {
+  margin: 0 0 12px;
   font-size: 15px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 12px 0;
 }
 .match-summary {
   display: grid;
@@ -99,16 +103,16 @@ onMounted(() => {
   gap: 12px;
 }
 .match-item {
-  text-align: center;
   padding: 8px;
+  text-align: center;
   background: $bg-hover;
   border-radius: $radius-base;
 }
 .match-item__label {
   display: block;
+  margin-bottom: 4px;
   font-size: 12px;
   color: $text-secondary;
-  margin-bottom: 4px;
 }
 .match-item__value {
   font-size: 18px;
@@ -125,8 +129,8 @@ onMounted(() => {
 }
 .match-detail-item__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 6px;
   .name {
     font-size: 14px;

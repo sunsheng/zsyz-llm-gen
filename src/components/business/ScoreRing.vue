@@ -32,17 +32,20 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-const props = withDefaults(defineProps<{
-  value?: number
-  size?: number
-  strokeWidth?: number
-  color?: string
-}>(), {
-  value: 0,
-  size: 100,
-  strokeWidth: 8,
-  color: ''
-})
+const props = withDefaults(
+  defineProps<{
+    value?: number
+    size?: number
+    strokeWidth?: number
+    color?: string
+  }>(),
+  {
+    value: 0,
+    size: 100,
+    strokeWidth: 8,
+    color: '',
+  },
+)
 
 const radius = computed(() => (props.size - props.strokeWidth) / 2)
 const circumference = computed(() => 2 * Math.PI * radius.value)
@@ -70,8 +73,8 @@ const ringColor = computed(() => {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   text-align: center;
+  transform: translate(-50%, -50%);
 }
 
 .score-ring__value {

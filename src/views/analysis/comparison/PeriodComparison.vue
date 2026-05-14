@@ -58,7 +58,20 @@ import BaseChart from '@/components/charts/BaseChart.vue'
 import { getMockChartData, getMockTableData } from '@/api/mock/analysis'
 
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
-const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+const months = [
+  '1月',
+  '2月',
+  '3月',
+  '4月',
+  '5月',
+  '6月',
+  '7月',
+  '8月',
+  '9月',
+  '10月',
+  '11月',
+  '12月',
+]
 
 const tableData = ref([])
 const trendOption = ref({})
@@ -78,9 +91,21 @@ onMounted(() => {
     xAxis: { type: 'category', data: months, boundaryGap: false },
     yAxis: { type: 'value', name: '产值(亿)' },
     series: [
-      { name: '本年度', type: 'line', smooth: true, data: trendData.data.series[0].data, areaStyle: { opacity: 0.1 } },
-      { name: '上年度', type: 'line', smooth: true, data: trendData.data.series[0].data.map((v: number) => Math.floor(v * 0.9)), areaStyle: { opacity: 0.05 } }
-    ]
+      {
+        name: '本年度',
+        type: 'line',
+        smooth: true,
+        data: trendData.data.series[0].data,
+        areaStyle: { opacity: 0.1 },
+      },
+      {
+        name: '上年度',
+        type: 'line',
+        smooth: true,
+        data: trendData.data.series[0].data.map((v: number) => Math.floor(v * 0.9)),
+        areaStyle: { opacity: 0.05 },
+      },
+    ],
   }
 
   occupancyOption.value = {
@@ -91,9 +116,19 @@ onMounted(() => {
     xAxis: { type: 'category', data: months, boundaryGap: false },
     yAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
     series: [
-      { name: '本年度', type: 'line', smooth: true, data: [72, 73, 75, 76, 78, 79, 81, 82, 84, 85, 86, 88] },
-      { name: '上年度', type: 'line', smooth: true, data: [65, 66, 68, 70, 71, 72, 73, 75, 76, 77, 78, 79] }
-    ]
+      {
+        name: '本年度',
+        type: 'line',
+        smooth: true,
+        data: [72, 73, 75, 76, 78, 79, 81, 82, 84, 85, 86, 88],
+      },
+      {
+        name: '上年度',
+        type: 'line',
+        smooth: true,
+        data: [65, 66, 68, 70, 71, 72, 73, 75, 76, 77, 78, 79],
+      },
+    ],
   }
 
   growthOption.value = {
@@ -104,9 +139,19 @@ onMounted(() => {
     xAxis: { type: 'category', data: months },
     yAxis: { type: 'value', name: '家' },
     series: [
-      { name: '新增企业', type: 'bar', data: [45, 38, 52, 35, 48, 42, 56, 39, 45, 38, 50, 43], barWidth: '25%' },
-      { name: '退出企业', type: 'bar', data: [12, 15, 10, 18, 13, 16, 11, 14, 12, 15, 10, 13], barWidth: '25%' }
-    ]
+      {
+        name: '新增企业',
+        type: 'bar',
+        data: [45, 38, 52, 35, 48, 42, 56, 39, 45, 38, 50, 43],
+        barWidth: '25%',
+      },
+      {
+        name: '退出企业',
+        type: 'bar',
+        data: [12, 15, 10, 18, 13, 16, 11, 14, 12, 15, 10, 13],
+        barWidth: '25%',
+      },
+    ],
   }
 
   const radarData = getMockChartData('park-radar')
@@ -117,23 +162,47 @@ onMounted(() => {
     radar: {
       indicator: radarData.data.indicator,
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: [
-        { name: '本年度', value: [85, 78, 90, 82, 88], areaStyle: { opacity: 0.2 } },
-        { name: '上年度', value: [72, 70, 78, 75, 72], areaStyle: { opacity: 0.1 } }
-      ]
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: [
+          { name: '本年度', value: [85, 78, 90, 82, 88], areaStyle: { opacity: 0.2 } },
+          { name: '上年度', value: [72, 70, 78, 75, 72], areaStyle: { opacity: 0.1 } },
+        ],
+      },
+    ],
   }
 })
 </script>
 
 <style lang="scss" scoped>
-.page-container { padding: 20px; }
-.chart-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-panel { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
-.chart-panel__title { font-size: 16px; font-weight: $font-weight-semibold; color: $text-primary; margin: 0 0 16px 0; }
-.table-section { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
+.page-container {
+  padding: 20px;
+}
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-panel {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+.chart-panel__title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+.table-section {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
 </style>

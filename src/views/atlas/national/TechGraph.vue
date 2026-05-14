@@ -37,23 +37,23 @@
       <div class="graph-page__legend">
         <div class="legend-title">技术领域</div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #1889E8" />
+          <span class="legend-dot" style="background: #1889e8"></span>
           <span>人工智能</span>
         </div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #36CBCB" />
+          <span class="legend-dot" style="background: #36cbcb"></span>
           <span>新能源</span>
         </div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #4ECB73" />
+          <span class="legend-dot" style="background: #4ecb73"></span>
           <span>生物医药</span>
         </div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #FBD437" />
+          <span class="legend-dot" style="background: #fbd437"></span>
           <span>先进制造</span>
         </div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #975FE5" />
+          <span class="legend-dot" style="background: #975fe5"></span>
           <span>新材料</span>
         </div>
       </div>
@@ -83,24 +83,150 @@ const relatedEnterprises = ref<string[]>([])
 
 // 技术节点 Mock 数据
 const techNodes: GraphNodeData[] = [
-  { id: 'ai-1', name: '深度学习', category: '人工智能', importance: 92, enterpriseCount: 45, value: 92 },
-  { id: 'ai-2', name: '自然语言处理', category: '人工智能', importance: 88, enterpriseCount: 38, value: 88 },
-  { id: 'ai-3', name: '计算机视觉', category: '人工智能', importance: 85, enterpriseCount: 42, value: 85 },
-  { id: 'ai-4', name: '知识图谱', category: '人工智能', importance: 72, enterpriseCount: 25, value: 72 },
-  { id: 'ai-5', name: '语音识别', category: '人工智能', importance: 78, enterpriseCount: 30, value: 78 },
-  { id: 'ne-1', name: '光伏技术', category: '新能源', importance: 90, enterpriseCount: 55, value: 90 },
-  { id: 'ne-2', name: '储能技术', category: '新能源', importance: 86, enterpriseCount: 40, value: 86 },
-  { id: 'ne-3', name: '风电技术', category: '新能源', importance: 82, enterpriseCount: 35, value: 82 },
-  { id: 'ne-4', name: '氢能技术', category: '新能源', importance: 75, enterpriseCount: 20, value: 75 },
-  { id: 'bio-1', name: '基因编辑', category: '生物医药', importance: 88, enterpriseCount: 28, value: 88 },
-  { id: 'bio-2', name: '免疫治疗', category: '生物医药', importance: 85, enterpriseCount: 32, value: 85 },
-  { id: 'bio-3', name: '药物递送', category: '生物医药', importance: 70, enterpriseCount: 18, value: 70 },
-  { id: 'mfg-1', name: '数控技术', category: '先进制造', importance: 84, enterpriseCount: 48, value: 84 },
-  { id: 'mfg-2', name: '工业机器人', category: '先进制造', importance: 86, enterpriseCount: 42, value: 86 },
-  { id: 'mfg-3', name: '3D打印', category: '先进制造', importance: 73, enterpriseCount: 22, value: 73 },
-  { id: 'mat-1', name: '碳纤维', category: '新材料', importance: 80, enterpriseCount: 30, value: 80 },
-  { id: 'mat-2', name: '石墨烯', category: '新材料', importance: 76, enterpriseCount: 18, value: 76 },
-  { id: 'mat-3', name: '高温合金', category: '新材料', importance: 72, enterpriseCount: 15, value: 72 }
+  {
+    id: 'ai-1',
+    name: '深度学习',
+    category: '人工智能',
+    importance: 92,
+    enterpriseCount: 45,
+    value: 92,
+  },
+  {
+    id: 'ai-2',
+    name: '自然语言处理',
+    category: '人工智能',
+    importance: 88,
+    enterpriseCount: 38,
+    value: 88,
+  },
+  {
+    id: 'ai-3',
+    name: '计算机视觉',
+    category: '人工智能',
+    importance: 85,
+    enterpriseCount: 42,
+    value: 85,
+  },
+  {
+    id: 'ai-4',
+    name: '知识图谱',
+    category: '人工智能',
+    importance: 72,
+    enterpriseCount: 25,
+    value: 72,
+  },
+  {
+    id: 'ai-5',
+    name: '语音识别',
+    category: '人工智能',
+    importance: 78,
+    enterpriseCount: 30,
+    value: 78,
+  },
+  {
+    id: 'ne-1',
+    name: '光伏技术',
+    category: '新能源',
+    importance: 90,
+    enterpriseCount: 55,
+    value: 90,
+  },
+  {
+    id: 'ne-2',
+    name: '储能技术',
+    category: '新能源',
+    importance: 86,
+    enterpriseCount: 40,
+    value: 86,
+  },
+  {
+    id: 'ne-3',
+    name: '风电技术',
+    category: '新能源',
+    importance: 82,
+    enterpriseCount: 35,
+    value: 82,
+  },
+  {
+    id: 'ne-4',
+    name: '氢能技术',
+    category: '新能源',
+    importance: 75,
+    enterpriseCount: 20,
+    value: 75,
+  },
+  {
+    id: 'bio-1',
+    name: '基因编辑',
+    category: '生物医药',
+    importance: 88,
+    enterpriseCount: 28,
+    value: 88,
+  },
+  {
+    id: 'bio-2',
+    name: '免疫治疗',
+    category: '生物医药',
+    importance: 85,
+    enterpriseCount: 32,
+    value: 85,
+  },
+  {
+    id: 'bio-3',
+    name: '药物递送',
+    category: '生物医药',
+    importance: 70,
+    enterpriseCount: 18,
+    value: 70,
+  },
+  {
+    id: 'mfg-1',
+    name: '数控技术',
+    category: '先进制造',
+    importance: 84,
+    enterpriseCount: 48,
+    value: 84,
+  },
+  {
+    id: 'mfg-2',
+    name: '工业机器人',
+    category: '先进制造',
+    importance: 86,
+    enterpriseCount: 42,
+    value: 86,
+  },
+  {
+    id: 'mfg-3',
+    name: '3D打印',
+    category: '先进制造',
+    importance: 73,
+    enterpriseCount: 22,
+    value: 73,
+  },
+  {
+    id: 'mat-1',
+    name: '碳纤维',
+    category: '新材料',
+    importance: 80,
+    enterpriseCount: 30,
+    value: 80,
+  },
+  {
+    id: 'mat-2',
+    name: '石墨烯',
+    category: '新材料',
+    importance: 76,
+    enterpriseCount: 18,
+    value: 76,
+  },
+  {
+    id: 'mat-3',
+    name: '高温合金',
+    category: '新材料',
+    importance: 72,
+    enterpriseCount: 15,
+    value: 72,
+  },
 ]
 
 const techEdges: GraphEdgeData[] = [
@@ -125,15 +251,15 @@ const techEdges: GraphEdgeData[] = [
   { source: 'mat-2', target: 'ai-4', weight: 0.4, type: 'collaboration' },
   { source: 'mat-3', target: 'mfg-1', weight: 0.55, type: 'dependency' },
   { source: 'ai-4', target: 'bio-1', weight: 0.5, type: 'transfer' },
-  { source: 'ne-2', target: 'mfg-3', weight: 0.35, type: 'collaboration' }
+  { source: 'ne-2', target: 'mfg-3', weight: 0.35, type: 'collaboration' },
 ]
 
 const fieldCategoryMap: Record<string, string> = {
-  'ai': '人工智能',
+  ai: '人工智能',
   'new-energy': '新能源',
-  'biomedicine': '生物医药',
-  'manufacturing': '先进制造',
-  'material': '新材料'
+  biomedicine: '生物医药',
+  manufacturing: '先进制造',
+  material: '新材料',
 }
 
 const allNodes = ref<GraphNodeData[]>(techNodes)
@@ -142,31 +268,48 @@ const allEdges = ref<GraphEdgeData[]>(techEdges)
 const filteredNodes = computed(() => {
   if (!techField.value) return allNodes.value
   const cat = fieldCategoryMap[techField.value]
-  return allNodes.value.filter(n => n.category === cat)
+  return allNodes.value.filter((n) => n.category === cat)
 })
 
 const filteredEdges = computed(() => {
   let edges = allEdges.value
   if (relationType.value) {
-    edges = edges.filter(e => e.type === relationType.value)
+    edges = edges.filter((e) => e.type === relationType.value)
   }
-  const nodeIds = new Set(filteredNodes.value.map(n => n.id))
-  return edges.filter(e => nodeIds.has(e.source as string) && nodeIds.has(e.target as string))
+  const nodeIds = new Set(filteredNodes.value.map((n) => n.id))
+  return edges.filter((e) => {
+    const srcId = typeof e.source === 'string' ? e.source : (e.source as { id: string }).id
+    const tgtId = typeof e.target === 'string' ? e.target : (e.target as { id: string }).id
+    return nodeIds.has(srcId) && nodeIds.has(tgtId)
+  })
 })
 
 const mockEnterpriseNames = [
-  '华创人工智能研究院', '中科深源科技', '远大智能机器人', '天合光能',
-  '国轩高科', '药明康德', '恒瑞医药', '大族激光', '先导智能'
+  '华创人工智能研究院',
+  '中科深源科技',
+  '远大智能机器人',
+  '天合光能',
+  '国轩高科',
+  '药明康德',
+  '恒瑞医药',
+  '大族激光',
+  '先导智能',
 ]
 
 function handleNodeClick(node: GraphNodeData) {
   selectedNode.value = node
   const related = allEdges.value
-    .filter(e => e.source === node.id || e.target === node.id)
-    .map(e => {
-      const targetId = e.source === node.id ? e.target : e.source
-      const found = allNodes.value.find(n => n.id === targetId)
-      return found ? found.name : targetId as string
+    .filter((e) => {
+      const srcId = typeof e.source === 'string' ? e.source : (e.source as { id: string }).id
+      const tgtId = typeof e.target === 'string' ? e.target : (e.target as { id: string }).id
+      return srcId === node.id || tgtId === node.id
+    })
+    .map((e) => {
+      const srcId = typeof e.source === 'string' ? e.source : (e.source as { id: string }).id
+      const tgtId = typeof e.target === 'string' ? e.target : (e.target as { id: string }).id
+      const targetId = srcId === node.id ? tgtId : srcId
+      const found = allNodes.value.find((n) => n.id === targetId)
+      return found ? found.name : targetId
     })
   relatedEnterprises.value = [...related, ...mockEnterpriseNames.slice(0, 3)]
   drawerVisible.value = true
@@ -196,44 +339,44 @@ onMounted(() => {
 .graph-page__body {
   position: relative;
   height: 100%;
+  overflow: hidden;
   background: #fff;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  overflow: hidden;
 }
 
 .graph-page__legend {
   position: absolute;
-  right: 16px;
   top: 16px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: $radius-base;
-  padding: 12px 16px;
-  box-shadow: $shadow-card;
+  right: 16px;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 12px 16px;
   font-size: 12px;
   color: $text-regular;
-  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
 }
 
 .legend-title {
+  margin-bottom: 4px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin-bottom: 4px;
 }
 
 .legend-item {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
 }
 
 .legend-dot {
+  flex-shrink: 0;
   width: 10px;
   height: 10px;
   border-radius: $radius-round;
-  flex-shrink: 0;
 }
 </style>

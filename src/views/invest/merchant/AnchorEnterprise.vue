@@ -33,18 +33,15 @@
                 <ScoreRing :value="item.investPotential" :size="40" :stroke-width="4" />
               </div>
             </div>
-            <el-button type="primary" size="small" style="width: 100%; margin-top: 8px">查看衍生关系</el-button>
+            <el-button type="primary" size="small" style="width: 100%; margin-top: 8px"
+              >查看衍生关系</el-button
+            >
           </el-card>
         </div>
       </div>
       <div class="graph-section">
         <h4 class="panel-title">企业关系网络</h4>
-        <ForceGraph
-          :nodes="graphData.nodes"
-          :edges="graphData.edges"
-          :width="500"
-          :height="400"
-        />
+        <ForceGraph :nodes="graphData.nodes" :edges="graphData.edges" :width="500" :height="400" />
       </div>
     </div>
   </div>
@@ -64,10 +61,50 @@ const graphData = ref<{ nodes: any[]; edges: any[] }>({ nodes: [], edges: [] })
 
 onMounted(() => {
   kpiCards.value = [
-    { key: 'anchorCount', label: '锚点企业', value: 8, unit: '家', trend: 'up', trendValue: '+14.3%', icon: 'Position', iconColor: '#1889E8', iconBgColor: '#ECF5FF' },
-    { key: 'derivedCount', label: '衍生企业', value: 62, unit: '家', trend: 'up', trendValue: '+22.5%', icon: 'Connection', iconColor: '#36CBCB', iconBgColor: '#E6F7F7' },
-    { key: 'avgPotential', label: '平均潜力', value: 73, unit: '分', trend: 'up', trendValue: '+5.8%', icon: 'TrendCharts', iconColor: '#4ECB73', iconBgColor: '#EDFAF0' },
-    { key: 'signedCount', label: '已签约', value: 15, unit: '家', trend: 'up', trendValue: '+30.0%', icon: 'DocumentChecked', iconColor: '#FBD437', iconBgColor: '#FFF8E6' }
+    {
+      key: 'anchorCount',
+      label: '锚点企业',
+      value: 8,
+      unit: '家',
+      trend: 'up',
+      trendValue: '+14.3%',
+      icon: 'Position',
+      iconColor: '#1889E8',
+      iconBgColor: '#ECF5FF',
+    },
+    {
+      key: 'derivedCount',
+      label: '衍生企业',
+      value: 62,
+      unit: '家',
+      trend: 'up',
+      trendValue: '+22.5%',
+      icon: 'Connection',
+      iconColor: '#36CBCB',
+      iconBgColor: '#E6F7F7',
+    },
+    {
+      key: 'avgPotential',
+      label: '平均潜力',
+      value: 73,
+      unit: '分',
+      trend: 'up',
+      trendValue: '+5.8%',
+      icon: 'TrendCharts',
+      iconColor: '#4ECB73',
+      iconBgColor: '#EDFAF0',
+    },
+    {
+      key: 'signedCount',
+      label: '已签约',
+      value: 15,
+      unit: '家',
+      trend: 'up',
+      trendValue: '+30.0%',
+      icon: 'DocumentChecked',
+      iconColor: '#FBD437',
+      iconBgColor: '#FFF8E6',
+    },
   ]
   anchors.value = getMockAnchorEnterprises()
   graphData.value = getMockRelationGraph()
@@ -91,16 +128,16 @@ onMounted(() => {
 }
 .card-section,
 .graph-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .panel-title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .card-grid {
   display: grid;
@@ -109,8 +146,8 @@ onMounted(() => {
 }
 .anchor-card__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 10px;
 }
 .anchor-card__name {
@@ -120,11 +157,16 @@ onMounted(() => {
 }
 .anchor-card__row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 4px 0;
   font-size: 13px;
-  .label { color: $text-secondary; }
-  .value { color: $text-primary; font-weight: $font-weight-medium; }
+  .label {
+    color: $text-secondary;
+  }
+  .value {
+    font-weight: $font-weight-medium;
+    color: $text-primary;
+  }
 }
 </style>

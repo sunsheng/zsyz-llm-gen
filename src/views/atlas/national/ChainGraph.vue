@@ -24,15 +24,15 @@
       <!-- 图例 -->
       <div class="graph-page__legend">
         <div class="legend-item">
-          <span class="legend-dot" style="background: #36CBCB" />
+          <span class="legend-dot" style="background: #36cbcb"></span>
           <span>上游</span>
         </div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #1889E8" />
+          <span class="legend-dot" style="background: #1889e8"></span>
           <span>中游</span>
         </div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #4ECB73" />
+          <span class="legend-dot" style="background: #4ecb73"></span>
           <span>下游</span>
         </div>
       </div>
@@ -67,10 +67,22 @@ const selectedNode = ref<GraphNodeData | null>(null)
 const relatedEnterprises = ref<string[]>([])
 
 const mockEnterpriseNames = [
-  '华创科技有限公司', '中科新材料集团', '远大智能装备', '恒信电子科技',
-  '东方生物制药', '天成新能源', '盛通精密仪器', '博远信息技术',
-  '瑞达材料科技', '宏图智能制造', '安捷供应链', '金诺环保科技',
-  '创维光电技术', '翔宇半导体', '鼎盛工业自动化', '国泰创新材料'
+  '华创科技有限公司',
+  '中科新材料集团',
+  '远大智能装备',
+  '恒信电子科技',
+  '东方生物制药',
+  '天成新能源',
+  '盛通精密仪器',
+  '博远信息技术',
+  '瑞达材料科技',
+  '宏图智能制造',
+  '安捷供应链',
+  '金诺环保科技',
+  '创维光电技术',
+  '翔宇半导体',
+  '鼎盛工业自动化',
+  '国泰创新材料',
 ]
 
 function handleNodeClick(node: GraphNodeData) {
@@ -97,19 +109,19 @@ async function loadGraph(code: string) {
   try {
     const data: ChainGraph | null = await fetchChainGraph(code)
     if (data) {
-      graphNodes.value = data.nodes.map(n => ({
+      graphNodes.value = data.nodes.map((n) => ({
         id: n.id,
         name: n.name,
         category: n.category,
         importance: n.importance,
         enterpriseCount: n.enterpriseCount,
-        value: n.importance
+        value: n.importance,
       }))
-      graphEdges.value = data.edges.map(e => ({
+      graphEdges.value = data.edges.map((e) => ({
         source: e.source,
         target: e.target,
         weight: e.weight,
-        type: e.type
+        type: e.type,
       }))
     }
   } finally {
@@ -142,38 +154,38 @@ onMounted(() => {
 .graph-page__body {
   position: relative;
   height: 100%;
+  overflow: hidden;
   background: #fff;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  overflow: hidden;
 }
 
 .graph-page__legend {
   position: absolute;
-  right: 16px;
   top: 16px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: $radius-base;
-  padding: 12px 16px;
-  box-shadow: $shadow-card;
+  right: 16px;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 12px 16px;
   font-size: 12px;
   color: $text-regular;
-  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
 }
 
 .legend-item {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
 }
 
 .legend-dot {
+  flex-shrink: 0;
   width: 10px;
   height: 10px;
   border-radius: $radius-round;
-  flex-shrink: 0;
 }
 </style>

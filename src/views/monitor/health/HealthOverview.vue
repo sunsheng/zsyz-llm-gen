@@ -14,9 +14,9 @@
         :value="856"
         unit="家"
         trend="up"
-        trendValue="+5.2%"
-        iconColor="#67C23A"
-        iconBgColor="#EDFAF0"
+        trend-value="+5.2%"
+        icon-color="#67C23A"
+        icon-bg-color="#EDFAF0"
       />
       <StatCard
         icon="Warning"
@@ -24,9 +24,9 @@
         :value="254"
         unit="家"
         trend="down"
-        trendValue="-2.1%"
-        iconColor="#E6A23C"
-        iconBgColor="#FDF6EC"
+        trend-value="-2.1%"
+        icon-color="#E6A23C"
+        icon-bg-color="#FDF6EC"
       />
       <StatCard
         icon="CircleClose"
@@ -34,9 +34,9 @@
         :value="128"
         unit="家"
         trend="up"
-        trendValue="+1.8%"
-        iconColor="#F56C6C"
-        iconBgColor="#FEF0F0"
+        trend-value="+1.8%"
+        icon-color="#F56C6C"
+        icon-bg-color="#FEF0F0"
       />
       <StatCard
         icon="TrendCharts"
@@ -44,9 +44,9 @@
         :value="76.8"
         unit="分"
         trend="up"
-        trendValue="+2.3"
-        iconColor="#1889E8"
-        iconBgColor="#ECF5FF"
+        trend-value="+2.3"
+        icon-color="#1889E8"
+        icon-bg-color="#ECF5FF"
       />
     </div>
 
@@ -67,7 +67,16 @@
         <el-table-column prop="name" label="企业名称" min-width="180" />
         <el-table-column prop="overallScore" label="综合评分" width="100">
           <template #default="{ row }">
-            <span :style="{ color: row.overallScore >= 80 ? '#67C23A' : row.overallScore >= 60 ? '#E6A23C' : '#F56C6C' }">
+            <span
+              :style="{
+                color:
+                  row.overallScore >= 80
+                    ? '#67C23A'
+                    : row.overallScore >= 60
+                      ? '#E6A23C'
+                      : '#F56C6C',
+              }"
+            >
               {{ row.overallScore }}
             </span>
           </template>
@@ -104,17 +113,19 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: ['0-20', '20-40', '40-60', '60-80', '80-100'] },
     yAxis: { type: 'value' },
-    series: [{
-      type: 'bar',
-      barWidth: '50%',
-      data: [
-        { value: 18, itemStyle: { color: '#F56C6C' } },
-        { value: 45, itemStyle: { color: '#E6A23C' } },
-        { value: 156, itemStyle: { color: '#FBD437' } },
-        { value: 520, itemStyle: { color: '#36CBCB' } },
-        { value: 547, itemStyle: { color: '#67C23A' } }
-      ]
-    }]
+    series: [
+      {
+        type: 'bar',
+        barWidth: '50%',
+        data: [
+          { value: 18, itemStyle: { color: '#F56C6C' } },
+          { value: 45, itemStyle: { color: '#E6A23C' } },
+          { value: 156, itemStyle: { color: '#FBD437' } },
+          { value: 520, itemStyle: { color: '#36CBCB' } },
+          { value: 547, itemStyle: { color: '#67C23A' } },
+        ],
+      },
+    ],
   }
 
   radarOption.value = {
@@ -126,18 +137,20 @@ onMounted(() => {
         { name: '盈利力', max: 100 },
         { name: '创新力', max: 100 },
         { name: '风控力', max: 100 },
-        { name: '社会贡献', max: 100 }
+        { name: '社会贡献', max: 100 },
       ],
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: [
-        { name: '平均得分', value: [75, 72, 68, 82, 70], areaStyle: { opacity: 0.2 } },
-        { name: '目标值', value: [85, 80, 80, 90, 80], areaStyle: { opacity: 0.1 } }
-      ]
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: [
+          { name: '平均得分', value: [75, 72, 68, 82, 70], areaStyle: { opacity: 0.2 } },
+          { name: '目标值', value: [85, 80, 80, 90, 80], areaStyle: { opacity: 0.1 } },
+        ],
+      },
+    ],
   }
 })
 </script>
@@ -159,21 +172,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

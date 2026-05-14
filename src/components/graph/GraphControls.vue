@@ -27,8 +27,8 @@ defineEmits<{
 <style lang="scss" scoped>
 .graph-controls {
   position: absolute;
-  left: 16px;
   bottom: 16px;
+  left: 16px;
   z-index: 10;
 }
 </style>

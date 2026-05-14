@@ -8,7 +8,7 @@
 
     <div class="filter-section">
       <SearchFilterBar
-        searchPlaceholder="搜索行业名称"
+        search-placeholder="搜索行业名称"
         :filters="filterFields"
         @search="handleSearch"
         @filter="handleFilter"
@@ -57,10 +57,15 @@ import { getMockEnterpriseDistribution } from '@/api/mock/monitor'
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
 const filterFields = [
-  { key: 'growth', label: '增长趋势', type: 'select' as const, options: [
-    { label: '正增长', value: 'up' },
-    { label: '负增长', value: 'down' }
-  ]}
+  {
+    key: 'growth',
+    label: '增长趋势',
+    type: 'select' as const,
+    options: [
+      { label: '正增长', value: 'up' },
+      { label: '负增长', value: 'down' },
+    ],
+  },
 ]
 
 const industryData = ref<any[]>([])
@@ -75,20 +80,22 @@ onMounted(() => {
     revenue: Math.floor(Math.random() * 200 + 20),
     growth: Math.floor(Math.random() * 40 - 5),
     avgHealth: Math.floor(Math.random() * 20 + 70),
-    riskCount: Math.floor(Math.random() * 15 + 2)
+    riskCount: Math.floor(Math.random() * 15 + 2),
   }))
 
   distPieOption.value = {
     color: chartColors,
     tooltip: { trigger: 'item' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie',
-      radius: ['40%', '70%'],
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: distData
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: distData,
+      },
+    ],
   }
 
   revenueBarOption.value = {
@@ -97,7 +104,7 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: industryData.value.map((d: any) => d.name) },
     yAxis: { type: 'value' },
-    series: [{ type: 'bar', barWidth: '40%', data: industryData.value.map((d: any) => d.revenue) }]
+    series: [{ type: 'bar', barWidth: '40%', data: industryData.value.map((d: any) => d.revenue) }],
   }
 })
 
@@ -121,21 +128,21 @@ function handleExport() {}
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

@@ -24,7 +24,12 @@
         <el-table-column prop="validDate" label="有效期至" width="120" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="row.status === '有效' ? 'success' : row.status === '即将到期' ? 'warning' : 'danger'" size="small">
+            <el-tag
+              :type="
+                row.status === '有效' ? 'success' : row.status === '即将到期' ? 'warning' : 'danger'
+              "
+              size="small"
+            >
               {{ row.status }}
             </el-tag>
           </template>
@@ -50,16 +55,26 @@ import { getMockQualifiedList } from '@/api/mock/invest'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const filters: FilterField[] = [
-  { key: 'qualType', label: '资质类型', type: 'select', options: [
-    { label: '高新技术企业', value: '高新技术企业' },
-    { label: '专精特新', value: '专精特新' },
-    { label: '科技型中小企业', value: '科技型中小企业' }
-  ]},
-  { key: 'status', label: '状态', type: 'select', options: [
-    { label: '有效', value: '有效' },
-    { label: '即将到期', value: '即将到期' },
-    { label: '已过期', value: '已过期' }
-  ]}
+  {
+    key: 'qualType',
+    label: '资质类型',
+    type: 'select',
+    options: [
+      { label: '高新技术企业', value: '高新技术企业' },
+      { label: '专精特新', value: '专精特新' },
+      { label: '科技型中小企业', value: '科技型中小企业' },
+    ],
+  },
+  {
+    key: 'status',
+    label: '状态',
+    type: 'select',
+    options: [
+      { label: '有效', value: '有效' },
+      { label: '即将到期', value: '即将到期' },
+      { label: '已过期', value: '已过期' },
+    ],
+  },
 ]
 
 const targets = ref<any[]>([])
@@ -68,7 +83,9 @@ function handleSearch() {
   targets.value = getMockQualifiedList('高新技术企业')
 }
 
-onMounted(() => { handleSearch() })
+onMounted(() => {
+  handleSearch()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -76,9 +93,9 @@ onMounted(() => { handleSearch() })
   padding: 20px;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

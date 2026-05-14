@@ -25,13 +25,13 @@ defineEmits<{
 <style lang="scss" scoped>
 .map-toolbar {
   position: absolute;
-  right: 16px;
   top: 16px;
+  right: 16px;
+  z-index: 10;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 8px;
-  z-index: 10;
+  align-items: center;
 
   .el-button {
     width: 56px;

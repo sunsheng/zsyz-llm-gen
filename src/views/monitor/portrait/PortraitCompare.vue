@@ -10,8 +10,19 @@
       <div class="chart-panel">
         <h4 class="chart-panel__title">选择对比企业</h4>
         <div class="select-row">
-          <el-select v-model="selectedEnterprises" multiple placeholder="请选择企业（最多5家）" :max-collapse-tags="3" style="width: 600px">
-            <el-option v-for="item in enterpriseOptions" :key="item.value" :label="item.label" :value="item.value" />
+          <el-select
+            v-model="selectedEnterprises"
+            multiple
+            placeholder="请选择企业（最多5家）"
+            :max-collapse-tags="3"
+            style="width: 600px"
+          >
+            <el-option
+              v-for="item in enterpriseOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
           </el-select>
           <el-button type="primary" @click="handleCompare">开始对比</el-button>
         </div>
@@ -33,9 +44,19 @@
       <h4 class="chart-panel__title">对比详情</h4>
       <el-table :data="compareData" stripe border style="width: 100%">
         <el-table-column prop="dimension" label="维度" width="120" />
-        <el-table-column v-for="(ent, idx) in compareEnterprises" :key="idx" :label="ent.name" min-width="120">
+        <el-table-column
+          v-for="(ent, idx) in compareEnterprises"
+          :key="idx"
+          :label="ent.name"
+          min-width="120"
+        >
           <template #default="{ row }">
-            <span :style="{ fontWeight: row.scores[idx] === Math.max(...row.scores) ? 700 : 400, color: row.scores[idx] === Math.max(...row.scores) ? '#1889E8' : '' }">
+            <span
+              :style="{
+                fontWeight: row.scores[idx] === Math.max(...row.scores) ? 700 : 400,
+                color: row.scores[idx] === Math.max(...row.scores) ? '#1889E8' : '',
+              }"
+            >
               {{ row.scores[idx] }}
             </span>
           </template>
@@ -69,13 +90,15 @@ onMounted(() => {
 })
 
 function handleCompare() {
-  compareEnterprises.value = selectedEnterprises.value.slice(0, 5).map(id => getMockPortraitData(id))
+  compareEnterprises.value = selectedEnterprises.value
+    .slice(0, 5)
+    .map((id) => getMockPortraitData(id))
   const dimensions = ['健康评分', '创新评分', '成长评分', '风险评分']
   const scoreKeys = ['healthScore', 'innovationScore', 'growthScore', 'riskScore'] as const
 
   compareData.value = dimensions.map((dimension, dIdx) => ({
     dimension,
-    scores: compareEnterprises.value.map(e => (e as any)[scoreKeys[dIdx]])
+    scores: compareEnterprises.value.map((e) => (e as any)[scoreKeys[dIdx]]),
   }))
 
   radarOption.value = {
@@ -83,20 +106,22 @@ function handleCompare() {
     tooltip: {},
     legend: { data: compareEnterprises.value.map((e: any) => e.name) },
     radar: {
-      indicator: dimensions.map(d => ({ name: d, max: 100 })),
+      indicator: dimensions.map((d) => ({ name: d, max: 100 })),
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: compareEnterprises.value.map((e: any, idx: number) => ({
-        name: e.name,
-        value: scoreKeys.map(k => e[k]),
-        areaStyle: { opacity: 0.15 },
-        lineStyle: { color: chartColors[idx] },
-        itemStyle: { color: chartColors[idx] }
-      }))
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: compareEnterprises.value.map((e: any, idx: number) => ({
+          name: e.name,
+          value: scoreKeys.map((k) => e[k]),
+          areaStyle: { opacity: 0.15 },
+          lineStyle: { color: chartColors[idx] },
+          itemStyle: { color: chartColors[idx] },
+        })),
+      },
+    ],
   }
 
   barOption.value = {
@@ -110,8 +135,8 @@ function handleCompare() {
       name: e.name,
       type: 'bar',
       barWidth: '15%',
-      data: scoreKeys.map(k => e[k])
-    }))
+      data: scoreKeys.map((k) => e[k]),
+    })),
   }
 }
 </script>
@@ -135,21 +160,21 @@ function handleCompare() {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

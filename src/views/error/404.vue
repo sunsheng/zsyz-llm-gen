@@ -15,11 +15,11 @@ const router = useRouter()
 
 <style lang="scss" scoped>
 .error-page {
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .error-page__content {
@@ -27,15 +27,15 @@ const router = useRouter()
 }
 
 .error-page__code {
+  margin-bottom: 16px;
   font-size: 72px;
   font-weight: 700;
   color: $color-primary;
-  margin-bottom: 16px;
 }
 
 .error-page__message {
+  margin-bottom: 32px;
   font-size: 18px;
   color: $text-secondary;
-  margin-bottom: 32px;
 }
 </style>

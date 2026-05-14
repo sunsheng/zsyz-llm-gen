@@ -18,7 +18,13 @@
         </div>
         <div class="filter-section">
           <div class="filter-label">产业类型</div>
-          <el-select v-model="selectedIndustry" placeholder="全部产业" clearable style="width: 100%" @change="handleSearch">
+          <el-select
+            v-model="selectedIndustry"
+            placeholder="全部产业"
+            clearable
+            style="width: 100%"
+            @change="handleSearch"
+          >
             <el-option v-for="item in industries" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
@@ -45,7 +51,9 @@
             >
               <div class="result-item__header">
                 <span class="result-item__name">{{ marker.name }}</span>
-                <el-tag size="small" :type="getTypeTagType(marker.type)">{{ getTypeLabel(marker.type) }}</el-tag>
+                <el-tag size="small" :type="getTypeTagType(marker.type)">{{
+                  getTypeLabel(marker.type)
+                }}</el-tag>
               </div>
               <div class="result-item__category">{{ marker.category }}</div>
               <div class="result-item__value">
@@ -56,7 +64,12 @@
         </div>
       </MapControlPanel>
       <div class="map-page__map">
-        <MaptalksMap :center="[104.612, 30.884]" :zoom="15" @ready="onMapReady" @click="onMapClick" />
+        <MaptalksMap
+          :center="[104.612, 30.884]"
+          :zoom="15"
+          @ready="onMapReady"
+          @click="onMapClick"
+        />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <MapLegend :items="legendItems" />
       </div>
@@ -75,7 +88,16 @@ import MapLegend from '@/components/map/MapLegend.vue'
 import { getMockMarkers } from '@/api/mock/map'
 import type { MapMarker } from '@/api/types/map'
 
-const industries = ['高端装备制造', '新材料', '生物医药', '电子信息', '新能源', '节能环保', '数字创意', '现代服务业']
+const industries = [
+  '高端装备制造',
+  '新材料',
+  '生物医药',
+  '电子信息',
+  '新能源',
+  '节能环保',
+  '数字创意',
+  '现代服务业',
+]
 
 const searchText = ref('')
 const selectedIndustry = ref('')
@@ -88,20 +110,22 @@ let markerLayer: any = null
 const legendItems = [
   { label: '企业', color: '#1889E8' },
   { label: '园区', color: '#4ECB73' },
-  { label: '机构', color: '#FBD437' }
+  { label: '机构', color: '#FBD437' },
 ]
 
 const filteredMarkers = computed(() => {
   let list = allMarkers.value
   if (searchText.value) {
     const kw = searchText.value.toLowerCase()
-    list = list.filter(m => m.name.toLowerCase().includes(kw) || m.category.toLowerCase().includes(kw))
+    list = list.filter(
+      (m) => m.name.toLowerCase().includes(kw) || m.category.toLowerCase().includes(kw),
+    )
   }
   if (selectedIndustry.value) {
-    list = list.filter(m => m.category === selectedIndustry.value)
+    list = list.filter((m) => m.category === selectedIndustry.value)
   }
   if (selectedType.value) {
-    list = list.filter(m => m.type === selectedType.value)
+    list = list.filter((m) => m.type === selectedType.value)
   }
   return list
 })
@@ -112,12 +136,20 @@ function getTypeLabel(type: string) {
 }
 
 function getTypeTagType(type: string): 'primary' | 'success' | 'warning' {
-  const map: Record<string, 'primary' | 'success' | 'warning'> = { enterprise: 'primary', park: 'success', institution: 'warning' }
+  const map: Record<string, 'primary' | 'success' | 'warning'> = {
+    enterprise: 'primary',
+    park: 'success',
+    institution: 'warning',
+  }
   return map[type] || 'primary'
 }
 
 function getMarkerColor(type: string) {
-  const map: Record<string, string> = { enterprise: '#1889E8', park: '#4ECB73', institution: '#FBD437' }
+  const map: Record<string, string> = {
+    enterprise: '#1889E8',
+    park: '#4ECB73',
+    institution: '#FBD437',
+  }
   return map[type] || '#1889E8'
 }
 
@@ -133,8 +165,8 @@ function addMarkersToMap() {
   markerLayer.clear()
   const maptalks = (window as any).__maptalks_module
   if (!maptalks) {
-    import('maptalks').then(mt => {
-      (window as any).__maptalks_module = mt
+    import('maptalks').then((mt) => {
+      ;(window as any).__maptalks_module = mt
       drawMarkers(mt)
     })
   } else {
@@ -145,7 +177,7 @@ function addMarkersToMap() {
 function drawMarkers(maptalks: any) {
   if (!markerLayer) return
   markerLayer.clear()
-  filteredMarkers.value.forEach(m => {
+  filteredMarkers.value.forEach((m) => {
     const color = getMarkerColor(m.type)
     const marker = new maptalks.Marker([m.longitude, m.latitude], {
       id: m.id,
@@ -156,8 +188,8 @@ function drawMarkers(maptalks: any) {
         markerLineColor: '#fff',
         markerLineWidth: 2,
         markerWidth: activeMarkerId.value === m.id ? 20 : 14,
-        markerHeight: activeMarkerId.value === m.id ? 20 : 14
-      }
+        markerHeight: activeMarkerId.value === m.id ? 20 : 14,
+      },
     })
     marker.on('click', () => handleMarkerClick(m))
     markerLayer.addGeometry(marker)
@@ -214,8 +246,8 @@ onUnmounted(() => {
 .map-page__body {
   position: relative;
   height: 100%;
-  border-radius: $radius-base;
   overflow: hidden;
+  border-radius: $radius-base;
 }
 
 .map-page__map {
@@ -233,16 +265,16 @@ onUnmounted(() => {
 }
 
 .filter-label {
+  margin-bottom: 8px;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  margin-bottom: 8px;
 }
 
 .results-section {
+  padding-top: 12px;
   margin-top: 16px;
   border-top: 1px solid $border-color-lighter;
-  padding-top: 12px;
 }
 
 .results-header {
@@ -261,11 +293,11 @@ onUnmounted(() => {
 
 .result-item {
   padding: 12px;
-  border-radius: $radius-base;
-  cursor: pointer;
-  transition: background $transition-fast;
-  border: 1px solid transparent;
   margin-bottom: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: $radius-base;
+  transition: background $transition-fast;
 
   &:hover {
     background: $bg-hover;
@@ -285,19 +317,19 @@ onUnmounted(() => {
 }
 
 .result-item__name {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 14px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 200px;
 }
 
 .result-item__category {
+  margin-bottom: 4px;
   font-size: 12px;
   color: $text-secondary;
-  margin-bottom: 4px;
 }
 
 .result-item__value {
@@ -306,7 +338,7 @@ onUnmounted(() => {
 }
 
 .value-num {
-  color: $color-primary;
   font-weight: $font-weight-semibold;
+  color: $color-primary;
 }
 </style>

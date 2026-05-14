@@ -8,7 +8,7 @@
 
     <div class="filter-section">
       <SearchFilterBar
-        searchPlaceholder="搜索区域名称"
+        search-placeholder="搜索区域名称"
         :filters="filterFields"
         @search="handleSearch"
         @filter="handleFilter"
@@ -57,10 +57,15 @@ import BaseChart from '@/components/charts/BaseChart.vue'
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
 const filterFields = [
-  { key: 'level', label: '区域级别', type: 'select' as const, options: [
-    { label: '市辖区', value: 'city' },
-    { label: '县级市', value: 'county' }
-  ]}
+  {
+    key: 'level',
+    label: '区域级别',
+    type: 'select' as const,
+    options: [
+      { label: '市辖区', value: 'city' },
+      { label: '县级市', value: 'county' },
+    ],
+  },
 ]
 
 const regionData = ref<any[]>([])
@@ -69,14 +74,14 @@ const radarOption = ref({})
 
 onMounted(() => {
   const cities = ['杭州市', '宁波市', '温州市', '嘉兴市', '湖州市', '绍兴市', '金华市', '台州市']
-  regionData.value = cities.map(name => ({
+  regionData.value = cities.map((name) => ({
     name,
     count: Math.floor(Math.random() * 200 + 50),
     revenue: Math.floor(Math.random() * 150 + 20),
     growth: Math.floor(Math.random() * 30 - 5),
     avgHealth: Math.floor(Math.random() * 20 + 70),
     riskCount: Math.floor(Math.random() * 15 + 2),
-    parkCount: Math.floor(Math.random() * 5 + 1)
+    parkCount: Math.floor(Math.random() * 5 + 1),
   }))
 
   regionBarOption.value = {
@@ -85,7 +90,7 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: cities },
     yAxis: { type: 'value' },
-    series: [{ type: 'bar', barWidth: '40%', data: regionData.value.map((d: any) => d.count) }]
+    series: [{ type: 'bar', barWidth: '40%', data: regionData.value.map((d: any) => d.count) }],
   }
 
   radarOption.value = {
@@ -98,19 +103,27 @@ onMounted(() => {
         { name: '营收规模', max: 200 },
         { name: '健康评分', max: 100 },
         { name: '创新能力', max: 100 },
-        { name: '风险控制', max: 100 }
+        { name: '风险控制', max: 100 },
       ],
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: regionData.value.slice(0, 4).map((d: any) => ({
-        name: d.name,
-        value: [d.count, d.revenue, d.avgHealth, Math.floor(Math.random() * 30 + 60), Math.floor(Math.random() * 20 + 70)],
-        areaStyle: { opacity: 0.2 }
-      }))
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: regionData.value.slice(0, 4).map((d: any) => ({
+          name: d.name,
+          value: [
+            d.count,
+            d.revenue,
+            d.avgHealth,
+            Math.floor(Math.random() * 30 + 60),
+            Math.floor(Math.random() * 20 + 70),
+          ],
+          areaStyle: { opacity: 0.2 },
+        })),
+      },
+    ],
   }
 })
 
@@ -134,21 +147,21 @@ function handleExport() {}
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

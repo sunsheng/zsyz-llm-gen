@@ -23,16 +23,16 @@
           <h4 class="section-title">关系类型</h4>
           <div class="legend-list">
             <div class="legend-item">
-              <span class="legend-dot" style="background: #1889E8" />投资关系
+              <span class="legend-dot" style="background: #1889e8"></span>投资关系
             </div>
             <div class="legend-item">
-              <span class="legend-dot" style="background: #36CBCB" />供应关系
+              <span class="legend-dot" style="background: #36cbcb"></span>供应关系
             </div>
             <div class="legend-item">
-              <span class="legend-dot" style="background: #4ECB73" />合作关系
+              <span class="legend-dot" style="background: #4ecb73"></span>合作关系
             </div>
             <div class="legend-item">
-              <span class="legend-dot" style="background: #F2637B" />竞争关系
+              <span class="legend-dot" style="background: #f2637b"></span>竞争关系
             </div>
           </div>
         </div>
@@ -97,23 +97,23 @@ onMounted(() => {
   gap: 20px;
 }
 .graph-main {
+  overflow: hidden;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  overflow: hidden;
 }
 .legend-section,
 .detail-section {
+  padding: 16px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 16px;
 }
 .section-title {
+  margin: 0 0 12px;
   font-size: 15px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 12px 0;
 }
 .legend-list {
   display: flex;
@@ -122,24 +122,29 @@ onMounted(() => {
 }
 .legend-item {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   font-size: 13px;
   color: $text-regular;
 }
 .legend-dot {
+  flex-shrink: 0;
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  flex-shrink: 0;
 }
 .detail-item {
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 1px solid $border-color-lighter;
   font-size: 13px;
-  .label { color: $text-secondary; }
-  .value { color: $text-primary; font-weight: $font-weight-medium; }
+  border-bottom: 1px solid $border-color-lighter;
+  .label {
+    color: $text-secondary;
+  }
+  .value {
+    font-weight: $font-weight-medium;
+    color: $text-primary;
+  }
 }
 </style>

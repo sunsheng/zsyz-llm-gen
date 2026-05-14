@@ -35,7 +35,9 @@
               </div>
               <div class="event-card__row">
                 <span class="label">金额</span>
-                <span class="value" style="color: #1889E8; font-weight: 600">{{ item.amount.toLocaleString() }}万</span>
+                <span class="value" style="font-weight: 600; color: #1889e8"
+                  >{{ item.amount.toLocaleString() }}万</span
+                >
               </div>
               <div class="event-card__row">
                 <span class="label">行业</span>
@@ -60,28 +62,43 @@ import { getMockInvestEvents } from '@/api/mock/intelligence'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const filters: FilterField[] = [
-  { key: 'type', label: '类型', type: 'select', options: [
-    { label: '融资', value: '融资' },
-    { label: '并购', value: '并购' },
-    { label: '上市', value: '上市' },
-    { label: '投资', value: '投资' }
-  ]},
-  { key: 'industry', label: '行业', type: 'select', options: [
-    { label: '高端装备制造', value: '高端装备制造' },
-    { label: '新材料', value: '新材料' },
-    { label: '生物医药', value: '生物医药' }
-  ]}
+  {
+    key: 'type',
+    label: '类型',
+    type: 'select',
+    options: [
+      { label: '融资', value: '融资' },
+      { label: '并购', value: '并购' },
+      { label: '上市', value: '上市' },
+      { label: '投资', value: '投资' },
+    ],
+  },
+  {
+    key: 'industry',
+    label: '行业',
+    type: 'select',
+    options: [
+      { label: '高端装备制造', value: '高端装备制造' },
+      { label: '新材料', value: '新材料' },
+      { label: '生物医药', value: '生物医药' },
+    ],
+  },
 ]
 
 const eventList = ref<any[]>([])
 
 function eventTypeTag(type: string) {
-  const map: Record<string, string> = { '融资': '', '并购': 'warning', '上市': 'success', '投资': 'info' }
+  const map: Record<string, string> = { 融资: '', 并购: 'warning', 上市: 'success', 投资: 'info' }
   return map[type] || ''
 }
 
 function eventTypeColor(type: string) {
-  const map: Record<string, string> = { '融资': 'primary', '并购': 'warning', '上市': 'success', '投资': '' }
+  const map: Record<string, string> = {
+    融资: 'primary',
+    并购: 'warning',
+    上市: 'success',
+    投资: '',
+  }
   return map[type] || ''
 }
 
@@ -89,7 +106,9 @@ function handleSearch() {
   eventList.value = getMockInvestEvents(8)
 }
 
-onMounted(() => { handleSearch() })
+onMounted(() => {
+  handleSearch()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -104,28 +123,32 @@ onMounted(() => { handleSearch() })
 }
 .event-card__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 8px;
 }
 .event-card__title {
+  margin: 0;
   font-size: 15px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0;
 }
 .event-card__row {
   display: flex;
   justify-content: space-between;
   padding: 2px 0;
   font-size: 13px;
-  .label { color: $text-secondary; }
-  .value { color: $text-primary; }
+  .label {
+    color: $text-secondary;
+  }
+  .value {
+    color: $text-primary;
+  }
 }
 .event-card__desc {
+  margin: 8px 0 0;
   font-size: 12px;
-  color: $text-regular;
-  margin: 8px 0 0 0;
   line-height: 1.5;
+  color: $text-regular;
 }
 </style>

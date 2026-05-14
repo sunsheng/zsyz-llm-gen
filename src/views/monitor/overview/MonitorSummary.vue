@@ -37,14 +37,24 @@
         <el-table-column prop="industry" label="行业" width="140" />
         <el-table-column prop="healthScore" label="健康评分" width="100">
           <template #default="{ row }">
-            <span :style="{ color: row.healthScore >= 80 ? '#67C23A' : row.healthScore >= 60 ? '#E6A23C' : '#F56C6C' }">
+            <span
+              :style="{
+                color:
+                  row.healthScore >= 80 ? '#67C23A' : row.healthScore >= 60 ? '#E6A23C' : '#F56C6C',
+              }"
+            >
               {{ row.healthScore }}
             </span>
           </template>
         </el-table-column>
         <el-table-column prop="riskScore" label="风险评分" width="100">
           <template #default="{ row }">
-            <span :style="{ color: row.riskScore <= 30 ? '#67C23A' : row.riskScore <= 60 ? '#E6A23C' : '#F56C6C' }">
+            <span
+              :style="{
+                color:
+                  row.riskScore <= 30 ? '#67C23A' : row.riskScore <= 60 ? '#E6A23C' : '#F56C6C',
+              }"
+            >
               {{ row.riskScore }}
             </span>
           </template>
@@ -66,7 +76,11 @@ import { ref, onMounted } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
-import { getMockMonitorKpi, getMockEnterpriseDistribution, getMockHealthData } from '@/api/mock/monitor'
+import {
+  getMockMonitorKpi,
+  getMockEnterpriseDistribution,
+  getMockHealthData,
+} from '@/api/mock/monitor'
 import type { MonitorKpi } from '@/api/mock/monitor'
 
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
@@ -81,12 +95,14 @@ const riskBarOption = ref({})
 onMounted(() => {
   kpiCards.value = getMockMonitorKpi()
   const healthData = getMockHealthData(8)
-  tableData.value = healthData.map(h => ({
+  tableData.value = healthData.map((h) => ({
     name: h.name,
-    industry: ['高端装备制造', '新材料', '生物医药', '电子信息', '新能源'][Math.floor(Math.random() * 5)],
+    industry: ['高端装备制造', '新材料', '生物医药', '电子信息', '新能源'][
+      Math.floor(Math.random() * 5)
+    ],
     healthScore: h.overallScore,
     riskScore: 100 - h.riskScore,
-    growth: Math.floor(Math.random() * 40 - 10)
+    growth: Math.floor(Math.random() * 40 - 10),
   }))
 
   const distData = getMockEnterpriseDistribution()
@@ -94,34 +110,51 @@ onMounted(() => {
     color: chartColors,
     tooltip: { trigger: 'item' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie',
-      radius: ['40%', '70%'],
-      avoidLabelOverlap: false,
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: distData
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: distData,
+      },
+    ],
   }
 
   healthPieOption.value = {
     color: chartColors,
     tooltip: { trigger: 'item' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie',
-      radius: ['40%', '70%'],
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: [
-        { name: '健康', value: 1024 },
-        { name: '预警', value: 186 },
-        { name: '风险', value: 76 }
-      ]
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: [
+          { name: '健康', value: 1024 },
+          { name: '预警', value: 186 },
+          { name: '风险', value: 76 },
+        ],
+      },
+    ],
   }
 
-  const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+  const months = [
+    '1月',
+    '2月',
+    '3月',
+    '4月',
+    '5月',
+    '6月',
+    '7月',
+    '8月',
+    '9月',
+    '10月',
+    '11月',
+    '12月',
+  ]
   trendOption.value = {
     color: chartColors,
     tooltip: { trigger: 'axis' },
@@ -130,10 +163,25 @@ onMounted(() => {
     xAxis: { type: 'category', data: months },
     yAxis: { type: 'value' },
     series: [
-      { name: '健康企业', type: 'line', smooth: true, data: [980, 990, 1000, 1005, 1010, 1015, 1020, 1020, 1022, 1023, 1024, 1024] },
-      { name: '预警企业', type: 'line', smooth: true, data: [200, 195, 198, 195, 192, 190, 188, 190, 188, 187, 186, 186] },
-      { name: '风险企业', type: 'line', smooth: true, data: [70, 72, 68, 72, 74, 75, 76, 74, 76, 77, 76, 76] }
-    ]
+      {
+        name: '健康企业',
+        type: 'line',
+        smooth: true,
+        data: [980, 990, 1000, 1005, 1010, 1015, 1020, 1020, 1022, 1023, 1024, 1024],
+      },
+      {
+        name: '预警企业',
+        type: 'line',
+        smooth: true,
+        data: [200, 195, 198, 195, 192, 190, 188, 190, 188, 187, 186, 186],
+      },
+      {
+        name: '风险企业',
+        type: 'line',
+        smooth: true,
+        data: [70, 72, 68, 72, 74, 75, 76, 74, 76, 77, 76, 76],
+      },
+    ],
   }
 
   riskBarOption.value = {
@@ -142,16 +190,18 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: ['低风险', '中风险', '高风险', '极高风险'] },
     yAxis: { type: 'value' },
-    series: [{
-      type: 'bar',
-      barWidth: '40%',
-      data: [
-        { value: 856, itemStyle: { color: '#67C23A' } },
-        { value: 254, itemStyle: { color: '#E6A23C' } },
-        { value: 128, itemStyle: { color: '#F56C6C' } },
-        { value: 48, itemStyle: { color: '#C45656' } }
-      ]
-    }]
+    series: [
+      {
+        type: 'bar',
+        barWidth: '40%',
+        data: [
+          { value: 856, itemStyle: { color: '#67C23A' } },
+          { value: 254, itemStyle: { color: '#E6A23C' } },
+          { value: 128, itemStyle: { color: '#F56C6C' } },
+          { value: 48, itemStyle: { color: '#C45656' } },
+        ],
+      },
+    ],
   }
 })
 </script>
@@ -173,21 +223,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

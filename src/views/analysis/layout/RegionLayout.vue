@@ -70,34 +70,72 @@ onMounted(() => {
     yAxis: { type: 'value' },
     series: [
       { name: '企业数', type: 'bar', data: [286, 198, 245, 176, 312, 269], barWidth: '30%' },
-      { name: '新增企业', type: 'bar', data: [45, 32, 38, 28, 52, 41], barWidth: '30%' }
-    ]
+      { name: '新增企业', type: 'bar', data: [45, 32, 38, 28, 52, 41], barWidth: '30%' },
+    ],
   }
 
   const scatterData = getMockChartData('scatter-distribution')
   scatterOption.value = {
     color: chartColors,
     tooltip: {
-      formatter: (params: any) => `企业密度: ${params.value[0]}<br/>产值指数: ${params.value[1]}<br/>规模: ${params.value[2]}`
+      formatter: (params: any) =>
+        `企业密度: ${params.value[0]}<br/>产值指数: ${params.value[1]}<br/>规模: ${params.value[2]}`,
     },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    xAxis: { type: 'value', name: '企业密度', splitLine: { show: true, lineStyle: { type: 'dashed' } } },
-    yAxis: { type: 'value', name: '产值指数', splitLine: { show: true, lineStyle: { type: 'dashed' } } },
-    series: [{
-      type: 'scatter',
-      symbolSize: (val: number[]) => val[2] / 2,
-      data: scatterData.data,
-      itemStyle: { opacity: 0.7 }
-    }]
+    xAxis: {
+      type: 'value',
+      name: '企业密度',
+      splitLine: { show: true, lineStyle: { type: 'dashed' } },
+    },
+    yAxis: {
+      type: 'value',
+      name: '产值指数',
+      splitLine: { show: true, lineStyle: { type: 'dashed' } },
+    },
+    series: [
+      {
+        type: 'scatter',
+        symbolSize: (val: number[]) => val[2] / 2,
+        data: scatterData.data,
+        itemStyle: { opacity: 0.7 },
+      },
+    ],
   }
 })
 </script>
 
 <style lang="scss" scoped>
-.page-container { padding: 20px; }
-.stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-panel { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
-.chart-panel__title { font-size: 16px; font-weight: $font-weight-semibold; color: $text-primary; margin: 0 0 16px 0; }
-.table-section { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
+.page-container {
+  padding: 20px;
+}
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-panel {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+.chart-panel__title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+.table-section {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
 </style>

@@ -70,12 +70,18 @@ onMounted(() => {
     xAxis: { type: 'category', data: contribData.data.xAxis.data },
     yAxis: [
       { type: 'value', name: '企业数' },
-      { type: 'value', name: '产值(亿)' }
+      { type: 'value', name: '产值(亿)' },
     ],
     series: [
       { name: '企业数', type: 'bar', data: [156, 132, 98, 124, 86, 72], barWidth: '25%' },
-      { name: '产值(亿)', type: 'bar', yAxisIndex: 1, data: contribData.data.series[0].data, barWidth: '25%' }
-    ]
+      {
+        name: '产值(亿)',
+        type: 'bar',
+        yAxisIndex: 1,
+        data: contribData.data.series[0].data,
+        barWidth: '25%',
+      },
+    ],
   }
 
   const trendData = getMockChartData('trend-line')
@@ -87,17 +93,47 @@ onMounted(() => {
     xAxis: { type: 'category', data: trendData.data.xAxis.data, boundaryGap: false },
     yAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
     series: trendData.data.series.map((s: any) => ({
-      ...s, type: 'line', smooth: true, areaStyle: { opacity: 0.1 }
-    }))
+      ...s,
+      type: 'line',
+      smooth: true,
+      areaStyle: { opacity: 0.1 },
+    })),
   }
 })
 </script>
 
 <style lang="scss" scoped>
-.page-container { padding: 20px; }
-.stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-panel { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
-.chart-panel__title { font-size: 16px; font-weight: $font-weight-semibold; color: $text-primary; margin: 0 0 16px 0; }
-.table-section { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
+.page-container {
+  padding: 20px;
+}
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-panel {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+.chart-panel__title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+.table-section {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
 </style>

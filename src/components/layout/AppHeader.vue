@@ -7,11 +7,7 @@
         </div>
         <span class="app-header__title">产业招商平台</span>
       </div>
-      <el-icon
-        class="app-header__collapse-btn"
-        :size="20"
-        @click="appStore.toggleSidebar"
-      >
+      <el-icon class="app-header__collapse-btn" :size="20" @click="appStore.toggleSidebar">
         <component :is="appStore.sidebarCollapsed ? 'Expand' : 'Fold'" />
       </el-icon>
     </div>
@@ -59,40 +55,40 @@ function handleCommand(command: string) {
 .app-header {
   position: fixed;
   top: 0;
-  left: 0;
   right: 0;
-  height: $header-height;
-  background: $bg-card;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
+  left: 0;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: $header-height;
   padding: 0 20px;
-  z-index: 100;
+  background: $bg-card;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.08);
 }
 
 .app-header__left {
   display: flex;
-  align-items: center;
   gap: 16px;
+  align-items: center;
 }
 
 .app-header__logo {
   display: flex;
-  align-items: center;
   gap: 10px;
+  align-items: center;
   cursor: pointer;
 }
 
 .app-header__logo-icon {
-  width: 36px;
-  height: 36px;
-  background: $color-primary;
-  border-radius: $radius-base;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 36px;
+  height: 36px;
   color: #fff;
+  background: $color-primary;
+  border-radius: $radius-base;
 }
 
 .app-header__title {
@@ -103,8 +99,8 @@ function handleCommand(command: string) {
 }
 
 .app-header__collapse-btn {
-  cursor: pointer;
   color: $text-regular;
+  cursor: pointer;
   transition: color $transition-fast;
   &:hover {
     color: $color-primary;
@@ -113,19 +109,19 @@ function handleCommand(command: string) {
 
 .app-header__right {
   display: flex;
-  align-items: center;
   gap: 20px;
+  align-items: center;
 }
 
 .app-header__actions {
   display: flex;
-  align-items: center;
   gap: 16px;
+  align-items: center;
 }
 
 .app-header__icon-btn {
-  cursor: pointer;
   color: $text-regular;
+  cursor: pointer;
   transition: color $transition-fast;
   &:hover {
     color: $color-primary;
@@ -134,8 +130,8 @@ function handleCommand(command: string) {
 
 .app-header__user {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   cursor: pointer;
 }
 

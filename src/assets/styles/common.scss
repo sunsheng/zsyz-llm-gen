@@ -34,9 +34,9 @@
 }
 .text-ellipsis-2 {
   display: -webkit-box;
+  overflow: hidden;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 .text-break { word-break: break-all; }
 
@@ -143,29 +143,29 @@
 
 // --- 卡片通用样式 ---
 .content-card {
+  padding: 20px;
+  margin-bottom: 16px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
-  margin-bottom: 16px;
 }
 
 .card-header {
-  font-size: 16px;
-  font-weight: $font-weight-semibold;
-  color: $text-primary;
-  padding-bottom: 12px;
-  margin-bottom: 16px;
-  border-bottom: 1px solid $border-color-lighter;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+  border-bottom: 1px solid $border-color-lighter;
 }
 
 // --- 页面容器 ---
 .page-container {
-  padding: 20px;
   min-height: calc(100vh - #{$header-height});
+  padding: 20px;
 }
 
 // --- 滚动条样式 (全局统一) ---
@@ -176,8 +176,8 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.10);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

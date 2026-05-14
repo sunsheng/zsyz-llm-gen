@@ -48,16 +48,26 @@ import { getMockTalentList } from '@/api/mock/intelligence'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const filters: FilterField[] = [
-  { key: 'level', label: '层级', type: 'select', options: [
-    { label: '高管', value: '高管' },
-    { label: '技术骨干', value: '技术骨干' },
-    { label: '核心研发', value: '核心研发' }
-  ]},
-  { key: 'field', label: '领域', type: 'select', options: [
-    { label: '高端装备制造', value: '高端装备制造' },
-    { label: '新材料', value: '新材料' },
-    { label: '生物医药', value: '生物医药' }
-  ]}
+  {
+    key: 'level',
+    label: '层级',
+    type: 'select',
+    options: [
+      { label: '高管', value: '高管' },
+      { label: '技术骨干', value: '技术骨干' },
+      { label: '核心研发', value: '核心研发' },
+    ],
+  },
+  {
+    key: 'field',
+    label: '领域',
+    type: 'select',
+    options: [
+      { label: '高端装备制造', value: '高端装备制造' },
+      { label: '新材料', value: '新材料' },
+      { label: '生物医药', value: '生物医药' },
+    ],
+  },
 ]
 
 const talentList = ref<any[]>([])
@@ -70,7 +80,9 @@ function handleSearch() {
   talentList.value = getMockTalentList(8)
 }
 
-onMounted(() => { handleSearch() })
+onMounted(() => {
+  handleSearch()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -85,15 +97,15 @@ onMounted(() => { handleSearch() })
 }
 .talent-card__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 12px;
 }
 .talent-card__name {
+  margin-right: 8px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin-right: 8px;
 }
 .talent-card__title {
   font-size: 12px;
@@ -101,18 +113,18 @@ onMounted(() => { handleSearch() })
 }
 .talent-card__flow {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   margin-bottom: 10px;
   font-size: 14px;
 }
 .talent-card__from {
-  color: $text-primary;
   font-weight: $font-weight-medium;
+  color: $text-primary;
 }
 .talent-card__to {
-  color: #1889E8;
   font-weight: $font-weight-medium;
+  color: #1889e8;
 }
 .talent-card__footer {
   display: flex;

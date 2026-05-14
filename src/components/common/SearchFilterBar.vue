@@ -21,7 +21,7 @@
           @change="handleFilterChange"
         >
           <el-option
-            v-for="opt in (filter.options || [])"
+            v-for="opt in filter.options || []"
             :key="(opt as any).value"
             :label="(opt as any).label"
             :value="(opt as any).value"
@@ -30,7 +30,7 @@
         <el-cascader
           v-else-if="filter.type === 'cascader'"
           v-model="filterValues[filter.key]"
-          :options="(filter.options as any)"
+          :options="filter.options as any"
           :placeholder="filter.placeholder || `请选择${filter.label}`"
           clearable
           @change="handleFilterChange"
@@ -69,13 +69,16 @@ export interface FilterField {
   options?: FilterOption[]
 }
 
-const props = withDefaults(defineProps<{
-  searchPlaceholder?: string
-  filters?: FilterField[]
-}>(), {
-  searchPlaceholder: '请输入关键词搜索',
-  filters: () => []
-})
+const props = withDefaults(
+  defineProps<{
+    searchPlaceholder?: string
+    filters?: FilterField[]
+  }>(),
+  {
+    searchPlaceholder: '请输入关键词搜索',
+    filters: () => [],
+  },
+)
 
 const emit = defineEmits<{
   search: [keyword: string]
@@ -96,7 +99,7 @@ function handleFilterChange() {
 
 function handleReset() {
   keyword.value = ''
-  Object.keys(filterValues).forEach(key => {
+  Object.keys(filterValues).forEach((key) => {
     filterValues[key] = undefined
   })
   emit('reset')
@@ -105,11 +108,11 @@ function handleReset() {
 
 <style lang="scss" scoped>
 .search-filter-bar {
+  padding: 20px;
+  margin-bottom: 16px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
-  margin-bottom: 16px;
 }
 
 .search-filter-bar__search {

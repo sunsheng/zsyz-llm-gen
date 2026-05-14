@@ -24,20 +24,39 @@
         <div class="sidebar-section">
           <h4 class="section-title">目标企业 ({{ targets.length }})</h4>
           <div class="target-list">
-            <div v-for="item in targets" :key="item.id" class="target-item" @click="handleTargetClick(item)">
+            <div
+              v-for="item in targets"
+              :key="item.id"
+              class="target-item"
+              @click="handleTargetClick(item)"
+            >
               <div class="target-item__header">
                 <span class="target-item__name">{{ item.name }}</span>
-                <span class="target-item__score" :style="{ color: item.matchScore >= 80 ? '#67C23A' : '#E6A23C' }">
+                <span
+                  class="target-item__score"
+                  :style="{ color: item.matchScore >= 80 ? '#67C23A' : '#E6A23C' }"
+                >
                   {{ item.matchScore }}%
                 </span>
               </div>
               <div class="target-item__info">
                 <span>{{ item.industry }}</span>
-                <el-tag size="small" :type="(item.status === '洽谈中' ? 'warning' : item.status === '已接触' ? 'info' : 'info') as any">
+                <el-tag
+                  size="small"
+                  :type="
+                    (item.status === '洽谈中'
+                      ? 'warning'
+                      : item.status === '已接触'
+                        ? 'info'
+                        : 'info') as any
+                  "
+                >
                   {{ item.status }}
                 </el-tag>
               </div>
-              <div class="target-item__amount">投资额: {{ item.investmentAmount.toLocaleString() }}万</div>
+              <div class="target-item__amount">
+                投资额: {{ item.investmentAmount.toLocaleString() }}万
+              </div>
             </div>
           </div>
         </div>
@@ -55,17 +74,27 @@ import { getMockMapTargets } from '@/api/mock/invest'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const filters: FilterField[] = [
-  { key: 'industry', label: '行业', type: 'select', options: [
-    { label: '高端装备制造', value: '高端装备制造' },
-    { label: '新材料', value: '新材料' },
-    { label: '生物医药', value: '生物医药' },
-    { label: '电子信息', value: '电子信息' }
-  ]},
-  { key: 'status', label: '状态', type: 'select', options: [
-    { label: '待接触', value: '待接触' },
-    { label: '已接触', value: '已接触' },
-    { label: '洽谈中', value: '洽谈中' }
-  ]}
+  {
+    key: 'industry',
+    label: '行业',
+    type: 'select',
+    options: [
+      { label: '高端装备制造', value: '高端装备制造' },
+      { label: '新材料', value: '新材料' },
+      { label: '生物医药', value: '生物医药' },
+      { label: '电子信息', value: '电子信息' },
+    ],
+  },
+  {
+    key: 'status',
+    label: '状态',
+    type: 'select',
+    options: [
+      { label: '待接触', value: '待接触' },
+      { label: '已接触', value: '已接触' },
+      { label: '洽谈中', value: '洽谈中' },
+    ],
+  },
 ]
 
 const targets = ref<any[]>([])
@@ -100,11 +129,11 @@ onMounted(() => {
   gap: 20px;
 }
 .map-area {
+  height: 600px;
+  overflow: hidden;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  overflow: hidden;
-  height: 600px;
 }
 .sidebar {
   display: flex;
@@ -112,16 +141,16 @@ onMounted(() => {
   gap: 16px;
 }
 .sidebar-section {
+  padding: 16px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 16px;
 }
 .section-title {
+  margin: 0 0 12px;
   font-size: 15px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 12px 0;
 }
 .target-list {
   max-height: 400px;
@@ -129,15 +158,17 @@ onMounted(() => {
 }
 .target-item {
   padding: 12px;
-  border-bottom: 1px solid $border-color-lighter;
   cursor: pointer;
+  border-bottom: 1px solid $border-color-lighter;
   transition: background 0.2s;
-  &:hover { background: $bg-hover; }
+  &:hover {
+    background: $bg-hover;
+  }
 }
 .target-item__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 6px;
 }
 .target-item__name {
@@ -151,11 +182,11 @@ onMounted(() => {
 }
 .target-item__info {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
   font-size: 12px;
   color: $text-secondary;
-  margin-bottom: 4px;
 }
 .target-item__amount {
   font-size: 12px;

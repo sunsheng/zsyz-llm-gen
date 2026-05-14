@@ -29,7 +29,7 @@
           </div>
           <div class="detail-row">
             <span class="label">回报率</span>
-            <span class="value" style="color: #67C23A">{{ fund.roi }}%</span>
+            <span class="value" style="color: #67c23a">{{ fund.roi }}%</span>
           </div>
         </div>
       </div>
@@ -55,20 +55,22 @@ const gaugeOption = ref({})
 onMounted(() => {
   const funds = getMockFunds()
   const id = route.params.id as string
-  fund.value = funds.find(f => f.id === id) || funds[0]
+  fund.value = funds.find((f) => f.id === id) || funds[0]
 
-  const investRate = fund.value.invested / fund.value.scale * 100
+  const investRate = (fund.value.invested / fund.value.scale) * 100
   gaugeOption.value = {
-    series: [{
-      type: 'gauge',
-      startAngle: 200,
-      endAngle: -20,
-      min: 0,
-      max: 100,
-      detail: { formatter: '{value}%' },
-      data: [{ value: Math.min(investRate, 100).toFixed(1), name: '投资进度' }],
-      axisLine: { lineStyle: { width: 20 } }
-    }]
+    series: [
+      {
+        type: 'gauge',
+        startAngle: 200,
+        endAngle: -20,
+        min: 0,
+        max: 100,
+        detail: { formatter: '{value}%' },
+        data: [{ value: Math.min(investRate, 100).toFixed(1), name: '投资进度' }],
+        axisLine: { lineStyle: { width: 20 } },
+      },
+    ],
   }
 })
 </script>
@@ -84,30 +86,35 @@ onMounted(() => {
 }
 .detail-card,
 .chart-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
   h3 {
+    margin: 0;
     font-size: 20px;
     font-weight: $font-weight-bold;
     color: $text-primary;
-    margin: 0;
   }
 }
 .panel-title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .detail-row {
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 1px solid $border-color-lighter;
   font-size: 14px;
-  .label { color: $text-secondary; }
-  .value { color: $text-primary; font-weight: $font-weight-medium; }
+  border-bottom: 1px solid $border-color-lighter;
+  .label {
+    color: $text-secondary;
+  }
+  .value {
+    font-weight: $font-weight-medium;
+    color: $text-primary;
+  }
 }
 </style>

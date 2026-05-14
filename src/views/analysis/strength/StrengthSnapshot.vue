@@ -47,11 +47,16 @@ onMounted(() => {
     label: d.name,
     value: d.strength,
     unit: '分',
-    trend: d.trend === 'up' ? 'up' as const : d.trend === 'down' ? 'down' as const : 'flat' as const,
+    trend:
+      d.trend === 'up'
+        ? ('up' as const)
+        : d.trend === 'down'
+          ? ('down' as const)
+          : ('flat' as const),
     trendValue: d.trend === 'up' ? '优势' : d.trend === 'down' ? '弱势' : '持平',
     icon: 'TrendCharts',
     iconColor: d.strength >= 75 ? '#4ECB73' : d.strength >= 65 ? '#FBD437' : '#F2637B',
-    iconBgColor: d.strength >= 75 ? '#EDFAF0' : d.strength >= 65 ? '#FFF8E6' : '#FEF0F0'
+    iconBgColor: d.strength >= 75 ? '#EDFAF0' : d.strength >= 65 ? '#FFF8E6' : '#FEF0F0',
   }))
 
   radarOption.value = {
@@ -61,15 +66,17 @@ onMounted(() => {
     radar: {
       indicator: data.industries.map((i: string) => ({ name: i, max: 100 })),
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: [
-        { name: '优势指数', value: data.strengthScores, areaStyle: { opacity: 0.2 } },
-        { name: '弱势指数', value: data.weaknessScores, areaStyle: { opacity: 0.1 } }
-      ]
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: [
+          { name: '优势指数', value: data.strengthScores, areaStyle: { opacity: 0.2 } },
+          { name: '弱势指数', value: data.weaknessScores, areaStyle: { opacity: 0.1 } },
+        ],
+      },
+    ],
   }
 
   barOption.value = {
@@ -80,17 +87,51 @@ onMounted(() => {
     xAxis: { type: 'category', data: data.industries },
     yAxis: { type: 'value', name: '指数', max: 100 },
     series: [
-      { name: '优势指数', type: 'bar', data: data.strengthScores, barWidth: '25%', itemStyle: { borderRadius: [4, 4, 0, 0] } },
-      { name: '弱势指数', type: 'bar', data: data.weaknessScores, barWidth: '25%', itemStyle: { borderRadius: [4, 4, 0, 0] } }
-    ]
+      {
+        name: '优势指数',
+        type: 'bar',
+        data: data.strengthScores,
+        barWidth: '25%',
+        itemStyle: { borderRadius: [4, 4, 0, 0] },
+      },
+      {
+        name: '弱势指数',
+        type: 'bar',
+        data: data.weaknessScores,
+        barWidth: '25%',
+        itemStyle: { borderRadius: [4, 4, 0, 0] },
+      },
+    ],
   }
 })
 </script>
 
 <style lang="scss" scoped>
-.page-container { padding: 20px; }
-.stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-panel { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
-.chart-panel__title { font-size: 16px; font-weight: $font-weight-semibold; color: $text-primary; margin: 0 0 16px 0; }
+.page-container {
+  padding: 20px;
+}
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-panel {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+.chart-panel__title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
 </style>

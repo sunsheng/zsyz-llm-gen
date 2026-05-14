@@ -52,7 +52,7 @@ const radarOption = ref({})
 onMounted(() => {
   const list = getMockResearchInstitutions()
   const id = route.params.id as string
-  institution.value = list.find(i => i.id === id) || list[0]
+  institution.value = list.find((i) => i.id === id) || list[0]
 
   radarOption.value = {
     color: ['#1889E8'],
@@ -63,24 +63,28 @@ onMounted(() => {
         { name: '技术转移', max: 100 },
         { name: '企业合作', max: 100 },
         { name: '科研人才', max: 100 },
-        { name: '项目数量', max: 100 }
+        { name: '项目数量', max: 100 },
       ],
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: [{
-        value: [
-          Math.min(institution.value.patents / 5, 100),
-          Math.min(institution.value.transfers * 2, 100),
-          Math.min(institution.value.cooperation, 100),
-          Math.floor(Math.random() * 30 + 65),
-          Math.floor(Math.random() * 30 + 55)
+    series: [
+      {
+        type: 'radar',
+        data: [
+          {
+            value: [
+              Math.min(institution.value.patents / 5, 100),
+              Math.min(institution.value.transfers * 2, 100),
+              Math.min(institution.value.cooperation, 100),
+              Math.floor(Math.random() * 30 + 65),
+              Math.floor(Math.random() * 30 + 55),
+            ],
+            areaStyle: { opacity: 0.3 },
+          },
         ],
-        areaStyle: { opacity: 0.3 }
-      }]
-    }]
+      },
+    ],
   }
 })
 </script>
@@ -96,31 +100,36 @@ onMounted(() => {
 }
 .detail-card,
 .chart-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
   h3 {
     display: inline;
+    margin: 0;
     font-size: 20px;
     font-weight: $font-weight-bold;
     color: $text-primary;
-    margin: 0;
   }
 }
 .panel-title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .detail-row {
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 1px solid $border-color-lighter;
   font-size: 14px;
-  .label { color: $text-secondary; }
-  .value { color: $text-primary; font-weight: $font-weight-medium; }
+  border-bottom: 1px solid $border-color-lighter;
+  .label {
+    color: $text-secondary;
+  }
+  .value {
+    font-weight: $font-weight-medium;
+    color: $text-primary;
+  }
 }
 </style>

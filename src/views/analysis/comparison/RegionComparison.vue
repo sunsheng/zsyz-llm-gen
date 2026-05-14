@@ -61,12 +61,18 @@ onMounted(() => {
     xAxis: { type: 'category', data: regions },
     yAxis: [
       { type: 'value', name: '企业数' },
-      { type: 'value', name: '产值(亿)' }
+      { type: 'value', name: '产值(亿)' },
     ],
     series: [
       { name: '企业数', type: 'bar', data: [286, 198, 245, 176, 312, 269], barWidth: '25%' },
-      { name: '产值(亿)', type: 'bar', yAxisIndex: 1, data: [98, 62, 78, 52, 112, 86], barWidth: '25%' }
-    ]
+      {
+        name: '产值(亿)',
+        type: 'bar',
+        yAxisIndex: 1,
+        data: [98, 62, 78, 52, 112, 86],
+        barWidth: '25%',
+      },
+    ],
   }
 
   const radarData = getMockChartData('park-radar')
@@ -77,24 +83,48 @@ onMounted(() => {
     radar: {
       indicator: radarData.data.indicator,
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: [
-        { name: '东区', value: [85, 78, 82, 76, 90], areaStyle: { opacity: 0.15 } },
-        { name: '西区', value: [72, 85, 68, 82, 75], areaStyle: { opacity: 0.15 } },
-        { name: '南区', value: [78, 72, 88, 70, 82], areaStyle: { opacity: 0.15 } }
-      ]
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: [
+          { name: '东区', value: [85, 78, 82, 76, 90], areaStyle: { opacity: 0.15 } },
+          { name: '西区', value: [72, 85, 68, 82, 75], areaStyle: { opacity: 0.15 } },
+          { name: '南区', value: [78, 72, 88, 70, 82], areaStyle: { opacity: 0.15 } },
+        ],
+      },
+    ],
   }
 })
 </script>
 
 <style lang="scss" scoped>
-.page-container { padding: 20px; }
-.chart-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-panel { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
-.chart-panel__title { font-size: 16px; font-weight: $font-weight-semibold; color: $text-primary; margin: 0 0 16px 0; }
-.table-section { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
+.page-container {
+  padding: 20px;
+}
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-panel {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+.chart-panel__title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+.table-section {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
 </style>

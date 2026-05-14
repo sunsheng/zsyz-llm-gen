@@ -31,12 +31,14 @@
         </el-table-column>
         <el-table-column prop="marketShare" label="市场份额(%)" width="110">
           <template #default="{ row }">
-            <span style="font-weight: 600; color: #1889E8">{{ row.marketShare }}%</span>
+            <span style="font-weight: 600; color: #1889e8">{{ row.marketShare }}%</span>
           </template>
         </el-table-column>
         <el-table-column prop="innovationScore" label="创新指数" width="100">
           <template #default="{ row }">
-            <span :style="{ color: row.innovationScore >= 80 ? '#67C23A' : '#E6A23C' }">{{ row.innovationScore }}</span>
+            <span :style="{ color: row.innovationScore >= 80 ? '#67C23A' : '#E6A23C' }">{{
+              row.innovationScore
+            }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="driveCapability" label="带动能力" width="100">
@@ -44,7 +46,9 @@
         </el-table-column>
         <el-table-column label="操作" width="100">
           <template #default="{ row }">
-            <el-button type="primary" link size="small" @click="handleViewDetail(row)">详情</el-button>
+            <el-button type="primary" link size="small" @click="handleViewDetail(row)"
+              >详情</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -73,15 +77,55 @@ function handleViewDetail(row: any) {
 
 onMounted(() => {
   kpiCards.value = [
-    { key: 'leadingCount', label: '龙头企业', value: 6, unit: '家', trend: 'up', trendValue: '+20.0%', icon: 'Trophy', iconColor: '#1889E8', iconBgColor: '#ECF5FF' },
-    { key: 'totalRevenue', label: '总营收', value: 86.5, unit: '亿', trend: 'up', trendValue: '+12.3%', icon: 'Money', iconColor: '#36CBCB', iconBgColor: '#E6F7F7' },
-    { key: 'avgDrive', label: '平均带动', value: 76, unit: '分', trend: 'up', trendValue: '+8.5%', icon: 'Promotion', iconColor: '#4ECB73', iconBgColor: '#EDFAF0' },
-    { key: 'avgInnovation', label: '创新指数', value: 82, unit: '分', trend: 'up', trendValue: '+6.2%', icon: 'Star', iconColor: '#FBD437', iconBgColor: '#FFF8E6' }
+    {
+      key: 'leadingCount',
+      label: '龙头企业',
+      value: 6,
+      unit: '家',
+      trend: 'up',
+      trendValue: '+20.0%',
+      icon: 'Trophy',
+      iconColor: '#1889E8',
+      iconBgColor: '#ECF5FF',
+    },
+    {
+      key: 'totalRevenue',
+      label: '总营收',
+      value: 86.5,
+      unit: '亿',
+      trend: 'up',
+      trendValue: '+12.3%',
+      icon: 'Money',
+      iconColor: '#36CBCB',
+      iconBgColor: '#E6F7F7',
+    },
+    {
+      key: 'avgDrive',
+      label: '平均带动',
+      value: 76,
+      unit: '分',
+      trend: 'up',
+      trendValue: '+8.5%',
+      icon: 'Promotion',
+      iconColor: '#4ECB73',
+      iconBgColor: '#EDFAF0',
+    },
+    {
+      key: 'avgInnovation',
+      label: '创新指数',
+      value: 82,
+      unit: '分',
+      trend: 'up',
+      trendValue: '+6.2%',
+      icon: 'Star',
+      iconColor: '#FBD437',
+      iconBgColor: '#FFF8E6',
+    },
   ]
 
   leadingList.value = getMockLeadingEnterprises()
-  const names = leadingList.value.map(l => l.name)
-  const revenues = leadingList.value.map(l => l.revenue)
+  const names = leadingList.value.map((l) => l.name)
+  const revenues = leadingList.value.map((l) => l.revenue)
 
   revenueBarOption.value = {
     color: chartColors,
@@ -89,7 +133,7 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: names, axisLabel: { rotate: 30 } },
     yAxis: { type: 'value', axisLabel: { formatter: '{value}万' } },
-    series: [{ type: 'bar', data: revenues, barWidth: '40%' }]
+    series: [{ type: 'bar', data: revenues, barWidth: '40%' }],
   }
 
   radarOption.value = {
@@ -102,25 +146,27 @@ onMounted(() => {
         { name: '市场份额', max: 100 },
         { name: '创新能力', max: 100 },
         { name: '带动能力', max: 100 },
-        { name: '人才规模', max: 100 }
+        { name: '人才规模', max: 100 },
       ],
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: leadingList.value.slice(0, 3).map(l => ({
-        name: l.name,
-        value: [
-          Math.min(l.revenue / 2500, 100),
-          l.marketShare * 3,
-          l.innovationScore,
-          l.driveCapability,
-          Math.min(l.employees / 100, 100)
-        ],
-        areaStyle: { opacity: 0.2 }
-      }))
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: leadingList.value.slice(0, 3).map((l) => ({
+          name: l.name,
+          value: [
+            Math.min(l.revenue / 2500, 100),
+            l.marketShare * 3,
+            l.innovationScore,
+            l.driveCapability,
+            Math.min(l.employees / 100, 100),
+          ],
+          areaStyle: { opacity: 0.2 },
+        })),
+      },
+    ],
   }
 })
 </script>
@@ -142,21 +188,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

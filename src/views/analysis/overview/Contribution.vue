@@ -59,13 +59,15 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: contribData.data.xAxis.data },
     yAxis: { type: 'value', name: '产值(亿)' },
-    series: [{
-      name: '产值(亿)',
-      type: 'bar',
-      data: contribData.data.series[0].data,
-      barWidth: '40%',
-      itemStyle: { borderRadius: [4, 4, 0, 0] }
-    }]
+    series: [
+      {
+        name: '产值(亿)',
+        type: 'bar',
+        data: contribData.data.series[0].data,
+        barWidth: '40%',
+        itemStyle: { borderRadius: [4, 4, 0, 0] },
+      },
+    ],
   }
 
   const structData = getMockChartData('structure-pie')
@@ -73,14 +75,16 @@ onMounted(() => {
     color: chartColors,
     tooltip: { trigger: 'item', formatter: '{b}: {c}亿 ({d}%)' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie',
-      radius: ['40%', '70%'],
-      avoidLabelOverlap: false,
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: structData.data
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: structData.data,
+      },
+    ],
   }
 })
 </script>
@@ -96,21 +100,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

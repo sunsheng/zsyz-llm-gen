@@ -82,28 +82,34 @@ onMounted(() => {
     color: chartColors,
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    xAxis: { type: 'category', data: ['60-65%', '65-70%', '70-75%', '75-80%', '80-85%', '85-90%', '90-95%'] },
+    xAxis: {
+      type: 'category',
+      data: ['60-65%', '65-70%', '70-75%', '75-80%', '80-85%', '85-90%', '90-95%'],
+    },
     yAxis: { type: 'value' },
-    series: [{ type: 'bar', data: [5, 8, 15, 22, 18, 12, 6], barWidth: '40%' }]
+    series: [{ type: 'bar', data: [5, 8, 15, 22, 18, 12, 6], barWidth: '40%' }],
   }
 
   industryPieOption.value = {
     color: chartColors,
     tooltip: { trigger: 'item' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie', radius: ['40%', '70%'],
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: [
-        { name: '高端装备制造', value: 28 },
-        { name: '新材料', value: 22 },
-        { name: '生物医药', value: 18 },
-        { name: '电子信息', value: 16 },
-        { name: '新能源', value: 10 },
-        { name: '其他', value: 6 }
-      ]
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: [
+          { name: '高端装备制造', value: 28 },
+          { name: '新材料', value: 22 },
+          { name: '生物医药', value: 18 },
+          { name: '电子信息', value: 16 },
+          { name: '新能源', value: 10 },
+          { name: '其他', value: 6 },
+        ],
+      },
+    ],
   }
 })
 </script>
@@ -125,22 +131,22 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .recommend-list {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .card-grid {
   display: grid;
@@ -167,19 +173,24 @@ onMounted(() => {
   justify-content: space-between;
   padding: 4px 0;
   font-size: 13px;
-  .label { color: $text-secondary; }
-  .value { color: $text-primary; font-weight: $font-weight-medium; }
+  .label {
+    color: $text-secondary;
+  }
+  .value {
+    font-weight: $font-weight-medium;
+    color: $text-primary;
+  }
 }
 .recommend-card__reasons {
-  border-top: 1px solid $border-color-lighter;
   padding-top: 8px;
+  border-top: 1px solid $border-color-lighter;
 }
 .reason-item {
   display: flex;
-  align-items: center;
   gap: 4px;
+  align-items: center;
+  padding: 2px 0;
   font-size: 12px;
   color: $text-regular;
-  padding: 2px 0;
 }
 </style>

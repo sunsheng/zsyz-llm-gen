@@ -22,7 +22,9 @@
         <el-table-column prop="region" label="区域" width="100" />
         <el-table-column prop="matchScore" label="匹配度" width="90">
           <template #default="{ row }">
-            <span :style="{ color: row.matchScore >= 80 ? '#67C23A' : '#E6A23C', fontWeight: 600 }">{{ row.matchScore }}%</span>
+            <span :style="{ color: row.matchScore >= 80 ? '#67C23A' : '#E6A23C', fontWeight: 600 }"
+              >{{ row.matchScore }}%</span
+            >
           </template>
         </el-table-column>
         <el-table-column prop="investmentAmount" label="投资额(万)" width="120">
@@ -30,7 +32,9 @@
         </el-table-column>
         <el-table-column prop="tags" label="标签" min-width="160">
           <template #default="{ row }">
-            <el-tag v-for="tag in row.tags" :key="tag" size="small" style="margin-right: 4px">{{ tag }}</el-tag>
+            <el-tag v-for="tag in row.tags" :key="tag" size="small" style="margin-right: 4px">{{
+              tag
+            }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="120" fixed="right">
@@ -54,16 +58,26 @@ import { getMockTargets } from '@/api/mock/invest'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const filters: FilterField[] = [
-  { key: 'fund', label: '基金', type: 'select', options: [
-    { label: '产业引导基金', value: '产业引导基金' },
-    { label: '创业投资基金', value: '创业投资基金' },
-    { label: '科技成果转化基金', value: '科技成果转化基金' }
-  ]},
-  { key: 'industry', label: '行业', type: 'select', options: [
-    { label: '高端装备制造', value: '高端装备制造' },
-    { label: '新材料', value: '新材料' },
-    { label: '生物医药', value: '生物医药' }
-  ]}
+  {
+    key: 'fund',
+    label: '基金',
+    type: 'select',
+    options: [
+      { label: '产业引导基金', value: '产业引导基金' },
+      { label: '创业投资基金', value: '创业投资基金' },
+      { label: '科技成果转化基金', value: '科技成果转化基金' },
+    ],
+  },
+  {
+    key: 'industry',
+    label: '行业',
+    type: 'select',
+    options: [
+      { label: '高端装备制造', value: '高端装备制造' },
+      { label: '新材料', value: '新材料' },
+      { label: '生物医药', value: '生物医药' },
+    ],
+  },
 ]
 
 const targets = ref<any[]>([])
@@ -72,7 +86,9 @@ function handleSearch() {
   targets.value = getMockTargets(10)
 }
 
-onMounted(() => { handleSearch() })
+onMounted(() => {
+  handleSearch()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -80,9 +96,9 @@ onMounted(() => { handleSearch() })
   padding: 20px;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

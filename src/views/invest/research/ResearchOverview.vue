@@ -32,7 +32,9 @@
         <el-table-column prop="cooperation" label="合作企业" width="100" />
         <el-table-column label="操作" width="100">
           <template #default="{ row }">
-            <el-button type="primary" link size="small" @click="handleViewDetail(row)">详情</el-button>
+            <el-button type="primary" link size="small" @click="handleViewDetail(row)"
+              >详情</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -65,34 +67,87 @@ onMounted(() => {
   const totalCooperation = institutions.value.reduce((s, i) => s + i.cooperation, 0)
 
   kpiCards.value = [
-    { key: 'instCount', label: '科研机构', value: institutions.value.length, unit: '家', trend: 'up', trendValue: '+12.0%', icon: 'School', iconColor: '#1889E8', iconBgColor: '#ECF5FF' },
-    { key: 'totalPatents', label: '专利总数', value: totalPatents, unit: '项', trend: 'up', trendValue: '+18.5%', icon: 'Document', iconColor: '#36CBCB', iconBgColor: '#E6F7F7' },
-    { key: 'totalCooperation', label: '合作企业', value: totalCooperation, unit: '家', trend: 'up', trendValue: '+15.3%', icon: 'Connection', iconColor: '#4ECB73', iconBgColor: '#EDFAF0' },
-    { key: 'transfers', label: '技术转移', value: institutions.value.reduce((s, i) => s + i.transfers, 0), unit: '项', trend: 'up', trendValue: '+22.1%', icon: 'Promotion', iconColor: '#FBD437', iconBgColor: '#FFF8E6' }
+    {
+      key: 'instCount',
+      label: '科研机构',
+      value: institutions.value.length,
+      unit: '家',
+      trend: 'up',
+      trendValue: '+12.0%',
+      icon: 'School',
+      iconColor: '#1889E8',
+      iconBgColor: '#ECF5FF',
+    },
+    {
+      key: 'totalPatents',
+      label: '专利总数',
+      value: totalPatents,
+      unit: '项',
+      trend: 'up',
+      trendValue: '+18.5%',
+      icon: 'Document',
+      iconColor: '#36CBCB',
+      iconBgColor: '#E6F7F7',
+    },
+    {
+      key: 'totalCooperation',
+      label: '合作企业',
+      value: totalCooperation,
+      unit: '家',
+      trend: 'up',
+      trendValue: '+15.3%',
+      icon: 'Connection',
+      iconColor: '#4ECB73',
+      iconBgColor: '#EDFAF0',
+    },
+    {
+      key: 'transfers',
+      label: '技术转移',
+      value: institutions.value.reduce((s, i) => s + i.transfers, 0),
+      unit: '项',
+      trend: 'up',
+      trendValue: '+22.1%',
+      icon: 'Promotion',
+      iconColor: '#FBD437',
+      iconBgColor: '#FFF8E6',
+    },
   ]
 
   typePieOption.value = {
     color: chartColors,
     tooltip: { trigger: 'item' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie', radius: ['40%', '70%'],
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: [
-        { name: '高校', value: institutions.value.filter(i => i.type === '高校').length },
-        { name: '科研院所', value: institutions.value.filter(i => i.type === '科研院所').length }
-      ]
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: [
+          { name: '高校', value: institutions.value.filter((i) => i.type === '高校').length },
+          {
+            name: '科研院所',
+            value: institutions.value.filter((i) => i.type === '科研院所').length,
+          },
+        ],
+      },
+    ],
   }
 
   patentBarOption.value = {
     color: chartColors,
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    xAxis: { type: 'category', data: institutions.value.map(i => i.name) },
+    xAxis: { type: 'category', data: institutions.value.map((i) => i.name) },
     yAxis: { type: 'value' },
-    series: [{ name: '专利数', type: 'bar', data: institutions.value.map(i => i.patents), barWidth: '40%' }]
+    series: [
+      {
+        name: '专利数',
+        type: 'bar',
+        data: institutions.value.map((i) => i.patents),
+        barWidth: '40%',
+      },
+    ],
   }
 })
 </script>
@@ -114,21 +169,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

@@ -37,19 +37,19 @@
       <div class="graph-page__legend">
         <div class="legend-title">关系类型</div>
         <div class="legend-item">
-          <span class="legend-line" style="border-top: 2px solid #1889E8" />
+          <span class="legend-line" style="border-top: 2px solid #1889e8"></span>
           <span>投资关系</span>
         </div>
         <div class="legend-item">
-          <span class="legend-line" style="border-top: 2px solid #4ECB73" />
+          <span class="legend-line" style="border-top: 2px solid #4ecb73"></span>
           <span>供应关系</span>
         </div>
         <div class="legend-item">
-          <span class="legend-line" style="border-top: 2px dashed #F2637B" />
+          <span class="legend-line" style="border-top: 2px dashed #f2637b"></span>
           <span>竞争关系</span>
         </div>
         <div class="legend-item">
-          <span class="legend-line" style="border-top: 2px solid #975FE5" />
+          <span class="legend-line" style="border-top: 2px solid #975fe5"></span>
           <span>合作关系</span>
         </div>
       </div>
@@ -79,11 +79,26 @@ const relatedEnterprises = ref<string[]>([])
 
 // 企业关系 Mock 数据
 const enterpriseNames = [
-  '华创科技集团', '中科新材料', '远大智能装备', '恒信电子科技',
-  '东方生物制药', '天成新能源', '盛通精密仪器', '博远信息技术',
-  '瑞达材料科技', '宏图智能制造', '安捷供应链', '金诺环保科技',
-  '创维光电技术', '翔宇半导体', '鼎盛工业自动化', '国泰创新材料',
-  '华鑫投资控股', '科创资本', '联创电子', '新元科技'
+  '华创科技集团',
+  '中科新材料',
+  '远大智能装备',
+  '恒信电子科技',
+  '东方生物制药',
+  '天成新能源',
+  '盛通精密仪器',
+  '博远信息技术',
+  '瑞达材料科技',
+  '宏图智能制造',
+  '安捷供应链',
+  '金诺环保科技',
+  '创维光电技术',
+  '翔宇半导体',
+  '鼎盛工业自动化',
+  '国泰创新材料',
+  '华鑫投资控股',
+  '科创资本',
+  '联创电子',
+  '新元科技',
 ]
 
 const categories = ['龙头企业', '核心企业', '配套企业', '投资机构']
@@ -95,7 +110,7 @@ const filteredNodes = computed(() => {
   let nodes = allNodes.value
   if (searchKeyword.value) {
     const kw = searchKeyword.value.toLowerCase()
-    nodes = nodes.filter(n => n.name.toLowerCase().includes(kw))
+    nodes = nodes.filter((n) => n.name.toLowerCase().includes(kw))
   }
   return nodes
 })
@@ -103,22 +118,32 @@ const filteredNodes = computed(() => {
 const filteredEdges = computed(() => {
   let edges = allEdges.value
   if (relationType.value) {
-    edges = edges.filter(e => e.type === relationType.value)
+    edges = edges.filter((e) => e.type === relationType.value)
   }
   // 只保留过滤后节点间的边
-  const nodeIds = new Set(filteredNodes.value.map(n => n.id))
-  return edges.filter(e => nodeIds.has(e.source as string) && nodeIds.has(e.target as string))
+  const nodeIds = new Set(filteredNodes.value.map((n) => n.id))
+  return edges.filter((e) => {
+    const srcId = typeof e.source === 'string' ? e.source : (e.source as { id: string }).id
+    const tgtId = typeof e.target === 'string' ? e.target : (e.target as { id: string }).id
+    return nodeIds.has(srcId) && nodeIds.has(tgtId)
+  })
 })
 
 function handleNodeClick(node: GraphNodeData) {
   selectedNode.value = node
   const related = allEdges.value
-    .filter(e => e.source === node.id || e.target === node.id)
-    .map(e => e.source === node.id ? e.target as string : e.source as string)
-  relatedEnterprises.value = related.map(id => {
-    const found = allNodes.value.find(n => n.id === id)
-    return found ? found.name : id
-  })
+    .filter((e) => {
+      const srcId = typeof e.source === 'string' ? e.source : (e.source as { id: string }).id
+      const tgtId = typeof e.target === 'string' ? e.target : (e.target as { id: string }).id
+      return srcId === node.id || tgtId === node.id
+    })
+    .map((e) => {
+      const srcId = typeof e.source === 'string' ? e.source : (e.source as { id: string }).id
+      const tgtId = typeof e.target === 'string' ? e.target : (e.target as { id: string }).id
+      const targetId = srcId === node.id ? tgtId : srcId
+      const found = allNodes.value.find((n) => n.id === targetId)
+      return found ? found.name : targetId
+    })
   drawerVisible.value = true
 }
 
@@ -138,7 +163,7 @@ function generateMockData() {
     category: categories[i % categories.length],
     importance: Math.floor(Math.random() * 50 + 50),
     enterpriseCount: Math.floor(Math.random() * 100 + 10),
-    value: Math.floor(Math.random() * 50 + 50)
+    value: Math.floor(Math.random() * 50 + 50),
   }))
 
   const edgeTypes = ['investment', 'supply', 'compete', 'cooperation']
@@ -153,7 +178,7 @@ function generateMockData() {
       source: nodes[src].id,
       target: nodes[tgt].id,
       weight: Math.random() * 0.6 + 0.4,
-      type: edgeTypes[Math.floor(Math.random() * edgeTypes.length)]
+      type: edgeTypes[Math.floor(Math.random() * edgeTypes.length)],
     })
   }
 
@@ -178,42 +203,42 @@ onMounted(() => {
 .graph-page__body {
   position: relative;
   height: 100%;
+  overflow: hidden;
   background: #fff;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  overflow: hidden;
 }
 
 .graph-page__legend {
   position: absolute;
-  right: 16px;
   top: 16px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: $radius-base;
-  padding: 12px 16px;
-  box-shadow: $shadow-card;
+  right: 16px;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 12px 16px;
   font-size: 12px;
   color: $text-regular;
-  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
 }
 
 .legend-title {
+  margin-bottom: 4px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin-bottom: 4px;
 }
 
 .legend-item {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
 }
 
 .legend-line {
-  width: 20px;
   display: inline-block;
+  width: 20px;
 }
 </style>

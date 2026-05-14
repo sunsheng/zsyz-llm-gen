@@ -2,7 +2,12 @@
   <div class="enterprise-card" @click="$emit('click', enterprise)">
     <div class="enterprise-card__header">
       <h4 class="enterprise-card__name">{{ enterprise.name }}</h4>
-      <EnterpriseTag v-for="tag in enterprise.tags?.slice(0, 2)" :key="tag" :text="tag" type="industry" />
+      <EnterpriseTag
+        v-for="tag in enterprise.tags?.slice(0, 2)"
+        :key="tag"
+        :text="tag"
+        type="industry"
+      />
     </div>
     <div class="enterprise-card__body">
       <div class="enterprise-card__row">
@@ -15,11 +20,17 @@
       </div>
       <div v-if="enterprise.growthRate != null" class="enterprise-card__row">
         <span class="enterprise-card__label">增长率</span>
-        <TrendIndicator :direction="enterprise.growthRate >= 0 ? 'up' : 'down'" :value="Math.abs(enterprise.growthRate) + '%'" />
+        <TrendIndicator
+          :direction="enterprise.growthRate >= 0 ? 'up' : 'down'"
+          :value="Math.abs(enterprise.growthRate) + '%'"
+        />
       </div>
       <div v-if="enterprise.riskScore != null" class="enterprise-card__row">
         <span class="enterprise-card__label">风险评分</span>
-        <RiskIndicator :score="enterprise.riskScore" :level="enterprise.riskScore > 70 ? 'high' : enterprise.riskScore > 40 ? 'medium' : 'low'" />
+        <RiskIndicator
+          :score="enterprise.riskScore"
+          :level="enterprise.riskScore > 70 ? 'high' : enterprise.riskScore > 40 ? 'medium' : 'low'"
+        />
       </div>
     </div>
     <div class="enterprise-card__footer">
@@ -52,33 +63,35 @@ defineEmits<{ click: [enterprise: unknown] }>()
 
 <style lang="scss" scoped>
 .enterprise-card {
+  padding: 20px;
+  cursor: pointer;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
-  cursor: pointer;
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
 
   &:hover {
-    transform: translateY(-2px);
     box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
   }
 }
 
 .enterprise-card__header {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
   flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
 .enterprise-card__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -99,8 +112,8 @@ defineEmits<{ click: [enterprise: unknown] }>()
 }
 
 .enterprise-card__value {
-  color: $text-primary;
   font-weight: $font-weight-medium;
+  color: $text-primary;
 }
 
 .enterprise-card__footer {

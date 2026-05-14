@@ -14,7 +14,9 @@
         <div class="detail-rows">
           <div class="detail-row">
             <span class="label">匹配度</span>
-            <span class="value" :style="{ color: owner.matchScore >= 80 ? '#67C23A' : '#E6A23C' }">{{ owner.matchScore }}%</span>
+            <span class="value" :style="{ color: owner.matchScore >= 80 ? '#67C23A' : '#E6A23C' }"
+              >{{ owner.matchScore }}%</span
+            >
           </div>
           <div class="detail-row">
             <span class="label">带动指数</span>
@@ -64,7 +66,7 @@ const owner = ref<any>({})
 onMounted(() => {
   const list = getMockChainOwners()
   const id = route.params.id as string
-  owner.value = list.find(o => o.id === id) || list[0]
+  owner.value = list.find((o) => o.id === id) || list[0]
 })
 </script>
 
@@ -79,32 +81,37 @@ onMounted(() => {
 }
 .detail-card,
 .score-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
   h3 {
     display: inline;
+    margin: 0;
     font-size: 20px;
     font-weight: $font-weight-bold;
     color: $text-primary;
-    margin: 0;
   }
 }
 .panel-title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .detail-row {
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 1px solid $border-color-lighter;
   font-size: 14px;
-  .label { color: $text-secondary; }
-  .value { color: $text-primary; font-weight: $font-weight-medium; }
+  border-bottom: 1px solid $border-color-lighter;
+  .label {
+    color: $text-secondary;
+  }
+  .value {
+    font-weight: $font-weight-medium;
+    color: $text-primary;
+  }
 }
 .score-grid {
   display: grid;
@@ -115,8 +122,8 @@ onMounted(() => {
 .score-item {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 8px;
+  align-items: center;
 }
 .score-label {
   font-size: 13px;

@@ -45,38 +45,86 @@ const trendOption = ref({})
 
 onMounted(() => {
   kpiCards.value = [
-    { key: 'score', label: '综合得分', value: 78.5, unit: '分', trend: 'up' as const, trendValue: '+3.2%', icon: 'TrendCharts', iconColor: '#1889E8', iconBgColor: '#ECF5FF' },
-    { key: 'rank', label: '全国排名', value: 15, unit: '名', trend: 'up' as const, trendValue: '+2位', icon: 'Trophy', iconColor: '#FBD437', iconBgColor: '#FFF8E6' },
-    { key: 'growth', label: '增长指数', value: 82.3, unit: '', trend: 'up' as const, trendValue: '+5.1%', icon: 'DataLine', iconColor: '#4ECB73', iconBgColor: '#EDFAF0' },
-    { key: 'potential', label: '发展潜力', value: 75.8, unit: '', trend: 'up' as const, trendValue: '+2.8%', icon: 'Opportunity', iconColor: '#975FE5', iconBgColor: '#F3ECFF' }
+    {
+      key: 'score',
+      label: '综合得分',
+      value: 78.5,
+      unit: '分',
+      trend: 'up' as const,
+      trendValue: '+3.2%',
+      icon: 'TrendCharts',
+      iconColor: '#1889E8',
+      iconBgColor: '#ECF5FF',
+    },
+    {
+      key: 'rank',
+      label: '全国排名',
+      value: 15,
+      unit: '名',
+      trend: 'up' as const,
+      trendValue: '+2位',
+      icon: 'Trophy',
+      iconColor: '#FBD437',
+      iconBgColor: '#FFF8E6',
+    },
+    {
+      key: 'growth',
+      label: '增长指数',
+      value: 82.3,
+      unit: '',
+      trend: 'up' as const,
+      trendValue: '+5.1%',
+      icon: 'DataLine',
+      iconColor: '#4ECB73',
+      iconBgColor: '#EDFAF0',
+    },
+    {
+      key: 'potential',
+      label: '发展潜力',
+      value: 75.8,
+      unit: '',
+      trend: 'up' as const,
+      trendValue: '+2.8%',
+      icon: 'Opportunity',
+      iconColor: '#975FE5',
+      iconBgColor: '#F3ECFF',
+    },
   ]
 
   const gaugeData = getMockChartData('evaluation-gauge')
   gaugeOption.value = {
-    series: [{
-      type: 'gauge',
-      startAngle: 200,
-      endAngle: -20,
-      min: 0,
-      max: 100,
-      splitNumber: 10,
-      axisLine: {
-        lineStyle: {
-          width: 18,
-          color: [
-            [0.3, '#67C23A'],
-            [0.7, '#E6A23C'],
-            [1, '#F56C6C']
-          ]
-        }
+    series: [
+      {
+        type: 'gauge',
+        startAngle: 200,
+        endAngle: -20,
+        min: 0,
+        max: 100,
+        splitNumber: 10,
+        axisLine: {
+          lineStyle: {
+            width: 18,
+            color: [
+              [0.3, '#67C23A'],
+              [0.7, '#E6A23C'],
+              [1, '#F56C6C'],
+            ],
+          },
+        },
+        pointer: { itemStyle: { color: '#1889E8' } },
+        axisTick: { distance: -18, length: 6, lineStyle: { color: '#fff', width: 1 } },
+        splitLine: { distance: -18, length: 18, lineStyle: { color: '#fff', width: 2 } },
+        axisLabel: { color: '#999', distance: 25, fontSize: 12 },
+        detail: {
+          valueAnimation: true,
+          formatter: '{value}分',
+          color: '#303133',
+          fontSize: 24,
+          offsetCenter: [0, '70%'],
+        },
+        data: [{ value: gaugeData.data.value, name: gaugeData.data.name }],
       },
-      pointer: { itemStyle: { color: '#1889E8' } },
-      axisTick: { distance: -18, length: 6, lineStyle: { color: '#fff', width: 1 } },
-      splitLine: { distance: -18, length: 18, lineStyle: { color: '#fff', width: 2 } },
-      axisLabel: { color: '#999', distance: 25, fontSize: 12 },
-      detail: { valueAnimation: true, formatter: '{value}分', color: '#303133', fontSize: 24, offsetCenter: [0, '70%'] },
-      data: [{ value: gaugeData.data.value, name: gaugeData.data.name }]
-    }]
+    ],
   }
 
   const radarData = getMockChartData('park-radar')
@@ -88,16 +136,18 @@ onMounted(() => {
       indicator: radarData.data.indicator,
       shape: 'polygon',
       splitNumber: 5,
-      axisName: { color: '#606266' }
+      axisName: { color: '#606266' },
     },
-    series: [{
-      type: 'radar',
-      data: radarData.data.series.map((s: any) => ({
-        name: s.name,
-        value: s.value,
-        areaStyle: { opacity: 0.2 }
-      }))
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: radarData.data.series.map((s: any) => ({
+          name: s.name,
+          value: s.value,
+          areaStyle: { opacity: 0.2 },
+        })),
+      },
+    ],
   }
 
   const trendData = getMockChartData('trend-line')
@@ -109,16 +159,41 @@ onMounted(() => {
     xAxis: { type: 'category', data: trendData.data.xAxis.data, boundaryGap: false },
     yAxis: { type: 'value', axisLabel: { formatter: '{value}分' } },
     series: trendData.data.series.map((s: any) => ({
-      ...s, type: 'line', smooth: true, areaStyle: { opacity: 0.1 }
-    }))
+      ...s,
+      type: 'line',
+      smooth: true,
+      areaStyle: { opacity: 0.1 },
+    })),
   }
 })
 </script>
 
 <style lang="scss" scoped>
-.page-container { padding: 20px; }
-.stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-panel { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
-.chart-panel__title { font-size: 16px; font-weight: $font-weight-semibold; color: $text-primary; margin: 0 0 16px 0; }
+.page-container {
+  padding: 20px;
+}
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-panel {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+.chart-panel__title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
 </style>

@@ -51,10 +51,50 @@ import { getMockChartData, getMockTableData } from '@/api/mock/analysis'
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
 const kpiCards = ref([
-  { key: 'platform', label: '平台数量', value: 28, unit: '个', trend: 'up' as const, trendValue: '+16.7%', icon: 'Monitor', iconColor: '#1889E8', iconBgColor: '#ECF5FF' },
-  { key: 'service', label: '服务企业数', value: 862, unit: '家', trend: 'up' as const, trendValue: '+22.3%', icon: 'UserFilled', iconColor: '#36CBCB', iconBgColor: '#E6F7F7' },
-  { key: 'satisfaction', label: '服务满意度', value: 92.5, unit: '%', trend: 'up' as const, trendValue: '+3.8%', icon: 'Star', iconColor: '#4ECB73', iconBgColor: '#EDFAF0' },
-  { key: 'income', label: '服务收入', value: 3580, unit: '万', trend: 'up' as const, trendValue: '+15.6%', icon: 'Coin', iconColor: '#FBD437', iconBgColor: '#FFF8E6' }
+  {
+    key: 'platform',
+    label: '平台数量',
+    value: 28,
+    unit: '个',
+    trend: 'up' as const,
+    trendValue: '+16.7%',
+    icon: 'Monitor',
+    iconColor: '#1889E8',
+    iconBgColor: '#ECF5FF',
+  },
+  {
+    key: 'service',
+    label: '服务企业数',
+    value: 862,
+    unit: '家',
+    trend: 'up' as const,
+    trendValue: '+22.3%',
+    icon: 'UserFilled',
+    iconColor: '#36CBCB',
+    iconBgColor: '#E6F7F7',
+  },
+  {
+    key: 'satisfaction',
+    label: '服务满意度',
+    value: 92.5,
+    unit: '%',
+    trend: 'up' as const,
+    trendValue: '+3.8%',
+    icon: 'Star',
+    iconColor: '#4ECB73',
+    iconBgColor: '#EDFAF0',
+  },
+  {
+    key: 'income',
+    label: '服务收入',
+    value: 3580,
+    unit: '万',
+    trend: 'up' as const,
+    trendValue: '+15.6%',
+    icon: 'Coin',
+    iconColor: '#FBD437',
+    iconBgColor: '#FFF8E6',
+  },
 ])
 
 const tableData = ref([])
@@ -75,18 +115,20 @@ onMounted(() => {
         { name: '人才培养', max: 100 },
         { name: '融资服务', max: 100 },
         { name: '市场拓展', max: 100 },
-        { name: '政策咨询', max: 100 }
+        { name: '政策咨询', max: 100 },
       ],
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: [
-        { name: '当前水平', value: [85, 72, 68, 78, 90], areaStyle: { opacity: 0.2 } },
-        { name: '目标水平', value: [95, 90, 85, 88, 92], areaStyle: { opacity: 0.1 } }
-      ]
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: [
+          { name: '当前水平', value: [85, 72, 68, 78, 90], areaStyle: { opacity: 0.2 } },
+          { name: '目标水平', value: [95, 90, 85, 88, 92], areaStyle: { opacity: 0.1 } },
+        ],
+      },
+    ],
   }
 
   const trendData = getMockChartData('trend-line')
@@ -98,17 +140,47 @@ onMounted(() => {
     xAxis: { type: 'category', data: trendData.data.xAxis.data, boundaryGap: false },
     yAxis: { type: 'value' },
     series: trendData.data.series.map((s: any) => ({
-      ...s, type: 'line', smooth: true, areaStyle: { opacity: 0.1 }
-    }))
+      ...s,
+      type: 'line',
+      smooth: true,
+      areaStyle: { opacity: 0.1 },
+    })),
   }
 })
 </script>
 
 <style lang="scss" scoped>
-.page-container { padding: 20px; }
-.stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-panel { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
-.chart-panel__title { font-size: 16px; font-weight: $font-weight-semibold; color: $text-primary; margin: 0 0 16px 0; }
-.table-section { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
+.page-container {
+  padding: 20px;
+}
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-panel {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+.chart-panel__title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+.table-section {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
 </style>
