@@ -59,7 +59,12 @@
           <div class="region-card__header">
             <div class="region-card__title">
               <h3 class="region-card__name">{{ region.name }}</h3>
-              <el-tag :type="region.level === '重点' ? 'danger' : region.level === '核心' ? 'warning' : 'info'" size="small">
+              <el-tag
+                :type="
+                  region.level === '重点' ? 'danger' : region.level === '核心' ? 'warning' : 'info'
+                "
+                size="small"
+              >
                 {{ region.level }}
               </el-tag>
             </div>
@@ -81,7 +86,9 @@
           <div class="region-card__chains">
             <span class="region-card__chains-label">重点产业链：</span>
             <div class="region-card__tags">
-              <el-tag v-for="chain in region.topChains" :key="chain" size="small" effect="plain">{{ chain }}</el-tag>
+              <el-tag v-for="chain in region.topChains" :key="chain" size="small" effect="plain">{{
+                chain
+              }}</el-tag>
             </div>
           </div>
           <div class="region-card__footer">
@@ -115,22 +122,72 @@ interface RegionData {
 }
 
 const regions = ref<RegionData[]>([
-  { code: 'yangtze', name: '长三角区域', level: '核心', chainCount: 12, nodeCount: 320, enterpriseCount: 1580, topChains: ['电子信息', '高端装备', '生物医药', '新材料'] },
-  { code: 'pearl', name: '珠三角区域', level: '核心', chainCount: 10, nodeCount: 280, enterpriseCount: 1320, topChains: ['电子信息', '智能家电', '新能源', '先进制造'] },
-  { code: 'beijing-tianjin', name: '京津冀区域', level: '重点', chainCount: 9, nodeCount: 240, enterpriseCount: 980, topChains: ['数字经济', '生物医药', '高端装备', '新能源'] },
-  { code: 'central', name: '中部区域', level: '重点', chainCount: 8, nodeCount: 200, enterpriseCount: 860, topChains: ['先进制造', '新材料', '新能源', '食品加工'] },
-  { code: 'western', name: '西部区域', level: '发展', chainCount: 6, nodeCount: 150, enterpriseCount: 620, topChains: ['新能源', '新材料', '生物医药'] },
-  { code: 'northeast', name: '东北区域', level: '发展', chainCount: 5, nodeCount: 120, enterpriseCount: 480, topChains: ['高端装备', '新材料', '农产品加工'] }
+  {
+    code: 'yangtze',
+    name: '长三角区域',
+    level: '核心',
+    chainCount: 12,
+    nodeCount: 320,
+    enterpriseCount: 1580,
+    topChains: ['电子信息', '高端装备', '生物医药', '新材料'],
+  },
+  {
+    code: 'pearl',
+    name: '珠三角区域',
+    level: '核心',
+    chainCount: 10,
+    nodeCount: 280,
+    enterpriseCount: 1320,
+    topChains: ['电子信息', '智能家电', '新能源', '先进制造'],
+  },
+  {
+    code: 'beijing-tianjin',
+    name: '京津冀区域',
+    level: '重点',
+    chainCount: 9,
+    nodeCount: 240,
+    enterpriseCount: 980,
+    topChains: ['数字经济', '生物医药', '高端装备', '新能源'],
+  },
+  {
+    code: 'central',
+    name: '中部区域',
+    level: '重点',
+    chainCount: 8,
+    nodeCount: 200,
+    enterpriseCount: 860,
+    topChains: ['先进制造', '新材料', '新能源', '食品加工'],
+  },
+  {
+    code: 'western',
+    name: '西部区域',
+    level: '发展',
+    chainCount: 6,
+    nodeCount: 150,
+    enterpriseCount: 620,
+    topChains: ['新能源', '新材料', '生物医药'],
+  },
+  {
+    code: 'northeast',
+    name: '东北区域',
+    level: '发展',
+    chainCount: 5,
+    nodeCount: 120,
+    enterpriseCount: 480,
+    topChains: ['高端装备', '新材料', '农产品加工'],
+  },
 ])
 
 const filteredRegions = computed(() => {
   if (!selectedRegion.value) return regions.value
-  return regions.value.filter(r => r.code === selectedRegion.value)
+  return regions.value.filter((r) => r.code === selectedRegion.value)
 })
 
 const totalChains = computed(() => regions.value.reduce((sum, r) => sum + r.chainCount, 0))
 const totalNodes = computed(() => regions.value.reduce((sum, r) => sum + r.nodeCount, 0))
-const totalEnterprises = computed(() => regions.value.reduce((sum, r) => sum + r.enterpriseCount, 0))
+const totalEnterprises = computed(() =>
+  regions.value.reduce((sum, r) => sum + r.enterpriseCount, 0),
+)
 
 function goToRegionChain(code: string) {
   router.push({ path: '/atlas/regional/chain', query: { region: code } })
@@ -158,16 +215,18 @@ onMounted(() => {
 }
 
 .region-card {
+  padding: 20px;
+  cursor: pointer;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
-  cursor: pointer;
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
 
   &:hover {
-    transform: translateY(-2px);
     box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
   }
 }
 
@@ -177,22 +236,22 @@ onMounted(() => {
 
 .region-card__title {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
 }
 
 .region-card__name {
+  margin: 0;
   font-size: 16px;
   font-weight: $font-weight-bold;
   color: $text-primary;
-  margin: 0;
 }
 
 .region-card__stats {
   display: flex;
   gap: 24px;
-  margin-bottom: 16px;
   padding-bottom: 16px;
+  margin-bottom: 16px;
   border-bottom: 1px solid $border-color-lighter;
 }
 

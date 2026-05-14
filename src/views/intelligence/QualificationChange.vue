@@ -20,7 +20,9 @@
         <el-table-column prop="qualType" label="资质类型" width="160" />
         <el-table-column prop="changeType" label="变动类型" width="100">
           <template #default="{ row }">
-            <el-tag :type="changeTag(row.changeType) as any" size="small">{{ row.changeType }}</el-tag>
+            <el-tag :type="changeTag(row.changeType) as any" size="small">{{
+              row.changeType
+            }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="date" label="变动日期" width="120" />
@@ -46,23 +48,33 @@ import { getMockQualificationChanges } from '@/api/mock/intelligence'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const filters: FilterField[] = [
-  { key: 'qualType', label: '资质类型', type: 'select', options: [
-    { label: '高新技术企业', value: '高新技术企业' },
-    { label: '专精特新', value: '专精特新' },
-    { label: '科技型中小企业', value: '科技型中小企业' }
-  ]},
-  { key: 'changeType', label: '变动类型', type: 'select', options: [
-    { label: '新增', value: '新增' },
-    { label: '升级', value: '升级' },
-    { label: '到期', value: '到期' },
-    { label: '撤销', value: '撤销' }
-  ]}
+  {
+    key: 'qualType',
+    label: '资质类型',
+    type: 'select',
+    options: [
+      { label: '高新技术企业', value: '高新技术企业' },
+      { label: '专精特新', value: '专精特新' },
+      { label: '科技型中小企业', value: '科技型中小企业' },
+    ],
+  },
+  {
+    key: 'changeType',
+    label: '变动类型',
+    type: 'select',
+    options: [
+      { label: '新增', value: '新增' },
+      { label: '升级', value: '升级' },
+      { label: '到期', value: '到期' },
+      { label: '撤销', value: '撤销' },
+    ],
+  },
 ]
 
 const qualList = ref<any[]>([])
 
 function changeTag(type: string) {
-  const map: Record<string, string> = { '新增': 'success', '升级': '', '到期': 'warning', '撤销': 'danger' }
+  const map: Record<string, string> = { 新增: 'success', 升级: '', 到期: 'warning', 撤销: 'danger' }
   return map[type] || ''
 }
 
@@ -70,7 +82,9 @@ function handleSearch() {
   qualList.value = getMockQualificationChanges(10)
 }
 
-onMounted(() => { handleSearch() })
+onMounted(() => {
+  handleSearch()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -78,9 +92,9 @@ onMounted(() => { handleSearch() })
   padding: 20px;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

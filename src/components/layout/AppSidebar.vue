@@ -68,13 +68,13 @@ const activeMenu = computed(() => route.path)
 .app-sidebar {
   position: fixed;
   top: $header-height;
-  left: 0;
   bottom: 0;
+  left: 0;
+  z-index: 90;
   width: $sidebar-width;
+  overflow: hidden;
   background: #001529;
   transition: $transition-sidebar;
-  z-index: 90;
-  overflow: hidden;
 
   &.is-collapsed {
     width: $sidebar-collapsed-width;
@@ -92,8 +92,8 @@ const activeMenu = computed(() => route.path)
 }
 
 :deep(.el-menu-item.is-active) {
-  background-color: $color-primary !important;
   color: #fff !important;
+  background-color: $color-primary !important;
 }
 
 :deep(.el-sub-menu.is-active > .el-sub-menu__title) {

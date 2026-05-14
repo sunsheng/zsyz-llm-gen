@@ -35,7 +35,9 @@
         <el-table-column prop="outputValue" label="产值(亿元)" width="120" sortable />
         <el-table-column prop="growth" label="增速(%)" width="100" sortable>
           <template #default="{ row }">
-            <span :style="{ color: row.growth >= 0 ? '#67C23A' : '#F56C6C' }">{{ row.growth >= 0 ? '+' : '' }}{{ row.growth }}%</span>
+            <span :style="{ color: row.growth >= 0 ? '#67C23A' : '#F56C6C' }"
+              >{{ row.growth >= 0 ? '+' : '' }}{{ row.growth }}%</span
+            >
           </template>
         </el-table-column>
         <el-table-column prop="enterpriseCount" label="规上企业数" width="120" />
@@ -61,14 +63,14 @@ onMounted(() => {
   const cities = ['杭州市', '宁波市', '苏州市', '南京市', '成都市', '武汉市']
   const industries = ['高端装备制造', '新材料', '生物医药', '电子信息', '新能源']
 
-  tableData.value = cities.map(city => ({
+  tableData.value = cities.map((city) => ({
     city,
     dominantIndustry: industries[Math.floor(Math.random() * industries.length)],
     clusterScore: Math.floor(Math.random() * 20 + 70),
     concentration: +(Math.random() * 20 + 30).toFixed(1),
     outputValue: Math.floor(Math.random() * 5000 + 1000),
     growth: +(Math.random() * 20 + 2).toFixed(1),
-    enterpriseCount: Math.floor(Math.random() * 500 + 100)
+    enterpriseCount: Math.floor(Math.random() * 500 + 100),
   }))
 
   radarOption.value = {
@@ -76,18 +78,20 @@ onMounted(() => {
     tooltip: {},
     legend: { data: ['本地', '对标城市A', '对标城市B'] },
     radar: {
-      indicator: industries.map(name => ({ name, max: 100 })),
+      indicator: industries.map((name) => ({ name, max: 100 })),
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: [
-        { name: '本地', value: [85, 78, 82, 90, 72], areaStyle: { opacity: 0.2 } },
-        { name: '对标城市A', value: [80, 82, 76, 85, 78], areaStyle: { opacity: 0.1 } },
-        { name: '对标城市B', value: [75, 70, 80, 78, 82], areaStyle: { opacity: 0.1 } }
-      ]
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: [
+          { name: '本地', value: [85, 78, 82, 90, 72], areaStyle: { opacity: 0.2 } },
+          { name: '对标城市A', value: [80, 82, 76, 85, 78], areaStyle: { opacity: 0.1 } },
+          { name: '对标城市B', value: [75, 70, 80, 78, 82], areaStyle: { opacity: 0.1 } },
+        ],
+      },
+    ],
   }
 
   industryBarOption.value = {
@@ -101,8 +105,8 @@ onMounted(() => {
       name: city,
       type: 'bar',
       barWidth: '18%',
-      data: industries.map(() => Math.floor(Math.random() * 2000 + 500))
-    }))
+      data: industries.map(() => Math.floor(Math.random() * 2000 + 500)),
+    })),
   }
 
   clusterBarOption.value = {
@@ -111,7 +115,7 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: cities },
     yAxis: { type: 'value', max: 100 },
-    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map(d => d.clusterScore) }]
+    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map((d) => d.clusterScore) }],
   }
 
   concentrationOption.value = {
@@ -120,7 +124,7 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: cities },
     yAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
-    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map(d => d.concentration) }]
+    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map((d) => d.concentration) }],
   }
 })
 </script>
@@ -136,21 +140,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

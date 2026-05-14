@@ -13,9 +13,9 @@
         label="综合评价指数"
         :value="78.5"
         trend="up"
-        trendValue="+2.3"
-        iconColor="#1889E8"
-        iconBgColor="#ECF5FF"
+        trend-value="+2.3"
+        icon-color="#1889E8"
+        icon-bg-color="#ECF5FF"
       />
       <StatCard
         icon="Top"
@@ -23,9 +23,9 @@
         :value="95.2"
         unit="分"
         trend="up"
-        trendValue="+1.5"
-        iconColor="#67C23A"
-        iconBgColor="#EDFAF0"
+        trend-value="+1.5"
+        icon-color="#67C23A"
+        icon-bg-color="#EDFAF0"
       />
       <StatCard
         icon="Bottom"
@@ -33,9 +33,9 @@
         :value="42.8"
         unit="分"
         trend="down"
-        trendValue="-3.2"
-        iconColor="#F56C6C"
-        iconBgColor="#FEF0F0"
+        trend-value="-3.2"
+        icon-color="#F56C6C"
+        icon-bg-color="#FEF0F0"
       />
       <StatCard
         icon="DataLine"
@@ -43,9 +43,9 @@
         :value="1286"
         unit="家"
         trend="up"
-        trendValue="+42"
-        iconColor="#975FE5"
-        iconBgColor="#F3ECFF"
+        trend-value="+42"
+        icon-color="#975FE5"
+        icon-bg-color="#F3ECFF"
       />
     </div>
 
@@ -89,8 +89,12 @@
         </el-table-column>
         <el-table-column label="综合评分" width="100">
           <template #default="{ row }">
-            <span style="font-weight: 600; color: #1889E8">
-              {{ Math.floor(row.scores.reduce((a: number, b: number) => a + b, 0) / row.scores.length) }}
+            <span style="font-weight: 600; color: #1889e8">
+              {{
+                Math.floor(
+                  row.scores.reduce((a: number, b: number) => a + b, 0) / row.scores.length,
+                )
+              }}
             </span>
           </template>
         </el-table-column>
@@ -119,17 +123,28 @@ onMounted(() => {
   tableData.value = evalData.enterprises
 
   gaugeOption.value = {
-    series: [{
-      type: 'gauge',
-      startAngle: 200,
-      endAngle: -20,
-      min: 0,
-      max: 100,
-      detail: { formatter: '{value}' },
-      data: [{ value: 78.5, name: '综合评价' }],
-      axisLine: { lineStyle: { width: 20, color: [[0.3, '#F56C6C'], [0.7, '#E6A23C'], [1, '#67C23A']] } },
-      pointer: { width: 5 }
-    }]
+    series: [
+      {
+        type: 'gauge',
+        startAngle: 200,
+        endAngle: -20,
+        min: 0,
+        max: 100,
+        detail: { formatter: '{value}' },
+        data: [{ value: 78.5, name: '综合评价' }],
+        axisLine: {
+          lineStyle: {
+            width: 20,
+            color: [
+              [0.3, '#F56C6C'],
+              [0.7, '#E6A23C'],
+              [1, '#67C23A'],
+            ],
+          },
+        },
+        pointer: { width: 5 },
+      },
+    ],
   }
 
   radarOption.value = {
@@ -139,16 +154,18 @@ onMounted(() => {
     radar: {
       indicator: evalData.dimensions.map((d: string) => ({ name: d, max: 100 })),
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: evalData.enterprises.map((e: any) => ({
-        name: e.name,
-        value: e.scores,
-        areaStyle: { opacity: 0.2 }
-      }))
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: evalData.enterprises.map((e: any) => ({
+          name: e.name,
+          value: e.scores,
+          areaStyle: { opacity: 0.2 },
+        })),
+      },
+    ],
   }
 
   const scoreRanges = ['0-20', '20-40', '40-60', '60-80', '80-100']
@@ -158,20 +175,35 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: scoreRanges },
     yAxis: { type: 'value' },
-    series: [{
-      type: 'bar',
-      barWidth: '50%',
-      data: [18, 56, 186, 520, 506],
-      itemStyle: {
-        color: (_params: any) => {
-          const colors = ['#F56C6C', '#E6A23C', '#FBD437', '#36CBCB', '#67C23A']
-          return colors[_params.dataIndex] || '#1889E8'
-        }
-      }
-    }]
+    series: [
+      {
+        type: 'bar',
+        barWidth: '50%',
+        data: [18, 56, 186, 520, 506],
+        itemStyle: {
+          color: (_params: any) => {
+            const colors = ['#F56C6C', '#E6A23C', '#FBD437', '#36CBCB', '#67C23A']
+            return colors[_params.dataIndex] || '#1889E8'
+          },
+        },
+      },
+    ],
   }
 
-  const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+  const months = [
+    '1月',
+    '2月',
+    '3月',
+    '4月',
+    '5月',
+    '6月',
+    '7月',
+    '8月',
+    '9月',
+    '10月',
+    '11月',
+    '12月',
+  ]
   trendOption.value = {
     color: chartColors,
     tooltip: { trigger: 'axis' },
@@ -180,8 +212,13 @@ onMounted(() => {
     xAxis: { type: 'category', data: months },
     yAxis: { type: 'value', min: 60, max: 100 },
     series: [
-      { name: '综合评价指数', type: 'line', smooth: true, data: [72.5, 73.1, 74.8, 75.2, 76.0, 75.8, 76.5, 77.1, 76.8, 78.0, 77.5, 78.5] }
-    ]
+      {
+        name: '综合评价指数',
+        type: 'line',
+        smooth: true,
+        data: [72.5, 73.1, 74.8, 75.2, 76.0, 75.8, 76.5, 77.1, 76.8, 78.0, 77.5, 78.5],
+      },
+    ],
   }
 })
 </script>
@@ -203,21 +240,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

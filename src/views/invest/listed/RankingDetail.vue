@@ -30,7 +30,12 @@
       <el-table :data="companyList" stripe border style="width: 100%">
         <el-table-column prop="rank" label="排名" width="80">
           <template #default="{ row }">
-            <span :style="{ fontWeight: row.rank <= 3 ? 'bold' : 'normal', color: row.rank <= 3 ? '#FBD437' : '#303133' }">
+            <span
+              :style="{
+                fontWeight: row.rank <= 3 ? 'bold' : 'normal',
+                color: row.rank <= 3 ? '#FBD437' : '#303133',
+              }"
+            >
               {{ row.rank }}
             </span>
           </template>
@@ -43,7 +48,9 @@
         <el-table-column prop="region" label="区域" width="100" />
         <el-table-column prop="tags" label="标签" min-width="160">
           <template #default="{ row }">
-            <el-tag v-for="tag in row.tags" :key="tag" size="small" style="margin-right: 4px">{{ tag }}</el-tag>
+            <el-tag v-for="tag in row.tags" :key="tag" size="small" style="margin-right: 4px">{{
+              tag
+            }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="100">
@@ -70,7 +77,7 @@ const topRegion = ref('')
 onMounted(() => {
   const rankings = getMockRankings()
   const id = (route.params.id as string) || 'rank-1'
-  rankingInfo.value = rankings.find(r => r.id === id) || rankings[0]
+  rankingInfo.value = rankings.find((r) => r.id === id) || rankings[0]
   companyList.value = getMockRankingDetails(id)
   topRegion.value = '北京市'
 })
@@ -81,26 +88,26 @@ onMounted(() => {
   padding: 20px;
 }
 .detail-card {
+  padding: 20px;
+  margin-bottom: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
-  margin-bottom: 20px;
 }
 .detail-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   h3 {
+    margin: 0 0 4px;
     font-size: 20px;
     font-weight: $font-weight-bold;
     color: $text-primary;
-    margin: 0 0 4px 0;
   }
   p {
+    margin: 0;
     font-size: 14px;
     color: $text-secondary;
-    margin: 0;
   }
 }
 .detail-header__stats {
@@ -114,16 +121,16 @@ onMounted(() => {
   display: block;
   font-size: 24px;
   font-weight: $font-weight-bold;
-  color: #1889E8;
+  color: #1889e8;
 }
 .stat-item__label {
   font-size: 12px;
   color: $text-secondary;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

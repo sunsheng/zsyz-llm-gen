@@ -37,7 +37,9 @@
         <el-table-column prop="gdp" label="GDP(亿元)" width="120" sortable />
         <el-table-column prop="growth" label="GDP增速(%)" width="120" sortable>
           <template #default="{ row }">
-            <span :style="{ color: row.growth >= 5 ? '#67C23A' : '#F56C6C' }">{{ row.growth }}%</span>
+            <span :style="{ color: row.growth >= 5 ? '#67C23A' : '#F56C6C' }"
+              >{{ row.growth }}%</span
+            >
           </template>
         </el-table-column>
         <el-table-column prop="enterpriseCount" label="企业数" width="100" sortable />
@@ -62,17 +64,57 @@ import { getMockLayers } from '@/api/mock/map'
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
 const kpiCards = [
-  { key: 'cities', label: '监测城市', value: 11, unit: '个', trend: 'flat' as const, trendValue: '', icon: 'Location', iconColor: '#1889E8', iconBgColor: '#ECF5FF' },
-  { key: 'gdp', label: 'GDP总量', value: 82500, unit: '亿元', trend: 'up' as const, trendValue: '+6.5%', icon: 'TrendCharts', iconColor: '#4ECB73', iconBgColor: '#EDFAF0' },
-  { key: 'enterprises', label: '企业总数', value: 12860, unit: '家', trend: 'up' as const, trendValue: '+356', icon: 'OfficeBuilding', iconColor: '#36CBCB', iconBgColor: '#E6F7F7' },
-  { key: 'invest', label: '引资总额', value: 2850, unit: '亿元', trend: 'up' as const, trendValue: '+12.3%', icon: 'Money', iconColor: '#FBD437', iconBgColor: '#FFF8E6' }
+  {
+    key: 'cities',
+    label: '监测城市',
+    value: 11,
+    unit: '个',
+    trend: 'flat' as const,
+    trendValue: '',
+    icon: 'Location',
+    iconColor: '#1889E8',
+    iconBgColor: '#ECF5FF',
+  },
+  {
+    key: 'gdp',
+    label: 'GDP总量',
+    value: 82500,
+    unit: '亿元',
+    trend: 'up' as const,
+    trendValue: '+6.5%',
+    icon: 'TrendCharts',
+    iconColor: '#4ECB73',
+    iconBgColor: '#EDFAF0',
+  },
+  {
+    key: 'enterprises',
+    label: '企业总数',
+    value: 12860,
+    unit: '家',
+    trend: 'up' as const,
+    trendValue: '+356',
+    icon: 'OfficeBuilding',
+    iconColor: '#36CBCB',
+    iconBgColor: '#E6F7F7',
+  },
+  {
+    key: 'invest',
+    label: '引资总额',
+    value: 2850,
+    unit: '亿元',
+    trend: 'up' as const,
+    trendValue: '+12.3%',
+    icon: 'Money',
+    iconColor: '#FBD437',
+    iconBgColor: '#FFF8E6',
+  },
 ]
 
 const layers = ref<any[]>([])
 const legendItems = [
   { label: '高发展区', color: '#67C23A' },
   { label: '中发展区', color: '#E6A23C' },
-  { label: '发展中区', color: '#1889E8' }
+  { label: '发展中区', color: '#1889E8' },
 ]
 const tableData = ref<any[]>([])
 const gdpBarOption = ref({})
@@ -81,15 +123,29 @@ const radarOption = ref({})
 onMounted(() => {
   layers.value = getMockLayers()
 
-  const cities = ['杭州市', '宁波市', '温州市', '嘉兴市', '湖州市', '绍兴市', '金华市', '台州市', '衢州市', '舟山市', '丽水市']
-  tableData.value = cities.map(city => ({
-    name: city,
-    gdp: Math.floor(Math.random() * 8000 + 1000),
-    growth: +(Math.random() * 8 + 3).toFixed(1),
-    enterpriseCount: Math.floor(Math.random() * 2000 + 200),
-    industryCount: Math.floor(Math.random() * 5 + 2),
-    investAmount: Math.floor(Math.random() * 500 + 50)
-  })).sort((a, b) => b.gdp - a.gdp)
+  const cities = [
+    '杭州市',
+    '宁波市',
+    '温州市',
+    '嘉兴市',
+    '湖州市',
+    '绍兴市',
+    '金华市',
+    '台州市',
+    '衢州市',
+    '舟山市',
+    '丽水市',
+  ]
+  tableData.value = cities
+    .map((city) => ({
+      name: city,
+      gdp: Math.floor(Math.random() * 8000 + 1000),
+      growth: +(Math.random() * 8 + 3).toFixed(1),
+      enterpriseCount: Math.floor(Math.random() * 2000 + 200),
+      industryCount: Math.floor(Math.random() * 5 + 2),
+      investAmount: Math.floor(Math.random() * 500 + 50),
+    }))
+    .sort((a, b) => b.gdp - a.gdp)
 
   gdpBarOption.value = {
     color: chartColors,
@@ -97,7 +153,7 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: cities },
     yAxis: { type: 'value' },
-    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map(d => d.gdp) }]
+    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map((d) => d.gdp) }],
   }
 
   radarOption.value = {
@@ -110,19 +166,21 @@ onMounted(() => {
         { name: '企业数', max: 100 },
         { name: '创新力', max: 100 },
         { name: '招商力', max: 100 },
-        { name: '人才密度', max: 100 }
+        { name: '人才密度', max: 100 },
       ],
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: cities.slice(0, 4).map(city => ({
-        name: city,
-        value: Array.from({ length: 5 }, () => Math.floor(Math.random() * 30 + 60)),
-        areaStyle: { opacity: 0.15 }
-      }))
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: cities.slice(0, 4).map((city) => ({
+          name: city,
+          value: Array.from({ length: 5 }, () => Math.floor(Math.random() * 30 + 60)),
+          areaStyle: { opacity: 0.15 },
+        })),
+      },
+    ],
   }
 })
 </script>
@@ -147,21 +205,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

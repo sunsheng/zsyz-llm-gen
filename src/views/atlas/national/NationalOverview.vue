@@ -71,19 +71,35 @@
             <div class="chain-card__section">
               <span class="chain-card__section-label">上游</span>
               <div class="chain-card__tags">
-                <el-tag v-for="item in chain.upstream" :key="item" size="small" type="info" effect="plain">{{ item }}</el-tag>
+                <el-tag
+                  v-for="item in chain.upstream"
+                  :key="item"
+                  size="small"
+                  type="info"
+                  effect="plain"
+                  >{{ item }}</el-tag
+                >
               </div>
             </div>
             <div class="chain-card__section">
               <span class="chain-card__section-label">中游</span>
               <div class="chain-card__tags">
-                <el-tag v-for="item in chain.midstream" :key="item" size="small" effect="plain">{{ item }}</el-tag>
+                <el-tag v-for="item in chain.midstream" :key="item" size="small" effect="plain">{{
+                  item
+                }}</el-tag>
               </div>
             </div>
             <div class="chain-card__section">
               <span class="chain-card__section-label">下游</span>
               <div class="chain-card__tags">
-                <el-tag v-for="item in chain.downstream" :key="item" size="small" type="success" effect="plain">{{ item }}</el-tag>
+                <el-tag
+                  v-for="item in chain.downstream"
+                  :key="item"
+                  size="small"
+                  type="success"
+                  effect="plain"
+                  >{{ item }}</el-tag
+                >
               </div>
             </div>
           </div>
@@ -138,16 +154,18 @@ onMounted(async () => {
 }
 
 .chain-card {
+  padding: 20px;
+  cursor: pointer;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
-  cursor: pointer;
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
 
   &:hover {
-    transform: translateY(-2px);
     box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
   }
 }
 
@@ -159,24 +177,24 @@ onMounted(async () => {
 }
 
 .chain-card__name {
+  margin: 0;
   font-size: 16px;
   font-weight: $font-weight-bold;
   color: $text-primary;
-  margin: 0;
 }
 
 .chain-card__desc {
-  font-size: 13px;
-  color: $text-secondary;
   margin: 0 0 16px;
+  font-size: 13px;
   line-height: 1.5;
+  color: $text-secondary;
 }
 
 .chain-card__stats {
   display: flex;
   gap: 32px;
-  margin-bottom: 16px;
   padding-bottom: 16px;
+  margin-bottom: 16px;
   border-bottom: 1px solid $border-color-lighter;
 }
 
@@ -205,16 +223,16 @@ onMounted(async () => {
 
 .chain-card__section {
   display: flex;
-  align-items: flex-start;
   gap: 8px;
+  align-items: flex-start;
 }
 
 .chain-card__section-label {
-  font-size: 12px;
-  color: $text-secondary;
   flex-shrink: 0;
   width: 28px;
+  font-size: 12px;
   line-height: 24px;
+  color: $text-secondary;
 }
 
 .chain-card__tags {

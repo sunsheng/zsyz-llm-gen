@@ -31,7 +31,13 @@
         </el-table-column>
         <el-table-column prop="occupancy" label="入驻率(%)" width="110">
           <template #default="{ row }">
-            <span :style="{ color: row.occupancy >= 80 ? '#67C23A' : row.occupancy >= 60 ? '#E6A23C' : '#F56C6C' }">{{ row.occupancy }}%</span>
+            <span
+              :style="{
+                color:
+                  row.occupancy >= 80 ? '#67C23A' : row.occupancy >= 60 ? '#E6A23C' : '#F56C6C',
+              }"
+              >{{ row.occupancy }}%</span
+            >
           </template>
         </el-table-column>
         <el-table-column prop="enterprises" label="企业数" width="90" />
@@ -40,7 +46,9 @@
         </el-table-column>
         <el-table-column label="操作" width="100">
           <template #default="{ row }">
-            <el-button type="primary" link size="small" @click="handleViewDetail(row)">详情</el-button>
+            <el-button type="primary" link size="small" @click="handleViewDetail(row)"
+              >详情</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -71,31 +79,77 @@ onMounted(() => {
   parks.value = getMockParks()
   const totalArea = parks.value.reduce((s, p) => s + p.area, 0)
   const totalEnterprises = parks.value.reduce((s, p) => s + p.enterprises, 0)
-  const avgOccupancy = Math.floor(parks.value.reduce((s, p) => s + p.occupancy, 0) / parks.value.length)
+  const avgOccupancy = Math.floor(
+    parks.value.reduce((s, p) => s + p.occupancy, 0) / parks.value.length,
+  )
 
   kpiCards.value = [
-    { key: 'parkCount', label: '园区数量', value: parks.value.length, unit: '个', trend: 'up', trendValue: '+12.0%', icon: 'OfficeBuilding', iconColor: '#1889E8', iconBgColor: '#ECF5FF' },
-    { key: 'totalArea', label: '总面积', value: totalArea.toLocaleString(), unit: '亩', trend: 'up', trendValue: '+8.5%', icon: 'Grid', iconColor: '#36CBCB', iconBgColor: '#E6F7F7' },
-    { key: 'avgOccupancy', label: '平均入驻率', value: avgOccupancy, unit: '%', trend: 'up', trendValue: '+5.3%', icon: 'DataLine', iconColor: '#4ECB73', iconBgColor: '#EDFAF0' },
-    { key: 'totalEnterprises', label: '入驻企业', value: totalEnterprises, unit: '家', trend: 'up', trendValue: '+15.2%', icon: 'UserFilled', iconColor: '#FBD437', iconBgColor: '#FFF8E6' }
+    {
+      key: 'parkCount',
+      label: '园区数量',
+      value: parks.value.length,
+      unit: '个',
+      trend: 'up',
+      trendValue: '+12.0%',
+      icon: 'OfficeBuilding',
+      iconColor: '#1889E8',
+      iconBgColor: '#ECF5FF',
+    },
+    {
+      key: 'totalArea',
+      label: '总面积',
+      value: totalArea.toLocaleString(),
+      unit: '亩',
+      trend: 'up',
+      trendValue: '+8.5%',
+      icon: 'Grid',
+      iconColor: '#36CBCB',
+      iconBgColor: '#E6F7F7',
+    },
+    {
+      key: 'avgOccupancy',
+      label: '平均入驻率',
+      value: avgOccupancy,
+      unit: '%',
+      trend: 'up',
+      trendValue: '+5.3%',
+      icon: 'DataLine',
+      iconColor: '#4ECB73',
+      iconBgColor: '#EDFAF0',
+    },
+    {
+      key: 'totalEnterprises',
+      label: '入驻企业',
+      value: totalEnterprises,
+      unit: '家',
+      trend: 'up',
+      trendValue: '+15.2%',
+      icon: 'UserFilled',
+      iconColor: '#FBD437',
+      iconBgColor: '#FFF8E6',
+    },
   ]
 
   occupancyBarOption.value = {
     color: chartColors,
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    xAxis: { type: 'category', data: parks.value.map(p => p.name) },
+    xAxis: { type: 'category', data: parks.value.map((p) => p.name) },
     yAxis: { type: 'value', max: 100, axisLabel: { formatter: '{value}%' } },
-    series: [{ name: '入驻率', type: 'bar', data: parks.value.map(p => p.occupancy), barWidth: '40%' }]
+    series: [
+      { name: '入驻率', type: 'bar', data: parks.value.map((p) => p.occupancy), barWidth: '40%' },
+    ],
   }
 
   revenueBarOption.value = {
     color: chartColors,
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    xAxis: { type: 'category', data: parks.value.map(p => p.name) },
+    xAxis: { type: 'category', data: parks.value.map((p) => p.name) },
     yAxis: { type: 'value', axisLabel: { formatter: '{value}万' } },
-    series: [{ name: '产值', type: 'bar', data: parks.value.map(p => p.revenue), barWidth: '40%' }]
+    series: [
+      { name: '产值', type: 'bar', data: parks.value.map((p) => p.revenue), barWidth: '40%' },
+    ],
   }
 })
 </script>
@@ -117,21 +171,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

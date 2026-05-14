@@ -33,14 +33,16 @@
         <el-table-column prop="projectCount" label="落地项目数" width="120" sortable />
         <el-table-column prop="growth" label="增速(%)" width="100" sortable>
           <template #default="{ row }">
-            <span :style="{ color: row.growth >= 0 ? '#67C23A' : '#F56C6C' }">{{ row.growth >= 0 ? '+' : '' }}{{ row.growth }}%</span>
+            <span :style="{ color: row.growth >= 0 ? '#67C23A' : '#F56C6C' }"
+              >{{ row.growth >= 0 ? '+' : '' }}{{ row.growth }}%</span
+            >
           </template>
         </el-table-column>
         <el-table-column prop="policyScore" label="政策评分" width="100" />
         <el-table-column prop="serviceScore" label="服务评分" width="100" />
         <el-table-column prop="investScore" label="招商指数" width="100" sortable>
           <template #default="{ row }">
-            <span style="font-weight: 600; color: #1889E8">{{ row.investScore }}</span>
+            <span style="font-weight: 600; color: #1889e8">{{ row.investScore }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -63,14 +65,14 @@ const policyBarOption = ref({})
 
 onMounted(() => {
   const cities = ['杭州市', '宁波市', '苏州市', '南京市', '成都市', '武汉市']
-  tableData.value = cities.map(city => ({
+  tableData.value = cities.map((city) => ({
     city,
     investAmount: Math.floor(Math.random() * 3000 + 500),
     projectCount: Math.floor(Math.random() * 200 + 50),
     growth: +(Math.random() * 30 + 5).toFixed(1),
     policyScore: Math.floor(Math.random() * 20 + 70),
     serviceScore: Math.floor(Math.random() * 20 + 68),
-    investScore: Math.floor(Math.random() * 20 + 70)
+    investScore: Math.floor(Math.random() * 20 + 70),
   }))
 
   radarOption.value = {
@@ -83,18 +85,20 @@ onMounted(() => {
         { name: '营商环境', max: 100 },
         { name: '人才供给', max: 100 },
         { name: '产业配套', max: 100 },
-        { name: '资金扶持', max: 100 }
+        { name: '资金扶持', max: 100 },
       ],
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: [
-        { name: '本地', value: [82, 78, 80, 85, 76], areaStyle: { opacity: 0.2 } },
-        { name: '对标均值', value: [72, 70, 68, 75, 65], areaStyle: { opacity: 0.1 } }
-      ]
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: [
+          { name: '本地', value: [82, 78, 80, 85, 76], areaStyle: { opacity: 0.2 } },
+          { name: '对标均值', value: [72, 70, 68, 75, 65], areaStyle: { opacity: 0.1 } },
+        ],
+      },
+    ],
   }
 
   investBarOption.value = {
@@ -103,7 +107,7 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: cities },
     yAxis: { type: 'value' },
-    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map(d => d.investAmount) }]
+    series: [{ type: 'bar', barWidth: '40%', data: tableData.value.map((d) => d.investAmount) }],
   }
 
   const years = ['2020', '2021', '2022', '2023', '2024']
@@ -116,8 +120,8 @@ onMounted(() => {
     yAxis: { type: 'value' },
     series: [
       { name: '本地', type: 'line', smooth: true, data: [120, 145, 168, 190, 215] },
-      { name: '对标城市A', type: 'line', smooth: true, data: [110, 130, 155, 175, 198] }
-    ]
+      { name: '对标城市A', type: 'line', smooth: true, data: [110, 130, 155, 175, 198] },
+    ],
   }
 
   const dimensions = ['税收优惠', '人才政策', '用地支持', '资金扶持', '审批效率']
@@ -130,8 +134,8 @@ onMounted(() => {
     yAxis: { type: 'value', max: 100 },
     series: [
       { name: '本地', type: 'bar', barWidth: '25%', data: [85, 82, 78, 76, 88] },
-      { name: '对标均值', type: 'bar', barWidth: '25%', data: [72, 68, 70, 65, 75] }
-    ]
+      { name: '对标均值', type: 'bar', barWidth: '25%', data: [72, 68, 70, 65, 75] },
+    ],
   }
 })
 </script>
@@ -147,21 +151,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

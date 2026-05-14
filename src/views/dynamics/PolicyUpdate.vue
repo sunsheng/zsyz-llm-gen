@@ -8,7 +8,7 @@
 
     <div class="filter-section">
       <SearchFilterBar
-        searchPlaceholder="搜索政策名称"
+        search-placeholder="搜索政策名称"
         :filters="filterFields"
         @search="handleSearch"
         @filter="handleFilter"
@@ -23,13 +23,34 @@
           :key="item.id"
           :timestamp="item.date"
           placement="top"
-          :type="item.impact === 'positive' ? 'success' : item.impact === 'negative' ? 'danger' : 'primary'"
+          :type="
+            item.impact === 'positive'
+              ? 'success'
+              : item.impact === 'negative'
+                ? 'danger'
+                : 'primary'
+          "
         >
           <el-card shadow="hover">
             <div class="policy-card">
               <div class="policy-card__header">
-                <el-tag :type="(item.impact === 'positive' ? 'success' : item.impact === 'negative' ? 'danger' : 'info') as any" size="small">
-                  {{ item.impact === 'positive' ? '利好' : item.impact === 'negative' ? '利空' : '中性' }}
+                <el-tag
+                  :type="
+                    (item.impact === 'positive'
+                      ? 'success'
+                      : item.impact === 'negative'
+                        ? 'danger'
+                        : 'info') as any
+                  "
+                  size="small"
+                >
+                  {{
+                    item.impact === 'positive'
+                      ? '利好'
+                      : item.impact === 'negative'
+                        ? '利空'
+                        : '中性'
+                  }}
                 </el-tag>
                 <el-tag type="info" size="small">{{ item.level }}</el-tag>
                 <el-tag effect="plain" size="small">{{ item.industry }}</el-tag>
@@ -54,16 +75,26 @@ import PageHeader from '@/components/common/PageHeader.vue'
 import SearchFilterBar from '@/components/common/SearchFilterBar.vue'
 
 const filterFields = [
-  { key: 'impact', label: '影响类型', type: 'select' as const, options: [
-    { label: '利好', value: 'positive' },
-    { label: '利空', value: 'negative' },
-    { label: '中性', value: 'neutral' }
-  ]},
-  { key: 'level', label: '政策层级', type: 'select' as const, options: [
-    { label: '国家级', value: 'national' },
-    { label: '省级', value: 'provincial' },
-    { label: '市级', value: 'municipal' }
-  ]}
+  {
+    key: 'impact',
+    label: '影响类型',
+    type: 'select' as const,
+    options: [
+      { label: '利好', value: 'positive' },
+      { label: '利空', value: 'negative' },
+      { label: '中性', value: 'neutral' },
+    ],
+  },
+  {
+    key: 'level',
+    label: '政策层级',
+    type: 'select' as const,
+    options: [
+      { label: '国家级', value: 'national' },
+      { label: '省级', value: 'provincial' },
+      { label: '市级', value: 'municipal' },
+    ],
+  },
 ]
 
 const allData = ref<any[]>([])
@@ -88,12 +119,56 @@ onMounted(() => {
     '产业园区税收优惠政策延期三年',
     '制造业数字化转型专项行动方案',
     '科技型中小企业研发费用加计扣除比例提高',
-    '关于进一步优化外商投资环境的若干措施'
+    '关于进一步优化外商投资环境的若干措施',
   ]
-  const impacts: Array<'positive' | 'negative' | 'neutral'> = ['positive', 'negative', 'positive', 'neutral', 'negative', 'positive', 'positive', 'positive', 'positive', 'positive']
-  const levels = ['国家级', '省级', '省级', '国家级', '国家级', '省级', '市级', '国家级', '国家级', '省级']
-  const industries = ['高端装备制造', '新材料', '生物医药', '电子信息', '新能源', '现代服务业', '现代服务业', '电子信息', '现代服务业', '现代服务业']
-  const publishers = ['国务院', '省生态环境厅', '省药监局', '工信部', '国家能源局', '省财政厅', '市政府', '发改委', '财政部', '商务部']
+  const impacts: Array<'positive' | 'negative' | 'neutral'> = [
+    'positive',
+    'negative',
+    'positive',
+    'neutral',
+    'negative',
+    'positive',
+    'positive',
+    'positive',
+    'positive',
+    'positive',
+  ]
+  const levels = [
+    '国家级',
+    '省级',
+    '省级',
+    '国家级',
+    '国家级',
+    '省级',
+    '市级',
+    '国家级',
+    '国家级',
+    '省级',
+  ]
+  const industries = [
+    '高端装备制造',
+    '新材料',
+    '生物医药',
+    '电子信息',
+    '新能源',
+    '现代服务业',
+    '现代服务业',
+    '电子信息',
+    '现代服务业',
+    '现代服务业',
+  ]
+  const publishers = [
+    '国务院',
+    '省生态环境厅',
+    '省药监局',
+    '工信部',
+    '国家能源局',
+    '省财政厅',
+    '市政府',
+    '发改委',
+    '财政部',
+    '商务部',
+  ]
 
   allData.value = titles.map((title, i) => ({
     id: `policy-${i + 1}`,
@@ -104,13 +179,17 @@ onMounted(() => {
     industry: industries[i],
     publisher: publishers[i],
     affectedCount: Math.floor(Math.random() * 200 + 20),
-    summary: '该政策旨在优化产业发展环境，促进产业高质量发展，对相关企业将产生深远影响。'
+    summary: '该政策旨在优化产业发展环境，促进产业高质量发展，对相关企业将产生深远影响。',
   }))
 })
 
-function handleSearch(kw: string) { keyword.value = kw }
+function handleSearch(kw: string) {
+  keyword.value = kw
+}
 function handleFilter(_filters: Record<string, unknown>) {}
-function handleReset() { keyword.value = '' }
+function handleReset() {
+  keyword.value = ''
+}
 </script>
 
 <style lang="scss" scoped>
@@ -121,28 +200,28 @@ function handleReset() { keyword.value = '' }
   margin-bottom: 20px;
 }
 .timeline-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .policy-card__header {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   margin-bottom: 8px;
 }
 .policy-card__title {
+  margin: 0 0 6px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 6px 0;
 }
 .policy-card__desc {
+  margin: 0 0 8px;
   font-size: 14px;
-  color: $text-secondary;
-  margin: 0 0 8px 0;
   line-height: 1.5;
+  color: $text-secondary;
 }
 .policy-card__meta {
   display: flex;

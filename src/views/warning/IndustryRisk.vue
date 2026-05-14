@@ -31,14 +31,23 @@
         <el-table-column prop="name" label="行业" min-width="140" />
         <el-table-column prop="riskScore" label="风险评分" width="100" sortable>
           <template #default="{ row }">
-            <span :style="{ color: row.riskScore > 60 ? '#F56C6C' : row.riskScore > 30 ? '#E6A23C' : '#67C23A', fontWeight: 600 }">{{ row.riskScore }}</span>
+            <span
+              :style="{
+                color: row.riskScore > 60 ? '#F56C6C' : row.riskScore > 30 ? '#E6A23C' : '#67C23A',
+                fontWeight: 600,
+              }"
+              >{{ row.riskScore }}</span
+            >
           </template>
         </el-table-column>
         <el-table-column prop="enterpriseCount" label="风险企业数" width="120" />
         <el-table-column prop="mainRisk" label="主要风险" width="120" />
         <el-table-column prop="trend" label="趋势" width="80">
           <template #default="{ row }">
-            <TrendIndicator :direction="row.riskChange > 0 ? 'up' : 'down'" :value="Math.abs(row.riskChange) + '%'" />
+            <TrendIndicator
+              :direction="row.riskChange > 0 ? 'up' : 'down'"
+              :value="Math.abs(row.riskChange) + '%'"
+            />
           </template>
         </el-table-column>
         <el-table-column prop="desc" label="风险描述" min-width="200" />
@@ -62,9 +71,36 @@ const typePieOption = ref({})
 const radarOption = ref({})
 
 onMounted(() => {
-  const industries = ['高端装备制造', '新材料', '生物医药', '电子信息', '新能源', '节能环保', '数字创意', '现代服务业']
-  const mainRisks = ['产能过剩', '原材料波动', '研发失败', '技术迭代', '补贴退坡', '环保合规', '数据安全', '需求萎缩']
-  const descs = ['行业产能利用率持续走低，过剩产能消化压力较大', '原材料价格波动剧烈，成本控制难度增加', '新药研发周期长，失败风险较高', '技术快速迭代，存量技术面临淘汰风险', '政策补贴逐步退坡，企业盈利承压', '环保标准趋严，合规成本上升', '数据安全法规收紧，合规要求提升', '市场需求放缓，行业增长动力不足']
+  const industries = [
+    '高端装备制造',
+    '新材料',
+    '生物医药',
+    '电子信息',
+    '新能源',
+    '节能环保',
+    '数字创意',
+    '现代服务业',
+  ]
+  const mainRisks = [
+    '产能过剩',
+    '原材料波动',
+    '研发失败',
+    '技术迭代',
+    '补贴退坡',
+    '环保合规',
+    '数据安全',
+    '需求萎缩',
+  ]
+  const descs = [
+    '行业产能利用率持续走低，过剩产能消化压力较大',
+    '原材料价格波动剧烈，成本控制难度增加',
+    '新药研发周期长，失败风险较高',
+    '技术快速迭代，存量技术面临淘汰风险',
+    '政策补贴逐步退坡，企业盈利承压',
+    '环保标准趋严，合规成本上升',
+    '数据安全法规收紧，合规要求提升',
+    '市场需求放缓，行业增长动力不足',
+  ]
 
   industryData.value = industries.map((name, i) => ({
     name,
@@ -72,7 +108,7 @@ onMounted(() => {
     enterpriseCount: Math.floor(Math.random() * 20 + 5),
     mainRisk: mainRisks[i],
     riskChange: Math.floor(Math.random() * 20 - 10),
-    desc: descs[i]
+    desc: descs[i],
   }))
 
   industryBarOption.value = {
@@ -81,14 +117,18 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: industries },
     yAxis: { type: 'value', max: 100 },
-    series: [{
-      type: 'bar',
-      barWidth: '40%',
-      data: industryData.value.map(d => ({
-        value: d.riskScore,
-        itemStyle: { color: d.riskScore > 60 ? '#F56C6C' : d.riskScore > 30 ? '#E6A23C' : '#67C23A' }
-      }))
-    }]
+    series: [
+      {
+        type: 'bar',
+        barWidth: '40%',
+        data: industryData.value.map((d) => ({
+          value: d.riskScore,
+          itemStyle: {
+            color: d.riskScore > 60 ? '#F56C6C' : d.riskScore > 30 ? '#E6A23C' : '#67C23A',
+          },
+        })),
+      },
+    ],
   }
 
   const months = ['1月', '2月', '3月', '4月', '5月', '6月']
@@ -99,30 +139,32 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: months },
     yAxis: { type: 'value' },
-    series: industries.slice(0, 4).map(name => ({
+    series: industries.slice(0, 4).map((name) => ({
       name,
       type: 'line',
       smooth: true,
-      data: Array.from({ length: 6 }, () => Math.floor(Math.random() * 30 + 25))
-    }))
+      data: Array.from({ length: 6 }, () => Math.floor(Math.random() * 30 + 25)),
+    })),
   }
 
   typePieOption.value = {
     color: chartColors,
     tooltip: { trigger: 'item' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie',
-      radius: ['40%', '70%'],
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: [
-        { name: '市场风险', value: 35 },
-        { name: '技术风险', value: 28 },
-        { name: '政策风险', value: 22 },
-        { name: '供应链风险', value: 15 }
-      ]
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: [
+          { name: '市场风险', value: 35 },
+          { name: '技术风险', value: 28 },
+          { name: '政策风险', value: 22 },
+          { name: '供应链风险', value: 15 },
+        ],
+      },
+    ],
   }
 
   radarOption.value = {
@@ -135,19 +177,21 @@ onMounted(() => {
         { name: '技术风险', max: 100 },
         { name: '政策风险', max: 100 },
         { name: '供应链风险', max: 100 },
-        { name: '人才风险', max: 100 }
+        { name: '人才风险', max: 100 },
       ],
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: industries.slice(0, 3).map(name => ({
-        name,
-        value: Array.from({ length: 5 }, () => Math.floor(Math.random() * 40 + 25)),
-        areaStyle: { opacity: 0.15 }
-      }))
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: industries.slice(0, 3).map((name) => ({
+          name,
+          value: Array.from({ length: 5 }, () => Math.floor(Math.random() * 40 + 25)),
+          areaStyle: { opacity: 0.15 },
+        })),
+      },
+    ],
   }
 })
 </script>
@@ -163,21 +207,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

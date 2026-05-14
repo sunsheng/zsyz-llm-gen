@@ -11,9 +11,7 @@
       </div>
     </div>
     <div class="map-marker-popup__footer">
-      <el-link type="primary" :underline="false" @click="$emit('detail')">
-        查看详情 &gt;
-      </el-link>
+      <el-link type="primary" :underline="false" @click="$emit('detail')"> 查看详情 &gt; </el-link>
     </div>
   </div>
 </template>
@@ -28,16 +26,19 @@ const props = defineProps<{
   metrics?: { label: string; value: string }[]
 }>()
 
-withDefaults(defineProps<{
-  name: string
-  tag?: string
-  tagType?: 'primary' | 'success' | 'warning' | 'danger' | 'info'
-  metrics?: { label: string; value: string }[]
-}>(), {
-  tag: '',
-  tagType: 'primary',
-  metrics: () => []
-})
+withDefaults(
+  defineProps<{
+    name: string
+    tag?: string
+    tagType?: 'primary' | 'success' | 'warning' | 'danger' | 'info'
+    metrics?: { label: string; value: string }[]
+  }>(),
+  {
+    tag: '',
+    tagType: 'primary',
+    metrics: () => [],
+  },
+)
 
 defineEmits<{
   detail: []
@@ -55,8 +56,8 @@ defineEmits<{
 
 .map-marker-popup__header {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   margin-bottom: 12px;
 }
 
@@ -82,12 +83,12 @@ defineEmits<{
 }
 
 .map-marker-popup__value {
-  color: $text-primary;
   font-weight: $font-weight-medium;
+  color: $text-primary;
 }
 
 .map-marker-popup__footer {
-  border-top: 1px solid $border-color-lighter;
   padding-top: 10px;
+  border-top: 1px solid $border-color-lighter;
 }
 </style>

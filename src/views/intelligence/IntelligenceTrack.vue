@@ -29,7 +29,14 @@
         </div>
         <div class="track-card__events">
           <span class="track-card__events-label">关键事件:</span>
-          <el-tag v-for="evt in item.keyEvents" :key="evt" size="small" type="info" style="margin-left: 4px">{{ evt }}</el-tag>
+          <el-tag
+            v-for="evt in item.keyEvents"
+            :key="evt"
+            size="small"
+            type="info"
+            style="margin-left: 4px"
+            >{{ evt }}</el-tag
+          >
         </div>
         <div class="track-card__footer">
           <span class="track-card__update">更新: {{ item.updateTime }}</span>
@@ -53,17 +60,27 @@ import { getMockTrackList } from '@/api/mock/intelligence'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const filters: FilterField[] = [
-  { key: 'trackType', label: '追踪类型', type: 'select', options: [
-    { label: '企业动态', value: '企业动态' },
-    { label: '投资意向', value: '投资意向' },
-    { label: '政策变化', value: '政策变化' },
-    { label: '竞争情报', value: '竞争情报' }
-  ]},
-  { key: 'status', label: '状态', type: 'select', options: [
-    { label: '进行中', value: '进行中' },
-    { label: '已完成', value: '已完成' },
-    { label: '已搁置', value: '已搁置' }
-  ]}
+  {
+    key: 'trackType',
+    label: '追踪类型',
+    type: 'select',
+    options: [
+      { label: '企业动态', value: '企业动态' },
+      { label: '投资意向', value: '投资意向' },
+      { label: '政策变化', value: '政策变化' },
+      { label: '竞争情报', value: '竞争情报' },
+    ],
+  },
+  {
+    key: 'status',
+    label: '状态',
+    type: 'select',
+    options: [
+      { label: '进行中', value: '进行中' },
+      { label: '已完成', value: '已完成' },
+      { label: '已搁置', value: '已搁置' },
+    ],
+  },
 ]
 
 const trackList = ref<any[]>([])
@@ -76,7 +93,9 @@ function handleSearch() {
   trackList.value = getMockTrackList(6)
 }
 
-onMounted(() => { handleSearch() })
+onMounted(() => {
+  handleSearch()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -91,8 +110,8 @@ onMounted(() => { handleSearch() })
 }
 .track-card__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 10px;
 }
 .track-card__name {
@@ -102,8 +121,8 @@ onMounted(() => { handleSearch() })
 }
 .track-card__progress {
   display: flex;
-  align-items: center;
   gap: 12px;
+  align-items: center;
   margin-bottom: 10px;
 }
 .track-card__progress-label {
@@ -113,9 +132,9 @@ onMounted(() => { handleSearch() })
 }
 .track-card__events {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
   gap: 4px;
+  align-items: center;
   margin-bottom: 10px;
 }
 .track-card__events-label {
@@ -124,8 +143,8 @@ onMounted(() => { handleSearch() })
 }
 .track-card__footer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding-top: 8px;
   border-top: 1px solid $border-color-lighter;
 }

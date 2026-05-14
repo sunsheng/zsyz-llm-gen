@@ -40,32 +40,32 @@
       <div class="graph-page__legend">
         <div class="legend-title">企业类型</div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #F2637B" />
+          <span class="legend-dot" style="background: #f2637b"></span>
           <span>龙头企业</span>
         </div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #1889E8" />
+          <span class="legend-dot" style="background: #1889e8"></span>
           <span>核心企业</span>
         </div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #4ECB73" />
+          <span class="legend-dot" style="background: #4ecb73"></span>
           <span>配套企业</span>
         </div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #975FE5" />
+          <span class="legend-dot" style="background: #975fe5"></span>
           <span>投资机构</span>
         </div>
         <div class="legend-title" style="margin-top: 8px">关系类型</div>
         <div class="legend-item">
-          <span class="legend-line" style="border-top: 2px solid #1889E8" />
+          <span class="legend-line" style="border-top: 2px solid #1889e8"></span>
           <span>投资</span>
         </div>
         <div class="legend-item">
-          <span class="legend-line" style="border-top: 2px solid #4ECB73" />
+          <span class="legend-line" style="border-top: 2px solid #4ecb73"></span>
           <span>供应</span>
         </div>
         <div class="legend-item">
-          <span class="legend-line" style="border-top: 2px dashed #F2637B" />
+          <span class="legend-line" style="border-top: 2px dashed #f2637b"></span>
           <span>竞争</span>
         </div>
       </div>
@@ -92,22 +92,118 @@ const regionOptions = [
   { code: 'beijing-tianjin', name: '京津冀区域' },
   { code: 'central', name: '中部区域' },
   { code: 'western', name: '西部区域' },
-  { code: 'northeast', name: '东北区域' }
+  { code: 'northeast', name: '东北区域' },
 ]
 
 const regionEnterpriseMap: Record<string, { names: string[]; categories: string[] }> = {
-  'yangtze': {
-    names: ['上海电气', '中芯国际', '药明康德', '蔚来汽车', '拼多多', '哔哩哔哩', '韦尔股份', '澜起科技', '中微公司', '安集科技', '华熙生物', '迈瑞医疗', '汇川技术', '大华股份', '海康威视'],
-    categories: ['龙头企业', '核心企业', '核心企业', '龙头企业', '配套企业', '配套企业', '核心企业', '配套企业', '配套企业', '配套企业', '核心企业', '龙头企业', '核心企业', '核心企业', '龙头企业']
+  yangtze: {
+    names: [
+      '上海电气',
+      '中芯国际',
+      '药明康德',
+      '蔚来汽车',
+      '拼多多',
+      '哔哩哔哩',
+      '韦尔股份',
+      '澜起科技',
+      '中微公司',
+      '安集科技',
+      '华熙生物',
+      '迈瑞医疗',
+      '汇川技术',
+      '大华股份',
+      '海康威视',
+    ],
+    categories: [
+      '龙头企业',
+      '核心企业',
+      '核心企业',
+      '龙头企业',
+      '配套企业',
+      '配套企业',
+      '核心企业',
+      '配套企业',
+      '配套企业',
+      '配套企业',
+      '核心企业',
+      '龙头企业',
+      '核心企业',
+      '核心企业',
+      '龙头企业',
+    ],
   },
-  'pearl': {
-    names: ['华为技术', '比亚迪', '腾讯控股', '大疆创新', '立讯精密', '蓝思科技', '格力电器', '美的集团', '拓斯达', '顺丰科技', '汇顶科技', '光启技术', '瑞芯微', '优必选', '云从科技'],
-    categories: ['龙头企业', '龙头企业', '龙头企业', '龙头企业', '核心企业', '配套企业', '龙头企业', '龙头企业', '配套企业', '配套企业', '核心企业', '配套企业', '核心企业', '核心企业', '核心企业']
+  pearl: {
+    names: [
+      '华为技术',
+      '比亚迪',
+      '腾讯控股',
+      '大疆创新',
+      '立讯精密',
+      '蓝思科技',
+      '格力电器',
+      '美的集团',
+      '拓斯达',
+      '顺丰科技',
+      '汇顶科技',
+      '光启技术',
+      '瑞芯微',
+      '优必选',
+      '云从科技',
+    ],
+    categories: [
+      '龙头企业',
+      '龙头企业',
+      '龙头企业',
+      '龙头企业',
+      '核心企业',
+      '配套企业',
+      '龙头企业',
+      '龙头企业',
+      '配套企业',
+      '配套企业',
+      '核心企业',
+      '配套企业',
+      '核心企业',
+      '核心企业',
+      '核心企业',
+    ],
   },
   'beijing-tianjin': {
-    names: ['百度', '京东集团', '字节跳动', '小米集团', '联想集团', '北方华创', '中科曙光', '寒武纪', '地平线', '四维图新', '君正集团', '兆易创新', '金山办公', '奇安信', '旷视科技'],
-    categories: ['龙头企业', '龙头企业', '龙头企业', '龙头企业', '龙头企业', '核心企业', '核心企业', '配套企业', '配套企业', '配套企业', '配套企业', '核心企业', '核心企业', '核心企业', '核心企业']
-  }
+    names: [
+      '百度',
+      '京东集团',
+      '字节跳动',
+      '小米集团',
+      '联想集团',
+      '北方华创',
+      '中科曙光',
+      '寒武纪',
+      '地平线',
+      '四维图新',
+      '君正集团',
+      '兆易创新',
+      '金山办公',
+      '奇安信',
+      '旷视科技',
+    ],
+    categories: [
+      '龙头企业',
+      '龙头企业',
+      '龙头企业',
+      '龙头企业',
+      '龙头企业',
+      '核心企业',
+      '核心企业',
+      '配套企业',
+      '配套企业',
+      '配套企业',
+      '配套企业',
+      '核心企业',
+      '核心企业',
+      '核心企业',
+      '核心企业',
+    ],
+  },
 }
 
 const selectedRegion = ref('yangtze')
@@ -125,7 +221,7 @@ const filteredNodes = computed(() => {
   let nodes = allNodes.value
   if (searchKeyword.value) {
     const kw = searchKeyword.value.toLowerCase()
-    nodes = nodes.filter(n => n.name.toLowerCase().includes(kw))
+    nodes = nodes.filter((n) => n.name.toLowerCase().includes(kw))
   }
   return nodes
 })
@@ -133,20 +229,30 @@ const filteredNodes = computed(() => {
 const filteredEdges = computed(() => {
   let edges = allEdges.value
   if (relationType.value) {
-    edges = edges.filter(e => e.type === relationType.value)
+    edges = edges.filter((e) => e.type === relationType.value)
   }
-  const nodeIds = new Set(filteredNodes.value.map(n => n.id))
-  return edges.filter(e => nodeIds.has(e.source as string) && nodeIds.has(e.target as string))
+  const nodeIds = new Set(filteredNodes.value.map((n) => n.id))
+  return edges.filter((e) => {
+    const srcId = typeof e.source === 'string' ? e.source : (e.source as { id: string }).id
+    const tgtId = typeof e.target === 'string' ? e.target : (e.target as { id: string }).id
+    return nodeIds.has(srcId) && nodeIds.has(tgtId)
+  })
 })
 
 function handleNodeClick(node: GraphNodeData) {
   selectedNode.value = node
   const related = allEdges.value
-    .filter(e => e.source === node.id || e.target === node.id)
-    .map(e => {
-      const targetId = e.source === node.id ? e.target : e.source
-      const found = allNodes.value.find(n => n.id === targetId)
-      return found ? found.name : targetId as string
+    .filter((e) => {
+      const srcId = typeof e.source === 'string' ? e.source : (e.source as { id: string }).id
+      const tgtId = typeof e.target === 'string' ? e.target : (e.target as { id: string }).id
+      return srcId === node.id || tgtId === node.id
+    })
+    .map((e) => {
+      const srcId = typeof e.source === 'string' ? e.source : (e.source as { id: string }).id
+      const tgtId = typeof e.target === 'string' ? e.target : (e.target as { id: string }).id
+      const targetId = srcId === node.id ? tgtId : srcId
+      const found = allNodes.value.find((n) => n.id === targetId)
+      return found ? found.name : targetId
     })
   relatedEnterprises.value = related
   drawerVisible.value = true
@@ -166,11 +272,19 @@ function generateRegionData(regionCode: string) {
     id: `ent-${i}`,
     name,
     category: regionData.categories[i],
-    importance: regionData.categories[i] === '龙头企业' ? 90 + Math.floor(Math.random() * 10) :
-                regionData.categories[i] === '核心企业' ? 70 + Math.floor(Math.random() * 20) :
-                50 + Math.floor(Math.random() * 20),
+    importance:
+      regionData.categories[i] === '龙头企业'
+        ? 90 + Math.floor(Math.random() * 10)
+        : regionData.categories[i] === '核心企业'
+          ? 70 + Math.floor(Math.random() * 20)
+          : 50 + Math.floor(Math.random() * 20),
     enterpriseCount: Math.floor(Math.random() * 80 + 10),
-    value: regionData.categories[i] === '龙头企业' ? 95 : regionData.categories[i] === '核心企业' ? 75 : 55
+    value:
+      regionData.categories[i] === '龙头企业'
+        ? 95
+        : regionData.categories[i] === '核心企业'
+          ? 75
+          : 55,
   }))
 
   const edgeTypes = ['investment', 'supply', 'compete', 'cooperation']
@@ -183,7 +297,7 @@ function generateRegionData(regionCode: string) {
       source: nodes[src].id,
       target: nodes[tgt].id,
       weight: Math.random() * 0.6 + 0.4,
-      type: edgeTypes[Math.floor(Math.random() * edgeTypes.length)]
+      type: edgeTypes[Math.floor(Math.random() * edgeTypes.length)],
     })
   }
 
@@ -216,49 +330,49 @@ onMounted(() => {
 .graph-page__body {
   position: relative;
   height: 100%;
+  overflow: hidden;
   background: #fff;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  overflow: hidden;
 }
 
 .graph-page__legend {
   position: absolute;
-  right: 16px;
   top: 16px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: $radius-base;
-  padding: 12px 16px;
-  box-shadow: $shadow-card;
+  right: 16px;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 12px 16px;
   font-size: 12px;
   color: $text-regular;
-  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
 }
 
 .legend-title {
+  margin-bottom: 4px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin-bottom: 4px;
 }
 
 .legend-item {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
 }
 
 .legend-dot {
+  flex-shrink: 0;
   width: 10px;
   height: 10px;
   border-radius: $radius-round;
-  flex-shrink: 0;
 }
 
 .legend-line {
-  width: 20px;
   display: inline-block;
+  width: 20px;
 }
 </style>

@@ -21,16 +21,16 @@
             <div class="compare-panel__header">
               <h3 class="compare-panel__title">{{ regionAName }}</h3>
               <div class="compare-panel__stats">
-                <span>节点: <strong>{{ nodesA.length }}</strong></span>
-                <span>关系: <strong>{{ edgesA.length }}</strong></span>
+                <span
+                  >节点: <strong>{{ nodesA.length }}</strong></span
+                >
+                <span
+                  >关系: <strong>{{ edgesA.length }}</strong></span
+                >
               </div>
             </div>
             <div class="compare-panel__graph">
-              <ForceGraph
-                :nodes="nodesA"
-                :edges="edgesA"
-                @node-click="handleNodeClickA"
-              />
+              <ForceGraph :nodes="nodesA" :edges="edgesA" @node-click="handleNodeClickA" />
             </div>
           </div>
           <!-- 区域B -->
@@ -38,16 +38,16 @@
             <div class="compare-panel__header">
               <h3 class="compare-panel__title">{{ regionBName }}</h3>
               <div class="compare-panel__stats">
-                <span>节点: <strong>{{ nodesB.length }}</strong></span>
-                <span>关系: <strong>{{ edgesB.length }}</strong></span>
+                <span
+                  >节点: <strong>{{ nodesB.length }}</strong></span
+                >
+                <span
+                  >关系: <strong>{{ edgesB.length }}</strong></span
+                >
               </div>
             </div>
             <div class="compare-panel__graph">
-              <ForceGraph
-                :nodes="nodesB"
-                :edges="edgesB"
-                @node-click="handleNodeClickB"
-              />
+              <ForceGraph :nodes="nodesB" :edges="edgesB" @node-click="handleNodeClickB" />
             </div>
           </div>
         </div>
@@ -57,9 +57,13 @@
           <div class="compare-summary__card">
             <div class="compare-summary__label">产业链完整度</div>
             <div class="compare-summary__values">
-              <span class="compare-summary__value compare-summary__value--a">{{ completenessA }}%</span>
+              <span class="compare-summary__value compare-summary__value--a"
+                >{{ completenessA }}%</span
+              >
               <span class="compare-summary__divider">vs</span>
-              <span class="compare-summary__value compare-summary__value--b">{{ completenessB }}%</span>
+              <span class="compare-summary__value compare-summary__value--b"
+                >{{ completenessB }}%</span
+              >
             </div>
           </div>
           <div class="compare-summary__card">
@@ -73,17 +77,25 @@
           <div class="compare-summary__card">
             <div class="compare-summary__label">中游集中度</div>
             <div class="compare-summary__values">
-              <span class="compare-summary__value compare-summary__value--a">{{ midstreamA }}%</span>
+              <span class="compare-summary__value compare-summary__value--a"
+                >{{ midstreamA }}%</span
+              >
               <span class="compare-summary__divider">vs</span>
-              <span class="compare-summary__value compare-summary__value--b">{{ midstreamB }}%</span>
+              <span class="compare-summary__value compare-summary__value--b"
+                >{{ midstreamB }}%</span
+              >
             </div>
           </div>
           <div class="compare-summary__card">
             <div class="compare-summary__label">关联企业数</div>
             <div class="compare-summary__values">
-              <span class="compare-summary__value compare-summary__value--a">{{ enterpriseA }}</span>
+              <span class="compare-summary__value compare-summary__value--a">{{
+                enterpriseA
+              }}</span>
               <span class="compare-summary__divider">vs</span>
-              <span class="compare-summary__value compare-summary__value--b">{{ enterpriseB }}</span>
+              <span class="compare-summary__value compare-summary__value--b">{{
+                enterpriseB
+              }}</span>
             </div>
           </div>
         </div>
@@ -119,7 +131,7 @@ const regionOptions = [
   { code: 'beijing-tianjin', name: '京津冀区域' },
   { code: 'central', name: '中部区域' },
   { code: 'western', name: '西部区域' },
-  { code: 'northeast', name: '东北区域' }
+  { code: 'northeast', name: '东北区域' },
 ]
 
 const regionA = ref('yangtze')
@@ -135,34 +147,38 @@ const edgesA = ref<GraphEdgeData[]>([])
 const nodesB = ref<GraphNodeData[]>([])
 const edgesB = ref<GraphEdgeData[]>([])
 
-const regionAName = computed(() => regionOptions.find(r => r.code === regionA.value)?.name || '')
-const regionBName = computed(() => regionOptions.find(r => r.code === regionB.value)?.name || '')
+const regionAName = computed(() => regionOptions.find((r) => r.code === regionA.value)?.name || '')
+const regionBName = computed(() => regionOptions.find((r) => r.code === regionB.value)?.name || '')
 
 // 对比统计
-const completenessA = computed(() => Math.min(100, Math.round(nodesA.value.length / 20 * 100)))
-const completenessB = computed(() => Math.min(100, Math.round(nodesB.value.length / 20 * 100)))
+const completenessA = computed(() => Math.min(100, Math.round((nodesA.value.length / 20) * 100)))
+const completenessB = computed(() => Math.min(100, Math.round((nodesB.value.length / 20) * 100)))
 const upstreamA = computed(() => {
   const total = nodesA.value.length || 1
-  const up = nodesA.value.filter(n => n.category === '上游').length
-  return Math.round(up / total * 100)
+  const up = nodesA.value.filter((n) => n.category === '上游').length
+  return Math.round((up / total) * 100)
 })
 const upstreamB = computed(() => {
   const total = nodesB.value.length || 1
-  const up = nodesB.value.filter(n => n.category === '上游').length
-  return Math.round(up / total * 100)
+  const up = nodesB.value.filter((n) => n.category === '上游').length
+  return Math.round((up / total) * 100)
 })
 const midstreamA = computed(() => {
   const total = nodesA.value.length || 1
-  const mid = nodesA.value.filter(n => n.category === '中游').length
-  return Math.round(mid / total * 100)
+  const mid = nodesA.value.filter((n) => n.category === '中游').length
+  return Math.round((mid / total) * 100)
 })
 const midstreamB = computed(() => {
   const total = nodesB.value.length || 1
-  const mid = nodesB.value.filter(n => n.category === '中游').length
-  return Math.round(mid / total * 100)
+  const mid = nodesB.value.filter((n) => n.category === '中游').length
+  return Math.round((mid / total) * 100)
 })
-const enterpriseA = computed(() => nodesA.value.reduce((sum, n) => sum + ((n.enterpriseCount as number) || 0), 0))
-const enterpriseB = computed(() => nodesB.value.reduce((sum, n) => sum + ((n.enterpriseCount as number) || 0), 0))
+const enterpriseA = computed(() =>
+  nodesA.value.reduce((sum, n) => sum + ((n.enterpriseCount as number) || 0), 0),
+)
+const enterpriseB = computed(() =>
+  nodesB.value.reduce((sum, n) => sum + ((n.enterpriseCount as number) || 0), 0),
+)
 
 function handleNodeClickA(node: GraphNodeData) {
   selectedNode.value = { ...node, name: `[${regionAName.value}] ${node.name}` }
@@ -181,49 +197,51 @@ function handleExport() {
 }
 
 async function loadCompareData() {
-  const chainCode = Array.isArray(selectedChain.value) ? selectedChain.value[selectedChain.value.length - 1] : selectedChain.value
+  const chainCode = Array.isArray(selectedChain.value)
+    ? selectedChain.value[selectedChain.value.length - 1]
+    : selectedChain.value
   if (!chainCode) return
 
   loading.value = true
   try {
     const [dataA, dataB] = await Promise.all([
       fetchChainGraph(chainCode),
-      fetchChainGraph(chainCode)
+      fetchChainGraph(chainCode),
     ])
 
     if (dataA) {
       // 区域A - 用不同随机因子模拟差异
-      nodesA.value = dataA.nodes.map(n => ({
+      nodesA.value = dataA.nodes.map((n) => ({
         id: `a-${n.id}`,
         name: n.name,
         category: n.category,
         importance: Math.min(100, n.importance + Math.floor(Math.random() * 10)),
         enterpriseCount: n.enterpriseCount + Math.floor(Math.random() * 10),
-        value: n.importance
+        value: n.importance,
       }))
-      edgesA.value = dataA.edges.map(e => ({
+      edgesA.value = dataA.edges.map((e) => ({
         source: `a-${e.source}`,
         target: `a-${e.target}`,
         weight: e.weight,
-        type: e.type
+        type: e.type,
       }))
     }
 
     if (dataB) {
       // 区域B - 用不同随机因子模拟差异
-      nodesB.value = dataB.nodes.map(n => ({
+      nodesB.value = dataB.nodes.map((n) => ({
         id: `b-${n.id}`,
         name: n.name,
         category: n.category,
         importance: Math.min(100, n.importance + Math.floor(Math.random() * 15 - 5)),
         enterpriseCount: n.enterpriseCount + Math.floor(Math.random() * 20 - 5),
-        value: n.importance
+        value: n.importance,
       }))
-      edgesB.value = dataB.edges.map(e => ({
+      edgesB.value = dataB.edges.map((e) => ({
         source: `b-${e.source}`,
         target: `b-${e.target}`,
         weight: e.weight,
-        type: e.type
+        type: e.type,
       }))
     }
   } finally {
@@ -246,10 +264,10 @@ onMounted(() => {
 }
 
 .compare-vs {
+  margin: 0 4px;
+  font-size: 14px;
   font-weight: $font-weight-bold;
   color: $color-primary;
-  font-size: 14px;
-  margin: 0 4px;
 }
 
 .compare-body {
@@ -263,13 +281,13 @@ onMounted(() => {
 }
 
 .compare-panel {
+  display: flex;
   flex: 1;
+  flex-direction: column;
+  overflow: hidden;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
 .compare-panel__header {
@@ -281,10 +299,10 @@ onMounted(() => {
 }
 
 .compare-panel__title {
+  margin: 0;
   font-size: 15px;
   font-weight: $font-weight-bold;
   color: $text-primary;
-  margin: 0;
 }
 
 .compare-panel__stats {
@@ -294,8 +312,8 @@ onMounted(() => {
   color: $text-secondary;
 
   strong {
-    color: $color-primary;
     font-weight: $font-weight-bold;
+    color: $color-primary;
   }
 }
 
@@ -312,24 +330,24 @@ onMounted(() => {
 
 .compare-summary__card {
   flex: 1;
+  padding: 16px;
+  text-align: center;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 16px;
-  text-align: center;
 }
 
 .compare-summary__label {
+  margin-bottom: 8px;
   font-size: 13px;
   color: $text-secondary;
-  margin-bottom: 8px;
 }
 
 .compare-summary__values {
   display: flex;
+  gap: 12px;
   align-items: center;
   justify-content: center;
-  gap: 12px;
 }
 
 .compare-summary__value {
@@ -337,17 +355,17 @@ onMounted(() => {
   font-weight: $font-weight-bold;
 
   &--a {
-    color: #1889E8;
+    color: #1889e8;
   }
 
   &--b {
-    color: #36CBCB;
+    color: #36cbcb;
   }
 }
 
 .compare-summary__divider {
   font-size: 12px;
-  color: $text-placeholder;
   font-weight: $font-weight-medium;
+  color: $text-placeholder;
 }
 </style>

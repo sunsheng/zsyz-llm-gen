@@ -9,7 +9,13 @@
       <MapControlPanel title="供应链控制">
         <div class="filter-section">
           <div class="filter-label">产业链</div>
-          <el-select v-model="selectedChain" placeholder="全部产业链" clearable style="width: 100%" @change="updateMap">
+          <el-select
+            v-model="selectedChain"
+            placeholder="全部产业链"
+            clearable
+            style="width: 100%"
+            @change="updateMap"
+          >
             <el-option v-for="chain in chains" :key="chain" :label="chain" :value="chain" />
           </el-select>
         </div>
@@ -36,21 +42,59 @@
             class="node-item"
             @click="handleNodeClick(node)"
           >
-            <span class="node-item__dot" :style="{ background: getNodeColor(node.type) }" />
+            <span class="node-item__dot" :style="{ background: getNodeColor(node.type) }"></span>
             <div class="node-item__info">
               <div class="node-item__name">{{ node.name }}</div>
               <div class="node-item__chain">{{ node.chain }}</div>
             </div>
-            <el-tag size="small" :type="getNodeTagType(node.type)">{{ getNodeLabel(node.type) }}</el-tag>
+            <el-tag size="small" :type="getNodeTagType(node.type)">{{
+              getNodeLabel(node.type)
+            }}</el-tag>
           </div>
         </div>
       </MapControlPanel>
       <div class="map-page__map">
         <div class="map-page__stat-cards">
-          <StatCard icon="Connection" label="供应链条数" :value="chains.length" unit="条" trend="up" trendValue="+3" iconColor="#1889E8" iconBgColor="#ECF5FF" />
-          <StatCard icon="OfficeBuilding" label="节点总数" :value="totalCount" unit="个" trend="up" trendValue="+12" iconColor="#4ECB73" iconBgColor="#F0F9EB" />
-          <StatCard icon="TrendCharts" label="供应效率" value="92.5" unit="%" trend="up" trendValue="+2.3" iconColor="#FBD437" iconBgColor="#FDF6EC" />
-          <StatCard icon="Warning" label="风险节点" value="7" unit="个" trend="down" trendValue="-2" iconColor="#F2637B" iconBgColor="#FEF0F0" />
+          <StatCard
+            icon="Connection"
+            label="供应链条数"
+            :value="chains.length"
+            unit="条"
+            trend="up"
+            trend-value="+3"
+            icon-color="#1889E8"
+            icon-bg-color="#ECF5FF"
+          />
+          <StatCard
+            icon="OfficeBuilding"
+            label="节点总数"
+            :value="totalCount"
+            unit="个"
+            trend="up"
+            trend-value="+12"
+            icon-color="#4ECB73"
+            icon-bg-color="#F0F9EB"
+          />
+          <StatCard
+            icon="TrendCharts"
+            label="供应效率"
+            value="92.5"
+            unit="%"
+            trend="up"
+            trend-value="+2.3"
+            icon-color="#FBD437"
+            icon-bg-color="#FDF6EC"
+          />
+          <StatCard
+            icon="Warning"
+            label="风险节点"
+            value="7"
+            unit="个"
+            trend="down"
+            trend-value="-2"
+            icon-color="#F2637B"
+            icon-bg-color="#FEF0F0"
+          />
         </div>
         <MaptalksMap :center="[104.612, 30.884]" :zoom="15" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
@@ -80,7 +124,13 @@ interface SupplyNode {
   value: number
 }
 
-const chains = ['高端装备制造链', '新材料产业链', '生物医药产业链', '电子信息产业链', '新能源产业链']
+const chains = [
+  '高端装备制造链',
+  '新材料产业链',
+  '生物医药产业链',
+  '电子信息产业链',
+  '新能源产业链',
+]
 
 function generateNodes(): SupplyNode[] {
   const types: SupplyNode['type'][] = ['supplier', 'manufacturer', 'distributor']
@@ -95,7 +145,7 @@ function generateNodes(): SupplyNode[] {
         chain,
         lng: 118 + Math.random() * 4,
         lat: 28 + Math.random() * 4,
-        value: Math.floor(Math.random() * 50000 + 1000)
+        value: Math.floor(Math.random() * 50000 + 1000),
       })
     }
   })
@@ -113,10 +163,10 @@ let lineLayer: any = null
 const filteredNodes = computed(() => {
   let list = allNodes.value
   if (selectedChain.value) {
-    list = list.filter(n => n.chain === selectedChain.value)
+    list = list.filter((n) => n.chain === selectedChain.value)
   }
   if (selectedNodeTypes.value.length > 0 && selectedNodeTypes.value.length < 3) {
-    list = list.filter(n => selectedNodeTypes.value.includes(n.type))
+    list = list.filter((n) => selectedNodeTypes.value.includes(n.type))
   }
   return list
 })
@@ -124,16 +174,23 @@ const filteredNodes = computed(() => {
 const totalCount = computed(() => filteredNodes.value.length)
 
 const supplyStats = computed(() => [
-  { label: '供应商', value: filteredNodes.value.filter(n => n.type === 'supplier').length },
-  { label: '制造商', value: filteredNodes.value.filter(n => n.type === 'manufacturer').length },
-  { label: '分销商', value: filteredNodes.value.filter(n => n.type === 'distributor').length },
-  { label: '平均产值', value: filteredNodes.value.length ? Math.round(filteredNodes.value.reduce((s, n) => s + n.value, 0) / filteredNodes.value.length).toLocaleString() + '万' : '0' }
+  { label: '供应商', value: filteredNodes.value.filter((n) => n.type === 'supplier').length },
+  { label: '制造商', value: filteredNodes.value.filter((n) => n.type === 'manufacturer').length },
+  { label: '分销商', value: filteredNodes.value.filter((n) => n.type === 'distributor').length },
+  {
+    label: '平均产值',
+    value: filteredNodes.value.length
+      ? Math.round(
+          filteredNodes.value.reduce((s, n) => s + n.value, 0) / filteredNodes.value.length,
+        ).toLocaleString() + '万'
+      : '0',
+  },
 ])
 
 const legendItems = [
   { label: '供应商', color: '#1889E8' },
   { label: '制造商', color: '#4ECB73' },
-  { label: '分销商', color: '#FBD437' }
+  { label: '分销商', color: '#FBD437' },
 ]
 
 function getNodeColor(type: SupplyNode['type']) {
@@ -147,7 +204,11 @@ function getNodeLabel(type: SupplyNode['type']) {
 }
 
 function getNodeTagType(type: SupplyNode['type']): 'primary' | 'success' | 'warning' {
-  const map: Record<SupplyNode['type'], 'primary' | 'success' | 'warning'> = { supplier: 'primary', manufacturer: 'success', distributor: 'warning' }
+  const map: Record<SupplyNode['type'], 'primary' | 'success' | 'warning'> = {
+    supplier: 'primary',
+    manufacturer: 'success',
+    distributor: 'warning',
+  }
   return map[type]
 }
 
@@ -168,43 +229,50 @@ async function updateMap() {
   // Draw supply lines connecting nodes in the same chain
   if (selectedChain.value || selectedChain.value === '') {
     const activeChains = selectedChain.value ? [selectedChain.value] : chains
-    activeChains.forEach(chain => {
-      const chainNodes = filteredNodes.value.filter(n => n.chain === chain)
+    activeChains.forEach((chain) => {
+      const chainNodes = filteredNodes.value.filter((n) => n.chain === chain)
       if (chainNodes.length < 2) return
       // Connect supplier -> manufacturer -> distributor in order
       for (let i = 0; i < chainNodes.length - 1; i++) {
         const from = chainNodes[i]
         const to = chainNodes[i + 1]
-        lineLayer.addGeometry(new maptalks.LineString(
-          [[from.lng, from.lat], [to.lng, to.lat]],
-          {
-            symbol: {
-              lineColor: '#975FE5',
-              lineWidth: 2,
-              lineOpacity: 0.5,
-              lineDasharray: [8, 4]
-            }
-          }
-        ))
+        lineLayer.addGeometry(
+          new maptalks.LineString(
+            [
+              [from.lng, from.lat],
+              [to.lng, to.lat],
+            ],
+            {
+              symbol: {
+                lineColor: '#975FE5',
+                lineWidth: 2,
+                lineOpacity: 0.5,
+                lineDasharray: [8, 4],
+              },
+            },
+          ),
+        )
       }
     })
   }
 
   // Draw nodes
-  filteredNodes.value.forEach(n => {
+  filteredNodes.value.forEach((n) => {
     const color = getNodeColor(n.type)
-    nodeLayer.addGeometry(new maptalks.Marker([n.lng, n.lat], {
-      id: n.id,
-      symbol: {
-        markerType: 'ellipse',
-        markerFill: color,
-        markerFillOpacity: 0.85,
-        markerLineColor: '#fff',
-        markerLineWidth: 2,
-        markerWidth: 16,
-        markerHeight: 16
-      }
-    }))
+    nodeLayer.addGeometry(
+      new maptalks.Marker([n.lng, n.lat], {
+        id: n.id,
+        symbol: {
+          markerType: 'ellipse',
+          markerFill: color,
+          markerFillOpacity: 0.85,
+          markerLineColor: '#fff',
+          markerLineWidth: 2,
+          markerWidth: 16,
+          markerHeight: 16,
+        },
+      }),
+    )
   })
 }
 
@@ -215,8 +283,12 @@ function handleNodeClick(node: SupplyNode) {
   }
 }
 
-function handleZoomIn() { mapInstance?.zoomIn() }
-function handleZoomOut() { mapInstance?.zoomOut() }
+function handleZoomIn() {
+  mapInstance?.zoomIn()
+}
+function handleZoomOut() {
+  mapInstance?.zoomOut()
+}
 function handleReset() {
   mapInstance?.setCenter([104.612, 30.884])
   mapInstance?.setZoom(15)
@@ -239,8 +311,8 @@ onUnmounted(() => {
 .map-page__body {
   position: relative;
   height: 100%;
-  border-radius: $radius-base;
   overflow: hidden;
+  border-radius: $radius-base;
 }
 
 .map-page__map {
@@ -253,10 +325,10 @@ onUnmounted(() => {
   position: absolute;
   top: 16px;
   left: 50%;
-  transform: translateX(-50%);
+  z-index: 10;
   display: flex;
   gap: 16px;
-  z-index: 10;
+  transform: translateX(-50%);
 
   .stat-card {
     min-width: 180px;
@@ -268,23 +340,23 @@ onUnmounted(() => {
 }
 
 .filter-label {
+  margin-bottom: 8px;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  margin-bottom: 8px;
 }
 
 .supply-stats {
-  margin-top: 16px;
   padding-top: 16px;
+  margin-top: 16px;
   border-top: 1px solid $border-color-lighter;
 }
 
 .supply-stats__title {
+  margin-bottom: 12px;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  margin-bottom: 12px;
 }
 
 .supply-stat-row {
@@ -299,32 +371,32 @@ onUnmounted(() => {
 }
 
 .supply-stat-row__value {
-  color: $text-primary;
   font-weight: $font-weight-medium;
+  color: $text-primary;
 }
 
 .node-list {
-  margin-top: 16px;
   padding-top: 16px;
+  margin-top: 16px;
   border-top: 1px solid $border-color-lighter;
 }
 
 .node-list__title {
+  margin-bottom: 12px;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  margin-bottom: 12px;
 }
 
 .node-item {
   display: flex;
-  align-items: center;
   gap: 10px;
+  align-items: center;
   padding: 10px;
-  border-radius: $radius-base;
-  cursor: pointer;
-  transition: background $transition-fast;
   margin-bottom: 4px;
+  cursor: pointer;
+  border-radius: $radius-base;
+  transition: background $transition-fast;
 
   &:hover {
     background: $bg-hover;
@@ -332,10 +404,10 @@ onUnmounted(() => {
 }
 
 .node-item__dot {
+  flex-shrink: 0;
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  flex-shrink: 0;
 }
 
 .node-item__info {
@@ -344,11 +416,11 @@ onUnmounted(() => {
 }
 
 .node-item__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 

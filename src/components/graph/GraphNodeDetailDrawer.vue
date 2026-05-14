@@ -14,7 +14,9 @@
 
       <el-descriptions :column="1" border size="small" class="node-detail__info">
         <el-descriptions-item label="重要性指数">{{ node.importance || '-' }}</el-descriptions-item>
-        <el-descriptions-item label="关联企业数">{{ node.enterpriseCount || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="关联企业数">{{
+          node.enterpriseCount || '-'
+        }}</el-descriptions-item>
         <el-descriptions-item label="节点ID">{{ node.id }}</el-descriptions-item>
       </el-descriptions>
 
@@ -35,13 +37,16 @@
 <script setup lang="ts">
 import type { GraphNodeData } from '@/composables/useForceGraph'
 
-const props = withDefaults(defineProps<{
-  visible: boolean
-  node: GraphNodeData | null
-  relatedEnterprises?: string[]
-}>(), {
-  relatedEnterprises: () => []
-})
+const props = withDefaults(
+  defineProps<{
+    visible: boolean
+    node: GraphNodeData | null
+    relatedEnterprises?: string[]
+  }>(),
+  {
+    relatedEnterprises: () => [],
+  },
+)
 
 const emit = defineEmits<{
   'update:visible': [val: boolean]
@@ -55,8 +60,8 @@ function handleClose() {
 <style lang="scss" scoped>
 .node-detail__header {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -72,17 +77,17 @@ function handleClose() {
 
 .node-detail__section {
   h4 {
+    margin-bottom: 12px;
     font-size: 14px;
     font-weight: $font-weight-semibold;
     color: $text-primary;
-    margin-bottom: 12px;
   }
 }
 
 .node-detail__ent-item {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   padding: 8px 0;
   font-size: 13px;
   color: $text-regular;

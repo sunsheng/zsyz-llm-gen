@@ -28,20 +28,20 @@
       <div class="graph-page__legend">
         <div class="legend-title">产业链层级</div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #36CBCB" />
+          <span class="legend-dot" style="background: #36cbcb"></span>
           <span>上游</span>
         </div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #1889E8" />
+          <span class="legend-dot" style="background: #1889e8"></span>
           <span>中游</span>
         </div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #4ECB73" />
+          <span class="legend-dot" style="background: #4ecb73"></span>
           <span>下游</span>
         </div>
         <div class="legend-title" style="margin-top: 8px">区域</div>
         <div class="legend-item">
-          <span class="legend-dot" style="background: #FBD437" />
+          <span class="legend-dot" style="background: #fbd437"></span>
           <span>{{ currentRegionName }}</span>
         </div>
       </div>
@@ -73,7 +73,7 @@ const regionOptions = [
   { code: 'beijing-tianjin', name: '京津冀区域' },
   { code: 'central', name: '中部区域' },
   { code: 'western', name: '西部区域' },
-  { code: 'northeast', name: '东北区域' }
+  { code: 'northeast', name: '东北区域' },
 ]
 
 const selectedRegion = ref('yangtze')
@@ -86,14 +86,23 @@ const selectedNode = ref<GraphNodeData | null>(null)
 const relatedEnterprises = ref<string[]>([])
 
 const currentRegionName = computed(() => {
-  const found = regionOptions.find(r => r.code === selectedRegion.value)
+  const found = regionOptions.find((r) => r.code === selectedRegion.value)
   return found ? found.name : ''
 })
 
 const mockEnterpriseNames = [
-  '上海电气集团', '中芯国际', '药明康德', '比亚迪',
-  '宁德时代', '大族激光', '先导智能', '汇川技术',
-  '立讯精密', '蓝思科技', '拓斯达', '埃斯顿'
+  '上海电气集团',
+  '中芯国际',
+  '药明康德',
+  '比亚迪',
+  '宁德时代',
+  '大族激光',
+  '先导智能',
+  '汇川技术',
+  '立讯精密',
+  '蓝思科技',
+  '拓斯达',
+  '埃斯顿',
 ]
 
 function handleNodeClick(node: GraphNodeData) {
@@ -116,19 +125,19 @@ async function loadGraph(chainCode: string) {
   try {
     const data: ChainGraph | null = await fetchChainGraph(chainCode)
     if (data) {
-      graphNodes.value = data.nodes.map(n => ({
+      graphNodes.value = data.nodes.map((n) => ({
         id: n.id,
         name: `[${currentRegionName.value}] ${n.name}`,
         category: n.category,
         importance: n.importance,
         enterpriseCount: n.enterpriseCount,
-        value: n.importance
+        value: n.importance,
       }))
-      graphEdges.value = data.edges.map(e => ({
+      graphEdges.value = data.edges.map((e) => ({
         source: e.source,
         target: e.target,
         weight: e.weight,
-        type: e.type
+        type: e.type,
       }))
     }
   } finally {
@@ -158,44 +167,44 @@ onMounted(() => {
 .graph-page__body {
   position: relative;
   height: 100%;
+  overflow: hidden;
   background: #fff;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  overflow: hidden;
 }
 
 .graph-page__legend {
   position: absolute;
-  right: 16px;
   top: 16px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: $radius-base;
-  padding: 12px 16px;
-  box-shadow: $shadow-card;
+  right: 16px;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 12px 16px;
   font-size: 12px;
   color: $text-regular;
-  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
 }
 
 .legend-title {
+  margin-bottom: 4px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin-bottom: 4px;
 }
 
 .legend-item {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
 }
 
 .legend-dot {
+  flex-shrink: 0;
   width: 10px;
   height: 10px;
   border-radius: $radius-round;
-  flex-shrink: 0;
 }
 </style>

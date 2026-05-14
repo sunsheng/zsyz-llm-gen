@@ -9,11 +9,16 @@
       <MapControlPanel title="供应链详情">
         <div class="filter-section">
           <div class="filter-label">选择产业链</div>
-          <el-select v-model="selectedChain" placeholder="请选择产业链" style="width: 100%" @change="updateDetail">
+          <el-select
+            v-model="selectedChain"
+            placeholder="请选择产业链"
+            style="width: 100%"
+            @change="updateDetail"
+          >
             <el-option v-for="chain in chains" :key="chain" :label="chain" :value="chain" />
           </el-select>
         </div>
-        <div class="chain-info" v-if="selectedChain">
+        <div v-if="selectedChain" class="chain-info">
           <div class="chain-info__title">{{ selectedChain }}</div>
           <div class="chain-info__stats">
             <div class="chain-info__stat">
@@ -30,7 +35,7 @@
             </div>
           </div>
         </div>
-        <div class="detail-list" v-if="selectedChain">
+        <div v-if="selectedChain" class="detail-list">
           <div class="detail-list__header">节点列表</div>
           <div
             v-for="node in chainNodes"
@@ -40,11 +45,16 @@
             @click="handleNodeClick(node)"
           >
             <div class="detail-item__side">
-              <span class="detail-item__dot" :style="{ background: getStreamColor(node.stream) }" />
+              <span
+                class="detail-item__dot"
+                :style="{ background: getStreamColor(node.stream) }"
+              ></span>
               <div class="detail-item__info">
                 <div class="detail-item__name">{{ node.name }}</div>
                 <div class="detail-item__meta">
-                  <el-tag size="small" :type="getStreamTagType(node.stream)">{{ getStreamLabel(node.stream) }}</el-tag>
+                  <el-tag size="small" :type="getStreamTagType(node.stream)">{{
+                    getStreamLabel(node.stream)
+                  }}</el-tag>
                 </div>
               </div>
             </div>
@@ -82,7 +92,13 @@ interface ChainNode {
   value: number
 }
 
-const chains = ['高端装备制造链', '新材料产业链', '生物医药产业链', '电子信息产业链', '新能源产业链']
+const chains = [
+  '高端装备制造链',
+  '新材料产业链',
+  '生物医药产业链',
+  '电子信息产业链',
+  '新能源产业链',
+]
 const selectedChain = ref('')
 const activeNodeId = ref('')
 
@@ -96,7 +112,7 @@ function generateChainNodes(chain: string): ChainNode[] {
   const baseLng = 119 + Math.random() * 2
   const baseLat = 29 + Math.random() * 1
   let idx = 0
-  streams.forEach(stream => {
+  streams.forEach((stream) => {
     const count = 3 + Math.floor(Math.random() * 4)
     for (let i = 0; i < count; i++) {
       idx++
@@ -106,7 +122,7 @@ function generateChainNodes(chain: string): ChainNode[] {
         stream,
         lng: baseLng + (Math.random() - 0.5) * 2,
         lat: baseLat + (Math.random() - 0.5) * 2,
-        value: Math.floor(Math.random() * 80000 + 5000)
+        value: Math.floor(Math.random() * 80000 + 5000),
       })
     }
   })
@@ -114,21 +130,25 @@ function generateChainNodes(chain: string): ChainNode[] {
 }
 
 const chainNodesMap = new Map<string, ChainNode[]>()
-chains.forEach(c => chainNodesMap.set(c, generateChainNodes(c)))
+chains.forEach((c) => chainNodesMap.set(c, generateChainNodes(c)))
 
 const chainNodes = computed(() => {
   if (!selectedChain.value) return []
   return chainNodesMap.get(selectedChain.value) || []
 })
 
-const upstreamCount = computed(() => chainNodes.value.filter(n => n.stream === 'upstream').length)
-const midstreamCount = computed(() => chainNodes.value.filter(n => n.stream === 'midstream').length)
-const downstreamCount = computed(() => chainNodes.value.filter(n => n.stream === 'downstream').length)
+const upstreamCount = computed(() => chainNodes.value.filter((n) => n.stream === 'upstream').length)
+const midstreamCount = computed(
+  () => chainNodes.value.filter((n) => n.stream === 'midstream').length,
+)
+const downstreamCount = computed(
+  () => chainNodes.value.filter((n) => n.stream === 'downstream').length,
+)
 
 const legendItems = [
   { label: '上游', color: '#1889E8' },
   { label: '中游', color: '#4ECB73' },
-  { label: '下游', color: '#FBD437' }
+  { label: '下游', color: '#FBD437' },
 ]
 
 function getStreamColor(stream: ChainNode['stream']) {
@@ -142,7 +162,11 @@ function getStreamLabel(stream: ChainNode['stream']) {
 }
 
 function getStreamTagType(stream: ChainNode['stream']): 'primary' | 'success' | 'warning' {
-  const map: Record<ChainNode['stream'], 'primary' | 'success' | 'warning'> = { upstream: 'primary', midstream: 'success', downstream: 'warning' }
+  const map: Record<ChainNode['stream'], 'primary' | 'success' | 'warning'> = {
+    upstream: 'primary',
+    midstream: 'success',
+    downstream: 'warning',
+  }
   return map[stream]
 }
 
@@ -163,55 +187,62 @@ async function updateDetail() {
   if (!selectedChain.value) return
 
   const nodes = chainNodes.value
-  const upstream = nodes.filter(n => n.stream === 'upstream')
-  const midstream = nodes.filter(n => n.stream === 'midstream')
-  const downstream = nodes.filter(n => n.stream === 'downstream')
+  const upstream = nodes.filter((n) => n.stream === 'upstream')
+  const midstream = nodes.filter((n) => n.stream === 'midstream')
+  const downstream = nodes.filter((n) => n.stream === 'downstream')
 
   // Draw connections: upstream -> midstream -> downstream
   const allGroups = [upstream, midstream, downstream]
   for (let g = 0; g < allGroups.length - 1; g++) {
     const fromGroup = allGroups[g]
     const toGroup = allGroups[g + 1]
-    fromGroup.forEach(from => {
+    fromGroup.forEach((from) => {
       // Connect each upstream to a random midstream
       const to = toGroup[Math.floor(Math.random() * toGroup.length)]
       if (to) {
-        lineLayer.addGeometry(new maptalks.LineString(
-          [[from.lng, from.lat], [to.lng, to.lat]],
-          {
-            symbol: {
-              lineColor: '#975FE5',
-              lineWidth: 2,
-              lineOpacity: 0.4,
-              lineDasharray: [6, 4]
-            }
-          }
-        ))
+        lineLayer.addGeometry(
+          new maptalks.LineString(
+            [
+              [from.lng, from.lat],
+              [to.lng, to.lat],
+            ],
+            {
+              symbol: {
+                lineColor: '#975FE5',
+                lineWidth: 2,
+                lineOpacity: 0.4,
+                lineDasharray: [6, 4],
+              },
+            },
+          ),
+        )
       }
     })
   }
 
   // Draw nodes
-  nodes.forEach(n => {
+  nodes.forEach((n) => {
     const color = getStreamColor(n.stream)
-    nodeLayer.addGeometry(new maptalks.Marker([n.lng, n.lat], {
-      id: n.id,
-      symbol: {
-        markerType: 'ellipse',
-        markerFill: color,
-        markerFillOpacity: 0.85,
-        markerLineColor: '#fff',
-        markerLineWidth: 2,
-        markerWidth: 16,
-        markerHeight: 16
-      }
-    }))
+    nodeLayer.addGeometry(
+      new maptalks.Marker([n.lng, n.lat], {
+        id: n.id,
+        symbol: {
+          markerType: 'ellipse',
+          markerFill: color,
+          markerFillOpacity: 0.85,
+          markerLineColor: '#fff',
+          markerLineWidth: 2,
+          markerWidth: 16,
+          markerHeight: 16,
+        },
+      }),
+    )
   })
 
   // Fit view
   if (nodes.length && mapInstance) {
-    const lngs = nodes.map(n => n.lng)
-    const lats = nodes.map(n => n.lat)
+    const lngs = nodes.map((n) => n.lng)
+    const lats = nodes.map((n) => n.lat)
     const centerLng = (Math.min(...lngs) + Math.max(...lngs)) / 2
     const centerLat = (Math.min(...lats) + Math.max(...lats)) / 2
     mapInstance.setCenter([centerLng, centerLat])
@@ -226,8 +257,12 @@ function handleNodeClick(node: ChainNode) {
   }
 }
 
-function handleZoomIn() { mapInstance?.zoomIn() }
-function handleZoomOut() { mapInstance?.zoomOut() }
+function handleZoomIn() {
+  mapInstance?.zoomIn()
+}
+function handleZoomOut() {
+  mapInstance?.zoomOut()
+}
 function handleReset() {
   mapInstance?.setCenter([104.612, 30.884])
   mapInstance?.setZoom(15)
@@ -250,8 +285,8 @@ onUnmounted(() => {
 .map-page__body {
   position: relative;
   height: 100%;
-  border-radius: $radius-base;
   overflow: hidden;
+  border-radius: $radius-base;
 }
 
 .map-page__map {
@@ -265,24 +300,24 @@ onUnmounted(() => {
 }
 
 .filter-label {
+  margin-bottom: 8px;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  margin-bottom: 8px;
 }
 
 .chain-info {
-  background: $bg-hover;
-  border-radius: $radius-base;
   padding: 14px;
   margin-bottom: 16px;
+  background: $bg-hover;
+  border-radius: $radius-base;
 }
 
 .chain-info__title {
+  margin-bottom: 12px;
   font-size: 14px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin-bottom: 12px;
 }
 
 .chain-info__stats {
@@ -297,9 +332,9 @@ onUnmounted(() => {
 
 .chain-info__stat-label {
   display: block;
+  margin-bottom: 4px;
   font-size: 12px;
   color: $text-secondary;
-  margin-bottom: 4px;
 }
 
 .chain-info__stat-value {
@@ -307,9 +342,15 @@ onUnmounted(() => {
   font-size: 20px;
   font-weight: $font-weight-bold;
 
-  &.upstream { color: #1889E8; }
-  &.midstream { color: #4ECB73; }
-  &.downstream { color: #FBD437; }
+  &.upstream {
+    color: #1889e8;
+  }
+  &.midstream {
+    color: #4ecb73;
+  }
+  &.downstream {
+    color: #fbd437;
+  }
 }
 
 .detail-list {
@@ -317,10 +358,10 @@ onUnmounted(() => {
 }
 
 .detail-list__header {
+  margin-bottom: 12px;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  margin-bottom: 12px;
 }
 
 .detail-item {
@@ -328,32 +369,32 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  border-radius: $radius-base;
-  cursor: pointer;
-  transition: background $transition-fast;
   margin-bottom: 4px;
+  cursor: pointer;
+  border-radius: $radius-base;
+  transition: background $transition-fast;
 
   &:hover {
     background: $bg-hover;
   }
 
   &.is-active {
-    background: $color-primary-light-9;
     outline: 1px solid $color-primary-light-5;
+    background: $color-primary-light-9;
   }
 }
 
 .detail-item__side {
   display: flex;
-  align-items: center;
   gap: 10px;
+  align-items: center;
 }
 
 .detail-item__dot {
+  flex-shrink: 0;
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  flex-shrink: 0;
 }
 
 .detail-item__info {

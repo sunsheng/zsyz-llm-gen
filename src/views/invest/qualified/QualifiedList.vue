@@ -16,18 +16,20 @@
         <el-table-column prop="count" label="企业数量" width="120" />
         <el-table-column prop="newCount" label="新增数" width="100">
           <template #default="{ row }">
-            <span style="color: #67C23A; font-weight: 600">+{{ row.newCount }}</span>
+            <span style="font-weight: 600; color: #67c23a">+{{ row.newCount }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="expireCount" label="即将到期" width="100">
           <template #default="{ row }">
-            <span style="color: #F56C6C; font-weight: 600">{{ row.expireCount }}</span>
+            <span style="font-weight: 600; color: #f56c6c">{{ row.expireCount }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="description" label="说明" min-width="200" />
         <el-table-column label="操作" width="160">
           <template #default="{ row }">
-            <el-button type="primary" link size="small" @click="handleViewDetail(row)">查看企业</el-button>
+            <el-button type="primary" link size="small" @click="handleViewDetail(row)"
+              >查看企业</el-button
+            >
             <el-button type="primary" link size="small">招商筛选</el-button>
           </template>
         </el-table-column>
@@ -57,10 +59,50 @@ onMounted(() => {
   const newTotal = qualList.value.reduce((s, q) => s + q.newCount, 0)
   const expireTotal = qualList.value.reduce((s, q) => s + q.expireCount, 0)
   kpiCards.value = [
-    { key: 'totalTypes', label: '资质类型', value: qualList.value.length, unit: '种', trend: 'flat', trendValue: '—', icon: 'Document', iconColor: '#1889E8', iconBgColor: '#ECF5FF' },
-    { key: 'totalCount', label: '企业总数', value: total, unit: '家', trend: 'up', trendValue: '+10.5%', icon: 'UserFilled', iconColor: '#36CBCB', iconBgColor: '#E6F7F7' },
-    { key: 'newCount', label: '新增企业', value: newTotal, unit: '家', trend: 'up', trendValue: '+15.3%', icon: 'Plus', iconColor: '#4ECB73', iconBgColor: '#EDFAF0' },
-    { key: 'expireCount', label: '即将到期', value: expireTotal, unit: '家', trend: 'down', trendValue: '-5.2%', icon: 'Warning', iconColor: '#F2637B', iconBgColor: '#FEF0F0' }
+    {
+      key: 'totalTypes',
+      label: '资质类型',
+      value: qualList.value.length,
+      unit: '种',
+      trend: 'flat',
+      trendValue: '—',
+      icon: 'Document',
+      iconColor: '#1889E8',
+      iconBgColor: '#ECF5FF',
+    },
+    {
+      key: 'totalCount',
+      label: '企业总数',
+      value: total,
+      unit: '家',
+      trend: 'up',
+      trendValue: '+10.5%',
+      icon: 'UserFilled',
+      iconColor: '#36CBCB',
+      iconBgColor: '#E6F7F7',
+    },
+    {
+      key: 'newCount',
+      label: '新增企业',
+      value: newTotal,
+      unit: '家',
+      trend: 'up',
+      trendValue: '+15.3%',
+      icon: 'Plus',
+      iconColor: '#4ECB73',
+      iconBgColor: '#EDFAF0',
+    },
+    {
+      key: 'expireCount',
+      label: '即将到期',
+      value: expireTotal,
+      unit: '家',
+      trend: 'down',
+      trendValue: '-5.2%',
+      icon: 'Warning',
+      iconColor: '#F2637B',
+      iconBgColor: '#FEF0F0',
+    },
   ]
 })
 </script>
@@ -76,9 +118,9 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

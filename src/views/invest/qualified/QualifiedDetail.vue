@@ -15,11 +15,11 @@
           <span class="detail-stat__label">认定企业</span>
         </div>
         <div class="detail-stat">
-          <span class="detail-stat__value" style="color: #67C23A">{{ newList.length }}</span>
+          <span class="detail-stat__value" style="color: #67c23a">{{ newList.length }}</span>
           <span class="detail-stat__label">新增</span>
         </div>
         <div class="detail-stat">
-          <span class="detail-stat__value" style="color: #F56C6C">{{ expiringCount }}</span>
+          <span class="detail-stat__value" style="color: #f56c6c">{{ expiringCount }}</span>
           <span class="detail-stat__label">即将到期</span>
         </div>
       </div>
@@ -34,7 +34,12 @@
         <el-table-column prop="validDate" label="有效期至" width="120" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="row.status === '有效' ? 'success' : row.status === '即将到期' ? 'warning' : 'danger'" size="small">
+            <el-tag
+              :type="
+                row.status === '有效' ? 'success' : row.status === '即将到期' ? 'warning' : 'danger'
+              "
+              size="small"
+            >
               {{ row.status }}
             </el-tag>
           </template>
@@ -66,7 +71,7 @@ const expiringCount = ref(0)
 onMounted(() => {
   const quals = getMockQualifiedEnterprises()
   const id = route.params.id as string
-  const qual = quals.find(q => q.id === id) || quals[0]
+  const qual = quals.find((q) => q.id === id) || quals[0]
   qualName.value = qual.name
   total.value = qual.count
   expiringCount.value = qual.expireCount
@@ -79,16 +84,16 @@ onMounted(() => {
   padding: 20px;
 }
 .detail-card {
+  padding: 20px;
+  margin-bottom: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
-  margin-bottom: 20px;
   h3 {
+    margin: 0 0 16px;
     font-size: 20px;
     font-weight: $font-weight-bold;
     color: $text-primary;
-    margin: 0 0 16px 0;
   }
 }
 .detail-stats {
@@ -102,16 +107,16 @@ onMounted(() => {
   display: block;
   font-size: 28px;
   font-weight: $font-weight-bold;
-  color: #1889E8;
+  color: #1889e8;
 }
 .detail-stat__label {
   font-size: 13px;
   color: $text-secondary;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

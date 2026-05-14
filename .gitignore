@@ -5,3 +5,6 @@ dist
 *.log
 *.zip
 conversation-*.txt
+
+# Lint cache
+.eslintcache

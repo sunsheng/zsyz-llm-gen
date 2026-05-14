@@ -20,21 +20,28 @@
         <el-table-column prop="name" label="产业" min-width="120" />
         <el-table-column prop="strength" label="优势指数" width="120">
           <template #default="{ row }">
-            <span :style="{ color: row.strength >= 75 ? '#4ECB73' : '#F2637B', fontWeight: 'bold' }">
+            <span
+              :style="{ color: row.strength >= 75 ? '#4ECB73' : '#F2637B', fontWeight: 'bold' }"
+            >
               {{ row.strength }}
             </span>
           </template>
         </el-table-column>
         <el-table-column prop="weakness" label="弱势指数" width="120">
           <template #default="{ row }">
-            <span :style="{ color: row.weakness >= 50 ? '#F2637B' : '#4ECB73', fontWeight: 'bold' }">
+            <span
+              :style="{ color: row.weakness >= 50 ? '#F2637B' : '#4ECB73', fontWeight: 'bold' }"
+            >
               {{ row.weakness }}
             </span>
           </template>
         </el-table-column>
         <el-table-column prop="trend" label="趋势" width="100">
           <template #default="{ row }">
-            <el-tag :type="row.trend === 'up' ? 'success' : row.trend === 'down' ? 'danger' : 'info'" size="small">
+            <el-tag
+              :type="row.trend === 'up' ? 'success' : row.trend === 'down' ? 'danger' : 'info'"
+              size="small"
+            >
               {{ row.trend === 'up' ? '上升' : row.trend === 'down' ? '下降' : '持平' }}
             </el-tag>
           </template>
@@ -78,32 +85,56 @@ onMounted(() => {
         tooltip: {},
         legend: { data: ['优势', '弱势'] },
         radar: {
-          indicator: dimensions.map(d => ({ name: d, max: 100 })),
+          indicator: dimensions.map((d) => ({ name: d, max: 100 })),
           shape: 'polygon',
-          splitNumber: 4
+          splitNumber: 4,
         },
-        series: [{
-          type: 'radar',
-          data: [
-            { name: '优势', value: strengthValues, areaStyle: { opacity: 0.2 } },
-            { name: '弱势', value: weaknessValues, areaStyle: { opacity: 0.1 } }
-          ]
-        }]
-      }
+        series: [
+          {
+            type: 'radar',
+            data: [
+              { name: '优势', value: strengthValues, areaStyle: { opacity: 0.2 } },
+              { name: '弱势', value: weaknessValues, areaStyle: { opacity: 0.1 } },
+            ],
+          },
+        ],
+      },
     }
   })
 
   tableData.value = data.details.map((d: any) => ({
     ...d,
-    gap: d.strength - d.weakness
+    gap: d.strength - d.weakness,
   }))
 })
 </script>
 
 <style lang="scss" scoped>
-.page-container { padding: 20px; }
-.chart-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-panel { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
-.chart-panel__title { font-size: 16px; font-weight: $font-weight-semibold; color: $text-primary; margin: 0 0 16px 0; }
-.table-section { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
+.page-container {
+  padding: 20px;
+}
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-panel {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+.chart-panel__title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+.table-section {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
 </style>

@@ -46,18 +46,28 @@ import { getMockNewsList } from '@/api/mock/intelligence'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const filters: FilterField[] = [
-  { key: 'category', label: '行业', type: 'select', options: [
-    { label: '高端装备制造', value: '高端装备制造' },
-    { label: '新材料', value: '新材料' },
-    { label: '生物医药', value: '生物医药' },
-    { label: '电子信息', value: '电子信息' }
-  ]},
-  { key: 'importance', label: '重要性', type: 'select', options: [
-    { label: '高', value: 'high' },
-    { label: '中', value: 'medium' },
-    { label: '低', value: 'low' }
-  ]},
-  { key: 'date', label: '日期', type: 'date' }
+  {
+    key: 'category',
+    label: '行业',
+    type: 'select',
+    options: [
+      { label: '高端装备制造', value: '高端装备制造' },
+      { label: '新材料', value: '新材料' },
+      { label: '生物医药', value: '生物医药' },
+      { label: '电子信息', value: '电子信息' },
+    ],
+  },
+  {
+    key: 'importance',
+    label: '重要性',
+    type: 'select',
+    options: [
+      { label: '高', value: 'high' },
+      { label: '中', value: 'medium' },
+      { label: '低', value: 'low' },
+    ],
+  },
+  { key: 'date', label: '日期', type: 'date' },
 ]
 
 const newsList = ref<any[]>([])
@@ -74,7 +84,9 @@ function handleSearch() {
   newsList.value = getMockNewsList(10)
 }
 
-onMounted(() => { handleSearch() })
+onMounted(() => {
+  handleSearch()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -88,8 +100,8 @@ onMounted(() => { handleSearch() })
 }
 .news-card__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 8px;
 }
 .news-card__tags {
@@ -101,23 +113,25 @@ onMounted(() => { handleSearch() })
   color: $text-secondary;
 }
 .news-card__title {
+  margin: 0 0 8px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 8px 0;
   cursor: pointer;
-  &:hover { color: #1889E8; }
+  &:hover {
+    color: #1889e8;
+  }
 }
 .news-card__summary {
+  margin: 0 0 10px;
   font-size: 13px;
-  color: $text-regular;
-  margin: 0 0 10px 0;
   line-height: 1.6;
+  color: $text-regular;
 }
 .news-card__footer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 .news-card__source {
   font-size: 12px;

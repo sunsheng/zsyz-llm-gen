@@ -1,5 +1,10 @@
 <template>
-  <div class="stat-card" :class="[`stat-card--${trend}`]" @mouseenter="hovered = true" @mouseleave="hovered = false">
+  <div
+    class="stat-card"
+    :class="[`stat-card--${trend}`]"
+    @mouseenter="hovered = true"
+    @mouseleave="hovered = false"
+  >
     <div class="stat-card__icon" :style="{ backgroundColor: iconBgColor }">
       <el-icon :size="20" :color="iconColor"><component :is="icon" /></el-icon>
     </div>
@@ -21,21 +26,24 @@
 import { computed, ref } from 'vue'
 import { Top, Bottom } from '@element-plus/icons-vue'
 
-const props = withDefaults(defineProps<{
-  icon: string
-  label: string
-  value: number | string
-  unit?: string
-  trend?: 'up' | 'down' | 'flat'
-  trendValue?: string
-  iconColor?: string
-  iconBgColor?: string
-}>(), {
-  trend: 'flat',
-  unit: '',
-  iconColor: '#1889E8',
-  iconBgColor: '#ECF5FF'
-})
+const props = withDefaults(
+  defineProps<{
+    icon: string
+    label: string
+    value: number | string
+    unit?: string
+    trend?: 'up' | 'down' | 'flat'
+    trendValue?: string
+    iconColor?: string
+    iconBgColor?: string
+  }>(),
+  {
+    trend: 'flat',
+    unit: '',
+    iconColor: '#1889E8',
+    iconBgColor: '#ECF5FF',
+  },
+)
 
 const hovered = ref(false)
 
@@ -49,30 +57,32 @@ const displayValue = computed(() => {
 
 <style lang="scss" scoped>
 .stat-card {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 20px;
+  cursor: pointer;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  cursor: pointer;
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
 
   &:hover {
-    transform: translateY(-2px);
     box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
   }
 }
 
 .stat-card__icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
   width: 48px;
   height: 48px;
   border-radius: $radius-base;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
 }
 
 .stat-card__content {
@@ -81,24 +91,24 @@ const displayValue = computed(() => {
 }
 
 .stat-card__label {
+  margin-bottom: 8px;
   font-size: 14px;
   color: $text-secondary;
-  margin-bottom: 8px;
 }
 
 .stat-card__value {
   font-size: 28px;
   font-weight: $font-weight-bold;
-  color: $text-primary;
   line-height: 1.2;
+  color: $text-primary;
 }
 
 .stat-card__trend {
   display: inline-flex;
-  align-items: center;
   gap: 2px;
-  font-size: 12px;
+  align-items: center;
   margin-top: 4px;
+  font-size: 12px;
 }
 
 .stat-card--up .stat-card__trend {

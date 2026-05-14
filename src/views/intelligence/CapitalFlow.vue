@@ -61,17 +61,27 @@ import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 const filters: FilterField[] = [
-  { key: 'type', label: '类型', type: 'select', options: [
-    { label: '融资', value: '融资' },
-    { label: '并购', value: '并购' },
-    { label: '上市', value: '上市' },
-    { label: '投资', value: '投资' }
-  ]},
-  { key: 'industry', label: '行业', type: 'select', options: [
-    { label: '高端装备制造', value: '高端装备制造' },
-    { label: '新材料', value: '新材料' },
-    { label: '生物医药', value: '生物医药' }
-  ]}
+  {
+    key: 'type',
+    label: '类型',
+    type: 'select',
+    options: [
+      { label: '融资', value: '融资' },
+      { label: '并购', value: '并购' },
+      { label: '上市', value: '上市' },
+      { label: '投资', value: '投资' },
+    ],
+  },
+  {
+    key: 'industry',
+    label: '行业',
+    type: 'select',
+    options: [
+      { label: '高端装备制造', value: '高端装备制造' },
+      { label: '新材料', value: '新材料' },
+      { label: '生物医药', value: '生物医药' },
+    ],
+  },
 ]
 
 const kpiCards = ref<any[]>([])
@@ -80,7 +90,7 @@ const typePieOption = ref({})
 const industryBarOption = ref({})
 
 function capitalTypeTag(type: string) {
-  const map: Record<string, string> = { '融资': '', '并购': 'warning', '上市': 'success', '投资': 'info' }
+  const map: Record<string, string> = { 融资: '', 并购: 'warning', 上市: 'success', 投资: 'info' }
   return map[type] || ''
 }
 
@@ -90,27 +100,70 @@ function handleSearch() {
 
 onMounted(() => {
   kpiCards.value = [
-    { key: 'totalAmount', label: '总金额', value: 86.5, unit: '亿', trend: 'up', trendValue: '+22.3%', icon: 'Money', iconColor: '#1889E8', iconBgColor: '#ECF5FF' },
-    { key: 'dealCount', label: '交易数', value: 156, unit: '笔', trend: 'up', trendValue: '+15.8%', icon: 'Document', iconColor: '#36CBCB', iconBgColor: '#E6F7F7' },
-    { key: 'avgAmount', label: '平均金额', value: 5545, unit: '万', trend: 'up', trendValue: '+8.2%', icon: 'DataLine', iconColor: '#4ECB73', iconBgColor: '#EDFAF0' },
-    { key: 'financingCount', label: '融资事件', value: 68, unit: '笔', trend: 'up', trendValue: '+18.5%', icon: 'TrendCharts', iconColor: '#FBD437', iconBgColor: '#FFF8E6' }
+    {
+      key: 'totalAmount',
+      label: '总金额',
+      value: 86.5,
+      unit: '亿',
+      trend: 'up',
+      trendValue: '+22.3%',
+      icon: 'Money',
+      iconColor: '#1889E8',
+      iconBgColor: '#ECF5FF',
+    },
+    {
+      key: 'dealCount',
+      label: '交易数',
+      value: 156,
+      unit: '笔',
+      trend: 'up',
+      trendValue: '+15.8%',
+      icon: 'Document',
+      iconColor: '#36CBCB',
+      iconBgColor: '#E6F7F7',
+    },
+    {
+      key: 'avgAmount',
+      label: '平均金额',
+      value: 5545,
+      unit: '万',
+      trend: 'up',
+      trendValue: '+8.2%',
+      icon: 'DataLine',
+      iconColor: '#4ECB73',
+      iconBgColor: '#EDFAF0',
+    },
+    {
+      key: 'financingCount',
+      label: '融资事件',
+      value: 68,
+      unit: '笔',
+      trend: 'up',
+      trendValue: '+18.5%',
+      icon: 'TrendCharts',
+      iconColor: '#FBD437',
+      iconBgColor: '#FFF8E6',
+    },
   ]
 
   typePieOption.value = {
     color: chartColors,
     tooltip: { trigger: 'item' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie', radius: ['40%', '70%'],
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: [
-        { name: '融资', value: 68 },
-        { name: '并购', value: 32 },
-        { name: '上市', value: 18 },
-        { name: '投资', value: 38 }
-      ]
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: [
+          { name: '融资', value: 68 },
+          { name: '并购', value: 32 },
+          { name: '上市', value: 18 },
+          { name: '投资', value: 38 },
+        ],
+      },
+    ],
   }
 
   industryBarOption.value = {
@@ -119,7 +172,7 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: ['高端装备', '新材料', '生物医药', '电子信息', '新能源'] },
     yAxis: { type: 'value', axisLabel: { formatter: '{value}亿' } },
-    series: [{ name: '资金量', type: 'bar', data: [28, 22, 15, 12, 9], barWidth: '40%' }]
+    series: [{ name: '资金量', type: 'bar', data: [28, 22, 15, 12, 9], barWidth: '40%' }],
   }
 
   handleSearch()
@@ -143,21 +196,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

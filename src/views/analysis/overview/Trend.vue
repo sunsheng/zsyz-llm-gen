@@ -54,8 +54,8 @@ onMounted(() => {
       ...s,
       type: 'line',
       smooth: true,
-      areaStyle: { opacity: 0.1 }
-    }))
+      areaStyle: { opacity: 0.1 },
+    })),
   }
 
   const contribData = getMockChartData('contribution-bar')
@@ -67,23 +67,23 @@ onMounted(() => {
     xAxis: { type: 'category', data: contribData.data.xAxis.data },
     yAxis: [
       { type: 'value', name: '产值(亿)' },
-      { type: 'value', name: '增速(%)' }
+      { type: 'value', name: '增速(%)' },
     ],
     series: [
       {
         name: '产值(亿)',
         type: 'bar',
         data: contribData.data.series[0].data,
-        barWidth: '30%'
+        barWidth: '30%',
       },
       {
         name: '同比增速(%)',
         type: 'line',
         yAxisIndex: 1,
         data: [8.3, 12.1, 6.7, 15.4, 9.8, 4.5],
-        smooth: true
-      }
-    ]
+        smooth: true,
+      },
+    ],
   }
 })
 </script>
@@ -105,15 +105,15 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 </style>

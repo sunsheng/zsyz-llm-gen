@@ -6,7 +6,7 @@
     </div>
     <div v-if="!collapsed" class="map-legend__body">
       <div v-for="item in items" :key="item.label" class="map-legend__item">
-        <span class="map-legend__dot" :style="{ background: item.color }" />
+        <span class="map-legend__dot" :style="{ background: item.color }"></span>
         <span class="map-legend__label">{{ item.label }}</span>
       </div>
     </div>
@@ -16,11 +16,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-withDefaults(defineProps<{
-  items?: { label: string; color: string }[]
-}>(), {
-  items: () => []
-})
+withDefaults(
+  defineProps<{
+    items?: { label: string; color: string }[]
+  }>(),
+  {
+    items: () => [],
+  },
+)
 
 const collapsed = ref(false)
 </script>
@@ -30,11 +33,11 @@ const collapsed = ref(false)
   position: absolute;
   right: 16px;
   bottom: 16px;
+  z-index: 10;
+  min-width: 120px;
   background: rgba(255, 255, 255, 0.95);
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  z-index: 10;
-  min-width: 120px;
 }
 
 .map-legend__header {
@@ -42,10 +45,10 @@ const collapsed = ref(false)
   align-items: center;
   justify-content: space-between;
   padding: 8px 12px;
-  cursor: pointer;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
+  cursor: pointer;
 }
 
 .map-legend__body {
@@ -54,16 +57,16 @@ const collapsed = ref(false)
 
 .map-legend__item {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   padding: 4px 0;
 }
 
 .map-legend__dot {
+  flex-shrink: 0;
   width: 12px;
   height: 12px;
   border-radius: 2px;
-  flex-shrink: 0;
 }
 
 .map-legend__label {

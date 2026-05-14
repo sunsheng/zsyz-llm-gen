@@ -59,7 +59,10 @@
         </el-table-column>
         <el-table-column prop="level" label="企业等级" width="100">
           <template #default="{ row }">
-            <el-tag :type="row.level === '龙头' ? 'danger' : row.level === '骨干' ? 'warning' : 'info'" size="small">
+            <el-tag
+              :type="row.level === '龙头' ? 'danger' : row.level === '骨干' ? 'warning' : 'info'"
+              size="small"
+            >
               {{ row.level }}
             </el-tag>
           </template>
@@ -95,13 +98,66 @@ onMounted(() => {
   regionName.value = name
 
   kpiCards.value = [
-    { key: 'gdp', label: 'GDP', value: 18753, unit: '亿元', trend: 'up' as const, trendValue: '+7.2%', icon: 'TrendCharts', iconColor: '#1889E8', iconBgColor: '#ECF5FF' },
-    { key: 'enterprises', label: '规上企业', value: 3256, unit: '家', trend: 'up' as const, trendValue: '+128', icon: 'OfficeBuilding', iconColor: '#4ECB73', iconBgColor: '#EDFAF0' },
-    { key: 'patent', label: '有效专利', value: 18200, unit: '件', trend: 'up' as const, trendValue: '+15.6%', icon: 'Document', iconColor: '#36CBCB', iconBgColor: '#E6F7F7' },
-    { key: 'invest', label: '实际引资', value: 580, unit: '亿元', trend: 'up' as const, trendValue: '+8.3%', icon: 'Money', iconColor: '#FBD437', iconBgColor: '#FFF8E6' }
+    {
+      key: 'gdp',
+      label: 'GDP',
+      value: 18753,
+      unit: '亿元',
+      trend: 'up' as const,
+      trendValue: '+7.2%',
+      icon: 'TrendCharts',
+      iconColor: '#1889E8',
+      iconBgColor: '#ECF5FF',
+    },
+    {
+      key: 'enterprises',
+      label: '规上企业',
+      value: 3256,
+      unit: '家',
+      trend: 'up' as const,
+      trendValue: '+128',
+      icon: 'OfficeBuilding',
+      iconColor: '#4ECB73',
+      iconBgColor: '#EDFAF0',
+    },
+    {
+      key: 'patent',
+      label: '有效专利',
+      value: 18200,
+      unit: '件',
+      trend: 'up' as const,
+      trendValue: '+15.6%',
+      icon: 'Document',
+      iconColor: '#36CBCB',
+      iconBgColor: '#E6F7F7',
+    },
+    {
+      key: 'invest',
+      label: '实际引资',
+      value: 580,
+      unit: '亿元',
+      trend: 'up' as const,
+      trendValue: '+8.3%',
+      icon: 'Money',
+      iconColor: '#FBD437',
+      iconBgColor: '#FFF8E6',
+    },
   ]
 
-  const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+  const months = [
+    '1月',
+    '2月',
+    '3月',
+    '4月',
+    '5月',
+    '6月',
+    '7月',
+    '8月',
+    '9月',
+    '10月',
+    '11月',
+    '12月',
+  ]
   trendOption.value = {
     color: chartColors,
     tooltip: { trigger: 'axis' },
@@ -110,31 +166,48 @@ onMounted(() => {
     xAxis: { type: 'category', data: months },
     yAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
     series: [
-      { name: 'GDP增速', type: 'line', smooth: true, data: [6.2, 6.5, 7.1, 7.3, 7.0, 6.8, 7.2, 7.5, 7.1, 6.9, 7.3, 7.2] },
-      { name: '工业增加值', type: 'line', smooth: true, data: [5.8, 6.1, 6.5, 6.8, 6.3, 6.0, 6.4, 6.9, 6.5, 6.2, 6.7, 6.5] },
-      { name: '投资增速', type: 'line', smooth: true, data: [8.1, 8.5, 9.2, 8.8, 8.3, 7.9, 8.6, 9.0, 8.4, 8.1, 8.7, 8.3] }
-    ]
+      {
+        name: 'GDP增速',
+        type: 'line',
+        smooth: true,
+        data: [6.2, 6.5, 7.1, 7.3, 7.0, 6.8, 7.2, 7.5, 7.1, 6.9, 7.3, 7.2],
+      },
+      {
+        name: '工业增加值',
+        type: 'line',
+        smooth: true,
+        data: [5.8, 6.1, 6.5, 6.8, 6.3, 6.0, 6.4, 6.9, 6.5, 6.2, 6.7, 6.5],
+      },
+      {
+        name: '投资增速',
+        type: 'line',
+        smooth: true,
+        data: [8.1, 8.5, 9.2, 8.8, 8.3, 7.9, 8.6, 9.0, 8.4, 8.1, 8.7, 8.3],
+      },
+    ],
   }
 
   industryPieOption.value = {
     color: chartColors,
     tooltip: { trigger: 'item' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie',
-      radius: ['40%', '70%'],
-      avoidLabelOverlap: false,
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: [
-        { value: 38, name: '数字经济' },
-        { value: 22, name: '先进制造' },
-        { value: 15, name: '生物医药' },
-        { value: 12, name: '新材料' },
-        { value: 8, name: '现代服务' },
-        { value: 5, name: '其他' }
-      ]
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: [
+          { value: 38, name: '数字经济' },
+          { value: 22, name: '先进制造' },
+          { value: 15, name: '生物医药' },
+          { value: 12, name: '新材料' },
+          { value: 8, name: '现代服务' },
+          { value: 5, name: '其他' },
+        ],
+      },
+    ],
   }
 
   radarOption.value = {
@@ -146,19 +219,23 @@ onMounted(() => {
         { name: '创新能力', max: 100 },
         { name: '产业集聚', max: 100 },
         { name: '人才密度', max: 100 },
-        { name: '营商环境', max: 100 }
+        { name: '营商环境', max: 100 },
       ],
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: [{
-        name: regionName.value,
-        value: [92, 88, 85, 90, 87],
-        areaStyle: { opacity: 0.2 }
-      }]
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: [
+          {
+            name: regionName.value,
+            value: [92, 88, 85, 90, 87],
+            areaStyle: { opacity: 0.2 },
+          },
+        ],
+      },
+    ],
   }
 
   scaleBarOption.value = {
@@ -167,14 +244,16 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: ['大型企业', '中型企业', '小型企业', '微型企业'] },
     yAxis: { type: 'value' },
-    series: [{
-      type: 'bar',
-      barWidth: '45%',
-      data: [186, 523, 1580, 967],
-      itemStyle: {
-        color: (params: any) => chartColors[params.dataIndex]
-      }
-    }]
+    series: [
+      {
+        type: 'bar',
+        barWidth: '45%',
+        data: [186, 523, 1580, 967],
+        itemStyle: {
+          color: (params: any) => chartColors[params.dataIndex],
+        },
+      },
+    ],
   }
 
   const industries = ['数字经济', '先进制造', '生物医药', '新材料', '现代服务']
@@ -185,7 +264,7 @@ onMounted(() => {
     revenue: +(Math.random() * 200 + 10).toFixed(1),
     employees: Math.floor(Math.random() * 5000 + 100),
     growth: +(Math.random() * 30 - 5).toFixed(1),
-    level: levels[i < 2 ? 0 : i < 5 ? 1 : 2]
+    level: levels[i < 2 ? 0 : i < 5 ? 1 : 2],
   }))
 })
 </script>
@@ -196,24 +275,24 @@ onMounted(() => {
 }
 .detail-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  margin-bottom: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
-  margin-bottom: 20px;
 }
 .detail-header__name {
+  margin: 0 0 8px;
   font-size: 20px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 8px 0;
 }
 .detail-header__desc {
+  margin: 0;
   font-size: 14px;
   color: #909399;
-  margin: 0;
 }
 .detail-header__tags {
   display: flex;
@@ -232,21 +311,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

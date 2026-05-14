@@ -40,7 +40,9 @@
               <span class="value">{{ item.revenue?.toLocaleString() }}万</span>
             </div>
           </div>
-          <el-button type="primary" size="small" style="width: 100%; margin-top: 8px">查看详情</el-button>
+          <el-button type="primary" size="small" style="width: 100%; margin-top: 8px"
+            >查看详情</el-button
+          >
         </el-card>
       </div>
     </div>
@@ -60,10 +62,52 @@ const owners = ref<any[]>([])
 onMounted(() => {
   owners.value = getMockChainOwners()
   kpiCards.value = [
-    { key: 'chainCount', label: '产业链数', value: owners.value.length, unit: '条', trend: 'up', trendValue: '+10.0%', icon: 'Share', iconColor: '#1889E8', iconBgColor: '#ECF5FF' },
-    { key: 'matchedCount', label: '已匹配', value: owners.value.filter(o => o.matchScore >= 70).length, unit: '条', trend: 'up', trendValue: '+20.0%', icon: 'CircleCheck', iconColor: '#36CBCB', iconBgColor: '#E6F7F7' },
-    { key: 'avgDrive', label: '平均带动', value: Math.floor(owners.value.reduce((s, o) => s + o.driveIndex, 0) / owners.value.length), unit: '分', trend: 'up', trendValue: '+8.5%', icon: 'TrendCharts', iconColor: '#4ECB73', iconBgColor: '#EDFAF0' },
-    { key: 'avgInfluence', label: '平均影响力', value: Math.floor(owners.value.reduce((s, o) => s + o.influenceRange, 0) / owners.value.length), unit: '%', trend: 'up', trendValue: '+5.2%', icon: 'Aim', iconColor: '#FBD437', iconBgColor: '#FFF8E6' }
+    {
+      key: 'chainCount',
+      label: '产业链数',
+      value: owners.value.length,
+      unit: '条',
+      trend: 'up',
+      trendValue: '+10.0%',
+      icon: 'Share',
+      iconColor: '#1889E8',
+      iconBgColor: '#ECF5FF',
+    },
+    {
+      key: 'matchedCount',
+      label: '已匹配',
+      value: owners.value.filter((o) => o.matchScore >= 70).length,
+      unit: '条',
+      trend: 'up',
+      trendValue: '+20.0%',
+      icon: 'CircleCheck',
+      iconColor: '#36CBCB',
+      iconBgColor: '#E6F7F7',
+    },
+    {
+      key: 'avgDrive',
+      label: '平均带动',
+      value: Math.floor(owners.value.reduce((s, o) => s + o.driveIndex, 0) / owners.value.length),
+      unit: '分',
+      trend: 'up',
+      trendValue: '+8.5%',
+      icon: 'TrendCharts',
+      iconColor: '#4ECB73',
+      iconBgColor: '#EDFAF0',
+    },
+    {
+      key: 'avgInfluence',
+      label: '平均影响力',
+      value: Math.floor(
+        owners.value.reduce((s, o) => s + o.influenceRange, 0) / owners.value.length,
+      ),
+      unit: '%',
+      trend: 'up',
+      trendValue: '+5.2%',
+      icon: 'Aim',
+      iconColor: '#FBD437',
+      iconBgColor: '#FFF8E6',
+    },
   ]
 })
 </script>
@@ -79,16 +123,16 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .panel-title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .match-grid {
   display: grid;
@@ -97,8 +141,8 @@ onMounted(() => {
 }
 .match-card__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 12px;
 }
 .match-card__chain {
@@ -111,7 +155,12 @@ onMounted(() => {
   justify-content: space-between;
   padding: 4px 0;
   font-size: 13px;
-  .label { color: $text-secondary; }
-  .value { color: $text-primary; font-weight: $font-weight-medium; }
+  .label {
+    color: $text-secondary;
+  }
+  .value {
+    font-weight: $font-weight-medium;
+    color: $text-primary;
+  }
 }
 </style>

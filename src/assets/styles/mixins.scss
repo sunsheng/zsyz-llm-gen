@@ -5,19 +5,19 @@
 // 清除浮动
 @mixin clearfix {
   &::after {
-    content: '';
-    display: table;
     clear: both;
+    display: table;
+    content: '';
   }
 }
 
 // 多行文字截断
 @mixin text-clamp($lines: 2) {
   display: -webkit-box;
-  -webkit-line-clamp: $lines;
-  -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
 }
 
 // Flex 居中
@@ -44,23 +44,23 @@
 
 // 卡片基础样式
 @mixin card-base($padding: 20px) {
+  padding: $padding;
+  margin-bottom: 16px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: $padding;
-  margin-bottom: 16px;
 }
 
 // 伪元素线条
 @mixin pseudo-line($direction: bottom) {
   position: relative;
   &::after {
-    content: '';
     position: absolute;
     left: 0;
-    #{$direction}: 0;
     width: 100%;
     height: 1px;
+    content: '';
     background: $border-color-lighter;
+    #{$direction}: 0;
   }
 }

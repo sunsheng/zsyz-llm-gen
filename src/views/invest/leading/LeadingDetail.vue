@@ -66,7 +66,7 @@ const potentialOption = ref({})
 onMounted(() => {
   const list = getMockLeadingEnterprises()
   const id = route.params.id as string
-  enterprise.value = list.find(l => l.id === id) || list[0]
+  enterprise.value = list.find((l) => l.id === id) || list[0]
 
   potentialOption.value = {
     color: chartColors,
@@ -77,23 +77,27 @@ onMounted(() => {
         { name: '市场拓展', max: 100 },
         { name: '产业链带动', max: 100 },
         { name: '人才吸引力', max: 100 },
-        { name: '资金实力', max: 100 }
+        { name: '资金实力', max: 100 },
       ],
-      shape: 'polygon'
+      shape: 'polygon',
     },
-    series: [{
-      type: 'radar',
-      data: [{
-        value: [
-          enterprise.value.innovationScore || 75,
-          Math.floor(Math.random() * 30 + 60),
-          enterprise.value.driveCapability || 70,
-          Math.floor(Math.random() * 30 + 55),
-          Math.floor(Math.random() * 30 + 65)
+    series: [
+      {
+        type: 'radar',
+        data: [
+          {
+            value: [
+              enterprise.value.innovationScore || 75,
+              Math.floor(Math.random() * 30 + 60),
+              enterprise.value.driveCapability || 70,
+              Math.floor(Math.random() * 30 + 55),
+              Math.floor(Math.random() * 30 + 65),
+            ],
+            areaStyle: { opacity: 0.3 },
+          },
         ],
-        areaStyle: { opacity: 0.3 }
-      }]
-    }]
+      },
+    ],
   }
 })
 </script>
@@ -111,36 +115,41 @@ onMounted(() => {
 .detail-card,
 .score-card,
 .chart-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .panel-title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .detail-header {
   display: flex;
-  align-items: center;
   gap: 12px;
+  align-items: center;
   h3 {
+    margin: 0;
     font-size: 20px;
     font-weight: $font-weight-bold;
     color: $text-primary;
-    margin: 0;
   }
 }
 .detail-row {
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 1px solid $border-color-lighter;
   font-size: 14px;
-  .label { color: $text-secondary; }
-  .value { color: $text-primary; font-weight: $font-weight-medium; }
+  border-bottom: 1px solid $border-color-lighter;
+  .label {
+    color: $text-secondary;
+  }
+  .value {
+    font-weight: $font-weight-medium;
+    color: $text-primary;
+  }
 }
 .score-grid {
   display: grid;
@@ -151,8 +160,8 @@ onMounted(() => {
 .score-item {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 8px;
+  align-items: center;
 }
 .score-label {
   font-size: 13px;

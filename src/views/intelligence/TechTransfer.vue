@@ -18,7 +18,9 @@
       <el-card v-for="item in techList" :key="item.id" shadow="hover" class="tech-card">
         <div class="tech-card__header">
           <h4 class="tech-card__name">{{ item.name }}</h4>
-          <el-tag :type="statusTag(item.status)" size="small">{{ statusLabel(item.status) }}</el-tag>
+          <el-tag :type="statusTag(item.status)" size="small">{{
+            statusLabel(item.status)
+          }}</el-tag>
         </div>
         <div class="tech-card__body">
           <div class="tech-card__row">
@@ -35,14 +37,18 @@
           </div>
           <div class="tech-card__row">
             <span class="label">价格</span>
-            <span class="value" style="color: #1889E8; font-weight: 600">{{ item.price.toLocaleString() }}万</span>
+            <span class="value" style="font-weight: 600; color: #1889e8"
+              >{{ item.price.toLocaleString() }}万</span
+            >
           </div>
           <div class="tech-card__row">
             <span class="label">机构</span>
             <span class="value">{{ item.institution }}</span>
           </div>
         </div>
-        <el-button type="primary" size="small" style="width: 100%; margin-top: 8px">了解详情</el-button>
+        <el-button type="primary" size="small" style="width: 100%; margin-top: 8px"
+          >了解详情</el-button
+        >
       </el-card>
     </div>
     <PaginationBar :current="1" :total="18" />
@@ -58,16 +64,26 @@ import { getMockTechTransfers } from '@/api/mock/intelligence'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const filters: FilterField[] = [
-  { key: 'field', label: '领域', type: 'select', options: [
-    { label: '高端装备制造', value: '高端装备制造' },
-    { label: '新材料', value: '新材料' },
-    { label: '生物医药', value: '生物医药' }
-  ]},
-  { key: 'status', label: '状态', type: 'select', options: [
-    { label: '可转让', value: 'available' },
-    { label: '洽谈中', value: 'negotiating' },
-    { label: '已转让', value: 'transferred' }
-  ]}
+  {
+    key: 'field',
+    label: '领域',
+    type: 'select',
+    options: [
+      { label: '高端装备制造', value: '高端装备制造' },
+      { label: '新材料', value: '新材料' },
+      { label: '生物医药', value: '生物医药' },
+    ],
+  },
+  {
+    key: 'status',
+    label: '状态',
+    type: 'select',
+    options: [
+      { label: '可转让', value: 'available' },
+      { label: '洽谈中', value: 'negotiating' },
+      { label: '已转让', value: 'transferred' },
+    ],
+  },
 ]
 
 const techList = ref<any[]>([])
@@ -84,7 +100,9 @@ function handleSearch() {
   techList.value = getMockTechTransfers(8)
 }
 
-onMounted(() => { handleSearch() })
+onMounted(() => {
+  handleSearch()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -99,24 +117,28 @@ onMounted(() => { handleSearch() })
 }
 .tech-card__header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
   margin-bottom: 10px;
 }
 .tech-card__name {
+  flex: 1;
+  margin: 0;
+  margin-right: 8px;
   font-size: 15px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0;
-  flex: 1;
-  margin-right: 8px;
 }
 .tech-card__row {
   display: flex;
   justify-content: space-between;
   padding: 3px 0;
   font-size: 13px;
-  .label { color: $text-secondary; }
-  .value { color: $text-primary; }
+  .label {
+    color: $text-secondary;
+  }
+  .value {
+    color: $text-primary;
+  }
 }
 </style>

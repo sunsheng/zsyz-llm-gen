@@ -79,9 +79,12 @@ onMounted(() => {
     xAxis: { type: 'category', data: ['Q1', 'Q2', 'Q3', 'Q4'], boundaryGap: false },
     yAxis: { type: 'value' },
     series: trendData.data.series.map((s: any) => ({
-      name: s.name, type: 'line', smooth: true, areaStyle: { opacity: 0.1 },
-      data: s.data.filter((_: any, i: number) => [2, 5, 8, 11].includes(i))
-    }))
+      name: s.name,
+      type: 'line',
+      smooth: true,
+      areaStyle: { opacity: 0.1 },
+      data: s.data.filter((_: any, i: number) => [2, 5, 8, 11].includes(i)),
+    })),
   }
 
   const structData = getMockChartData('structure-pie')
@@ -89,14 +92,16 @@ onMounted(() => {
     color: chartColors,
     tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie',
-      radius: ['40%', '70%'],
-      avoidLabelOverlap: false,
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: structData.data
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: structData.data,
+      },
+    ],
   }
 
   const contribData = getMockChartData('contribution-bar')
@@ -109,8 +114,13 @@ onMounted(() => {
     yAxis: { type: 'value' },
     series: [
       { name: '本季度', type: 'bar', data: contribData.data.series[0].data, barWidth: '25%' },
-      { name: '上季度', type: 'bar', data: contribData.data.series[0].data.map((v: number) => +(v * 0.92).toFixed(1)), barWidth: '25%' }
-    ]
+      {
+        name: '上季度',
+        type: 'bar',
+        data: contribData.data.series[0].data.map((v: number) => +(v * 0.92).toFixed(1)),
+        barWidth: '25%',
+      },
+    ],
   }
 
   const radarData = getMockChartData('park-radar')
@@ -119,21 +129,52 @@ onMounted(() => {
     tooltip: {},
     legend: { data: radarData.data.series.map((s: any) => s.name) },
     radar: { indicator: radarData.data.indicator, shape: 'polygon', splitNumber: 5 },
-    series: [{
-      type: 'radar',
-      data: radarData.data.series.map((s: any) => ({
-        name: s.name, value: s.value, areaStyle: { opacity: 0.2 }
-      }))
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: radarData.data.series.map((s: any) => ({
+          name: s.name,
+          value: s.value,
+          areaStyle: { opacity: 0.2 },
+        })),
+      },
+    ],
   }
 })
 </script>
 
 <style lang="scss" scoped>
-.page-container { padding: 20px; }
-.stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-panel { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
-.chart-panel__title { font-size: 16px; font-weight: $font-weight-semibold; color: $text-primary; margin: 0 0 16px 0; }
-.table-section { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
+.page-container {
+  padding: 20px;
+}
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-panel {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+.chart-panel__title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+.table-section {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
 </style>

@@ -9,13 +9,25 @@
       <MapControlPanel title="集群分析">
         <div class="filter-section">
           <div class="filter-label">产业类型</div>
-          <el-select v-model="selectedIndustry" placeholder="全部产业" clearable style="width: 100%" @change="updateClusters">
+          <el-select
+            v-model="selectedIndustry"
+            placeholder="全部产业"
+            clearable
+            style="width: 100%"
+            @change="updateClusters"
+          >
             <el-option v-for="item in industries" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="filter-section">
           <div class="filter-label">聚合范围</div>
-          <el-slider v-model="clusterRadius" :min="1" :max="10" :step="1" @change="updateClusters" />
+          <el-slider
+            v-model="clusterRadius"
+            :min="1"
+            :max="10"
+            :step="1"
+            @change="updateClusters"
+          />
         </div>
         <div class="cluster-list">
           <div class="cluster-list__title">产业集群列表</div>
@@ -30,7 +42,7 @@
               <span class="cluster-item__count">{{ cluster.count }}家</span>
             </div>
             <el-progress
-              :percentage="cluster.count / maxCount * 100"
+              :percentage="(cluster.count / maxCount) * 100"
               :stroke-width="6"
               :color="getClusterColor(cluster.count)"
               :show-text="false"
@@ -78,7 +90,16 @@ import MapToolbar from '@/components/map/MapToolbar.vue'
 import MapLegend from '@/components/map/MapLegend.vue'
 import { getMockClusterData } from '@/api/mock/map'
 
-const industries = ['高端装备制造', '新材料', '生物医药', '电子信息', '新能源', '节能环保', '数字创意', '现代服务业']
+const industries = [
+  '高端装备制造',
+  '新材料',
+  '生物医药',
+  '电子信息',
+  '新能源',
+  '节能环保',
+  '数字创意',
+  '现代服务业',
+]
 
 const selectedIndustry = ref('')
 const clusterRadius = ref(5)
@@ -92,16 +113,16 @@ function getMockClustersWithExtra() {
     ...c,
     enterprises: Math.floor(c.count * 0.6),
     parks: Math.floor(c.count * 0.2),
-    institutions: Math.floor(c.count * 0.2)
+    institutions: Math.floor(c.count * 0.2),
   }))
 }
 
 const filteredClusters = computed(() => {
   if (!selectedIndustry.value) return allClusters
-  return allClusters.filter(c => c.name === selectedIndustry.value)
+  return allClusters.filter((c) => c.name === selectedIndustry.value)
 })
 
-const maxCount = computed(() => Math.max(...filteredClusters.value.map(c => c.count)))
+const maxCount = computed(() => Math.max(...filteredClusters.value.map((c) => c.count)))
 const totalCount = computed(() => filteredClusters.value.reduce((s, c) => s + c.count, 0))
 const avgCount = computed(() => {
   const list = filteredClusters.value
@@ -111,7 +132,7 @@ const avgCount = computed(() => {
 const legendItems = [
   { label: '大型集群(>150家)', color: '#F2637B' },
   { label: '中型集群(80-150家)', color: '#FBD437' },
-  { label: '小型集群(<80家)', color: '#36CBCB' }
+  { label: '小型集群(<80家)', color: '#36CBCB' },
 ]
 
 function getClusterColor(count: number) {
@@ -134,57 +155,65 @@ async function updateClusters() {
 
   const radiusFactor = clusterRadius.value / 5
 
-  filteredClusters.value.forEach(c => {
+  filteredClusters.value.forEach((c) => {
     const color = getClusterColor(c.count)
     const radius = Math.max(8000, c.count * 150 * radiusFactor)
 
     // Cluster circle
-    clusterLayer.addGeometry(new maptalks.Circle([c.lng, c.lat], radius, {
-      symbol: {
-        polygonFill: color,
-        polygonOpacity: 0.3,
-        lineColor: color,
-        lineWidth: 2,
-        lineOpacity: 0.7,
-        lineDasharray: [6, 4]
-      }
-    }))
+    clusterLayer.addGeometry(
+      new maptalks.Circle([c.lng, c.lat], radius, {
+        symbol: {
+          polygonFill: color,
+          polygonOpacity: 0.3,
+          lineColor: color,
+          lineWidth: 2,
+          lineOpacity: 0.7,
+          lineDasharray: [6, 4],
+        },
+      }),
+    )
 
     // Center marker
-    clusterLayer.addGeometry(new maptalks.Marker([c.lng, c.lat], {
-      symbol: {
-        markerType: 'ellipse',
-        markerFill: color,
-        markerFillOpacity: 0.9,
-        markerLineColor: '#fff',
-        markerLineWidth: 2,
-        markerWidth: 24,
-        markerHeight: 24
-      }
-    }))
+    clusterLayer.addGeometry(
+      new maptalks.Marker([c.lng, c.lat], {
+        symbol: {
+          markerType: 'ellipse',
+          markerFill: color,
+          markerFillOpacity: 0.9,
+          markerLineColor: '#fff',
+          markerLineWidth: 2,
+          markerWidth: 24,
+          markerHeight: 24,
+        },
+      }),
+    )
 
     // Label
-    clusterLayer.addGeometry(new maptalks.Marker([c.lng, c.lat + 0.15], {
-      symbol: {
-        textName: c.name,
-        textSize: 13,
-        textFill: '#303133',
-        textHaloFill: '#fff',
-        textHaloRadius: 2,
-        textWeight: 'bold',
-        textDy: -20
-      }
-    }))
+    clusterLayer.addGeometry(
+      new maptalks.Marker([c.lng, c.lat + 0.15], {
+        symbol: {
+          textName: c.name,
+          textSize: 13,
+          textFill: '#303133',
+          textHaloFill: '#fff',
+          textHaloRadius: 2,
+          textWeight: 'bold',
+          textDy: -20,
+        },
+      }),
+    )
 
     // Count label
-    clusterLayer.addGeometry(new maptalks.Marker([c.lng, c.lat], {
-      symbol: {
-        textName: `${c.count}`,
-        textSize: 12,
-        textFill: '#fff',
-        textWeight: 'bold'
-      }
-    }))
+    clusterLayer.addGeometry(
+      new maptalks.Marker([c.lng, c.lat], {
+        symbol: {
+          textName: `${c.count}`,
+          textSize: 12,
+          textFill: '#fff',
+          textWeight: 'bold',
+        },
+      }),
+    )
   })
 }
 
@@ -195,8 +224,12 @@ function handleClusterClick(cluster: { name: string; lng: number; lat: number })
   }
 }
 
-function handleZoomIn() { mapInstance?.zoomIn() }
-function handleZoomOut() { mapInstance?.zoomOut() }
+function handleZoomIn() {
+  mapInstance?.zoomIn()
+}
+function handleZoomOut() {
+  mapInstance?.zoomOut()
+}
 function handleReset() {
   mapInstance?.setCenter([104.612, 30.884])
   mapInstance?.setZoom(15)
@@ -218,8 +251,8 @@ onUnmounted(() => {
 .map-page__body {
   position: relative;
   height: 100%;
-  border-radius: $radius-base;
   overflow: hidden;
+  border-radius: $radius-base;
 }
 
 .map-page__map {
@@ -233,31 +266,31 @@ onUnmounted(() => {
 }
 
 .filter-label {
+  margin-bottom: 8px;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  margin-bottom: 8px;
 }
 
 .cluster-list {
-  margin-top: 16px;
   padding-top: 16px;
+  margin-top: 16px;
   border-top: 1px solid $border-color-lighter;
 }
 
 .cluster-list__title {
+  margin-bottom: 12px;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  margin-bottom: 12px;
 }
 
 .cluster-item {
   padding: 10px;
-  border-radius: $radius-base;
-  cursor: pointer;
-  transition: background $transition-fast;
   margin-bottom: 8px;
+  cursor: pointer;
+  border-radius: $radius-base;
+  transition: background $transition-fast;
 
   &:hover {
     background: $bg-hover;
@@ -266,8 +299,8 @@ onUnmounted(() => {
 
 .cluster-item__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 8px;
 }
 
@@ -284,16 +317,16 @@ onUnmounted(() => {
 }
 
 .stats-section {
-  margin-top: 16px;
   padding-top: 16px;
+  margin-top: 16px;
   border-top: 1px solid $border-color-lighter;
 }
 
 .stats-title {
+  margin-bottom: 12px;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  margin-bottom: 12px;
 }
 
 .stats-grid {
@@ -303,10 +336,10 @@ onUnmounted(() => {
 }
 
 .stat-item {
-  background: $bg-hover;
-  border-radius: $radius-base;
   padding: 10px;
   text-align: center;
+  background: $bg-hover;
+  border-radius: $radius-base;
 }
 
 .stat-item__value {
@@ -316,8 +349,8 @@ onUnmounted(() => {
 }
 
 .stat-item__label {
+  margin-top: 4px;
   font-size: 12px;
   color: $text-secondary;
-  margin-top: 4px;
 }
 </style>

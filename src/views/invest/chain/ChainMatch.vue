@@ -24,7 +24,9 @@
           <el-table-column prop="industry" label="行业" width="120" />
           <el-table-column prop="matchScore" label="匹配度" width="80">
             <template #default="{ row }">
-              <span :style="{ color: row.matchScore >= 80 ? '#67C23A' : '#E6A23C', fontWeight: 600 }">
+              <span
+                :style="{ color: row.matchScore >= 80 ? '#67C23A' : '#E6A23C', fontWeight: 600 }"
+              >
                 {{ row.matchScore }}%
               </span>
             </template>
@@ -71,15 +73,15 @@ onMounted(() => {
 }
 .graph-panel,
 .match-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .panel-title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 </style>

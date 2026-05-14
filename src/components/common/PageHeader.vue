@@ -5,7 +5,7 @@
       <p v-if="subtitle" class="page-header__subtitle">{{ subtitle }}</p>
     </div>
     <div class="page-header__actions">
-      <slot name="actions" />
+      <slot name="actions"></slot>
     </div>
   </div>
 </template>
@@ -26,21 +26,21 @@ defineProps<{
 }
 
 .page-header__title {
+  margin: 0;
   font-size: 20px;
   font-weight: $font-weight-bold;
   color: $text-primary;
-  margin: 0;
 }
 
 .page-header__subtitle {
+  margin-top: 4px;
   font-size: 14px;
   color: $text-secondary;
-  margin-top: 4px;
 }
 
 .page-header__actions {
   display: flex;
-  align-items: center;
   gap: 12px;
+  align-items: center;
 }
 </style>

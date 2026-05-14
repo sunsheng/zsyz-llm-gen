@@ -36,7 +36,12 @@
         <el-table-column prop="riskType" label="风险类型" width="120" />
         <el-table-column prop="riskScore" label="风险评分" width="100" sortable>
           <template #default="{ row }">
-            <span :style="{ color: row.riskScore > 60 ? '#F56C6C' : row.riskScore > 30 ? '#E6A23C' : '#67C23A', fontWeight: 600 }">
+            <span
+              :style="{
+                color: row.riskScore > 60 ? '#F56C6C' : row.riskScore > 30 ? '#E6A23C' : '#67C23A',
+                fontWeight: 600,
+              }"
+            >
               {{ row.riskScore }}
             </span>
           </template>
@@ -61,10 +66,50 @@ import BaseChart from '@/components/charts/BaseChart.vue'
 import RiskIndicator from '@/components/business/RiskIndicator.vue'
 
 const kpiCards = [
-  { key: 'total', label: '供应链风险', value: 36, unit: '条', trend: 'up' as const, trendValue: '+5', icon: 'Connection', iconColor: '#F2637B', iconBgColor: '#FEF0F0' },
-  { key: 'break', label: '断链风险', value: 8, unit: '条', trend: 'up' as const, trendValue: '+2', icon: 'SwitchButton', iconColor: '#F56C6C', iconBgColor: '#FEF0F0' },
-  { key: 'price', label: '价格波动', value: 18, unit: '条', trend: 'up' as const, trendValue: '+3', icon: 'TrendCharts', iconColor: '#E6A23C', iconBgColor: '#FDF6EC' },
-  { key: 'stable', label: '供应稳定', value: 92, unit: '%', trend: 'down' as const, trendValue: '-2.3%', icon: 'CircleCheck', iconColor: '#67C23A', iconBgColor: '#EDFAF0' }
+  {
+    key: 'total',
+    label: '供应链风险',
+    value: 36,
+    unit: '条',
+    trend: 'up' as const,
+    trendValue: '+5',
+    icon: 'Connection',
+    iconColor: '#F2637B',
+    iconBgColor: '#FEF0F0',
+  },
+  {
+    key: 'break',
+    label: '断链风险',
+    value: 8,
+    unit: '条',
+    trend: 'up' as const,
+    trendValue: '+2',
+    icon: 'SwitchButton',
+    iconColor: '#F56C6C',
+    iconBgColor: '#FEF0F0',
+  },
+  {
+    key: 'price',
+    label: '价格波动',
+    value: 18,
+    unit: '条',
+    trend: 'up' as const,
+    trendValue: '+3',
+    icon: 'TrendCharts',
+    iconColor: '#E6A23C',
+    iconBgColor: '#FDF6EC',
+  },
+  {
+    key: 'stable',
+    label: '供应稳定',
+    value: 92,
+    unit: '%',
+    trend: 'down' as const,
+    trendValue: '-2.3%',
+    icon: 'CircleCheck',
+    iconColor: '#67C23A',
+    iconBgColor: '#EDFAF0',
+  },
 ]
 
 const riskData = ref<any[]>([])
@@ -74,10 +119,29 @@ const materialBarOption = ref({})
 const supplierOption = ref({})
 
 onMounted(() => {
-  const materials = ['稀土材料', '锂矿资源', '芯片供应', '高端轴承', '特种钢材', '医用原料', '光学元件', '碳纤维材料']
+  const materials = [
+    '稀土材料',
+    '锂矿资源',
+    '芯片供应',
+    '高端轴承',
+    '特种钢材',
+    '医用原料',
+    '光学元件',
+    '碳纤维材料',
+  ]
   const riskTypes = ['断链风险', '价格波动', '质量风险', '交期延迟']
-  const levels: Array<'low' | 'medium' | 'high' | 'critical'> = ['low', 'medium', 'high', 'critical']
-  const descs = ['上游供应企业减少，替代渠道有限', '国际市场价格持续上涨，成本压力增大', '批次质量不稳定，合格率下降', '物流受阻导致交期延长']
+  const levels: Array<'low' | 'medium' | 'high' | 'critical'> = [
+    'low',
+    'medium',
+    'high',
+    'critical',
+  ]
+  const descs = [
+    '上游供应企业减少，替代渠道有限',
+    '国际市场价格持续上涨，成本压力增大',
+    '批次质量不稳定，合格率下降',
+    '物流受阻导致交期延长',
+  ]
 
   riskData.value = materials.map((material, i) => ({
     material,
@@ -85,25 +149,27 @@ onMounted(() => {
     riskScore: Math.floor(Math.random() * 60 + 20),
     affectedEnterprises: Math.floor(Math.random() * 30 + 5),
     level: levels[i % 4],
-    desc: descs[i % descs.length]
+    desc: descs[i % descs.length],
   }))
 
   typePieOption.value = {
     color: ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437'],
     tooltip: { trigger: 'item' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie',
-      radius: ['40%', '70%'],
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: [
-        { name: '断链风险', value: 8 },
-        { name: '价格波动', value: 18 },
-        { name: '质量风险', value: 6 },
-        { name: '交期延迟', value: 4 }
-      ]
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: [
+          { name: '断链风险', value: 8 },
+          { name: '价格波动', value: 18 },
+          { name: '质量风险', value: 6 },
+          { name: '交期延迟', value: 4 },
+        ],
+      },
+    ],
   }
 
   const months = ['1月', '2月', '3月', '4月', '5月', '6月']
@@ -117,8 +183,8 @@ onMounted(() => {
     series: [
       { name: '断链风险', type: 'line', smooth: true, data: [5, 6, 7, 6, 8, 8] },
       { name: '价格波动', type: 'line', smooth: true, data: [12, 15, 14, 16, 18, 18] },
-      { name: '总风险', type: 'line', smooth: true, data: [25, 28, 30, 28, 32, 36] }
-    ]
+      { name: '总风险', type: 'line', smooth: true, data: [25, 28, 30, 28, 32, 36] },
+    ],
   }
 
   materialBarOption.value = {
@@ -127,14 +193,18 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: materials.slice(0, 6) },
     yAxis: { type: 'value', max: 100 },
-    series: [{
-      type: 'bar',
-      barWidth: '40%',
-      data: riskData.value.slice(0, 6).map(d => ({
-        value: d.riskScore,
-        itemStyle: { color: d.riskScore > 60 ? '#F56C6C' : d.riskScore > 30 ? '#E6A23C' : '#67C23A' }
-      }))
-    }]
+    series: [
+      {
+        type: 'bar',
+        barWidth: '40%',
+        data: riskData.value.slice(0, 6).map((d) => ({
+          value: d.riskScore,
+          itemStyle: {
+            color: d.riskScore > 60 ? '#F56C6C' : d.riskScore > 30 ? '#E6A23C' : '#67C23A',
+          },
+        })),
+      },
+    ],
   }
 
   const supplierNames = ['供应商A', '供应商B', '供应商C', '供应商D', '供应商E']
@@ -144,11 +214,13 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: supplierNames },
     yAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
-    series: [{
-      type: 'bar',
-      barWidth: '40%',
-      data: [35, 28, 18, 12, 7]
-    }]
+    series: [
+      {
+        type: 'bar',
+        barWidth: '40%',
+        data: [35, 28, 18, 12, 7],
+      },
+    ],
   }
 })
 </script>
@@ -170,21 +242,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

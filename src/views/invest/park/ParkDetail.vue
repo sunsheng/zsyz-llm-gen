@@ -18,7 +18,11 @@
           </div>
           <div class="detail-row">
             <span class="label">入驻率</span>
-            <span class="value" :style="{ color: (park.occupancy || 0) >= 80 ? '#67C23A' : '#E6A23C' }">{{ park.occupancy }}%</span>
+            <span
+              class="value"
+              :style="{ color: (park.occupancy || 0) >= 80 ? '#67C23A' : '#E6A23C' }"
+              >{{ park.occupancy }}%</span
+            >
           </div>
           <div class="detail-row">
             <span class="label">入驻企业</span>
@@ -56,7 +60,7 @@ const radarOption = ref({})
 onMounted(() => {
   const list = getMockParks()
   const id = route.params.id as string
-  park.value = list.find(p => p.id === id) || list[0]
+  park.value = list.find((p) => p.id === id) || list[0]
 
   radarOption.value = {
     color: ['#1889E8'],
@@ -67,24 +71,28 @@ onMounted(() => {
         { name: '企业密度', max: 100 },
         { name: '产值贡献', max: 100 },
         { name: '配套设施', max: 100 },
-        { name: '招商潜力', max: 100 }
+        { name: '招商潜力', max: 100 },
       ],
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: [{
-        value: [
-          park.value.occupancy || 70,
-          Math.min((park.value.enterprises || 50) / 2, 100),
-          Math.min((park.value.revenue || 50000) / 3000, 100),
-          Math.floor(Math.random() * 30 + 60),
-          Math.floor(Math.random() * 30 + 55)
+    series: [
+      {
+        type: 'radar',
+        data: [
+          {
+            value: [
+              park.value.occupancy || 70,
+              Math.min((park.value.enterprises || 50) / 2, 100),
+              Math.min((park.value.revenue || 50000) / 3000, 100),
+              Math.floor(Math.random() * 30 + 60),
+              Math.floor(Math.random() * 30 + 55),
+            ],
+            areaStyle: { opacity: 0.3 },
+          },
         ],
-        areaStyle: { opacity: 0.3 }
-      }]
-    }]
+      },
+    ],
   }
 })
 </script>
@@ -100,31 +108,36 @@ onMounted(() => {
 }
 .detail-card,
 .chart-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
   h3 {
     display: inline;
+    margin: 0;
     font-size: 20px;
     font-weight: $font-weight-bold;
     color: $text-primary;
-    margin: 0;
   }
 }
 .panel-title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .detail-row {
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 1px solid $border-color-lighter;
   font-size: 14px;
-  .label { color: $text-secondary; }
-  .value { color: $text-primary; font-weight: $font-weight-medium; }
+  border-bottom: 1px solid $border-color-lighter;
+  .label {
+    color: $text-secondary;
+  }
+  .value {
+    font-weight: $font-weight-medium;
+    color: $text-primary;
+  }
 }
 </style>

@@ -13,7 +13,9 @@
         <el-table-column prop="region" label="区域" width="100" />
         <el-table-column prop="matchScore" label="匹配度" width="90">
           <template #default="{ row }">
-            <span :style="{ color: row.matchScore >= 80 ? '#67C23A' : '#E6A23C', fontWeight: 600 }">{{ row.matchScore }}%</span>
+            <span :style="{ color: row.matchScore >= 80 ? '#67C23A' : '#E6A23C', fontWeight: 600 }"
+              >{{ row.matchScore }}%</span
+            >
           </template>
         </el-table-column>
         <el-table-column prop="investmentAmount" label="投资额(万)" width="120">
@@ -46,7 +48,12 @@ import { getMockTargets } from '@/api/mock/invest'
 const results = ref<any[]>([])
 
 function statusTagType(status: string) {
-  const map: Record<string, string> = { '待接触': 'info', '已接触': '', '洽谈中': 'warning', '已签约': 'success' }
+  const map: Record<string, string> = {
+    待接触: 'info',
+    已接触: '',
+    洽谈中: 'warning',
+    已签约: 'success',
+  }
   return map[status] || ''
 }
 
@@ -62,9 +69,9 @@ onMounted(() => {
   padding: 20px;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

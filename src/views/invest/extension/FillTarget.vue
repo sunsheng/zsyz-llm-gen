@@ -23,7 +23,9 @@
         <el-table-column prop="chainPosition" label="链上位置" width="130" />
         <el-table-column prop="matchScore" label="补链匹配度" width="110">
           <template #default="{ row }">
-            <span :style="{ color: row.matchScore >= 80 ? '#67C23A' : '#E6A23C', fontWeight: 600 }">{{ row.matchScore }}%</span>
+            <span :style="{ color: row.matchScore >= 80 ? '#67C23A' : '#E6A23C', fontWeight: 600 }"
+              >{{ row.matchScore }}%</span
+            >
           </template>
         </el-table-column>
         <el-table-column prop="investmentAmount" label="投资额(万)" width="120">
@@ -55,22 +57,37 @@ import { getMockTargets } from '@/api/mock/invest'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const filters: FilterField[] = [
-  { key: 'industry', label: '行业', type: 'select', options: [
-    { label: '高端装备制造', value: '高端装备制造' },
-    { label: '新材料', value: '新材料' },
-    { label: '生物医药', value: '生物医药' }
-  ]},
-  { key: 'chainPosition', label: '链上位置', type: 'select', options: [
-    { label: '上游-原材料', value: '上游-原材料' },
-    { label: '中游-整机制造', value: '中游-整机制造' },
-    { label: '下游-应用服务', value: '下游-应用服务' }
-  ]}
+  {
+    key: 'industry',
+    label: '行业',
+    type: 'select',
+    options: [
+      { label: '高端装备制造', value: '高端装备制造' },
+      { label: '新材料', value: '新材料' },
+      { label: '生物医药', value: '生物医药' },
+    ],
+  },
+  {
+    key: 'chainPosition',
+    label: '链上位置',
+    type: 'select',
+    options: [
+      { label: '上游-原材料', value: '上游-原材料' },
+      { label: '中游-整机制造', value: '中游-整机制造' },
+      { label: '下游-应用服务', value: '下游-应用服务' },
+    ],
+  },
 ]
 
 const targets = ref<any[]>([])
 
 function statusTagType(status: string) {
-  const map: Record<string, string> = { '待接触': 'info', '已接触': '', '洽谈中': 'warning', '已签约': 'success' }
+  const map: Record<string, string> = {
+    待接触: 'info',
+    已接触: '',
+    洽谈中: 'warning',
+    已签约: 'success',
+  }
   return map[status] || ''
 }
 
@@ -78,7 +95,9 @@ function handleSearch() {
   targets.value = getMockTargets(10)
 }
 
-onMounted(() => { handleSearch() })
+onMounted(() => {
+  handleSearch()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -86,9 +105,9 @@ onMounted(() => { handleSearch() })
   padding: 20px;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

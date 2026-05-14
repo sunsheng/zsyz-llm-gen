@@ -50,24 +50,40 @@ import { getMockProjectList } from '@/api/mock/intelligence'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const filters: FilterField[] = [
-  { key: 'industry', label: '行业', type: 'select', options: [
-    { label: '高端装备制造', value: '高端装备制造' },
-    { label: '新材料', value: '新材料' },
-    { label: '生物医药', value: '生物医药' }
-  ]},
-  { key: 'stage', label: '阶段', type: 'select', options: [
-    { label: '意向', value: '意向' },
-    { label: '对接', value: '对接' },
-    { label: '谈判', value: '谈判' },
-    { label: '签约', value: '签约' },
-    { label: '落地', value: '落地' }
-  ]}
+  {
+    key: 'industry',
+    label: '行业',
+    type: 'select',
+    options: [
+      { label: '高端装备制造', value: '高端装备制造' },
+      { label: '新材料', value: '新材料' },
+      { label: '生物医药', value: '生物医药' },
+    ],
+  },
+  {
+    key: 'stage',
+    label: '阶段',
+    type: 'select',
+    options: [
+      { label: '意向', value: '意向' },
+      { label: '对接', value: '对接' },
+      { label: '谈判', value: '谈判' },
+      { label: '签约', value: '签约' },
+      { label: '落地', value: '落地' },
+    ],
+  },
 ]
 
 const projectList = ref<any[]>([])
 
 function stageTag(stage: string) {
-  const map: Record<string, string> = { '意向': 'info', '对接': '', '谈判': 'warning', '签约': 'success', '落地': 'success' }
+  const map: Record<string, string> = {
+    意向: 'info',
+    对接: '',
+    谈判: 'warning',
+    签约: 'success',
+    落地: 'success',
+  }
   return map[stage] || ''
 }
 
@@ -75,7 +91,9 @@ function handleSearch() {
   projectList.value = getMockProjectList(10)
 }
 
-onMounted(() => { handleSearch() })
+onMounted(() => {
+  handleSearch()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -83,9 +101,9 @@ onMounted(() => { handleSearch() })
   padding: 20px;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

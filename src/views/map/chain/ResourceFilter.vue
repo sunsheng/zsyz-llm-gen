@@ -9,13 +9,25 @@
       <MapControlPanel title="资源筛选">
         <div class="filter-section">
           <div class="filter-label">产业类型</div>
-          <el-select v-model="filters.industry" placeholder="全部产业" clearable style="width: 100%" @change="applyFilters">
+          <el-select
+            v-model="filters.industry"
+            placeholder="全部产业"
+            clearable
+            style="width: 100%"
+            @change="applyFilters"
+          >
             <el-option v-for="item in industries" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="filter-section">
           <div class="filter-label">企业规模</div>
-          <el-select v-model="filters.scale" placeholder="全部规模" clearable style="width: 100%" @change="applyFilters">
+          <el-select
+            v-model="filters.scale"
+            placeholder="全部规模"
+            clearable
+            style="width: 100%"
+            @change="applyFilters"
+          >
             <el-option label="大型(5000人以上)" value="large" />
             <el-option label="中型(500-5000人)" value="medium" />
             <el-option label="小型(500人以下)" value="small" />
@@ -23,8 +35,19 @@
         </div>
         <div class="filter-section">
           <div class="filter-label">所在区域</div>
-          <el-select v-model="filters.region" placeholder="全部区域" clearable style="width: 100%" @change="applyFilters">
-            <el-option v-for="city in regions" :key="city.code" :label="city.name" :value="city.code" />
+          <el-select
+            v-model="filters.region"
+            placeholder="全部区域"
+            clearable
+            style="width: 100%"
+            @change="applyFilters"
+          >
+            <el-option
+              v-for="city in regions"
+              :key="city.code"
+              :label="city.name"
+              :value="city.code"
+            />
           </el-select>
         </div>
         <div class="filter-section">
@@ -38,9 +61,21 @@
         <div class="filter-section">
           <div class="filter-label">产值范围 (万元)</div>
           <div class="range-inputs">
-            <el-input-number v-model="filters.minValue" :min="0" placeholder="最小值" controls-position="right" style="width: 48%" />
+            <el-input-number
+              v-model="filters.minValue"
+              :min="0"
+              placeholder="最小值"
+              controls-position="right"
+              style="width: 48%"
+            />
             <span class="range-sep">-</span>
-            <el-input-number v-model="filters.maxValue" :min="0" placeholder="最大值" controls-position="right" style="width: 48%" />
+            <el-input-number
+              v-model="filters.maxValue"
+              :min="0"
+              placeholder="最大值"
+              controls-position="right"
+              style="width: 48%"
+            />
           </div>
         </div>
         <div class="filter-actions">
@@ -62,7 +97,9 @@
           >
             <div class="result-item__header">
               <span class="result-item__name">{{ marker.name }}</span>
-              <el-tag size="small" :type="getTypeTagType(marker.type)">{{ getTypeLabel(marker.type) }}</el-tag>
+              <el-tag size="small" :type="getTypeTagType(marker.type)">{{
+                getTypeLabel(marker.type)
+              }}</el-tag>
             </div>
             <div class="result-item__category">{{ marker.category }}</div>
           </div>
@@ -88,8 +125,17 @@ import MapLegend from '@/components/map/MapLegend.vue'
 import { getMockMarkers, getMockGeoFeatures } from '@/api/mock/map'
 import type { MapMarker } from '@/api/types/map'
 
-const industries = ['高端装备制造', '新材料', '生物医药', '电子信息', '新能源', '节能环保', '数字创意', '现代服务业']
-const regions = getMockGeoFeatures('zhejiang').map(f => f.properties)
+const industries = [
+  '高端装备制造',
+  '新材料',
+  '生物医药',
+  '电子信息',
+  '新能源',
+  '节能环保',
+  '数字创意',
+  '现代服务业',
+]
+const regions = getMockGeoFeatures('zhejiang').map((f) => f.properties)
 
 const allMarkers = ref<MapMarker[]>(getMockMarkers(80))
 let mapInstance: any = null
@@ -101,43 +147,49 @@ const filters = reactive({
   region: '',
   types: ['enterprise', 'park', 'institution'] as string[],
   minValue: undefined as number | undefined,
-  maxValue: undefined as number | undefined
+  maxValue: undefined as number | undefined,
 })
 
 const legendItems = [
   { label: '企业', color: '#1889E8' },
   { label: '园区', color: '#4ECB73' },
-  { label: '机构', color: '#FBD437' }
+  { label: '机构', color: '#FBD437' },
 ]
 
 const filteredMarkers = computed(() => {
   let list = allMarkers.value
   if (filters.industry) {
-    list = list.filter(m => m.category === filters.industry)
+    list = list.filter((m) => m.category === filters.industry)
   }
   if (filters.scale) {
     const extra = (m: MapMarker) => (m.extra as any) || {}
-    if (filters.scale === 'large') list = list.filter(m => extra(m).employees >= 5000)
-    else if (filters.scale === 'medium') list = list.filter(m => { const e = extra(m).employees; return e >= 500 && e < 5000 })
-    else if (filters.scale === 'small') list = list.filter(m => extra(m).employees < 500)
+    if (filters.scale === 'large') list = list.filter((m) => extra(m).employees >= 5000)
+    else if (filters.scale === 'medium')
+      list = list.filter((m) => {
+        const e = extra(m).employees
+        return e >= 500 && e < 5000
+      })
+    else if (filters.scale === 'small') list = list.filter((m) => extra(m).employees < 500)
   }
   if (filters.region) {
-    const regionCenter = regions.find(r => r.code === filters.region)?.center
+    const regionCenter = regions.find((r) => r.code === filters.region)?.center
     if (regionCenter) {
-      list = list.filter(m => {
-        const dist = Math.sqrt((m.longitude - regionCenter[0]) ** 2 + (m.latitude - regionCenter[1]) ** 2)
+      list = list.filter((m) => {
+        const dist = Math.sqrt(
+          (m.longitude - regionCenter[0]) ** 2 + (m.latitude - regionCenter[1]) ** 2,
+        )
         return dist < 0.6
       })
     }
   }
   if (filters.types.length > 0 && filters.types.length < 3) {
-    list = list.filter(m => filters.types.includes(m.type))
+    list = list.filter((m) => filters.types.includes(m.type))
   }
   if (filters.minValue != null) {
-    list = list.filter(m => (m.value || 0) >= filters.minValue!)
+    list = list.filter((m) => (m.value || 0) >= filters.minValue!)
   }
   if (filters.maxValue != null) {
-    list = list.filter(m => (m.value || 0) <= filters.maxValue!)
+    list = list.filter((m) => (m.value || 0) <= filters.maxValue!)
   }
   return list
 })
@@ -148,12 +200,20 @@ function getTypeLabel(type: string) {
 }
 
 function getTypeTagType(type: string): 'primary' | 'success' | 'warning' {
-  const map: Record<string, 'primary' | 'success' | 'warning'> = { enterprise: 'primary', park: 'success', institution: 'warning' }
+  const map: Record<string, 'primary' | 'success' | 'warning'> = {
+    enterprise: 'primary',
+    park: 'success',
+    institution: 'warning',
+  }
   return map[type] || 'primary'
 }
 
 function getMarkerColor(type: string) {
-  const map: Record<string, string> = { enterprise: '#1889E8', park: '#4ECB73', institution: '#FBD437' }
+  const map: Record<string, string> = {
+    enterprise: '#1889E8',
+    park: '#4ECB73',
+    institution: '#FBD437',
+  }
   return map[type] || '#1889E8'
 }
 
@@ -166,9 +226,9 @@ async function onMapReady(map: any) {
 
 function drawMarkers() {
   if (!markerLayer) return
-  import('maptalks').then(maptalks => {
+  import('maptalks').then((maptalks) => {
     markerLayer.clear()
-    filteredMarkers.value.forEach(m => {
+    filteredMarkers.value.forEach((m) => {
       const color = getMarkerColor(m.type)
       const marker = new maptalks.Marker([m.longitude, m.latitude], {
         id: m.id,
@@ -179,8 +239,8 @@ function drawMarkers() {
           markerLineColor: '#fff',
           markerLineWidth: 1.5,
           markerWidth: 12,
-          markerHeight: 12
-        }
+          markerHeight: 12,
+        },
       })
       markerLayer.addGeometry(marker)
     })
@@ -208,8 +268,12 @@ function handleMarkerClick(marker: MapMarker) {
   }
 }
 
-function handleZoomIn() { mapInstance?.zoomIn() }
-function handleZoomOut() { mapInstance?.zoomOut() }
+function handleZoomIn() {
+  mapInstance?.zoomIn()
+}
+function handleZoomOut() {
+  mapInstance?.zoomOut()
+}
 function handleReset() {
   mapInstance?.setCenter([104.612, 30.884])
   mapInstance?.setZoom(15)
@@ -230,8 +294,8 @@ onUnmounted(() => {
 .map-page__body {
   position: relative;
   height: 100%;
-  border-radius: $radius-base;
   overflow: hidden;
+  border-radius: $radius-base;
 }
 
 .map-page__map {
@@ -245,16 +309,16 @@ onUnmounted(() => {
 }
 
 .filter-label {
+  margin-bottom: 8px;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  margin-bottom: 8px;
 }
 
 .range-inputs {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
 }
 
 .range-sep {
@@ -268,16 +332,16 @@ onUnmounted(() => {
 }
 
 .stats-section {
-  background: $bg-hover;
-  border-radius: $radius-base;
   padding: 12px;
   margin-bottom: 12px;
+  background: $bg-hover;
+  border-radius: $radius-base;
 }
 
 .stats-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
 .stats-label {
@@ -298,10 +362,10 @@ onUnmounted(() => {
 
 .result-item {
   padding: 10px;
-  border-radius: $radius-base;
-  cursor: pointer;
-  transition: background $transition-fast;
   margin-bottom: 4px;
+  cursor: pointer;
+  border-radius: $radius-base;
+  transition: background $transition-fast;
 
   &:hover {
     background: $bg-hover;
@@ -316,13 +380,13 @@ onUnmounted(() => {
 }
 
 .result-item__name {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 200px;
 }
 
 .result-item__category {

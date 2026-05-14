@@ -22,7 +22,13 @@
         <el-table-column prop="chainName" label="产业链" width="160" />
         <el-table-column prop="matchScore" label="匹配度" width="90">
           <template #default="{ row }">
-            <span :style="{ color: row.matchScore >= 80 ? '#67C23A' : row.matchScore >= 60 ? '#E6A23C' : '#F56C6C', fontWeight: 600 }">
+            <span
+              :style="{
+                color:
+                  row.matchScore >= 80 ? '#67C23A' : row.matchScore >= 60 ? '#E6A23C' : '#F56C6C',
+                fontWeight: 600,
+              }"
+            >
               {{ row.matchScore }}%
             </span>
           </template>
@@ -34,7 +40,10 @@
         </el-table-column>
         <el-table-column prop="priority" label="优先级" width="80">
           <template #default="{ row }">
-            <el-tag :type="row.priority === '高' ? 'danger' : row.priority === '中' ? 'warning' : 'info'" size="small">
+            <el-tag
+              :type="row.priority === '高' ? 'danger' : row.priority === '中' ? 'warning' : 'info'"
+              size="small"
+            >
               {{ row.priority }}
             </el-tag>
           </template>
@@ -52,7 +61,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <PaginationBar :current="pagination.current" :total="pagination.total" @change="handlePageChange" />
+      <PaginationBar
+        :current="pagination.current"
+        :total="pagination.total"
+        @change="handlePageChange"
+      />
     </div>
   </div>
 </template>
@@ -66,16 +79,26 @@ import { getMockRecommendResults } from '@/api/mock/invest'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const filters: FilterField[] = [
-  { key: 'priority', label: '优先级', type: 'select', options: [
-    { label: '高', value: '高' },
-    { label: '中', value: '中' },
-    { label: '低', value: '低' }
-  ]},
-  { key: 'chain', label: '产业链', type: 'select', options: [
-    { label: '高端装备制造产业链', value: '高端装备制造' },
-    { label: '新材料产业链', value: '新材料' },
-    { label: '生物医药产业链', value: '生物医药' }
-  ]}
+  {
+    key: 'priority',
+    label: '优先级',
+    type: 'select',
+    options: [
+      { label: '高', value: '高' },
+      { label: '中', value: '中' },
+      { label: '低', value: '低' },
+    ],
+  },
+  {
+    key: 'chain',
+    label: '产业链',
+    type: 'select',
+    options: [
+      { label: '高端装备制造产业链', value: '高端装备制造' },
+      { label: '新材料产业链', value: '新材料' },
+      { label: '生物医药产业链', value: '生物医药' },
+    ],
+  },
 ]
 
 const results = ref<any[]>([])
@@ -85,12 +108,22 @@ function handleSearch() {
   results.value = getMockRecommendResults(10)
   pagination.total = 32
 }
-function handleFilter() { handleSearch() }
-function handleReset() { pagination.current = 1; handleSearch() }
-function handlePageChange(page: number) { pagination.current = page; handleSearch() }
+function handleFilter() {
+  handleSearch()
+}
+function handleReset() {
+  pagination.current = 1
+  handleSearch()
+}
+function handlePageChange(page: number) {
+  pagination.current = page
+  handleSearch()
+}
 function handleExport() {}
 
-onMounted(() => { handleSearch() })
+onMounted(() => {
+  handleSearch()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -98,9 +131,9 @@ onMounted(() => { handleSearch() })
   padding: 20px;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

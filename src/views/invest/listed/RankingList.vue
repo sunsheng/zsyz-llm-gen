@@ -14,7 +14,9 @@
         <el-table-column prop="topCompany" label="榜首企业" width="140" />
         <el-table-column label="操作" width="200">
           <template #default="{ row }">
-            <el-button type="primary" link size="small" @click="handleViewDetail(row)">查看详情</el-button>
+            <el-button type="primary" link size="small" @click="handleViewDetail(row)"
+              >查看详情</el-button
+            >
             <el-button type="primary" link size="small">招商筛选</el-button>
           </template>
         </el-table-column>
@@ -46,9 +48,9 @@ onMounted(() => {
   padding: 20px;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

@@ -20,7 +20,10 @@
         <el-card v-for="item in results" :key="item.id" shadow="hover" class="result-card">
           <div class="result-card__header">
             <span class="result-card__name">{{ item.name }}</span>
-            <span class="result-card__score" :style="{ color: item.matchScore >= 80 ? '#67C23A' : '#E6A23C' }">
+            <span
+              class="result-card__score"
+              :style="{ color: item.matchScore >= 80 ? '#67C23A' : '#E6A23C' }"
+            >
               {{ item.matchScore }}%
             </span>
           </div>
@@ -39,9 +42,13 @@
             </div>
           </div>
           <div class="result-card__footer">
-            <el-tag v-for="tag in item.tags" :key="tag" size="small" style="margin-right: 4px">{{ tag }}</el-tag>
+            <el-tag v-for="tag in item.tags" :key="tag" size="small" style="margin-right: 4px">{{
+              tag
+            }}</el-tag>
           </div>
-          <el-button type="primary" size="small" style="width: 100%; margin-top: 8px">加入目标</el-button>
+          <el-button type="primary" size="small" style="width: 100%; margin-top: 8px"
+            >加入目标</el-button
+          >
         </el-card>
       </div>
       <PaginationBar :current="1" :total="24" />
@@ -58,16 +65,26 @@ import { getMockTargets } from '@/api/mock/invest'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const filters: FilterField[] = [
-  { key: 'industry', label: '行业', type: 'select', options: [
-    { label: '高端装备制造', value: '高端装备制造' },
-    { label: '新材料', value: '新材料' },
-    { label: '生物医药', value: '生物医药' }
-  ]},
-  { key: 'relation', label: '关系类型', type: 'select', options: [
-    { label: '供应商', value: '供应商' },
-    { label: '客户', value: '客户' },
-    { label: '合作伙伴', value: '合作伙伴' }
-  ]}
+  {
+    key: 'industry',
+    label: '行业',
+    type: 'select',
+    options: [
+      { label: '高端装备制造', value: '高端装备制造' },
+      { label: '新材料', value: '新材料' },
+      { label: '生物医药', value: '生物医药' },
+    ],
+  },
+  {
+    key: 'relation',
+    label: '关系类型',
+    type: 'select',
+    options: [
+      { label: '供应商', value: '供应商' },
+      { label: '客户', value: '客户' },
+      { label: '合作伙伴', value: '合作伙伴' },
+    ],
+  },
 ]
 
 const results = ref<any[]>([])
@@ -76,7 +93,9 @@ function handleSearch() {
   results.value = getMockTargets(8)
 }
 
-onMounted(() => { handleSearch() })
+onMounted(() => {
+  handleSearch()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -84,16 +103,16 @@ onMounted(() => { handleSearch() })
   padding: 20px;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .panel-title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .card-grid {
   display: grid;
@@ -103,8 +122,8 @@ onMounted(() => { handleSearch() })
 }
 .result-card__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 8px;
 }
 .result-card__name {
@@ -121,12 +140,16 @@ onMounted(() => { handleSearch() })
   justify-content: space-between;
   padding: 2px 0;
   font-size: 12px;
-  .label { color: $text-secondary; }
-  .value { color: $text-primary; }
+  .label {
+    color: $text-secondary;
+  }
+  .value {
+    color: $text-primary;
+  }
 }
 .result-card__footer {
-  margin-top: 8px;
   padding-top: 8px;
+  margin-top: 8px;
   border-top: 1px solid $border-color-lighter;
 }
 </style>

@@ -12,22 +12,25 @@
 <script setup lang="ts">
 import { Top, Bottom, Minus } from '@element-plus/icons-vue'
 
-withDefaults(defineProps<{
-  direction?: 'up' | 'down' | 'flat'
-  value?: string
-  isGood?: boolean
-}>(), {
-  direction: 'flat',
-  value: '',
-  isGood: undefined
-})
+withDefaults(
+  defineProps<{
+    direction?: 'up' | 'down' | 'flat'
+    value?: string
+    isGood?: boolean
+  }>(),
+  {
+    direction: 'flat',
+    value: '',
+    isGood: undefined,
+  },
+)
 </script>
 
 <style lang="scss" scoped>
 .trend-indicator {
   display: inline-flex;
-  align-items: center;
   gap: 2px;
+  align-items: center;
   font-size: 12px;
   font-weight: $font-weight-medium;
 }

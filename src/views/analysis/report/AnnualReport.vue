@@ -89,8 +89,11 @@ onMounted(() => {
     xAxis: { type: 'category', data: trendData.data.xAxis.data, boundaryGap: false },
     yAxis: { type: 'value' },
     series: trendData.data.series.map((s: any) => ({
-      ...s, type: 'line', smooth: true, areaStyle: { opacity: 0.1 }
-    }))
+      ...s,
+      type: 'line',
+      smooth: true,
+      areaStyle: { opacity: 0.1 },
+    })),
   }
 
   const structData = getMockChartData('structure-pie')
@@ -98,14 +101,16 @@ onMounted(() => {
     color: chartColors,
     tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie',
-      radius: ['40%', '70%'],
-      avoidLabelOverlap: false,
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: structData.data
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: structData.data,
+      },
+    ],
   }
 
   const contribData = getMockChartData('contribution-bar')
@@ -115,10 +120,15 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: contribData.data.xAxis.data },
     yAxis: { type: 'value' },
-    series: [{
-      name: '产值(亿)', type: 'bar', data: contribData.data.series[0].data, barWidth: '35%',
-      itemStyle: { borderRadius: [4, 4, 0, 0] }
-    }]
+    series: [
+      {
+        name: '产值(亿)',
+        type: 'bar',
+        data: contribData.data.series[0].data,
+        barWidth: '35%',
+        itemStyle: { borderRadius: [4, 4, 0, 0] },
+      },
+    ],
   }
 
   const radarData = getMockChartData('park-radar')
@@ -127,52 +137,107 @@ onMounted(() => {
     tooltip: {},
     legend: { data: radarData.data.series.map((s: any) => s.name) },
     radar: { indicator: radarData.data.indicator, shape: 'polygon', splitNumber: 5 },
-    series: [{
-      type: 'radar',
-      data: radarData.data.series.map((s: any) => ({
-        name: s.name, value: s.value, areaStyle: { opacity: 0.2 }
-      }))
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: radarData.data.series.map((s: any) => ({
+          name: s.name,
+          value: s.value,
+          areaStyle: { opacity: 0.2 },
+        })),
+      },
+    ],
   }
 
   gaugeOption.value = {
-    series: [{
-      type: 'gauge',
-      startAngle: 200, endAngle: -20, min: 0, max: 100, splitNumber: 10,
-      axisLine: { lineStyle: { width: 18, color: [[0.3, '#67C23A'], [0.7, '#E6A23C'], [1, '#F56C6C']] } },
-      pointer: { itemStyle: { color: '#1889E8' } },
-      axisTick: { distance: -18, length: 6, lineStyle: { color: '#fff', width: 1 } },
-      splitLine: { distance: -18, length: 18, lineStyle: { color: '#fff', width: 2 } },
-      axisLabel: { color: '#999', distance: 25, fontSize: 12 },
-      detail: { valueAnimation: true, formatter: '{value}分', color: '#303133', fontSize: 24, offsetCenter: [0, '70%'] },
-      data: [{ value: 82.3, name: '年度得分' }]
-    }]
+    series: [
+      {
+        type: 'gauge',
+        startAngle: 200,
+        endAngle: -20,
+        min: 0,
+        max: 100,
+        splitNumber: 10,
+        axisLine: {
+          lineStyle: {
+            width: 18,
+            color: [
+              [0.3, '#67C23A'],
+              [0.7, '#E6A23C'],
+              [1, '#F56C6C'],
+            ],
+          },
+        },
+        pointer: { itemStyle: { color: '#1889E8' } },
+        axisTick: { distance: -18, length: 6, lineStyle: { color: '#fff', width: 1 } },
+        splitLine: { distance: -18, length: 18, lineStyle: { color: '#fff', width: 2 } },
+        axisLabel: { color: '#999', distance: 25, fontSize: 12 },
+        detail: {
+          valueAnimation: true,
+          formatter: '{value}分',
+          color: '#303133',
+          fontSize: 24,
+          offsetCenter: [0, '70%'],
+        },
+        data: [{ value: 82.3, name: '年度得分' }],
+      },
+    ],
   }
 
   const scatterData = getMockChartData('scatter-distribution')
   scatterOption.value = {
     color: chartColors,
     tooltip: {
-      formatter: (params: any) => `指标A: ${params.value[0]}<br/>指标B: ${params.value[1]}<br/>规模: ${params.value[2]}`
+      formatter: (params: any) =>
+        `指标A: ${params.value[0]}<br/>指标B: ${params.value[1]}<br/>规模: ${params.value[2]}`,
     },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'value', splitLine: { show: true, lineStyle: { type: 'dashed' } } },
     yAxis: { type: 'value', splitLine: { show: true, lineStyle: { type: 'dashed' } } },
-    series: [{
-      type: 'scatter',
-      symbolSize: (val: number[]) => val[2] / 2,
-      data: scatterData.data,
-      itemStyle: { opacity: 0.7 }
-    }]
+    series: [
+      {
+        type: 'scatter',
+        symbolSize: (val: number[]) => val[2] / 2,
+        data: scatterData.data,
+        itemStyle: { opacity: 0.7 },
+      },
+    ],
   }
 })
 </script>
 
 <style lang="scss" scoped>
-.page-container { padding: 20px; }
-.stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
-.chart-panel { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
-.chart-panel__title { font-size: 16px; font-weight: $font-weight-semibold; color: $text-primary; margin: 0 0 16px 0; }
-.table-section { background: $bg-card; border-radius: $radius-base; box-shadow: $shadow-card; padding: 20px; }
+.page-container {
+  padding: 20px;
+}
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.chart-panel {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+.chart-panel__title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+.table-section {
+  padding: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
 </style>

@@ -7,7 +7,7 @@
       </el-icon>
     </div>
     <div v-if="!collapsed" class="map-control-panel__body">
-      <slot />
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -15,11 +15,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-withDefaults(defineProps<{
-  title?: string
-}>(), {
-  title: '控制面板'
-})
+withDefaults(
+  defineProps<{
+    title?: string
+  }>(),
+  {
+    title: '控制面板',
+  },
+)
 
 const collapsed = ref(false)
 </script>
@@ -29,14 +32,14 @@ const collapsed = ref(false)
   position: absolute;
   top: 16px;
   left: 16px;
+  z-index: 10;
   width: 360px;
   max-height: calc(100% - 32px);
+  overflow: hidden;
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
   border-radius: $radius-base;
   box-shadow: $shadow-dropdown;
-  z-index: 10;
-  overflow: hidden;
+  backdrop-filter: blur(10px);
   transition: width 0.3s ease;
 
   &.is-collapsed {
@@ -59,15 +62,17 @@ const collapsed = ref(false)
 }
 
 .map-control-panel__toggle {
-  cursor: pointer;
   font-size: 16px;
   color: $text-secondary;
-  &:hover { color: $color-primary; }
+  cursor: pointer;
+  &:hover {
+    color: $color-primary;
+  }
 }
 
 .map-control-panel__body {
+  max-height: calc(100vh - 200px);
   padding: 16px;
   overflow-y: auto;
-  max-height: calc(100vh - 200px);
 }
 </style>

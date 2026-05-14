@@ -23,7 +23,13 @@
         <el-table-column prop="chainPosition" label="链上位置" width="140" />
         <el-table-column prop="matchScore" label="匹配度" width="100">
           <template #default="{ row }">
-            <span :style="{ color: row.matchScore >= 80 ? '#67C23A' : row.matchScore >= 60 ? '#E6A23C' : '#F56C6C', fontWeight: 600 }">
+            <span
+              :style="{
+                color:
+                  row.matchScore >= 80 ? '#67C23A' : row.matchScore >= 60 ? '#E6A23C' : '#F56C6C',
+                fontWeight: 600,
+              }"
+            >
               {{ row.matchScore }}%
             </span>
           </template>
@@ -40,7 +46,9 @@
         </el-table-column>
         <el-table-column prop="tags" label="标签" min-width="180">
           <template #default="{ row }">
-            <el-tag v-for="tag in row.tags" :key="tag" size="small" style="margin-right: 4px">{{ tag }}</el-tag>
+            <el-tag v-for="tag in row.tags" :key="tag" size="small" style="margin-right: 4px">{{
+              tag
+            }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="120" fixed="right">
@@ -50,7 +58,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <PaginationBar :current="pagination.current" :total="pagination.total" @change="handlePageChange" />
+      <PaginationBar
+        :current="pagination.current"
+        :total="pagination.total"
+        @change="handlePageChange"
+      />
     </div>
   </div>
 </template>
@@ -64,32 +76,52 @@ import { getMockTargets } from '@/api/mock/invest'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 
 const filters: FilterField[] = [
-  { key: 'industry', label: '行业', type: 'select', options: [
-    { label: '高端装备制造', value: '高端装备制造' },
-    { label: '新材料', value: '新材料' },
-    { label: '生物医药', value: '生物医药' },
-    { label: '电子信息', value: '电子信息' },
-    { label: '新能源', value: '新能源' }
-  ]},
-  { key: 'region', label: '区域', type: 'select', options: [
-    { label: '北京市', value: '北京市' },
-    { label: '上海市', value: '上海市' },
-    { label: '深圳市', value: '深圳市' },
-    { label: '广州市', value: '广州市' }
-  ]},
-  { key: 'status', label: '状态', type: 'select', options: [
-    { label: '待接触', value: '待接触' },
-    { label: '已接触', value: '已接触' },
-    { label: '洽谈中', value: '洽谈中' },
-    { label: '已签约', value: '已签约' }
-  ]}
+  {
+    key: 'industry',
+    label: '行业',
+    type: 'select',
+    options: [
+      { label: '高端装备制造', value: '高端装备制造' },
+      { label: '新材料', value: '新材料' },
+      { label: '生物医药', value: '生物医药' },
+      { label: '电子信息', value: '电子信息' },
+      { label: '新能源', value: '新能源' },
+    ],
+  },
+  {
+    key: 'region',
+    label: '区域',
+    type: 'select',
+    options: [
+      { label: '北京市', value: '北京市' },
+      { label: '上海市', value: '上海市' },
+      { label: '深圳市', value: '深圳市' },
+      { label: '广州市', value: '广州市' },
+    ],
+  },
+  {
+    key: 'status',
+    label: '状态',
+    type: 'select',
+    options: [
+      { label: '待接触', value: '待接触' },
+      { label: '已接触', value: '已接触' },
+      { label: '洽谈中', value: '洽谈中' },
+      { label: '已签约', value: '已签约' },
+    ],
+  },
 ]
 
 const targets = ref<any[]>([])
 const pagination = reactive({ current: 1, total: 0 })
 
 function statusTagType(status: string) {
-  const map: Record<string, string> = { '待接触': 'info', '已接触': '', '洽谈中': 'warning', '已签约': 'success' }
+  const map: Record<string, string> = {
+    待接触: 'info',
+    已接触: '',
+    洽谈中: 'warning',
+    已签约: 'success',
+  }
   return map[status] || ''
 }
 
@@ -122,9 +154,9 @@ onMounted(() => {
   padding: 20px;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

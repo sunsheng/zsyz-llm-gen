@@ -79,7 +79,7 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: trendData.data.xAxis.data },
     yAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
-    series: trendData.data.series.map((s: any) => ({ ...s, type: 'line', smooth: true }))
+    series: trendData.data.series.map((s: any) => ({ ...s, type: 'line', smooth: true })),
   }
 
   const hotData = getMockChartData('hot-resource-bar')
@@ -90,7 +90,7 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: hotData.data.xAxis.data },
     yAxis: { type: 'value' },
-    series: hotData.data.series.map((s: any) => ({ ...s, type: 'bar', barWidth: '30%' }))
+    series: hotData.data.series.map((s: any) => ({ ...s, type: 'bar', barWidth: '30%' })),
   }
 
   const statusData = getMockChartData('status-pie')
@@ -98,14 +98,16 @@ onMounted(() => {
     color: chartColors,
     tooltip: { trigger: 'item' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie',
-      radius: ['40%', '70%'],
-      avoidLabelOverlap: false,
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: statusData.data
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: statusData.data,
+      },
+    ],
   }
 
   const radarData = getMockChartData('park-radar')
@@ -116,16 +118,18 @@ onMounted(() => {
     radar: {
       indicator: radarData.data.indicator,
       shape: 'polygon',
-      splitNumber: 5
+      splitNumber: 5,
     },
-    series: [{
-      type: 'radar',
-      data: radarData.data.series.map((s: any) => ({
-        name: s.name,
-        value: s.value,
-        areaStyle: { opacity: 0.2 }
-      }))
-    }]
+    series: [
+      {
+        type: 'radar',
+        data: radarData.data.series.map((s: any) => ({
+          name: s.name,
+          value: s.value,
+          areaStyle: { opacity: 0.2 },
+        })),
+      },
+    ],
   }
 })
 </script>
@@ -147,21 +151,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

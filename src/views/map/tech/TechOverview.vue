@@ -9,7 +9,13 @@
       <MapControlPanel title="技术链控制">
         <div class="filter-section">
           <div class="filter-label">技术领域</div>
-          <el-select v-model="selectedField" placeholder="全部领域" clearable style="width: 100%" @change="updateMap">
+          <el-select
+            v-model="selectedField"
+            placeholder="全部领域"
+            clearable
+            style="width: 100%"
+            @change="updateMap"
+          >
             <el-option v-for="field in techFields" :key="field" :label="field" :value="field" />
           </el-select>
         </div>
@@ -50,7 +56,7 @@
             class="tech-item"
             @click="handleNodeClick(node)"
           >
-            <span class="tech-item__dot" :style="{ background: getNodeColor(node.type) }" />
+            <span class="tech-item__dot" :style="{ background: getNodeColor(node.type) }"></span>
             <div class="tech-item__info">
               <div class="tech-item__name">{{ node.name }}</div>
               <div class="tech-item__field">{{ node.field }}</div>
@@ -61,10 +67,46 @@
       </MapControlPanel>
       <div class="map-page__map">
         <div class="map-page__stat-cards">
-          <StatCard icon="Cpu" label="技术领域" :value="techFields.length" unit="个" trend="up" trendValue="+2" iconColor="#975FE5" iconBgColor="#F3F0FF" />
-          <StatCard icon="School" label="研发机构" :value="rdCount" unit="家" trend="up" trendValue="+5" iconColor="#1889E8" iconBgColor="#ECF5FF" />
-          <StatCard icon="Medal" label="专利总数" :value="totalPatents" unit="项" trend="up" trendValue="+120" iconColor="#4ECB73" iconBgColor="#F0F9EB" />
-          <StatCard icon="TrendCharts" label="技术转化率" value="78.6" unit="%" trend="up" trendValue="+3.2" iconColor="#FBD437" iconBgColor="#FDF6EC" />
+          <StatCard
+            icon="Cpu"
+            label="技术领域"
+            :value="techFields.length"
+            unit="个"
+            trend="up"
+            trend-value="+2"
+            icon-color="#975FE5"
+            icon-bg-color="#F3F0FF"
+          />
+          <StatCard
+            icon="School"
+            label="研发机构"
+            :value="rdCount"
+            unit="家"
+            trend="up"
+            trend-value="+5"
+            icon-color="#1889E8"
+            icon-bg-color="#ECF5FF"
+          />
+          <StatCard
+            icon="Medal"
+            label="专利总数"
+            :value="totalPatents"
+            unit="项"
+            trend="up"
+            trend-value="+120"
+            icon-color="#4ECB73"
+            icon-bg-color="#F0F9EB"
+          />
+          <StatCard
+            icon="TrendCharts"
+            label="技术转化率"
+            value="78.6"
+            unit="%"
+            trend="up"
+            trend-value="+3.2"
+            icon-color="#FBD437"
+            icon-bg-color="#FDF6EC"
+          />
         </div>
         <MaptalksMap :center="[104.612, 30.884]" :zoom="15" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
@@ -94,7 +136,16 @@ interface TechNode {
   patentCount: number
 }
 
-const techFields = ['人工智能', '量子计算', '生物医药', '新能源技术', '新材料技术', '集成电路', '航空航天', '智能制造']
+const techFields = [
+  '人工智能',
+  '量子计算',
+  '生物医药',
+  '新能源技术',
+  '新材料技术',
+  '集成电路',
+  '航空航天',
+  '智能制造',
+]
 
 function generateTechNodes(): TechNode[] {
   const types: TechNode['type'][] = ['rd', 'lab', 'patent']
@@ -109,7 +160,7 @@ function generateTechNodes(): TechNode[] {
         field,
         lng: 118 + Math.random() * 4,
         lat: 28 + Math.random() * 4,
-        patentCount: Math.floor(Math.random() * 500 + 10)
+        patentCount: Math.floor(Math.random() * 500 + 10),
       })
     }
   })
@@ -126,23 +177,23 @@ let nodeLayer: any = null
 const filteredNodes = computed(() => {
   let list = allNodes.value
   if (selectedField.value) {
-    list = list.filter(n => n.field === selectedField.value)
+    list = list.filter((n) => n.field === selectedField.value)
   }
   if (selectedTypes.value.length > 0 && selectedTypes.value.length < 3) {
-    list = list.filter(n => selectedTypes.value.includes(n.type))
+    list = list.filter((n) => selectedTypes.value.includes(n.type))
   }
   return list
 })
 
-const rdCount = computed(() => filteredNodes.value.filter(n => n.type === 'rd').length)
-const labCount = computed(() => filteredNodes.value.filter(n => n.type === 'lab').length)
-const patentCount = computed(() => filteredNodes.value.filter(n => n.type === 'patent').length)
+const rdCount = computed(() => filteredNodes.value.filter((n) => n.type === 'rd').length)
+const labCount = computed(() => filteredNodes.value.filter((n) => n.type === 'lab').length)
+const patentCount = computed(() => filteredNodes.value.filter((n) => n.type === 'patent').length)
 const totalPatents = computed(() => filteredNodes.value.reduce((s, n) => s + n.patentCount, 0))
 
 const legendItems = [
   { label: '研发机构', color: '#1889E8' },
   { label: '重点实验室', color: '#975FE5' },
-  { label: '专利集群', color: '#4ECB73' }
+  { label: '专利集群', color: '#4ECB73' },
 ]
 
 function getNodeColor(type: TechNode['type']) {
@@ -162,38 +213,45 @@ async function updateMap() {
   const maptalks = await import('maptalks')
   nodeLayer.clear()
 
-  filteredNodes.value.forEach(n => {
+  filteredNodes.value.forEach((n) => {
     const color = getNodeColor(n.type)
     const size = n.type === 'lab' ? 18 : 14
-    nodeLayer.addGeometry(new maptalks.Marker([n.lng, n.lat], {
-      id: n.id,
-      symbol: {
-        markerType: 'ellipse',
-        markerFill: color,
-        markerFillOpacity: 0.85,
-        markerLineColor: '#fff',
-        markerLineWidth: 2,
-        markerWidth: size,
-        markerHeight: size
-      }
-    }))
+    nodeLayer.addGeometry(
+      new maptalks.Marker([n.lng, n.lat], {
+        id: n.id,
+        symbol: {
+          markerType: 'ellipse',
+          markerFill: color,
+          markerFillOpacity: 0.85,
+          markerLineColor: '#fff',
+          markerLineWidth: 2,
+          markerWidth: size,
+          markerHeight: size,
+        },
+      }),
+    )
   })
 
   // Draw connections between same-field nodes
   if (selectedField.value) {
     const fieldNodes = filteredNodes.value
     for (let i = 0; i < fieldNodes.length - 1; i++) {
-      nodeLayer.addGeometry(new maptalks.LineString(
-        [[fieldNodes[i].lng, fieldNodes[i].lat], [fieldNodes[i + 1].lng, fieldNodes[i + 1].lat]],
-        {
-          symbol: {
-            lineColor: '#975FE5',
-            lineWidth: 1.5,
-            lineOpacity: 0.4,
-            lineDasharray: [6, 4]
-          }
-        }
-      ))
+      nodeLayer.addGeometry(
+        new maptalks.LineString(
+          [
+            [fieldNodes[i].lng, fieldNodes[i].lat],
+            [fieldNodes[i + 1].lng, fieldNodes[i + 1].lat],
+          ],
+          {
+            symbol: {
+              lineColor: '#975FE5',
+              lineWidth: 1.5,
+              lineOpacity: 0.4,
+              lineDasharray: [6, 4],
+            },
+          },
+        ),
+      )
     }
   }
 }
@@ -205,8 +263,12 @@ function handleNodeClick(node: TechNode) {
   }
 }
 
-function handleZoomIn() { mapInstance?.zoomIn() }
-function handleZoomOut() { mapInstance?.zoomOut() }
+function handleZoomIn() {
+  mapInstance?.zoomIn()
+}
+function handleZoomOut() {
+  mapInstance?.zoomOut()
+}
 function handleReset() {
   mapInstance?.setCenter([104.612, 30.884])
   mapInstance?.setZoom(15)
@@ -228,8 +290,8 @@ onUnmounted(() => {
 .map-page__body {
   position: relative;
   height: 100%;
-  border-radius: $radius-base;
   overflow: hidden;
+  border-radius: $radius-base;
 }
 
 .map-page__map {
@@ -242,10 +304,10 @@ onUnmounted(() => {
   position: absolute;
   top: 16px;
   left: 50%;
-  transform: translateX(-50%);
+  z-index: 10;
   display: flex;
   gap: 16px;
-  z-index: 10;
+  transform: translateX(-50%);
 
   .stat-card {
     min-width: 180px;
@@ -257,23 +319,23 @@ onUnmounted(() => {
 }
 
 .filter-label {
+  margin-bottom: 8px;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  margin-bottom: 8px;
 }
 
 .tech-stats {
-  margin-top: 16px;
   padding-top: 16px;
+  margin-top: 16px;
   border-top: 1px solid $border-color-lighter;
 }
 
 .tech-stats__title {
+  margin-bottom: 12px;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  margin-bottom: 12px;
 }
 
 .tech-stats__grid {
@@ -283,10 +345,10 @@ onUnmounted(() => {
 }
 
 .tech-stat {
-  background: $bg-hover;
-  border-radius: $radius-base;
   padding: 10px;
   text-align: center;
+  background: $bg-hover;
+  border-radius: $radius-base;
 }
 
 .tech-stat__value {
@@ -296,35 +358,35 @@ onUnmounted(() => {
 }
 
 .tech-stat__label {
+  margin-top: 4px;
   font-size: 12px;
   color: $text-secondary;
-  margin-top: 4px;
 }
 
 .tech-list {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid $border-color-lighter;
   max-height: calc(100vh - 550px);
+  padding-top: 16px;
+  margin-top: 16px;
   overflow-y: auto;
+  border-top: 1px solid $border-color-lighter;
 }
 
 .tech-list__title {
+  margin-bottom: 12px;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  margin-bottom: 12px;
 }
 
 .tech-item {
   display: flex;
-  align-items: center;
   gap: 10px;
+  align-items: center;
   padding: 8px;
-  border-radius: $radius-base;
-  cursor: pointer;
-  transition: background $transition-fast;
   margin-bottom: 4px;
+  cursor: pointer;
+  border-radius: $radius-base;
+  transition: background $transition-fast;
 
   &:hover {
     background: $bg-hover;
@@ -332,10 +394,10 @@ onUnmounted(() => {
 }
 
 .tech-item__dot {
+  flex-shrink: 0;
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  flex-shrink: 0;
 }
 
 .tech-item__info {
@@ -344,11 +406,11 @@ onUnmounted(() => {
 }
 
 .tech-item__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 13px;
   font-weight: $font-weight-medium;
   color: $text-primary;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 

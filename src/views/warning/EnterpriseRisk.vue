@@ -8,7 +8,7 @@
 
     <div class="filter-section">
       <SearchFilterBar
-        searchPlaceholder="搜索企业名称"
+        search-placeholder="搜索企业名称"
         :filters="filterFields"
         @search="handleSearch"
         @filter="handleFilter"
@@ -38,7 +38,12 @@
         <el-table-column prop="industry" label="行业" width="130" />
         <el-table-column prop="riskScore" label="风险评分" width="100" sortable>
           <template #default="{ row }">
-            <span :style="{ color: row.riskScore > 70 ? '#F56C6C' : row.riskScore > 40 ? '#E6A23C' : '#67C23A', fontWeight: 600 }">
+            <span
+              :style="{
+                color: row.riskScore > 70 ? '#F56C6C' : row.riskScore > 40 ? '#E6A23C' : '#67C23A',
+                fontWeight: 600,
+              }"
+            >
               {{ row.riskScore }}
             </span>
           </template>
@@ -51,7 +56,10 @@
         </el-table-column>
         <el-table-column prop="trend" label="风险趋势" width="100">
           <template #default="{ row }">
-            <TrendIndicator :direction="row.riskChange > 0 ? 'up' : 'down'" :value="Math.abs(row.riskChange) + '%'" />
+            <TrendIndicator
+              :direction="row.riskChange > 0 ? 'up' : 'down'"
+              :value="Math.abs(row.riskChange) + '%'"
+            />
           </template>
         </el-table-column>
         <el-table-column prop="alertDate" label="预警日期" width="120" />
@@ -72,23 +80,73 @@ import TrendIndicator from '@/components/business/TrendIndicator.vue'
 import PaginationBar from '@/components/common/PaginationBar.vue'
 
 const kpiCards = [
-  { key: 'total', label: '风险企业', value: 128, unit: '家', trend: 'up' as const, trendValue: '+5', icon: 'Warning', iconColor: '#F2637B', iconBgColor: '#FEF0F0' },
-  { key: 'high', label: '高风险企业', value: 28, unit: '家', trend: 'up' as const, trendValue: '+3', icon: 'CircleClose', iconColor: '#F56C6C', iconBgColor: '#FEF0F0' },
-  { key: 'cashflow', label: '现金流预警', value: 42, unit: '家', trend: 'down' as const, trendValue: '-2', icon: 'Money', iconColor: '#E6A23C', iconBgColor: '#FDF6EC' },
-  { key: 'resolved', label: '已处置', value: 86, unit: '条', trend: 'up' as const, trendValue: '+12', icon: 'CircleCheck', iconColor: '#67C23A', iconBgColor: '#EDFAF0' }
+  {
+    key: 'total',
+    label: '风险企业',
+    value: 128,
+    unit: '家',
+    trend: 'up' as const,
+    trendValue: '+5',
+    icon: 'Warning',
+    iconColor: '#F2637B',
+    iconBgColor: '#FEF0F0',
+  },
+  {
+    key: 'high',
+    label: '高风险企业',
+    value: 28,
+    unit: '家',
+    trend: 'up' as const,
+    trendValue: '+3',
+    icon: 'CircleClose',
+    iconColor: '#F56C6C',
+    iconBgColor: '#FEF0F0',
+  },
+  {
+    key: 'cashflow',
+    label: '现金流预警',
+    value: 42,
+    unit: '家',
+    trend: 'down' as const,
+    trendValue: '-2',
+    icon: 'Money',
+    iconColor: '#E6A23C',
+    iconBgColor: '#FDF6EC',
+  },
+  {
+    key: 'resolved',
+    label: '已处置',
+    value: 86,
+    unit: '条',
+    trend: 'up' as const,
+    trendValue: '+12',
+    icon: 'CircleCheck',
+    iconColor: '#67C23A',
+    iconBgColor: '#EDFAF0',
+  },
 ]
 
 const filterFields = [
-  { key: 'level', label: '风险等级', type: 'select' as const, options: [
-    { label: '低风险', value: 'low' },
-    { label: '中风险', value: 'medium' },
-    { label: '高风险', value: 'high' }
-  ]},
-  { key: 'type', label: '风险类型', type: 'select' as const, options: [
-    { label: '现金流', value: 'cashflow' },
-    { label: '法律诉讼', value: 'legal' },
-    { label: '经营异常', value: 'business' }
-  ]}
+  {
+    key: 'level',
+    label: '风险等级',
+    type: 'select' as const,
+    options: [
+      { label: '低风险', value: 'low' },
+      { label: '中风险', value: 'medium' },
+      { label: '高风险', value: 'high' },
+    ],
+  },
+  {
+    key: 'type',
+    label: '风险类型',
+    type: 'select' as const,
+    options: [
+      { label: '现金流', value: 'cashflow' },
+      { label: '法律诉讼', value: 'legal' },
+      { label: '经营异常', value: 'business' },
+    ],
+  },
 ]
 
 const allData = ref<any[]>([])
@@ -107,20 +165,43 @@ const filteredData = computed(() => {
 })
 
 onMounted(() => {
-  const names = ['华创新材料科技', '东方精密制造', '博远生物医药', '天域半导体', '绿能新能源', '中科智联信息', '鼎盛环保科技', '创想数字技术', '恒达装备制造', '瑞丰新材料', '恒宇光电科技', '昌盛药业集团', '芯源集成电路', '亿能动力电池', '安泰环保设备']
+  const names = [
+    '华创新材料科技',
+    '东方精密制造',
+    '博远生物医药',
+    '天域半导体',
+    '绿能新能源',
+    '中科智联信息',
+    '鼎盛环保科技',
+    '创想数字技术',
+    '恒达装备制造',
+    '瑞丰新材料',
+    '恒宇光电科技',
+    '昌盛药业集团',
+    '芯源集成电路',
+    '亿能动力电池',
+    '安泰环保设备',
+  ]
   const industries = ['高端装备制造', '新材料', '生物医药', '电子信息', '新能源']
   const riskTypes = ['现金流', '法律诉讼', '经营异常', '信用违约']
-  const levels: Array<'low' | 'medium' | 'high' | 'critical'> = ['low', 'medium', 'high', 'critical']
+  const levels: Array<'low' | 'medium' | 'high' | 'critical'> = [
+    'low',
+    'medium',
+    'high',
+    'critical',
+  ]
 
-  allData.value = names.map((name, i) => ({
-    name,
-    industry: industries[i % industries.length],
-    riskScore: Math.floor(Math.random() * 80 + 20),
-    riskType: riskTypes[i % riskTypes.length],
-    level: levels[i % 4],
-    riskChange: Math.floor(Math.random() * 20 - 10),
-    alertDate: `2025-05-${String(Math.floor(Math.random() * 12 + 1)).padStart(2, '0')}`
-  })).sort((a, b) => b.riskScore - a.riskScore)
+  allData.value = names
+    .map((name, i) => ({
+      name,
+      industry: industries[i % industries.length],
+      riskScore: Math.floor(Math.random() * 80 + 20),
+      riskType: riskTypes[i % riskTypes.length],
+      level: levels[i % 4],
+      riskChange: Math.floor(Math.random() * 20 - 10),
+      alertDate: `2025-05-${String(Math.floor(Math.random() * 12 + 1)).padStart(2, '0')}`,
+    }))
+    .sort((a, b) => b.riskScore - a.riskScore)
   total.value = allData.value.length
 
   distOption.value = {
@@ -129,42 +210,53 @@ onMounted(() => {
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: ['0-20', '20-40', '40-60', '60-80', '80-100'] },
     yAxis: { type: 'value' },
-    series: [{
-      type: 'bar',
-      barWidth: '50%',
-      data: [
-        { value: 15, itemStyle: { color: '#67C23A' } },
-        { value: 35, itemStyle: { color: '#36CBCB' } },
-        { value: 42, itemStyle: { color: '#E6A23C' } },
-        { value: 28, itemStyle: { color: '#F56C6C' } },
-        { value: 8, itemStyle: { color: '#C45656' } }
-      ]
-    }]
+    series: [
+      {
+        type: 'bar',
+        barWidth: '50%',
+        data: [
+          { value: 15, itemStyle: { color: '#67C23A' } },
+          { value: 35, itemStyle: { color: '#36CBCB' } },
+          { value: 42, itemStyle: { color: '#E6A23C' } },
+          { value: 28, itemStyle: { color: '#F56C6C' } },
+          { value: 8, itemStyle: { color: '#C45656' } },
+        ],
+      },
+    ],
   }
 
   typePieOption.value = {
     color: ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437'],
     tooltip: { trigger: 'item' },
     legend: { orient: 'vertical', left: 'left' },
-    series: [{
-      type: 'pie',
-      radius: ['40%', '70%'],
-      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}: {d}%' },
-      data: [
-        { name: '现金流', value: 42 },
-        { name: '法律诉讼', value: 35 },
-        { name: '经营异常', value: 28 },
-        { name: '信用违约', value: 23 }
-      ]
-    }]
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {d}%' },
+        data: [
+          { name: '现金流', value: 42 },
+          { name: '法律诉讼', value: 35 },
+          { name: '经营异常', value: 28 },
+          { name: '信用违约', value: 23 },
+        ],
+      },
+    ],
   }
 })
 
-function handleSearch(kw: string) { keyword.value = kw; currentPage.value = 1 }
+function handleSearch(kw: string) {
+  keyword.value = kw
+  currentPage.value = 1
+}
 function handleFilter(_filters: Record<string, unknown>) {}
-function handleReset() { keyword.value = '' }
-function handlePageChange(page: number) { currentPage.value = page }
+function handleReset() {
+  keyword.value = ''
+}
+function handlePageChange(page: number) {
+  currentPage.value = page
+}
 </script>
 
 <style lang="scss" scoped>
@@ -187,21 +279,21 @@ function handlePageChange(page: number) { currentPage.value = page }
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .table-section {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>

@@ -35,12 +35,14 @@
         <el-table-column prop="projects" label="项目数" width="90" />
         <el-table-column prop="roi" label="回报率(%)" width="100">
           <template #default="{ row }">
-            <span style="color: #67C23A; font-weight: 600">{{ row.roi }}%</span>
+            <span style="font-weight: 600; color: #67c23a">{{ row.roi }}%</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="100">
           <template #default="{ row }">
-            <el-button type="primary" link size="small" @click="handleViewDetail(row)">详情</el-button>
+            <el-button type="primary" link size="small" @click="handleViewDetail(row)"
+              >详情</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -73,31 +75,80 @@ onMounted(() => {
   const totalInvested = funds.value.reduce((s, f) => s + f.invested, 0)
 
   kpiCards.value = [
-    { key: 'fundCount', label: '基金数量', value: funds.value.length, unit: '只', trend: 'up', trendValue: '+16.7%', icon: 'Wallet', iconColor: '#1889E8', iconBgColor: '#ECF5FF' },
-    { key: 'totalScale', label: '总规模', value: (totalScale / 10000).toFixed(1), unit: '亿', trend: 'up', trendValue: '+22.3%', icon: 'Money', iconColor: '#36CBCB', iconBgColor: '#E6F7F7' },
-    { key: 'totalInvested', label: '已投资金', value: (totalInvested / 10000).toFixed(1), unit: '亿', trend: 'up', trendValue: '+18.5%', icon: 'TrendCharts', iconColor: '#4ECB73', iconBgColor: '#EDFAF0' },
-    { key: 'avgRoi', label: '平均回报率', value: (funds.value.reduce((s, f) => s + parseFloat(f.roi), 0) / funds.value.length).toFixed(1), unit: '%', trend: 'up', trendValue: '+3.2%', icon: 'DataLine', iconColor: '#FBD437', iconBgColor: '#FFF8E6' }
+    {
+      key: 'fundCount',
+      label: '基金数量',
+      value: funds.value.length,
+      unit: '只',
+      trend: 'up',
+      trendValue: '+16.7%',
+      icon: 'Wallet',
+      iconColor: '#1889E8',
+      iconBgColor: '#ECF5FF',
+    },
+    {
+      key: 'totalScale',
+      label: '总规模',
+      value: (totalScale / 10000).toFixed(1),
+      unit: '亿',
+      trend: 'up',
+      trendValue: '+22.3%',
+      icon: 'Money',
+      iconColor: '#36CBCB',
+      iconBgColor: '#E6F7F7',
+    },
+    {
+      key: 'totalInvested',
+      label: '已投资金',
+      value: (totalInvested / 10000).toFixed(1),
+      unit: '亿',
+      trend: 'up',
+      trendValue: '+18.5%',
+      icon: 'TrendCharts',
+      iconColor: '#4ECB73',
+      iconBgColor: '#EDFAF0',
+    },
+    {
+      key: 'avgRoi',
+      label: '平均回报率',
+      value: (funds.value.reduce((s, f) => s + parseFloat(f.roi), 0) / funds.value.length).toFixed(
+        1,
+      ),
+      unit: '%',
+      trend: 'up',
+      trendValue: '+3.2%',
+      icon: 'DataLine',
+      iconColor: '#FBD437',
+      iconBgColor: '#FFF8E6',
+    },
   ]
 
   scaleBarOption.value = {
     color: chartColors,
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    xAxis: { type: 'category', data: funds.value.map(f => f.name) },
+    xAxis: { type: 'category', data: funds.value.map((f) => f.name) },
     yAxis: { type: 'value', axisLabel: { formatter: '{value}万' } },
     series: [
-      { name: '总规模', type: 'bar', data: funds.value.map(f => f.scale) },
-      { name: '已投', type: 'bar', data: funds.value.map(f => f.invested) }
-    ]
+      { name: '总规模', type: 'bar', data: funds.value.map((f) => f.scale) },
+      { name: '已投', type: 'bar', data: funds.value.map((f) => f.invested) },
+    ],
   }
 
   roiBarOption.value = {
     color: chartColors,
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    xAxis: { type: 'category', data: funds.value.map(f => f.name) },
+    xAxis: { type: 'category', data: funds.value.map((f) => f.name) },
     yAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
-    series: [{ name: '回报率', type: 'bar', data: funds.value.map(f => parseFloat(f.roi)), barWidth: '40%' }]
+    series: [
+      {
+        name: '回报率',
+        type: 'bar',
+        data: funds.value.map((f) => parseFloat(f.roi)),
+        barWidth: '40%',
+      },
+    ],
   }
 })
 </script>
@@ -119,21 +170,21 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 .chart-panel {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 .chart-panel__title {
+  margin: 0 0 16px;
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-  margin: 0 0 16px 0;
 }
 .content-card {
+  padding: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
-  padding: 20px;
 }
 </style>
