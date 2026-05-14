@@ -110,23 +110,25 @@ Key visual rules:
 
 ### 流程
 
-1. **总结变更** — push 前，先检查本地与远程的差异，总结修改内容
-2. **创建 feature 分支** — 根据变更内容命名，格式 `features/<描述性名称>`（如 `features/project-scaffold`、`features/login-page`）
+1. **总结变更** — 对比本地与远程 main 的所有提交差异（`git log origin/main..HEAD --oneline`），根据提交内容总结命名
+2. **创建 feature 分支** — 根据总结的变更内容命名，格式 `features/<描述性名称>`（如 `features/project-scaffold`、`features/login-page`）
 3. **提交并推送** — 在 feature 分支上提交代码，push 到远程
 4. **创建 PR** — 在 GitHub 上创建 PR，目标分支为 `main`，填写变更说明
-5. **合并后清理** — 合并后切换到 `main`，pull 最新代码，删除本地 feature 分支
+5. **合并后清理** — 合并后切换到 `main`，pull 最新代码，删除本地和远程 feature 分支，清理缓存引用
 
 ### 禁止
 
 - 直接 push 到 `main` 分支
 - 使用无意义或示例性的分支名（如 `features/xxx`、`features/test`）
+- 仅根据当前提交内容命名分支，应基于与远程 main 的全部差异总结
 
 ### 示例
 
 ```bash
-# 1. 总结变更
-git status
-git diff --stat
+# 1. 总结变更（对比本地与远程 main 的提交差异）
+git fetch origin
+git log origin/main..HEAD --oneline
+# 根据提交总结，决定分支名称
 
 # 2. 创建并切换到 feature 分支
 git checkout -b features/project-scaffold
@@ -140,6 +142,8 @@ git push -u origin features/project-scaffold
 # 5. 合并后清理
 git checkout main && git pull origin main
 git branch -d features/project-scaffold
+git push origin --delete features/project-scaffold
+git remote prune origin
 ```
 
 ## Reference Documents
