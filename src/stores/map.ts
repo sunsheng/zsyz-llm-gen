@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useMapStore = defineStore('map', () => {
-  const center = ref<[number, number]>([120.15, 30.28]) // 默认杭州
-  const zoom = ref(8)
+  const center = ref<[number, number]>([104.612, 30.884]) // 默认凯州新城
+  const zoom = ref(15)
   const activeLayers = ref<string[]>([])
   const selectedMarker = ref<Record<string, unknown> | null>(null)
 

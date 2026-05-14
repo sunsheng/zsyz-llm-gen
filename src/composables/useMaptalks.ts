@@ -10,11 +10,11 @@ export function useMaptalks(containerId: string, options?: Record<string, unknow
     try {
       const maptalks = await import('maptalks')
       const defaultOptions = {
-        center: [120.15, 30.28],
-        zoom: 8,
+        center: [104.612, 30.884],
+        zoom: 15,
         baseLayer: new maptalks.TileLayer('base', {
-          urlTemplate: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-          subdomains: ['a', 'b', 'c', 'd']
+          urlTemplate: 'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
+          subdomains: ['1', '2', '3', '4']
         })
       }
       mapInstance.value = new maptalks.Map(containerId, { ...defaultOptions, ...options })

@@ -8,7 +8,7 @@
 
     <div class="map-layout">
       <div class="map-area">
-        <MaptalksMap :center="[120.15, 30.28]" :zoom="10" />
+        <MaptalksMap :center="[104.612, 30.884]" :zoom="15" />
       </div>
       <div class="sidebar">
         <div class="search-section">

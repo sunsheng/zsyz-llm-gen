@@ -25,10 +25,10 @@
         <div class="filter-section">
           <div class="filter-label">资源类型</div>
           <el-radio-group v-model="selectedType" @change="handleSearch">
-            <el-radio-button label="">全部</el-radio-button>
-            <el-radio-button label="enterprise">企业</el-radio-button>
-            <el-radio-button label="park">园区</el-radio-button>
-            <el-radio-button label="institution">机构</el-radio-button>
+            <el-radio-button value="">全部</el-radio-button>
+            <el-radio-button value="enterprise">企业</el-radio-button>
+            <el-radio-button value="park">园区</el-radio-button>
+            <el-radio-button value="institution">机构</el-radio-button>
           </el-radio-group>
         </div>
         <div class="results-section">
@@ -56,7 +56,7 @@
         </div>
       </MapControlPanel>
       <div class="map-page__map">
-        <MaptalksMap :center="[120.15, 30.28]" :zoom="8" @ready="onMapReady" @click="onMapClick" />
+        <MaptalksMap :center="[104.612, 30.884]" :zoom="15" @ready="onMapReady" @click="onMapClick" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <MapLegend :items="legendItems" />
       </div>
@@ -172,7 +172,7 @@ function handleMarkerClick(marker: MapMarker) {
   activeMarkerId.value = marker.id
   if (mapInstance) {
     mapInstance.setCenter([marker.longitude, marker.latitude])
-    mapInstance.setZoom(12)
+    mapInstance.setZoom(15)
   }
   addMarkersToMap()
 }
@@ -191,8 +191,8 @@ function handleZoomOut() {
 }
 
 function handleReset() {
-  mapInstance?.setCenter([120.15, 30.28])
-  mapInstance?.setZoom(8)
+  mapInstance?.setCenter([104.612, 30.884])
+  mapInstance?.setZoom(15)
   activeMarkerId.value = ''
   searchText.value = ''
   selectedIndustry.value = ''

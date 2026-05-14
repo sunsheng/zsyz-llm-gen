@@ -14,7 +14,6 @@ declare module 'vue' {
     Breadcrumb: typeof import('./components/layout/Breadcrumb.vue')['default']
     ComparisonBar: typeof import('./components/business/ComparisonBar.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
-    ElBadge: typeof import('element-plus/es')['ElBadge']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElButton: typeof import('element-plus/es')['ElButton']

@@ -10,8 +10,8 @@ const enterpriseNames = [
 ]
 
 function randomCoords(): [number, number] {
-  // 浙江省范围附近
-  return [118 + Math.random() * 4, 28 + Math.random() * 4]
+  // 凯州新城智能制造产业园范围附近（兴隆镇周边）
+  return [104.55 + Math.random() * 0.12, 30.85 + Math.random() * 0.08]
 }
 
 export function getMockMarkers(count = 50): MapMarker[] {
@@ -36,22 +36,22 @@ export function getMockMarkers(count = 50): MapMarker[] {
 
 export function getMockGeoFeatures(region: string): GeoFeature[] {
   const regions: Record<string, { name: string; code: string; center: [number, number] }[]> = {
-    zhejiang: [
-      { name: '杭州市', code: '330100', center: [120.15, 30.28] },
-      { name: '宁波市', code: '330200', center: [121.55, 29.87] },
-      { name: '温州市', code: '330300', center: [120.70, 28.00] },
-      { name: '嘉兴市', code: '330400', center: [120.76, 30.77] },
-      { name: '湖州市', code: '330500', center: [120.09, 30.87] },
-      { name: '绍兴市', code: '330600', center: [120.58, 30.00] },
-      { name: '金华市', code: '330700', center: [119.65, 29.08] },
-      { name: '衢州市', code: '330800', center: [118.87, 28.94] },
-      { name: '舟山市', code: '330900', center: [122.11, 30.01] },
-      { name: '台州市', code: '331000', center: [121.42, 28.66] },
-      { name: '丽水市', code: '331100', center: [119.92, 28.45] }
+    kaizhou: [
+      { name: '凯州新城核心区', code: '510623001', center: [104.612, 30.884] },
+      { name: '辑庆片区', code: '510623002', center: [104.623, 30.920] },
+      { name: '兴隆片区', code: '510623003', center: [104.612, 30.884] },
+      { name: '成巴东片区', code: '510623004', center: [104.650, 30.860] },
+      { name: '中江县', code: '510623100', center: [104.803, 30.885] },
+      { name: '德阳市', code: '510600', center: [104.398, 31.127] },
+      { name: '成都市', code: '510100', center: [104.066, 30.572] },
+      { name: '广汉市', code: '510681', center: [104.282, 30.977] },
+      { name: '什邡市', code: '510682', center: [104.168, 31.127] },
+      { name: '绵竹市', code: '510683', center: [104.221, 31.338] },
+      { name: '罗江区', code: '510626', center: [104.510, 31.318] }
     ]
   }
 
-  const list = regions[region] || regions.zhejiang
+  const list = regions[region] || regions.kaizhou
   return list.map(r => ({
     type: 'Feature' as const,
     properties: {

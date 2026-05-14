@@ -278,7 +278,7 @@ zsyz-llm-gen/
 | 组件 | 职责 | 使用频率 |
 |------|------|---------|
 | `MainLayout.vue` | 整体布局骨架：Header(固定顶部) + Sidebar(固定左) + Content(滚动主区域) | 所有需登录页面 |
-| `AppHeader.vue` | 顶栏：Logo/标题 + 面包屑 + 全局搜索 + 通知铃铛 + 用户菜单 | 同上 |
+| `AppHeader.vue` | 顶栏：Logo/标题 + 面包屑 + 用户菜单 | 同上 |
 | `AppSidebar.vue` | 左侧菜单：递归渲染 menuConfig，支持 3 级嵌套，可折叠(220px ↔ 64px) | 同上 |
 | `Breadcrumb.vue` | 当前路径面包屑，从 route.meta.title 生成 | 同上 |
 

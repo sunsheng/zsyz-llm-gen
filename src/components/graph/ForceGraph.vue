@@ -83,7 +83,16 @@ async function render() {
   const categoryColors: Record<string, string> = {
     '上游': '#36CBCB',
     '中游': '#1889E8',
-    '下游': '#4ECB73'
+    '下游': '#4ECB73',
+    '龙头企业': '#F2637B',
+    '核心企业': '#1889E8',
+    '配套企业': '#4ECB73',
+    '投资机构': '#975FE5',
+    '人工智能': '#1889E8',
+    '新能源': '#36CBCB',
+    '生物医药': '#4ECB73',
+    '先进制造': '#FBD437',
+    '新材料': '#975FE5'
   }
 
   // Nodes
@@ -92,7 +101,23 @@ async function render() {
     .data(props.nodes)
     .join('g')
     .attr('cursor', 'pointer')
-    .on('click', (_event: MouseEvent, d: GraphNodeData) => emit('nodeClick', d))
+    .on('click', (_event: MouseEvent, d: GraphNodeData) => {
+      emit('nodeClick', d)
+      // Small ripple animation on click
+      const nodeR = 6 + (Number(d.importance || 50)) / 20
+      const ripple = d3.select(_event.currentTarget as SVGGElement)
+        .append('circle')
+        .attr('r', nodeR)
+        .attr('fill', 'none')
+        .attr('stroke', categoryColors[d.category || ''] || '#1889E8')
+        .attr('stroke-width', 2)
+        .attr('opacity', 0.8)
+      ripple.transition()
+        .duration(500)
+        .attr('r', nodeR + 20)
+        .attr('opacity', 0)
+        .remove()
+    })
     .on('mouseenter', (_event: MouseEvent, d: GraphNodeData) => {
       emit('nodeHover', d)
       const connectedIds = new Set<string>()
@@ -101,7 +126,7 @@ async function render() {
         if (e.source === d.id || (typeof e.source === 'object' && (e.source as { id: string }).id === d.id)) connectedIds.add(typeof e.target === 'string' ? e.target : (e.target as { id: string }).id)
         if (e.target === d.id || (typeof e.target === 'object' && (e.target as { id: string }).id === d.id)) connectedIds.add(typeof e.source === 'string' ? e.source : (e.source as { id: string }).id)
       })
-      node.attr('opacity', (n: GraphNodeData) => connectedIds.has(n.id) ? 1 : 0.15)
+      node.attr('opacity', (n: GraphNodeData) => connectedIds.has(n.id) ? 1 : 0.2)
       link.attr('opacity', (e: GraphEdgeData) => {
         const srcId = typeof e.source === 'string' ? e.source : (e.source as { id: string }).id
         const tgtId = typeof e.target === 'string' ? e.target : (e.target as { id: string }).id
@@ -144,14 +169,24 @@ async function render() {
     .attr('dy', 4)
     .attr('fill', '#303133')
 
-  // Force simulation
+  // Force simulation — tuned to keep nodes within visible area
   simulation = d3.forceSimulation(props.nodes as unknown as d3types.SimulationNodeDatum[])
-    .force('link', d3.forceLink(props.edges as unknown as d3types.SimulationLinkDatum<d3types.SimulationNodeDatum>[]).id((d: unknown) => (d as GraphNodeData).id).distance(100))
-    .force('charge', d3.forceManyBody().strength(-300))
+    .force('link', d3.forceLink(props.edges as unknown as d3types.SimulationLinkDatum<d3types.SimulationNodeDatum>[]).id((d: unknown) => (d as GraphNodeData).id).distance(80))
+    .force('charge', d3.forceManyBody().strength(-120).distanceMax(200))
     .force('center', d3.forceCenter(width / 2, height / 2))
     .force('collision', d3.forceCollide().radius(30))
+    .force('x', d3.forceX(width / 2).strength(0.05))
+    .force('y', d3.forceY(height / 2).strength(0.05))
 
   simulation.on('tick', () => {
+    // Constrain nodes within SVG bounds
+    const padding = 40
+    props.nodes.forEach((n: GraphNodeData & { x?: number; y?: number; fx?: number | null; fy?: number | null }) => {
+      if (n.fx != null) return
+      n.x = Math.max(padding, Math.min(width - padding, n.x || 0))
+      n.y = Math.max(padding, Math.min(height - padding, n.y || 0))
+    })
+
     link
       .attr('x1', (d: unknown) => ((d as { source: { x: number } }).source.x))
       .attr('y1', (d: unknown) => ((d as { source: { y: number } }).source.y))

@@ -11,8 +11,8 @@ const props = withDefaults(defineProps<{
   minZoom?: number
   maxZoom?: number
 }>(), {
-  center: () => [120.15, 30.28],
-  zoom: 8,
+  center: () => [104.612, 30.884],
+  zoom: 15,
   minZoom: 4,
   maxZoom: 18
 })
@@ -35,9 +35,9 @@ onMounted(async () => {
       minZoom: props.minZoom,
       maxZoom: props.maxZoom,
       baseLayer: new maptalks.TileLayer('base', {
-        urlTemplate: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-        subdomains: ['a', 'b', 'c', 'd'],
-        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+        urlTemplate: 'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
+        subdomains: ['1', '2', '3', '4'],
+        attribution: '&copy; 高德地图'
       }),
       attribution: { content: '' }
     })

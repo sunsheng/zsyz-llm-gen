@@ -16,9 +16,9 @@
         <div class="filter-section">
           <div class="filter-label">节点类型</div>
           <el-checkbox-group v-model="selectedNodeTypes" @change="updateMap">
-            <el-checkbox label="supplier">供应商</el-checkbox>
-            <el-checkbox label="manufacturer">制造商</el-checkbox>
-            <el-checkbox label="distributor">分销商</el-checkbox>
+            <el-checkbox value="supplier">供应商</el-checkbox>
+            <el-checkbox value="manufacturer">制造商</el-checkbox>
+            <el-checkbox value="distributor">分销商</el-checkbox>
           </el-checkbox-group>
         </div>
         <div class="supply-stats">
@@ -52,7 +52,7 @@
           <StatCard icon="TrendCharts" label="供应效率" value="92.5" unit="%" trend="up" trendValue="+2.3" iconColor="#FBD437" iconBgColor="#FDF6EC" />
           <StatCard icon="Warning" label="风险节点" value="7" unit="个" trend="down" trendValue="-2" iconColor="#F2637B" iconBgColor="#FEF0F0" />
         </div>
-        <MaptalksMap :center="[120.15, 30.28]" :zoom="8" @ready="onMapReady" />
+        <MaptalksMap :center="[104.612, 30.884]" :zoom="15" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <MapLegend :items="legendItems" />
       </div>
@@ -218,8 +218,8 @@ function handleNodeClick(node: SupplyNode) {
 function handleZoomIn() { mapInstance?.zoomIn() }
 function handleZoomOut() { mapInstance?.zoomOut() }
 function handleReset() {
-  mapInstance?.setCenter([120.15, 30.28])
-  mapInstance?.setZoom(8)
+  mapInstance?.setCenter([104.612, 30.884])
+  mapInstance?.setZoom(15)
   selectedChain.value = ''
   selectedNodeTypes.value = ['supplier', 'manufacturer', 'distributor']
 }

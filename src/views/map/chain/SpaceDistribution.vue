@@ -20,8 +20,8 @@
         <div class="filter-section">
           <div class="filter-label">显示模式</div>
           <el-radio-group v-model="displayMode" @change="updateHeatmap">
-            <el-radio-button label="heatmap">热力图</el-radio-button>
-            <el-radio-button label="bubble">气泡图</el-radio-button>
+            <el-radio-button value="heatmap">热力图</el-radio-button>
+            <el-radio-button value="bubble">气泡图</el-radio-button>
           </el-radio-group>
         </div>
         <div class="stats-section">
@@ -56,7 +56,7 @@
         </div>
       </MapControlPanel>
       <div class="map-page__map">
-        <MaptalksMap :center="[120.15, 30.28]" :zoom="8" @ready="onMapReady" />
+        <MaptalksMap :center="[104.612, 30.884]" :zoom="15" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <MapLegend :items="legendItems" />
       </div>
@@ -166,8 +166,8 @@ function getHeatColor(ratio: number): string {
 function handleZoomIn() { mapInstance?.zoomIn() }
 function handleZoomOut() { mapInstance?.zoomOut() }
 function handleReset() {
-  mapInstance?.setCenter([120.15, 30.28])
-  mapInstance?.setZoom(8)
+  mapInstance?.setCenter([104.612, 30.884])
+  mapInstance?.setZoom(15)
   selectedIndustry.value = ''
   intensity.value = 5
   displayMode.value = 'heatmap'

@@ -8,7 +8,7 @@
     </PageHeader>
 
     <div class="map-section">
-      <MaptalksMap :center="[120.15, 30.28]" :zoom="8" height="600px">
+      <MaptalksMap :center="[104.612, 30.884]" :zoom="15" height="600px">
         <MapLayerToggle :layers="layers" />
         <MapLegend :items="legendItems" />
         <MapToolbar />

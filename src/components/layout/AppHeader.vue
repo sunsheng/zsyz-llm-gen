@@ -18,14 +18,6 @@
     <div class="app-header__right">
       <Breadcrumb />
       <div class="app-header__actions">
-        <el-tooltip content="全局搜索" placement="bottom">
-          <el-icon :size="20" class="app-header__icon-btn"><Search /></el-icon>
-        </el-tooltip>
-        <el-tooltip content="消息通知" placement="bottom">
-          <el-badge :value="3" :max="99">
-            <el-icon :size="20" class="app-header__icon-btn"><Bell /></el-icon>
-          </el-badge>
-        </el-tooltip>
         <el-dropdown trigger="click" @command="handleCommand">
           <div class="app-header__user">
             <el-avatar :size="32" icon="UserFilled" />

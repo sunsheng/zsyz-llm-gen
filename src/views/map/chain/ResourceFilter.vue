@@ -30,9 +30,9 @@
         <div class="filter-section">
           <div class="filter-label">资源类型</div>
           <el-checkbox-group v-model="filters.types" @change="applyFilters">
-            <el-checkbox label="enterprise">企业</el-checkbox>
-            <el-checkbox label="park">园区</el-checkbox>
-            <el-checkbox label="institution">机构</el-checkbox>
+            <el-checkbox value="enterprise">企业</el-checkbox>
+            <el-checkbox value="park">园区</el-checkbox>
+            <el-checkbox value="institution">机构</el-checkbox>
           </el-checkbox-group>
         </div>
         <div class="filter-section">
@@ -69,7 +69,7 @@
         </div>
       </MapControlPanel>
       <div class="map-page__map">
-        <MaptalksMap :center="[120.15, 30.28]" :zoom="8" @ready="onMapReady" />
+        <MaptalksMap :center="[104.612, 30.884]" :zoom="15" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <MapLegend :items="legendItems" />
       </div>
@@ -204,15 +204,15 @@ function resetFilters() {
 function handleMarkerClick(marker: MapMarker) {
   if (mapInstance) {
     mapInstance.setCenter([marker.longitude, marker.latitude])
-    mapInstance.setZoom(12)
+    mapInstance.setZoom(15)
   }
 }
 
 function handleZoomIn() { mapInstance?.zoomIn() }
 function handleZoomOut() { mapInstance?.zoomOut() }
 function handleReset() {
-  mapInstance?.setCenter([120.15, 30.28])
-  mapInstance?.setZoom(8)
+  mapInstance?.setCenter([104.612, 30.884])
+  mapInstance?.setZoom(15)
   resetFilters()
 }
 

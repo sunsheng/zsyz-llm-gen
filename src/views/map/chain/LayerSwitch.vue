@@ -31,7 +31,7 @@
         </div>
       </MapControlPanel>
       <div class="map-page__map">
-        <MaptalksMap :center="[120.15, 30.28]" :zoom="8" @ready="onMapReady" />
+        <MaptalksMap :center="[104.612, 30.884]" :zoom="15" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <MapLegend :items="currentLegendItems" />
       </div>
@@ -194,17 +194,17 @@ async function renderActiveLayers() {
   if (activeLayers.value.includes('boundary')) {
     const layer = new maptalks.VectorLayer('boundary-layer').addTo(mapInstance)
     const cities = [
-      { name: '杭州市', lng: 120.15, lat: 30.28 },
-      { name: '宁波市', lng: 121.55, lat: 29.87 },
-      { name: '温州市', lng: 120.70, lat: 28.00 },
-      { name: '嘉兴市', lng: 120.76, lat: 30.77 },
-      { name: '湖州市', lng: 120.09, lat: 30.87 },
-      { name: '绍兴市', lng: 120.58, lat: 30.00 },
-      { name: '金华市', lng: 119.65, lat: 29.08 },
-      { name: '衢州市', lng: 118.87, lat: 28.94 },
-      { name: '舟山市', lng: 122.11, lat: 30.01 },
-      { name: '台州市', lng: 121.42, lat: 28.66 },
-      { name: '丽水市', lng: 119.92, lat: 28.45 }
+      { name: '凯州新城核心区', lng: 104.612, lat: 30.884 },
+      { name: '辑庆片区', lng: 104.623, lat: 30.920 },
+      { name: '兴隆片区', lng: 104.612, lat: 30.884 },
+      { name: '成巴东片区', lng: 104.650, lat: 30.860 },
+      { name: '中江县', lng: 104.803, lat: 30.885 },
+      { name: '德阳市', lng: 104.398, lat: 31.127 },
+      { name: '成都市', lng: 104.066, lat: 30.572 },
+      { name: '广汉市', lng: 104.282, lat: 30.977 },
+      { name: '什邡市', lng: 104.168, lat: 31.127 },
+      { name: '绵竹市', lng: 104.221, lat: 31.338 },
+      { name: '罗江区', lng: 104.510, lat: 31.318 }
     ]
     cities.forEach(c => {
       layer.addGeometry(new maptalks.Marker([c.lng, c.lat], {
@@ -253,8 +253,8 @@ async function renderActiveLayers() {
 function handleZoomIn() { mapInstance?.zoomIn() }
 function handleZoomOut() { mapInstance?.zoomOut() }
 function handleReset() {
-  mapInstance?.setCenter([120.15, 30.28])
-  mapInstance?.setZoom(8)
+  mapInstance?.setCenter([104.612, 30.884])
+  mapInstance?.setZoom(15)
 }
 
 onUnmounted(() => {

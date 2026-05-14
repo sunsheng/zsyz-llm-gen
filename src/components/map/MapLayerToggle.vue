@@ -2,7 +2,7 @@
   <div class="map-layer-toggle">
     <div class="map-layer-toggle__title">图层控制</div>
     <el-checkbox-group v-model="activeLayers" @change="handleChange">
-      <el-checkbox v-for="layer in layers" :key="layer.id" :label="layer.id">
+      <el-checkbox v-for="layer in layers" :key="layer.id" :value="layer.id">
         <span class="map-layer-toggle__dot" :style="{ background: layer.color || '#1889E8' }" />
         {{ layer.name }}
       </el-checkbox>

@@ -16,9 +16,9 @@
         <div class="filter-section">
           <div class="filter-label">节点类型</div>
           <el-checkbox-group v-model="selectedTypes" @change="updateMap">
-            <el-checkbox label="rd">研发机构</el-checkbox>
-            <el-checkbox label="lab">重点实验室</el-checkbox>
-            <el-checkbox label="patent">专利集群</el-checkbox>
+            <el-checkbox value="rd">研发机构</el-checkbox>
+            <el-checkbox value="lab">重点实验室</el-checkbox>
+            <el-checkbox value="patent">专利集群</el-checkbox>
           </el-checkbox-group>
         </div>
         <div class="tech-stats">
@@ -66,7 +66,7 @@
           <StatCard icon="Medal" label="专利总数" :value="totalPatents" unit="项" trend="up" trendValue="+120" iconColor="#4ECB73" iconBgColor="#F0F9EB" />
           <StatCard icon="TrendCharts" label="技术转化率" value="78.6" unit="%" trend="up" trendValue="+3.2" iconColor="#FBD437" iconBgColor="#FDF6EC" />
         </div>
-        <MaptalksMap :center="[120.15, 30.28]" :zoom="8" @ready="onMapReady" />
+        <MaptalksMap :center="[104.612, 30.884]" :zoom="15" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <MapLegend :items="legendItems" />
       </div>
@@ -201,15 +201,15 @@ async function updateMap() {
 function handleNodeClick(node: TechNode) {
   if (mapInstance) {
     mapInstance.setCenter([node.lng, node.lat])
-    mapInstance.setZoom(12)
+    mapInstance.setZoom(15)
   }
 }
 
 function handleZoomIn() { mapInstance?.zoomIn() }
 function handleZoomOut() { mapInstance?.zoomOut() }
 function handleReset() {
-  mapInstance?.setCenter([120.15, 30.28])
-  mapInstance?.setZoom(8)
+  mapInstance?.setCenter([104.612, 30.884])
+  mapInstance?.setZoom(15)
   selectedField.value = ''
   selectedTypes.value = ['rd', 'lab', 'patent']
 }
