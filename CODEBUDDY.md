@@ -104,6 +104,44 @@ Key visual rules:
 - NProgress bar on route change, color #1889E8, height 3px
 - Chart colors: `['#1889E8','#36CBCB','#4ECB73','#FBD437','#F2637B','#975FE5']`
 
+## Git Workflow
+
+代码通过 **GitHub PR** 合并到 `main`，禁止直接 push 到 `main`。
+
+### 流程
+
+1. **总结变更** — push 前，先检查本地与远程的差异，总结修改内容
+2. **创建 feature 分支** — 根据变更内容命名，格式 `features/<描述性名称>`（如 `features/project-scaffold`、`features/login-page`）
+3. **提交并推送** — 在 feature 分支上提交代码，push 到远程
+4. **创建 PR** — 在 GitHub 上创建 PR，目标分支为 `main`，填写变更说明
+5. **合并后清理** — 合并后切换到 `main`，pull 最新代码，删除本地 feature 分支
+
+### 禁止
+
+- 直接 push 到 `main` 分支
+- 使用无意义或示例性的分支名（如 `features/xxx`、`features/test`）
+
+### 示例
+
+```bash
+# 1. 总结变更
+git status
+git diff --stat
+
+# 2. 创建并切换到 feature 分支
+git checkout -b features/project-scaffold
+
+# 3. 提交并推送
+git add -A && git commit -m "feat: 描述变更"
+git push -u origin features/project-scaffold
+
+# 4. 在 GitHub 上创建 PR (main ← features/project-scaffold)
+
+# 5. 合并后清理
+git checkout main && git pull origin main
+git branch -d features/project-scaffold
+```
+
 ## Reference Documents
 
 - **PRD**: `docs/PRD.md` — Complete functional spec (10 modules, 140 features, route table, page type definitions, layout diagrams)
