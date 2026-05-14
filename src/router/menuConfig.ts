@@ -336,12 +336,12 @@ export const menuConfig: MenuItem[] = [
     path: '/monitor',
     children: [
       {
-        title: '总览',
+        title: '企业总览',
         path: '/monitor/overview',
         children: [
-          { title: '监测总览', path: '/monitor/overview/summary' },
-          { title: '监测仪表盘', path: '/monitor/overview/dashboard' },
-          { title: '监测地图', path: '/monitor/overview/map' },
+          { title: '基础信息总览', path: '/monitor/overview/basic-info' },
+          { title: '经济贡献分析', path: '/monitor/overview/economic-contribution' },
+          { title: '动态排名', path: '/monitor/overview/dynamic-ranking' },
         ],
       },
       {

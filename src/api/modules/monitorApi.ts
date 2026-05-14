@@ -7,6 +7,10 @@ import {
   getMockEnterpriseDistribution,
   getMockEvaluationData,
   getMockPortraitData,
+  getMockEnterpriseBasicList,
+  getMockEconomicContribution,
+  getMockDynamicRanking,
+  getMockOverviewKpi,
 } from '@/api/mock/monitor'
 import { getMockEnterpriseList, getMockEnterpriseDetail } from '@/api/mock/enterprises'
 import type { PaginatedData } from '@/api/types/common'
@@ -63,5 +67,31 @@ export function fetchEvaluationData() {
 export function fetchPortraitData(id: string) {
   return new Promise((resolve) => {
     setTimeout(() => resolve(getMockPortraitData(id)), 200)
+  })
+}
+
+// ===== 10.1 企业总览 =====
+
+export function fetchOverviewKpi() {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(getMockOverviewKpi()), 200)
+  })
+}
+
+export function fetchEnterpriseBasicList(count = 20) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(getMockEnterpriseBasicList(count)), 200)
+  })
+}
+
+export function fetchEconomicContribution() {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(getMockEconomicContribution()), 200)
+  })
+}
+
+export function fetchDynamicRanking(count = 20, sortBy: 'tax' | 'employment' | 'rd' = 'tax') {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(getMockDynamicRanking(count, sortBy)), 200)
   })
 }
