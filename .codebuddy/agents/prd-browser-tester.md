@@ -407,6 +407,136 @@ Before finalizing your output, verify:
 - **Tool Selection**: Default to Playwright for structured tests. Use agent-browser for exploratory/quick checks. Never use banned tools.
 - **CDP First**: Always connect to the system browser via CDP protocol. This is non-negotiable — the tests must validate the actual running application with real user sessions, not a sterile headless environment.
 
+## Existing Test Infrastructure
+
+The project already has a well-structured Playwright test suite. Before writing new tests, understand the existing architecture to maintain consistency.
+
+### Test Files
+
+| File                            | Phase | Tests | Scope                                                                                             |
+| ------------------------------- | ----- | ----- | ------------------------------------------------------------------------------------------------- |
+| `tests/e2e/phase1-test.spec.ts` | 1     | ~10   | Login page, auth flow                                                                             |
+| `tests/e2e/phase2-test.spec.ts` | 2     | ~18   | Dashboard, sidebar, layout shell, common components                                               |
+| `tests/e2e/phase3-test.spec.ts` | 3     | 42    | 产业地图(9) + 产业图谱(8) + 运行分析(25)                                                          |
+| `tests/e2e/phase4-test.spec.ts` | 4     | 86    | 产业动态(4) + 区域对标(8) + 风险预警(6) + 区域地图(3) + 精准招商(39) + 招商情报(9) + 企业监测(16) |
+
+### Shared Helpers
+
+| File                               | Purpose                                                                                                                  |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `tests/e2e/helpers/auth.ts`        | `gotoWithAuth(page, route)` — navigates to a route and handles mock auth (localStorage token injection)                  |
+| `tests/e2e/helpers/log-capture.ts` | `capturePageLogs(page)` — collects failed requests (4xx/5xx) and console errors; `assertClean()` fails test if any found |
+| `tests/e2e/helpers/types.ts`       | `RouteDef` type — `{ route: string; title: string; pageType: 'dashboard' \| 'list' \| 'map' \| 'graph' }`                |
+
+### Established Test Pattern
+
+All Phase 3/4 tests follow a **data-driven route-group pattern**:
+
+```typescript
+import { test, expect } from '@playwright/test'
+import { gotoWithAuth } from './helpers/auth'
+import { capturePageLogs } from './helpers/log-capture'
+import type { RouteDef } from './helpers/types'
+
+const ROUTE_GROUP: RouteDef[] = [
+  { route: '/module/sub/page', title: '页面标题', pageType: 'dashboard' },
+  // ...
+]
+
+async function assertPageType(page: Page, pageType: RouteDef['pageType']) {
+  if (pageType === 'dashboard') {
+    // Check for stat-card, base-chart, chart-panel, canvas, el-table
+  } else if (pageType === 'list') {
+    // Check for el-table, el-card, list-item/news-item/project-card/enterprise-card, el-input
+  } else if (pageType === 'map') {
+    // Check for .maptalks-map
+  } else if (pageType === 'graph') {
+    // Check for svg, .graph-page__canvas
+  }
+}
+
+function testRouteGroup(describeName: string, routes: RouteDef[]) {
+  test.describe(`Phase N: ${describeName}`, () => {
+    for (const { route, title, pageType } of routes) {
+      test(`${title} (${route})`, async ({ page }) => {
+        const logs = capturePageLogs(page)
+        await gotoWithAuth(page, route)
+
+        expect(page.url()).not.toContain('/login')
+        expect(page.url()).not.toContain('error/404')
+
+        const bodyText = await page.locator('body').innerText()
+        expect(bodyText.trim().length, '页面不应为空').toBeGreaterThan(5)
+
+        const headerCount = await page.locator('.page-header').count()
+        const h2Count = await page.locator('h2').count()
+        expect(headerCount + h2Count, 'PageHeader 或 h2 应存在').toBeGreaterThan(0)
+
+        await assertPageType(page, pageType)
+        logs.assertClean()
+      })
+    }
+  })
+}
+
+testRouteGroup('模块名', ROUTE_GROUP)
+```
+
+**When adding new tests for new pages**, follow this exact pattern:
+
+1. Define a `RouteDef[]` array for the new routes
+2. Add the `assertPageType` checks if the page type is new
+3. Call `testRouteGroup()` at the bottom
+4. Each route entry must match a real route in `src/router/routes.ts`
+
+### Known Flakiness & Mitigation
+
+The 154-test sequential suite (1 worker) runs ~10 minutes. Known issues:
+
+1. **Empty page assertion flakiness** (`页面不应为空`): In long sequential runs, some pages may not finish rendering before the `bodyText` assertion executes. **Mitigation**: Add `await page.waitForLoadState('networkidle')` or `await page.waitForSelector('.page-header', { timeout: 10000 })` before assertions on pages that load async data.
+
+2. **Browser channel closed** (last tests in suite): Chromium may crash or be killed near the end of long runs. The `CVDisplayLinkCreateWithCGDisplay failed` macOS error is a known Chromium display issue. **Mitigation**: This is infrastructure-level; re-running the failing test in isolation almost always passes.
+
+3. **Element Plus deprecation warnings**: `[el-link] [API] The underline option (boolean) is about to be deprecated` — these are `ElementPlusError` warnings logged to console but caught by `capturePageLogs`. The existing `log-capture.ts` filters these as needed.
+
+### Running Tests
+
+```bash
+# Full suite
+npm run test:e2e
+
+# Specific phase
+npx playwright test tests/e2e/phase4-test.spec.ts
+
+# Single test (by title)
+npx playwright test tests/e2e/phase4-test.spec.ts -g "关系目标"
+
+# Debug mode (headed, slow)
+npx playwright test --debug tests/e2e/phase3-test.spec.ts
+
+# With trace on failure
+npx playwright test --trace on-first-retry
+```
+
+### Playwright Configuration
+
+The project uses `playwright.config.ts` with:
+
+- **1 worker** (sequential execution — avoids resource contention on macOS)
+- **Chromium only** (single browser project)
+- **Base URL**: `http://localhost:5173`
+- **Screenshot on failure**: enabled
+- **Video on failure**: enabled (retained on failure)
+- **Trace**: on-first-retry
+- **Dev server**: auto-starts `npm run dev` if not running
+
+### Test Results
+
+Test results are stored in `test-results/`:
+
+- Failed tests generate: `error-context.md`, `test-failed-1.png`, `video.webm`
+- All artifacts (screenshots, videos) also stored in `.playwright-artifacts-1/`
+
 ## Output Format
 
 1. **Requirements Analysis Summary**: Brief overview of what the PRD contains

@@ -33,6 +33,10 @@ defineEmits<{
   gap: 8px;
   align-items: center;
 
+  :deep(.el-button + .el-button) {
+    margin-left: 0;
+  }
+
   .el-button {
     width: 56px;
     height: 56px;

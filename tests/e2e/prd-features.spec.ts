@@ -4,7 +4,7 @@
  * 迁移自: prd-features.spec.py
  */
 import { test, expect } from '@playwright/test'
-import { injectAuth, clearAuth } from './helpers/auth'
+import { gotoWithAuth, injectAuth } from './helpers/auth'
 import { capturePageLogs } from './helpers/log-capture'
 
 test.describe('1. 登录页', () => {
@@ -81,10 +81,7 @@ test.describe('1. 登录页', () => {
 
 test.describe('2. 主布局', () => {
   test.beforeEach(async ({ page }) => {
-    await injectAuth(page)
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1500)
+    await gotoWithAuth(page, '/')
   })
 
   test('PRD-2.1: Header、Sidebar、Content 三栏布局', async ({ page }) => {
@@ -146,10 +143,7 @@ test.describe('2. 主布局', () => {
 
 test.describe('3. 侧边栏导航', () => {
   test.beforeEach(async ({ page }) => {
-    await injectAuth(page)
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1500)
+    await gotoWithAuth(page, '/')
   })
 
   test('PRD-3.1: 展开"运行分析"子菜单', async ({ page }) => {
@@ -186,10 +180,7 @@ test.describe('3. 侧边栏导航', () => {
 
 test.describe('4. 侧边栏折叠/展开', () => {
   test('PRD-4.1: 折叠与展开', async ({ page }) => {
-    await injectAuth(page)
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1500)
+    await gotoWithAuth(page, '/')
 
     const sidebar = page.locator('.app-sidebar')
     const widthBefore = await sidebar.first().evaluate((el) => el.offsetWidth)
@@ -226,10 +217,7 @@ test.describe('5. 页面路由导航', () => {
 
   for (const { route, title } of routesToTest) {
     test(`PRD-5: ${route}`, async ({ page }) => {
-      await injectAuth(page)
-      await page.goto(route)
-      await page.waitForLoadState('networkidle')
-      await page.waitForTimeout(1200)
+      await gotoWithAuth(page, route)
 
       const pageTitle = page.locator('.page-header__title')
       const hasTitle = await pageTitle.count()
@@ -246,10 +234,7 @@ test.describe('5. 页面路由导航', () => {
 
 test.describe('6. 404 页面', () => {
   test('PRD-6.1: 无效路由显示404', async ({ page }) => {
-    await injectAuth(page)
-    await page.goto('/nonexistent-page-xyz')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1500)
+    await gotoWithAuth(page, '/nonexistent-page-xyz')
 
     const errorCode = page.locator('text=404')
     const errorMsg = page.locator('text=页面不存在')
@@ -260,10 +245,7 @@ test.describe('6. 404 页面', () => {
 
 test.describe('7. 退出登录', () => {
   test('PRD-7.1: 退出后跳转登录页', async ({ page }) => {
-    await injectAuth(page)
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(800)
+    await gotoWithAuth(page, '/')
 
     const userDropdown = page.locator('.app-header__user')
     if ((await userDropdown.count()) > 0) {
@@ -316,10 +298,7 @@ test.describe('8. 视觉设计校验', () => {
   })
 
   test('PRD-8.2: 主页面视觉规范', async ({ page }) => {
-    await injectAuth(page)
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1500)
+    await gotoWithAuth(page, '/')
 
     // Body has background color
     const bodyBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor)

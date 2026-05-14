@@ -14,7 +14,10 @@
     "format:check": "prettier --check .",
     "lint:style": "stylelint \"src/**/*.{css,scss,vue}\"",
     "lint:style:fix": "stylelint \"src/**/*.{css,scss,vue}\" --fix",
-    "check-all": "npm run lint && npm run format:check && npm run lint:style && vue-tsc --noEmit"
+    "check-all": "npm run lint && npm run format:check && npm run lint:style && vue-tsc --noEmit",
+    "test:e2e": "playwright test --config=playwright.config.ts",
+    "test:e2e:ui": "playwright test --config=playwright.config.ts --ui",
+    "test:e2e:debug": "playwright test --config=playwright.config.ts --debug"
   },
   "lint-staged": {
     "*.{vue,js,jsx,ts,tsx}": [

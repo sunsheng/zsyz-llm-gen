@@ -4,7 +4,7 @@
  * 迁移自: phase3-test.spec.py
  */
 import { test, expect } from '@playwright/test'
-import { ensureAuth } from './helpers/auth'
+import { gotoWithAuth } from './helpers/auth'
 import { capturePageLogs } from './helpers/log-capture'
 import type { RouteDef } from './helpers/types'
 
@@ -65,10 +65,7 @@ test.describe('Phase 3: 产业地图', () => {
   for (const { route, title } of MAP_ROUTES) {
     test(`${title} (${route})`, async ({ page }) => {
       const logs = capturePageLogs(page)
-      await ensureAuth(page)
-      await page.goto(route)
-      await page.waitForLoadState('networkidle')
-      await page.waitForTimeout(2500)
+      await gotoWithAuth(page, route)
 
       // Not redirected to login
       expect(page.url()).not.toContain('/login')
@@ -97,10 +94,7 @@ test.describe('Phase 3: 产业图谱', () => {
   for (const { route, title } of ATLAS_ROUTES) {
     test(`${title} (${route})`, async ({ page }) => {
       const logs = capturePageLogs(page)
-      await ensureAuth(page)
-      await page.goto(route)
-      await page.waitForLoadState('networkidle')
-      await page.waitForTimeout(2500)
+      await gotoWithAuth(page, route)
 
       expect(page.url()).not.toContain('/login')
       expect(page.url()).not.toContain('error/404')
@@ -123,10 +117,7 @@ test.describe('Phase 3: 运行分析', () => {
   for (const { route, title } of ANALYSIS_ROUTES) {
     test(`${title} (${route})`, async ({ page }) => {
       const logs = capturePageLogs(page)
-      await ensureAuth(page)
-      await page.goto(route)
-      await page.waitForLoadState('networkidle')
-      await page.waitForTimeout(2500)
+      await gotoWithAuth(page, route)
 
       expect(page.url()).not.toContain('/login')
       expect(page.url()).not.toContain('error/404')
