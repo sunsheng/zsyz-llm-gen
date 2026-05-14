@@ -107,14 +107,16 @@ Key visual rules:
 ## Git Workflow
 
 代码通过 **GitHub PR** 合并到 `main`，禁止直接 push 到 `main`。
+使用 `gh` CLI（已登录，ready 状态）进行 PR 创建、远程分支管理等操作。
 
 ### 流程
 
-1. **总结变更** — 对比本地与远程 main 的所有提交差异（`git log origin/main..HEAD --oneline`），根据提交内容总结命名
-2. **创建 feature 分支** — 根据总结的变更内容命名，格式 `features/<描述性名称>`（如 `features/project-scaffold`、`features/login-page`）
-3. **提交并推送** — 在 feature 分支上提交代码，push 到远程
-4. **创建 PR** — 在 GitHub 上创建 PR，目标分支为 `main`，填写变更说明
-5. **合并后清理** — 合并后切换到 `main`，pull 最新代码，删除本地和远程 feature 分支，清理缓存引用
+1. **提交代码** — 先将变更提交到本地（`git add -A && git commit -m "feat: 描述变更"`）
+2. **总结变更** — 对比本地与远程 main 的所有提交差异（`git log origin/main..HEAD --oneline`），根据提交内容总结命名
+3. **创建 feature 分支** — 根据总结的变更内容命名，格式 `features/<描述性名称>`（如 `features/project-scaffold`、`features/login-page`）
+4. **推送** — 将 feature 分支 push 到远程
+5. **创建 PR** — 使用 `gh pr create` 创建 PR，目标分支为 `main`，填写变更说明
+6. **合并后清理** — 合并后切换到 `main`，pull 最新代码，删除本地和远程 feature 分支，清理缓存引用
 
 ### 禁止
 
@@ -125,21 +127,24 @@ Key visual rules:
 ### 示例
 
 ```bash
-# 1. 总结变更（对比本地与远程 main 的提交差异）
+# 1. 提交代码
 git add -A && git commit -m "feat: 描述变更"
+
+# 2. 总结变更（对比本地与远程 main 的提交差异）
 git fetch origin
 git log origin/main..HEAD --oneline
 # 根据提交总结，决定分支名称
 
-# 2. 创建并切换到 feature 分支
+# 3. 创建并切换到 feature 分支
 git checkout -b features/project-scaffold
 
-# 3. 提交并推送
+# 4. 推送到远程
 git push -u origin features/project-scaffold
 
-# 4. 在 GitHub 上创建 PR (main ← features/project-scaffold)
+# 5. 使用 gh CLI 创建 PR (main ← features/project-scaffold)
+gh pr create --base main --head features/project-scaffold --title "feat: 描述变更" --body "变更说明"
 
-# 5. 合并后清理
+# 6. 合并后清理
 git checkout main && git pull origin main
 git branch -d features/project-scaffold
 git push origin --delete features/project-scaffold

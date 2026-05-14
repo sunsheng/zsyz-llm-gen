@@ -26,16 +26,16 @@ export const menuConfig: MenuItem[] = [
         title: '供应链地图',
         path: '/map/supply',
         children: [
-          { title: '供应链总览', path: '/map/supply/overview' },
-          { title: '供应链详情', path: '/map/supply/detail' },
+          { title: '规上企业分布', path: '/map/supply/enterprise' },
+          { title: '配套资源分布', path: '/map/supply/resources' },
         ],
       },
       {
         title: '技术链地图',
         path: '/map/tech',
         children: [
-          { title: '技术链总览', path: '/map/tech/overview' },
-          { title: '技术链详情', path: '/map/tech/detail' },
+          { title: '产业地图操作', path: '/map/tech/operate' },
+          { title: '产业地图配置', path: '/map/tech/config' },
         ],
       },
     ],
