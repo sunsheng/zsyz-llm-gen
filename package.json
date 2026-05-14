@@ -27,7 +27,7 @@
     "*.{css,scss,vue}": [
       "stylelint --fix"
     ],
-    "*.{json,md,yml,yaml}": [
+    "*.{json,md,yml,yaml,html}": [
       "prettier --write"
     ]
   },

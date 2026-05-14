@@ -109,14 +109,31 @@ Key visual rules:
 代码通过 **GitHub PR** 合并到 `main`，禁止直接 push 到 `main`。
 使用 `gh` CLI（已登录，ready 状态）进行 PR 创建、远程分支管理等操作。
 
+### 本地检查（husky pre-commit hook）
+
+项目已配置 husky + lint-staged，`git commit` 时自动运行：
+
+- ESLint — 修复 JS/TS/Vue 代码问题
+- Prettier — 格式化 JS/TS/Vue/JSON/MD/YAML/HTML 文件
+- Stylelint — 修复 CSS/SCSS/Vue 样式问题
+
+**推送前**建议手动运行全量检查（与 CI 一致），避免 PR 报错：
+
+```bash
+npm run check-all
+```
+
+等价于 CI 中的 `lint` + `format:check` + `lint:style` + `vue-tsc --noEmit`。
+
 ### 流程
 
-1. **提交代码** — 先将变更提交到本地（`git add -A && git commit -m "feat: 描述变更"`）
-2. **总结变更** — 对比本地与远程 main 的所有提交差异（`git log origin/main..HEAD --oneline`），根据提交内容总结命名
-3. **创建 feature 分支** — 根据总结的变更内容命名，格式 `features/<描述性名称>`（如 `features/project-scaffold`、`features/login-page`）
-4. **推送** — 将 feature 分支 push 到远程
-5. **创建 PR** — 使用 `gh pr create` 创建 PR，目标分支为 `main`，填写变更说明
-6. **合并后清理** — 合并后切换到 `main`，pull 最新代码，删除本地和远程 feature 分支，清理缓存引用
+1. **提交代码** — 先将变更提交到本地（`git add -A && git commit -m "feat: 描述变更"`），husky 自动执行 lint-staged
+2. **本地验证** — 推送前运行 `npm run check-all` 确保与 CI 一致
+3. **总结变更** — 对比本地与远程 main 的所有提交差异（`git log origin/main..HEAD --oneline`），根据提交内容总结命名
+4. **创建 feature 分支** — 根据总结的变更内容命名，格式 `features/<描述性名称>`（如 `features/project-scaffold`、`features/login-page`）
+5. **推送** — 将 feature 分支 push 到远程
+6. **创建 PR** — 使用 `gh pr create` 创建 PR，目标分支为 `main`，填写变更说明
+7. **合并后清理** — 合并后切换到 `main`，pull 最新代码，删除本地和远程 feature 分支，清理缓存引用
 
 ### 禁止
 
@@ -127,24 +144,27 @@ Key visual rules:
 ### 示例
 
 ```bash
-# 1. 提交代码
+# 1. 提交代码（husky 自动执行 lint-staged）
 git add -A && git commit -m "feat: 描述变更"
 
-# 2. 总结变更（对比本地与远程 main 的提交差异）
+# 2. 本地验证（与 CI 一致的完整检查）
+npm run check-all
+
+# 3. 总结变更（对比本地与远程 main 的提交差异）
 git fetch origin
 git log origin/main..HEAD --oneline
 # 根据提交总结，决定分支名称
 
-# 3. 创建并切换到 feature 分支
+# 4. 创建并切换到 feature 分支
 git checkout -b features/project-scaffold
 
-# 4. 推送到远程
+# 5. 推送到远程
 git push -u origin features/project-scaffold
 
-# 5. 使用 gh CLI 创建 PR (main ← features/project-scaffold)
+# 6. 使用 gh CLI 创建 PR (main ← features/project-scaffold)
 gh pr create --base main --head features/project-scaffold --title "feat: 描述变更" --body "变更说明"
 
-# 6. 合并后清理
+# 7. 合并后清理
 git checkout main && git pull origin main
 git branch -d features/project-scaffold
 git push origin --delete features/project-scaffold
