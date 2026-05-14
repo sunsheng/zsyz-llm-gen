@@ -5,7 +5,7 @@
  * 迁移自: phase4-test.spec.py
  */
 import { test, expect } from '@playwright/test'
-import { ensureAuth } from './helpers/auth'
+import { gotoWithAuth } from './helpers/auth'
 import { capturePageLogs } from './helpers/log-capture'
 import type { RouteDef } from './helpers/types'
 
@@ -155,10 +155,7 @@ function testRouteGroup(describeName: string, routes: RouteDef[]) {
     for (const { route, title, pageType } of routes) {
       test(`${title} (${route})`, async ({ page }) => {
         const logs = capturePageLogs(page)
-        await ensureAuth(page)
-        await page.goto(route)
-        await page.waitForLoadState('networkidle')
-        await page.waitForTimeout(2500)
+        await gotoWithAuth(page, route)
 
         // Not redirected to login
         expect(page.url()).not.toContain('/login')
