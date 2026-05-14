@@ -5,6 +5,8 @@ dist
 *.log
 *.zip
 conversation-*.txt
+exported_sessions/
+exported_sessions_md/
 
 # Lint cache
 .eslintcache

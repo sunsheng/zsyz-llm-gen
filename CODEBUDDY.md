@@ -126,6 +126,7 @@ Key visual rules:
 
 ```bash
 # 1. 总结变更（对比本地与远程 main 的提交差异）
+git add -A && git commit -m "feat: 描述变更"
 git fetch origin
 git log origin/main..HEAD --oneline
 # 根据提交总结，决定分支名称
@@ -134,7 +135,6 @@ git log origin/main..HEAD --oneline
 git checkout -b features/project-scaffold
 
 # 3. 提交并推送
-git add -A && git commit -m "feat: 描述变更"
 git push -u origin features/project-scaffold
 
 # 4. 在 GitHub 上创建 PR (main ← features/project-scaffold)
@@ -150,4 +150,4 @@ git remote prune origin
 
 - **PRD**: `docs/PRD.md` — Complete functional spec (10 modules, 140 features, route table, page type definitions, layout diagrams)
 - **Dev Prompt**: `docs/FrontendDevPrompt.md` — AI-executable build instructions (directory tree, component specs, mock architecture, nginx config, phased implementation plan)
-- **Source of truth for features**: `九、产业招商平台.xlsx` (Excel with 10一级/40二级/140三级功能 rows)
+- **Source of truth for features**: `docs/九、产业招商平台.xlsx` (Excel with 10一级/40二级/140三级功能 rows)
