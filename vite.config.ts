@@ -9,20 +9,20 @@ export default defineConfig({
   base: './',
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src')
-    }
+      '@': path.resolve(__dirname, 'src'),
+    },
   },
   plugins: [
     vue(),
     AutoImport({
       imports: ['vue', 'vue-router', 'pinia'],
       resolvers: [ElementPlusResolver()],
-      dts: 'src/auto-imports.d.ts'
+      dts: 'src/auto-imports.d.ts',
     }),
     Components({
       resolvers: [ElementPlusResolver()],
-      dts: 'src/components.d.ts'
-    })
+      dts: 'src/components.d.ts',
+    }),
   ],
   build: {
     outDir: 'dist',
@@ -34,17 +34,17 @@ export default defineConfig({
           'vendor-element': ['element-plus'],
           'vendor-echarts': ['echarts', 'vue-echarts'],
           'vendor-d3': ['d3'],
-          'vendor-maptalks': ['maptalks']
-        }
-      }
-    }
+          'vendor-maptalks': ['maptalks'],
+        },
+      },
+    },
   },
   css: {
     preprocessorOptions: {
       scss: {
         additionalData: `@use "@/assets/styles/variables.scss" as *;\n`,
-        api: 'modern-compiler'
-      }
-    }
-  }
+        api: 'modern-compiler',
+      },
+    },
+  },
 })

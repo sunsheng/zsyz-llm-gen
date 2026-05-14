@@ -1,21 +1,24 @@
 <template>
-  <div ref="mapContainer" class="maptalks-map" :id="mapId" />
+  <div :id="mapId" ref="mapContainer" class="maptalks-map"></div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 
-const props = withDefaults(defineProps<{
-  center?: [number, number]
-  zoom?: number
-  minZoom?: number
-  maxZoom?: number
-}>(), {
-  center: () => [104.612, 30.884],
-  zoom: 15,
-  minZoom: 4,
-  maxZoom: 18
-})
+const props = withDefaults(
+  defineProps<{
+    center?: [number, number]
+    zoom?: number
+    minZoom?: number
+    maxZoom?: number
+  }>(),
+  {
+    center: () => [104.612, 30.884],
+    zoom: 15,
+    minZoom: 4,
+    maxZoom: 18,
+  },
+)
 
 const emit = defineEmits<{
   ready: [map: unknown]
@@ -35,11 +38,12 @@ onMounted(async () => {
       minZoom: props.minZoom,
       maxZoom: props.maxZoom,
       baseLayer: new maptalks.TileLayer('base', {
-        urlTemplate: 'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
+        urlTemplate:
+          'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
         subdomains: ['1', '2', '3', '4'],
-        attribution: '&copy; 高德地图'
+        attribution: '&copy; 高德地图',
       }),
-      attribution: { content: '' }
+      attribution: { content: '' },
     })
 
     map.on('click', (e: unknown) => emit('click', e))
@@ -50,21 +54,33 @@ onMounted(async () => {
   }
 })
 
-watch(() => props.center, (val) => {
-  if (mapInstance && typeof (mapInstance as { setCenter: (c: number[]) => void }).setCenter === 'function') {
-    (mapInstance as { setCenter: (c: number[]) => void }).setCenter(val)
-  }
-})
+watch(
+  () => props.center,
+  (val) => {
+    if (
+      mapInstance &&
+      typeof (mapInstance as { setCenter: (c: number[]) => void }).setCenter === 'function'
+    ) {
+      ;(mapInstance as { setCenter: (c: number[]) => void }).setCenter(val)
+    }
+  },
+)
 
-watch(() => props.zoom, (val) => {
-  if (mapInstance && typeof (mapInstance as { setZoom: (z: number) => void }).setZoom === 'function') {
-    (mapInstance as { setZoom: (z: number) => void }).setZoom(val)
-  }
-})
+watch(
+  () => props.zoom,
+  (val) => {
+    if (
+      mapInstance &&
+      typeof (mapInstance as { setZoom: (z: number) => void }).setZoom === 'function'
+    ) {
+      ;(mapInstance as { setZoom: (z: number) => void }).setZoom(val)
+    }
+  },
+)
 
 onUnmounted(() => {
   if (mapInstance && typeof (mapInstance as { remove: () => void }).remove === 'function') {
-    (mapInstance as { remove: () => void }).remove()
+    ;(mapInstance as { remove: () => void }).remove()
   }
   mapInstance = null
 })

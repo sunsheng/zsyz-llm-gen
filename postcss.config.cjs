@@ -4,8 +4,8 @@ module.exports = {
       rootValue: 100,
       propList: ['*'],
       selectorBlackList: [/^\.el-/],
-      exclude: /node_modules/
+      exclude: /node_modules/,
     },
-    autoprefixer: {}
-  }
+    autoprefixer: {},
+  },
 }

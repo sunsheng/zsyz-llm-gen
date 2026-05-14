@@ -2,18 +2,21 @@
   <div class="empty-state">
     <el-icon :size="64" color="#C0C4CC"><DocumentRemove /></el-icon>
     <p class="empty-state__description">{{ description }}</p>
-    <slot name="action" />
+    <slot name="action"></slot>
   </div>
 </template>
 
 <script setup lang="ts">
 import { DocumentRemove } from '@element-plus/icons-vue'
 
-withDefaults(defineProps<{
-  description?: string
-}>(), {
-  description: '暂无数据'
-})
+withDefaults(
+  defineProps<{
+    description?: string
+  }>(),
+  {
+    description: '暂无数据',
+  },
+)
 </script>
 
 <style lang="scss" scoped>

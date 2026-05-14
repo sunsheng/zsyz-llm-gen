@@ -5,7 +5,7 @@ import { getToken } from '@/utils/auth'
 
 const service: AxiosInstance = axios.create({
   baseURL: '',
-  timeout: 15000
+  timeout: 15000,
 })
 
 // 请求拦截器
@@ -19,7 +19,7 @@ service.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error)
-  }
+  },
 )
 
 // 响应拦截器
@@ -32,7 +32,7 @@ service.interceptors.response.use(
     const message = error.response?.data?.message || error.message || '请求失败'
     ElMessage.error(message)
     return Promise.reject(error)
-  }
+  },
 )
 
 export default service

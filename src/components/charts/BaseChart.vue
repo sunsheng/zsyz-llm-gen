@@ -1,5 +1,5 @@
 <template>
-  <div ref="chartRef" class="base-chart" :style="{ width, height }" />
+  <div ref="chartRef" class="base-chart" :style="{ width, height }"></div>
 </template>
 
 <script setup lang="ts">
@@ -7,16 +7,19 @@ import { ref, watch, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 import type { EChartsOption } from 'echarts'
 
-const props = withDefaults(defineProps<{
-  option?: EChartsOption
-  width?: string
-  height?: string
-  loading?: boolean
-}>(), {
-  width: '100%',
-  height: '400px',
-  loading: false
-})
+const props = withDefaults(
+  defineProps<{
+    option?: EChartsOption
+    width?: string
+    height?: string
+    loading?: boolean
+  }>(),
+  {
+    width: '100%',
+    height: '400px',
+    loading: false,
+  },
+)
 
 const chartRef = ref<HTMLElement | null>(null)
 let chartInstance: echarts.ECharts | null = null
@@ -43,7 +46,7 @@ function showLoading() {
   chartInstance?.showLoading('default', {
     text: '',
     color: '#1889E8',
-    maskColor: 'rgba(255, 255, 255, 0.8)'
+    maskColor: 'rgba(255, 255, 255, 0.8)',
   })
 }
 
@@ -56,16 +59,23 @@ function dispose() {
   chartInstance = null
 }
 
-watch(() => props.option, (val) => {
-  if (val && chartInstance) {
-    chartInstance.setOption(val, true)
-  }
-}, { deep: true })
+watch(
+  () => props.option,
+  (val) => {
+    if (val && chartInstance) {
+      chartInstance.setOption(val, true)
+    }
+  },
+  { deep: true },
+)
 
-watch(() => props.loading, (val) => {
-  if (val) showLoading()
-  else hideLoading()
-})
+watch(
+  () => props.loading,
+  (val) => {
+    if (val) showLoading()
+    else hideLoading()
+  },
+)
 
 onMounted(() => {
   init()

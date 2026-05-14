@@ -25,11 +25,11 @@ interface BreadcrumbItem {
 }
 
 const breadcrumbs = computed<BreadcrumbItem[]>(() => {
-  const matched = route.matched.filter(item => item.meta?.title)
+  const matched = route.matched.filter((item) => item.meta?.title)
   return matched.map((item, index) => ({
     title: item.meta.title as string,
     path: item.path,
-    isLast: index === matched.length - 1
+    isLast: index === matched.length - 1,
   }))
 })
 </script>

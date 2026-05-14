@@ -28,5 +28,14 @@ export const useMapStore = defineStore('map', () => {
     selectedMarker.value = marker
   }
 
-  return { center, zoom, activeLayers, selectedMarker, setCenter, setZoom, toggleLayer, selectMarker }
+  return {
+    center,
+    zoom,
+    activeLayers,
+    selectedMarker,
+    setCenter,
+    setZoom,
+    toggleLayer,
+    selectMarker,
+  }
 })

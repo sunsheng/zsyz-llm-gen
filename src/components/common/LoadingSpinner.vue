@@ -6,22 +6,25 @@
       <p v-if="text" class="loading-spinner__text">{{ text }}</p>
     </div>
   </div>
-  <slot v-else />
+  <slot v-else></slot>
 </template>
 
 <script setup lang="ts">
 import { Loading } from '@element-plus/icons-vue'
 
-withDefaults(defineProps<{
-  loading: boolean
-  type?: 'skeleton' | 'spinner'
-  rows?: number
-  text?: string
-}>(), {
-  type: 'skeleton',
-  rows: 5,
-  text: ''
-})
+withDefaults(
+  defineProps<{
+    loading: boolean
+    type?: 'skeleton' | 'spinner'
+    rows?: number
+    text?: string
+  }>(),
+  {
+    type: 'skeleton',
+    rows: 5,
+    text: '',
+  },
+)
 </script>
 
 <style lang="scss" scoped>
@@ -48,7 +51,11 @@ withDefaults(defineProps<{
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

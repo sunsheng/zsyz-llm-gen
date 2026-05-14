@@ -34,15 +34,55 @@ export interface InvestProject {
   progress: number
 }
 
-const industries = ['高端装备制造', '新材料', '生物医药', '电子信息', '新能源', '节能环保', '数字创意', '现代服务业']
+const industries = [
+  '高端装备制造',
+  '新材料',
+  '生物医药',
+  '电子信息',
+  '新能源',
+  '节能环保',
+  '数字创意',
+  '现代服务业',
+]
 const regions = ['北京市', '上海市', '深圳市', '广州市', '苏州市', '成都市', '武汉市', '南京市']
-const chainPositions = ['上游-原材料', '上游-核心部件', '中游-整机制造', '中游-系统集成', '下游-应用服务', '下游-运维保障']
-const tagOptions = ['上市公司', '行业龙头', '专精特新', '高新技术企业', '外资企业', '独角兽', '瞪羚企业']
+const chainPositions = [
+  '上游-原材料',
+  '上游-核心部件',
+  '中游-整机制造',
+  '中游-系统集成',
+  '下游-应用服务',
+  '下游-运维保障',
+]
+const tagOptions = [
+  '上市公司',
+  '行业龙头',
+  '专精特新',
+  '高新技术企业',
+  '外资企业',
+  '独角兽',
+  '瞪羚企业',
+]
 const companyNames = [
-  '中芯国际', '宁德时代', '隆基绿能', '比亚迪半导体', '药明康德',
-  '迈瑞医疗', '三一重工', '大疆创新', '海康威视', '科大讯飞',
-  '紫光集团', '长电科技', '韦尔股份', '兆易创新', '汇顶科技',
-  '北方华创', '中微公司', '沪硅产业', '华熙生物', '泰格医药'
+  '中芯国际',
+  '宁德时代',
+  '隆基绿能',
+  '比亚迪半导体',
+  '药明康德',
+  '迈瑞医疗',
+  '三一重工',
+  '大疆创新',
+  '海康威视',
+  '科大讯飞',
+  '紫光集团',
+  '长电科技',
+  '韦尔股份',
+  '兆易创新',
+  '汇顶科技',
+  '北方华创',
+  '中微公司',
+  '沪硅产业',
+  '华熙生物',
+  '泰格医药',
 ]
 
 function randomItems<T>(arr: T[], count: number): T[] {
@@ -60,7 +100,7 @@ export function getMockTargets(count = 12): InvestTarget[] {
     chainPosition: chainPositions[i % chainPositions.length],
     investmentAmount: Math.floor(Math.random() * 100000 + 5000),
     status: (['待接触', '已接触', '洽谈中', '已签约'] as const)[i % 4],
-    tags: randomItems(tagOptions, Math.floor(Math.random() * 3 + 1))
+    tags: randomItems(tagOptions, Math.floor(Math.random() * 3 + 1)),
   }))
 }
 
@@ -74,10 +114,10 @@ export function getMockRecommendResults(count = 8): InvestRecommendResult[] {
       '产业链上下游匹配度高',
       '该企业近年扩张意愿强烈',
       '与本地现有产业形成互补',
-      '技术水平处于行业领先'
+      '技术水平处于行业领先',
     ].slice(0, Math.floor(Math.random() * 3 + 1)),
     estimatedInvestment: Math.floor(Math.random() * 80000 + 10000),
-    priority: (['高', '中', '低'] as const)[i % 3]
+    priority: (['高', '中', '低'] as const)[i % 3],
   }))
 }
 
@@ -91,7 +131,7 @@ export function getMockInvestProjects(count = 10): InvestProject[] {
     area: Math.floor(Math.random() * 500 + 20),
     jobs: Math.floor(Math.random() * 2000 + 100),
     status: ['规划中', '建设中', '已投产'][i % 3],
-    progress: Math.floor(Math.random() * 100)
+    progress: Math.floor(Math.random() * 100),
   }))
 }
 
@@ -101,7 +141,7 @@ export function getMockRelationGraph() {
     id: `node-${i}`,
     name,
     category: industries[i % industries.length],
-    value: Math.floor(Math.random() * 100 + 50)
+    value: Math.floor(Math.random() * 100 + 50),
   }))
   const edges: { source: string; target: string; weight: number; type: string }[] = []
   for (let i = 0; i < nodes.length; i++) {
@@ -110,7 +150,7 @@ export function getMockRelationGraph() {
       source: nodes[i].id,
       target: nodes[targetIdx].id,
       weight: Math.random() * 0.5 + 0.5,
-      type: (['投资', '供应', '合作', '竞争'] as const)[i % 4]
+      type: (['投资', '供应', '合作', '竞争'] as const)[i % 4],
     })
   }
   return { nodes, edges }
@@ -124,7 +164,7 @@ export function getMockAnchorEnterprises() {
     industry: industries[i % industries.length],
     derivedCount: Math.floor(Math.random() * 15 + 3),
     investPotential: Math.floor(Math.random() * 50 + 50),
-    relationshipType: (['供应商', '客户', '合作伙伴', '竞争对手'] as const)[i % 4]
+    relationshipType: (['供应商', '客户', '合作伙伴', '竞争对手'] as const)[i % 4],
   }))
 }
 
@@ -138,7 +178,7 @@ export function getMockLeadingEnterprises() {
     marketShare: Math.floor(Math.random() * 30 + 5),
     innovationScore: Math.floor(Math.random() * 30 + 70),
     driveCapability: Math.floor(Math.random() * 30 + 60),
-    employees: Math.floor(Math.random() * 10000 + 1000)
+    employees: Math.floor(Math.random() * 10000 + 1000),
   }))
 }
 
@@ -149,7 +189,7 @@ export function getMockRankings() {
     { id: 'rank-2', name: '制造业单项冠军', year: '2025', count: 256, topCompany: '中芯国际' },
     { id: 'rank-3', name: '独角兽企业榜', year: '2025', count: 328, topCompany: '字节跳动' },
     { id: 'rank-4', name: '专精特新小巨人', year: '2025', count: 899, topCompany: '—' },
-    { id: 'rank-5', name: '高新技术企业TOP100', year: '2025', count: 100, topCompany: '华为技术' }
+    { id: 'rank-5', name: '高新技术企业TOP100', year: '2025', count: 100, topCompany: '华为技术' },
   ]
 }
 
@@ -162,33 +202,42 @@ export function getMockQualifiedEnterprises() {
     count: Math.floor(Math.random() * 300 + 50),
     newCount: Math.floor(Math.random() * 30 + 5),
     expireCount: Math.floor(Math.random() * 20 + 2),
-    description: `${q}认定企业统计`
+    description: `${q}认定企业统计`,
   }))
 }
 
 // 基金数据
 export function getMockFunds() {
-  return ['产业引导基金', '创业投资基金', '科技成果转化基金', '并购基金', '基础设施基金'].map((name, i) => ({
-    id: `fund-${i}`,
-    name,
-    scale: Math.floor(Math.random() * 500000 + 50000),
-    invested: Math.floor(Math.random() * 200000 + 10000),
-    projects: Math.floor(Math.random() * 30 + 5),
-    roi: (Math.random() * 15 + 5).toFixed(1),
-    focus: industries[i % industries.length]
-  }))
+  return ['产业引导基金', '创业投资基金', '科技成果转化基金', '并购基金', '基础设施基金'].map(
+    (name, i) => ({
+      id: `fund-${i}`,
+      name,
+      scale: Math.floor(Math.random() * 500000 + 50000),
+      invested: Math.floor(Math.random() * 200000 + 10000),
+      projects: Math.floor(Math.random() * 30 + 5),
+      roi: (Math.random() * 15 + 5).toFixed(1),
+      focus: industries[i % industries.length],
+    }),
+  )
 }
 
 // 科研机构数据
 export function getMockResearchInstitutions() {
-  return ['浙江大学', '中科院宁波材料所', '西湖大学', '浙江工业大学', '杭州电子科技大学', '中国美术学院'].map((name, i) => ({
+  return [
+    '浙江大学',
+    '中科院宁波材料所',
+    '西湖大学',
+    '浙江工业大学',
+    '杭州电子科技大学',
+    '中国美术学院',
+  ].map((name, i) => ({
     id: `inst-${i}`,
     name,
     type: i < 3 ? '高校' : '科研院所',
     field: industries[i % industries.length],
     patents: Math.floor(Math.random() * 500 + 50),
     transfers: Math.floor(Math.random() * 50 + 5),
-    cooperation: Math.floor(Math.random() * 100 + 20)
+    cooperation: Math.floor(Math.random() * 100 + 20),
   }))
 }
 
@@ -198,7 +247,7 @@ export function getMockChainMatchData() {
     id: `chain-${i}`,
     name,
     category: chainPositions[i % chainPositions.length],
-    value: Math.floor(Math.random() * 100 + 50)
+    value: Math.floor(Math.random() * 100 + 50),
   }))
   const chainEdges: { source: string; target: string; weight: number; type: string }[] = []
   for (let i = 0; i < chainNodes.length - 1; i++) {
@@ -206,7 +255,7 @@ export function getMockChainMatchData() {
       source: chainNodes[i].id,
       target: chainNodes[i + 1].id,
       weight: Math.random() * 0.5 + 0.5,
-      type: '供应'
+      type: '供应',
     })
   }
   return { nodes: chainNodes, edges: chainEdges }
@@ -215,10 +264,50 @@ export function getMockChainMatchData() {
 // 产业链招商 - KPI数据
 export function getMockChainKpiCards() {
   return [
-    { key: 'totalChains', label: '产业链数量', value: 28, unit: '条', trend: 'up' as const, trendValue: '+12.5%', icon: 'Share', iconColor: '#1889E8', iconBgColor: '#ECF5FF' },
-    { key: 'matchedTargets', label: '已匹配目标', value: 156, unit: '家', trend: 'up' as const, trendValue: '+18.3%', icon: 'Aim', iconColor: '#36CBCB', iconBgColor: '#E6F7F7' },
-    { key: 'recommendCount', label: '推荐企业', value: 89, unit: '家', trend: 'up' as const, trendValue: '+8.6%', icon: 'Promotion', iconColor: '#4ECB73', iconBgColor: '#EDFAF0' },
-    { key: 'signedCount', label: '已签约数', value: 34, unit: '个', trend: 'up' as const, trendValue: '+22.1%', icon: 'DocumentChecked', iconColor: '#FBD437', iconBgColor: '#FFF8E6' }
+    {
+      key: 'totalChains',
+      label: '产业链数量',
+      value: 28,
+      unit: '条',
+      trend: 'up' as const,
+      trendValue: '+12.5%',
+      icon: 'Share',
+      iconColor: '#1889E8',
+      iconBgColor: '#ECF5FF',
+    },
+    {
+      key: 'matchedTargets',
+      label: '已匹配目标',
+      value: 156,
+      unit: '家',
+      trend: 'up' as const,
+      trendValue: '+18.3%',
+      icon: 'Aim',
+      iconColor: '#36CBCB',
+      iconBgColor: '#E6F7F7',
+    },
+    {
+      key: 'recommendCount',
+      label: '推荐企业',
+      value: 89,
+      unit: '家',
+      trend: 'up' as const,
+      trendValue: '+8.6%',
+      icon: 'Promotion',
+      iconColor: '#4ECB73',
+      iconBgColor: '#EDFAF0',
+    },
+    {
+      key: 'signedCount',
+      label: '已签约数',
+      value: 34,
+      unit: '个',
+      trend: 'up' as const,
+      trendValue: '+22.1%',
+      icon: 'DocumentChecked',
+      iconColor: '#FBD437',
+      iconBgColor: '#FFF8E6',
+    },
   ]
 }
 
@@ -230,7 +319,7 @@ export function getMockGapAnalysis() {
     missingLinks: chainPositions.slice(i % 3, (i % 3) + 2),
     severity: (['高', '中', '低'] as const)[i % 3],
     targetCount: Math.floor(Math.random() * 10 + 2),
-    fillRate: Math.floor(Math.random() * 40 + 10)
+    fillRate: Math.floor(Math.random() * 40 + 10),
   }))
   return gaps
 }
@@ -245,13 +334,20 @@ export function getMockChainOwners() {
     driveIndex: Math.floor(Math.random() * 30 + 70),
     influenceRange: Math.floor(Math.random() * 50 + 30),
     cooperationCount: Math.floor(Math.random() * 80 + 20),
-    revenue: Math.floor(Math.random() * 200000 + 30000)
+    revenue: Math.floor(Math.random() * 200000 + 30000),
   }))
 }
 
 // 园区数据
 export function getMockParks() {
-  return ['高端装备产业园', '新材料创新园', '生物医药基地', '电子信息产业园', '新能源科技园', '现代服务集聚区'].map((name, i) => ({
+  return [
+    '高端装备产业园',
+    '新材料创新园',
+    '生物医药基地',
+    '电子信息产业园',
+    '新能源科技园',
+    '现代服务集聚区',
+  ].map((name, i) => ({
     id: `park-${i}`,
     name,
     area: Math.floor(Math.random() * 5000 + 500),
@@ -259,7 +355,7 @@ export function getMockParks() {
     enterprises: Math.floor(Math.random() * 200 + 30),
     revenue: Math.floor(Math.random() * 300000 + 50000),
     vacantArea: Math.floor(Math.random() * 500 + 50),
-    industry: industries[i % industries.length]
+    industry: industries[i % industries.length],
   }))
 }
 
@@ -272,7 +368,7 @@ export function getMockRankingDetails(rankingId: string) {
     industry: industries[i % industries.length],
     revenue: Math.floor(Math.random() * 300000 + 10000),
     region: regions[i % regions.length],
-    tags: randomItems(tagOptions, 2)
+    tags: randomItems(tagOptions, 2),
   }))
 }
 
@@ -286,7 +382,7 @@ export function getMockMapTargets() {
     industry: industries[i % industries.length],
     matchScore: Math.floor(Math.random() * 30 + 70),
     investmentAmount: Math.floor(Math.random() * 80000 + 5000),
-    status: (['待接触', '已接触', '洽谈中'] as const)[i % 3]
+    status: (['待接触', '已接触', '洽谈中'] as const)[i % 3],
   }))
 }
 
@@ -299,6 +395,6 @@ export function getMockQualifiedList(qualType: string) {
     validDate: `2025-${String(Math.floor(Math.random() * 12 + 1)).padStart(2, '0')}-${String(Math.floor(Math.random() * 28 + 1)).padStart(2, '0')}`,
     industry: industries[i % industries.length],
     region: regions[i % regions.length],
-    status: (['有效', '即将到期', '已过期'] as const)[i % 3]
+    status: (['有效', '即将到期', '已过期'] as const)[i % 3],
   }))
 }

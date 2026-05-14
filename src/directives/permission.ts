@@ -10,5 +10,5 @@ export const permission: Directive = {
     if (requiredPermission && userStore.userInfo.role !== 'admin') {
       el.parentNode?.removeChild(el)
     }
-  }
+  },
 }

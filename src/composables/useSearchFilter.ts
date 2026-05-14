@@ -19,13 +19,13 @@ export function useSearchFilter() {
 
   function clearAll() {
     keyword.value = ''
-    Object.keys(filters).forEach(key => delete filters[key])
+    Object.keys(filters).forEach((key) => delete filters[key])
   }
 
   function getParams() {
     return {
       keyword: keyword.value,
-      ...filters
+      ...filters,
     }
   }
 

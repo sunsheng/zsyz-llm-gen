@@ -9,7 +9,7 @@ NProgress.configure({ showSpinner: false })
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
-  scrollBehavior: () => ({ top: 0 })
+  scrollBehavior: () => ({ top: 0 }),
 })
 
 // 路由守卫

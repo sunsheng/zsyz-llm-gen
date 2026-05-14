@@ -16,13 +16,16 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-const props = withDefaults(defineProps<{
-  current: number
-  total: number
-  pageSize?: number
-}>(), {
-  pageSize: 20
-})
+const props = withDefaults(
+  defineProps<{
+    current: number
+    total: number
+    pageSize?: number
+  }>(),
+  {
+    pageSize: 20,
+  },
+)
 
 const emit = defineEmits<{
   change: [current: number, pageSize: number]
@@ -30,12 +33,12 @@ const emit = defineEmits<{
 
 const currentPage = computed({
   get: () => props.current,
-  set: (val) => emit('change', val, pageSizeModel.value)
+  set: (val) => emit('change', val, pageSizeModel.value),
 })
 
 const pageSizeModel = computed({
   get: () => props.pageSize,
-  set: (val) => emit('change', 1, val)
+  set: (val) => emit('change', 1, val),
 })
 
 function handleChange() {

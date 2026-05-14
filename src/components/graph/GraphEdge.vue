@@ -15,23 +15,26 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-const props = withDefaults(defineProps<{
-  x1: number
-  y1: number
-  x2: number
-  y2: number
-  weight?: number
-  type?: string
-}>(), {
-  weight: 0.5,
-  type: 'supply'
-})
+const props = withDefaults(
+  defineProps<{
+    x1: number
+    y1: number
+    x2: number
+    y2: number
+    weight?: number
+    type?: string
+  }>(),
+  {
+    weight: 0.5,
+    type: 'supply',
+  },
+)
 
 const typeColors: Record<string, string> = {
   supply: '#C0C4CC',
   tech: '#36CBCB',
   investment: '#FBD437',
-  compete: '#F2637B'
+  compete: '#F2637B',
 }
 
 const width = computed(() => 1 + props.weight * 3)

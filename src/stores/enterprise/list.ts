@@ -28,5 +28,15 @@ export const useEnterpriseListStore = defineStore('enterprise-list', () => {
     currentPage.value = page
   }
 
-  return { searchKeyword, filters, currentPage, pageSize, total, setKeyword, setFilter, clearFilters, setPage }
+  return {
+    searchKeyword,
+    filters,
+    currentPage,
+    pageSize,
+    total,
+    setKeyword,
+    setFilter,
+    clearFilters,
+    setPage,
+  }
 })

@@ -37,19 +37,25 @@ export function useForceGraph(containerRef: Ref<HTMLElement | null>) {
       // 清除旧 SVG
       d3.select(container).selectAll('svg').remove()
 
-      svg = d3.select(container)
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height)
+      svg = d3.select(container).append('svg').attr('width', width).attr('height', height)
 
-      const simulationObj = d3.forceSimulation(nodes as unknown as d3types.SimulationNodeDatum[])
-        .force('link', d3.forceLink(edges as unknown as d3types.SimulationLinkDatum<d3types.SimulationNodeDatum>[]).id((d: unknown) => (d as GraphNodeData).id))
+      const simulationObj = d3
+        .forceSimulation(nodes as unknown as d3types.SimulationNodeDatum[])
+        .force(
+          'link',
+          d3
+            .forceLink(
+              edges as unknown as d3types.SimulationLinkDatum<d3types.SimulationNodeDatum>[],
+            )
+            .id((d: unknown) => (d as GraphNodeData).id),
+        )
         .force('charge', d3.forceManyBody().strength(-200))
         .force('center', d3.forceCenter(width / 2, height / 2))
 
       simulation = simulationObj
 
-      const link = svg.append('g')
+      const link = svg
+        .append('g')
         .selectAll('line')
         .data(edges)
         .join('line')
@@ -57,40 +63,45 @@ export function useForceGraph(containerRef: Ref<HTMLElement | null>) {
         .attr('stroke-opacity', 0.6)
         .attr('stroke-width', 1.5)
 
-      const node = svg.append('g')
+      const node = svg
+        .append('g')
         .selectAll('circle')
         .data(nodes)
         .join('circle')
         .attr('r', 8)
         .attr('fill', '#1889E8')
-        .call(d3.drag<SVGCircleElement, GraphNodeData>()
-          .on('start', () => {})
-          .on('drag', () => {})
-          .on('end', () => {}))
+        .call(
+          d3
+            .drag<SVGCircleElement, GraphNodeData>()
+            .on('start', () => {})
+            .on('drag', () => {})
+            .on('end', () => {}),
+        )
 
-      const label = svg.append('g')
+      const label = svg
+        .append('g')
         .selectAll('text')
         .data(nodes)
         .join('text')
-        .text(d => d.name)
+        .text((d) => d.name)
         .attr('font-size', 10)
         .attr('dx', 12)
         .attr('dy', 4)
 
       simulationObj.on('tick', () => {
         link
-          .attr('x1', (d: unknown) => ((d as { source: { x: number } }).source.x))
-          .attr('y1', (d: unknown) => ((d as { source: { y: number } }).source.y))
-          .attr('x2', (d: unknown) => ((d as { target: { x: number } }).target.x))
-          .attr('y2', (d: unknown) => ((d as { target: { y: number } }).target.y))
+          .attr('x1', (d: unknown) => (d as { source: { x: number } }).source.x)
+          .attr('y1', (d: unknown) => (d as { source: { y: number } }).source.y)
+          .attr('x2', (d: unknown) => (d as { target: { x: number } }).target.x)
+          .attr('y2', (d: unknown) => (d as { target: { y: number } }).target.y)
 
         node
-          .attr('cx', (d: unknown) => ((d as { x: number }).x))
-          .attr('cy', (d: unknown) => ((d as { y: number }).y))
+          .attr('cx', (d: unknown) => (d as { x: number }).x)
+          .attr('cy', (d: unknown) => (d as { y: number }).y)
 
         label
-          .attr('x', (d: unknown) => ((d as { x: number }).x))
-          .attr('y', (d: unknown) => ((d as { y: number }).y))
+          .attr('x', (d: unknown) => (d as { x: number }).x)
+          .attr('y', (d: unknown) => (d as { y: number }).y)
       })
     } catch (e) {
       console.error('Force graph render failed:', e)

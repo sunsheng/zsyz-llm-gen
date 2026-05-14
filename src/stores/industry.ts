@@ -8,7 +8,7 @@ export const useIndustryStore = defineStore('industry', () => {
     { code: 'frontier-material', name: '前沿材料' },
     { code: 'digital-economy', name: '数字经济' },
     { code: 'fashion', name: '时尚产业' },
-    { code: 'modern-service', name: '现代服务业' }
+    { code: 'modern-service', name: '现代服务业' },
   ])
 
   function selectChain(code: string) {

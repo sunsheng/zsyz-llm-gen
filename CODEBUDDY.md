@@ -30,22 +30,24 @@ No test framework is configured yet. No linter is configured yet.
 
 ### Tech Stack (must use exactly)
 
-| Layer | Library | Key detail |
-|-------|---------|-----------|
-| UI framework | **Element Plus** | Auto-imported via unplugin-vue-components |
-| Charts | **ECharts 5** + vue-echarts | All chart instances managed by `useECharts()` composable |
-| Maps | **Maptalks** (primary), Baidu Map overlay (heatmap) | Managed by `useMaptalks()` composable |
-| Graphs | **D3 v7** force simulation (SVG) | Managed by `useForceGraph()` composable |
-| State | **Pinia** stores in `src/stores/` | user/app/map/industry/enterprise domains |
-| Routing | **Vue Router 4**, ~140 lazy-loaded leaf routes, 3-level nesting |
-| Styling | SCSS + postcss-pxtorem (rootValue=192 for 1920px design) | No media queries — 1920x1080 only |
+| Layer        | Library                                                         | Key detail                                               |
+| ------------ | --------------------------------------------------------------- | -------------------------------------------------------- |
+| UI framework | **Element Plus**                                                | Auto-imported via unplugin-vue-components                |
+| Charts       | **ECharts 5** + vue-echarts                                     | All chart instances managed by `useECharts()` composable |
+| Maps         | **Maptalks** (primary), Baidu Map overlay (heatmap)             | Managed by `useMaptalks()` composable                    |
+| Graphs       | **D3 v7** force simulation (SVG)                                | Managed by `useForceGraph()` composable                  |
+| State        | **Pinia** stores in `src/stores/`                               | user/app/map/industry/enterprise domains                 |
+| Routing      | **Vue Router 4**, ~140 lazy-loaded leaf routes, 3-level nesting |
+| Styling      | SCSS + postcss-pxtorem (rootValue=192 for 1920px design)        | No media queries — 1920x1080 only                        |
 
 ### Layout Shell (3-part)
 
 All authenticated pages are wrapped by:
+
 ```
 MainLayout.vue → AppHeader.vue (fixed top, h:56px) + AppSidebar.vue (fixed left, w:220px, collapsible to 64px) + <router-view> (scrolling content area)
 ```
+
 - Sidebar renders recursively from `router/menuConfig.ts`, supports 3-level nested menus (10 top-level modules)
 - Default route `/` redirects to `/map/chain/search`
 
@@ -62,14 +64,14 @@ Components live in `src/components/` organized by abstraction level:
 
 ### 6 Page Templates (~140 pages map into these patterns)
 
-| Type | Core tech | Count | Example pages |
-|------|----------|:-----:|---------------|
-| A: Dashboard | ECharts grid | ~35 | 运行分析(22页), 企业监测(部分), 区域对标(部分) |
-| B: Map | Maptalks full-screen | ~15 | 产业地图(9页), 热力图 |
-| C: Graph | D3 force-directed SVG | ~12 | 产业图谱(8页), 关系链招商 |
-| D: Portrait | Mixed (cards+charts+tables) | ~18 | 企业画像, 龙头企业评估 |
-| E: List/Search | el-table/el-card + filters | ~30 | 精准招商(39页), 招商情报(9页) |
-| F: Report/Compare | Radar overlay + comparison bars | ~20 | 园区对比报告, 五维评价 |
+| Type              | Core tech                       | Count | Example pages                                  |
+| ----------------- | ------------------------------- | :---: | ---------------------------------------------- |
+| A: Dashboard      | ECharts grid                    |  ~35  | 运行分析(22页), 企业监测(部分), 区域对标(部分) |
+| B: Map            | Maptalks full-screen            |  ~15  | 产业地图(9页), 热力图                          |
+| C: Graph          | D3 force-directed SVG           |  ~12  | 产业图谱(8页), 关系链招商                      |
+| D: Portrait       | Mixed (cards+charts+tables)     |  ~18  | 企业画像, 龙头企业评估                         |
+| E: List/Search    | el-table/el-card + filters      |  ~30  | 精准招商(39页), 招商情报(9页)                  |
+| F: Report/Compare | Radar overlay + comparison bars |  ~20  | 园区对比报告, 五维评价                         |
 
 ### Route Structure Pattern
 
@@ -93,6 +95,7 @@ Routes defined in `src/router/routes.ts`, menu config in `src/router/menuConfig.
 Full token set in `src/assets/styles/variables.scss` (once created). Element Plus theme overrides in `src/assets/styles/element-custom.scss`.
 
 Key visual rules:
+
 - Cards: white bg, radius 4px, shadow `0 2px 12px 0 rgba(0,0,0,0.06)`, padding 20px
 - Tables: striped + bordered, header bg `#FAFAFA`
 - Stat cards: icon 32px, value 28px bold, trend arrow green↑/red↓

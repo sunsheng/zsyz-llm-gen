@@ -60,6 +60,6 @@ export function useECharts(chartRef: Ref<HTMLElement | null>) {
     showLoading,
     hideLoading,
     resize,
-    dispose
+    dispose,
   }
 }

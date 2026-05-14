@@ -13,15 +13,18 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
-const props = withDefaults(defineProps<{
-  modelValue?: string | string[]
-  multiple?: boolean
-  placeholder?: string
-}>(), {
-  modelValue: '',
-  multiple: false,
-  placeholder: '请选择产业链'
-})
+const props = withDefaults(
+  defineProps<{
+    modelValue?: string | string[]
+    multiple?: boolean
+    placeholder?: string
+  }>(),
+  {
+    modelValue: '',
+    multiple: false,
+    placeholder: '请选择产业链',
+  },
+)
 
 const emit = defineEmits<{
   'update:modelValue': [value: string | string[]]
@@ -29,9 +32,12 @@ const emit = defineEmits<{
 
 const selected = ref(props.modelValue)
 
-watch(() => props.modelValue, (val) => {
-  selected.value = val
-})
+watch(
+  () => props.modelValue,
+  (val) => {
+    selected.value = val
+  },
+)
 
 const chainOptions = [
   {
@@ -40,8 +46,8 @@ const chainOptions = [
     children: [
       { code: 'he-auto', name: '汽车汽配' },
       { code: 'he-precision', name: '精密仪器' },
-      { code: 'he-robot', name: '工业机器人' }
-    ]
+      { code: 'he-robot', name: '工业机器人' },
+    ],
   },
   {
     code: 'frontier-material',
@@ -49,8 +55,8 @@ const chainOptions = [
     children: [
       { code: 'fm-glass', name: '玻纤复合材料' },
       { code: 'fm-carbon', name: '碳纤维' },
-      { code: 'fm-new-energy', name: '新能源材料' }
-    ]
+      { code: 'fm-new-energy', name: '新能源材料' },
+    ],
   },
   {
     code: 'digital-economy',
@@ -59,16 +65,16 @@ const chainOptions = [
       { code: 'de-5g', name: '5G' },
       { code: 'de-ic', name: '集成电路' },
       { code: 'de-computing', name: '先进计算' },
-      { code: 'de-security', name: '智能安防' }
-    ]
+      { code: 'de-security', name: '智能安防' },
+    ],
   },
   {
     code: 'fashion',
     name: '时尚产业',
     children: [
       { code: 'fa-textile', name: '纺织服装' },
-      { code: 'fa-leather', name: '皮革毛皮' }
-    ]
+      { code: 'fa-leather', name: '皮革毛皮' },
+    ],
   },
   {
     code: 'modern-service',
@@ -76,9 +82,9 @@ const chainOptions = [
     children: [
       { code: 'ms-finance', name: '金融服务' },
       { code: 'ms-logistics', name: '现代物流' },
-      { code: 'ms-it', name: '信息技术服务' }
-    ]
-  }
+      { code: 'ms-it', name: '信息技术服务' },
+    ],
+  },
 ]
 
 function handleChange(val: string | string[] | null | undefined) {

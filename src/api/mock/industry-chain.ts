@@ -10,7 +10,7 @@ const chainList: IndustryChain[] = [
     edgeCount: 42,
     upstream: ['原材料供应', '核心零部件', '基础材料加工'],
     midstream: ['整机制造', '系统集成', '关键部件生产'],
-    downstream: ['应用服务', '运维保障', '技术支持']
+    downstream: ['应用服务', '运维保障', '技术支持'],
   },
   {
     code: 'new-material',
@@ -20,7 +20,7 @@ const chainList: IndustryChain[] = [
     edgeCount: 36,
     upstream: ['矿产开采', '基础化工', '原料制备'],
     midstream: ['材料加工', '合成制备', '性能改性'],
-    downstream: ['应用制造', '产品检测', '市场销售']
+    downstream: ['应用制造', '产品检测', '市场销售'],
   },
   {
     code: 'biomedicine',
@@ -30,7 +30,7 @@ const chainList: IndustryChain[] = [
     edgeCount: 33,
     upstream: ['原料药生产', '试剂耗材', '实验设备'],
     midstream: ['药物研发', '临床测试', '生产制造'],
-    downstream: ['流通销售', '医疗服务', '健康管理']
+    downstream: ['流通销售', '医疗服务', '健康管理'],
   },
   {
     code: 'electronics',
@@ -40,7 +40,7 @@ const chainList: IndustryChain[] = [
     edgeCount: 48,
     upstream: ['芯片设计', '晶圆制造', '封装测试'],
     midstream: ['模组组装', '系统集成', '软件开发'],
-    downstream: ['终端产品', '运维服务', '数据服务']
+    downstream: ['终端产品', '运维服务', '数据服务'],
   },
   {
     code: 'new-energy',
@@ -50,8 +50,8 @@ const chainList: IndustryChain[] = [
     edgeCount: 40,
     upstream: ['硅料生产', '零部件制造', '原材料加工'],
     midstream: ['电池制造', '组件生产', '系统集成'],
-    downstream: ['电站运营', '电网接入', '运维服务']
-  }
+    downstream: ['电站运营', '电网接入', '运维服务'],
+  },
 ]
 
 export function getMockChains(): IndustryChain[] {
@@ -59,11 +59,18 @@ export function getMockChains(): IndustryChain[] {
 }
 
 export function getMockChainGraph(code: string): ChainGraph | null {
-  const chain = chainList.find(c => c.code === code)
+  const chain = chainList.find((c) => c.code === code)
   if (!chain) return null
 
   const upstreamNames = ['原材料供应', '核心零部件', '基础材料加工', '技术支撑', '设备供应']
-  const midstreamNames = ['整机制造', '系统集成', '关键部件生产', '工艺优化', '质量控制', '组装测试']
+  const midstreamNames = [
+    '整机制造',
+    '系统集成',
+    '关键部件生产',
+    '工艺优化',
+    '质量控制',
+    '组装测试',
+  ]
   const downstreamNames = ['应用服务', '运维保障', '技术支持', '市场推广', '售后服务']
 
   const nodes = [
@@ -73,7 +80,7 @@ export function getMockChainGraph(code: string): ChainGraph | null {
       level: 'upstream' as const,
       category: '上游',
       importance: Math.floor(Math.random() * 40 + 60),
-      enterpriseCount: Math.floor(Math.random() * 50 + 10)
+      enterpriseCount: Math.floor(Math.random() * 50 + 10),
     })),
     ...midstreamNames.map((name, i) => ({
       id: `mid-${i}`,
@@ -81,7 +88,7 @@ export function getMockChainGraph(code: string): ChainGraph | null {
       level: 'midstream' as const,
       category: '中游',
       importance: Math.floor(Math.random() * 30 + 70),
-      enterpriseCount: Math.floor(Math.random() * 80 + 20)
+      enterpriseCount: Math.floor(Math.random() * 80 + 20),
     })),
     ...downstreamNames.map((name, i) => ({
       id: `down-${i}`,
@@ -89,27 +96,47 @@ export function getMockChainGraph(code: string): ChainGraph | null {
       level: 'downstream' as const,
       category: '下游',
       importance: Math.floor(Math.random() * 20 + 50),
-      enterpriseCount: Math.floor(Math.random() * 60 + 15)
-    }))
+      enterpriseCount: Math.floor(Math.random() * 60 + 15),
+    })),
   ]
 
-  const edges: { source: string; target: string; weight: number; type: 'supply' | 'tech' | 'investment' | 'compete' }[] = []
+  const edges: {
+    source: string
+    target: string
+    weight: number
+    type: 'supply' | 'tech' | 'investment' | 'compete'
+  }[] = []
   // 上游→中游
   for (let i = 0; i < upstreamNames.length; i++) {
     const targetIdx = Math.floor(Math.random() * midstreamNames.length)
-    edges.push({ source: `up-${i}`, target: `mid-${targetIdx}`, weight: Math.random() * 0.5 + 0.5, type: 'supply' })
+    edges.push({
+      source: `up-${i}`,
+      target: `mid-${targetIdx}`,
+      weight: Math.random() * 0.5 + 0.5,
+      type: 'supply',
+    })
   }
   // 中游→下游
   for (let i = 0; i < midstreamNames.length; i++) {
     const targetIdx = Math.floor(Math.random() * downstreamNames.length)
-    edges.push({ source: `mid-${i}`, target: `down-${targetIdx}`, weight: Math.random() * 0.4 + 0.6, type: 'supply' })
+    edges.push({
+      source: `mid-${i}`,
+      target: `down-${targetIdx}`,
+      weight: Math.random() * 0.4 + 0.6,
+      type: 'supply',
+    })
   }
   // 技术关联
   for (let i = 0; i < 5; i++) {
     const s = Math.floor(Math.random() * nodes.length)
     const t = Math.floor(Math.random() * nodes.length)
     if (s !== t) {
-      edges.push({ source: nodes[s].id, target: nodes[t].id, weight: Math.random() * 0.3 + 0.2, type: 'tech' })
+      edges.push({
+        source: nodes[s].id,
+        target: nodes[t].id,
+        weight: Math.random() * 0.3 + 0.2,
+        type: 'tech',
+      })
     }
   }
 

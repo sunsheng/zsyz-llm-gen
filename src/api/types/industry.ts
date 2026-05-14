@@ -16,7 +16,7 @@ export interface ChainNode {
   name: string
   level: 'upstream' | 'midstream' | 'downstream'
   category: string
-  importance: number            // 0-100 重要性
+  importance: number // 0-100 重要性
   enterpriseCount: number
   children?: ChainNode[]
 }
@@ -24,7 +24,7 @@ export interface ChainNode {
 export interface ChainEdge {
   source: string
   target: string
-  weight: number                // 关系强度 0-1
+  weight: number // 关系强度 0-1
   type: 'supply' | 'tech' | 'investment' | 'compete'
 }
 
