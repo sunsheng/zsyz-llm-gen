@@ -55,7 +55,7 @@ export interface IntelligenceTalent {
 }
 
 const newsTitles = [
-  '长三角高端装备制造产业峰会即将召开',
+  '成渝地区高端装备制造产业峰会即将召开',
   '新材料产业园区招商引资成果显著，签约金额突破50亿',
   '生物医药创新政策出台，加速产业集聚发展',
   '半导体产业国产替代加速，核心环节突破在即',
@@ -91,7 +91,7 @@ export function getMockNewsList(count = 10): IntelligenceNews[] {
   return Array.from({ length: count }, (_, i) => ({
     id: `news-${i + 1}`,
     title: newsTitles[i % newsTitles.length],
-    source: ['经济日报', '科技日报', '浙江日报', '中国工业报', '新华网'][i % 5],
+    source: ['经济日报', '科技日报', '四川日报', '中国工业报', '新华网'][i % 5],
     category: industries[i % industries.length],
     publishDate: `2025-${String(Math.floor(Math.random() * 3 + 1)).padStart(2, '0')}-${String(Math.floor(Math.random() * 28 + 1)).padStart(2, '0')}`,
     summary: '围绕产业发展核心议题，聚焦技术创新与产业升级，推动区域经济高质量发展。',
@@ -128,7 +128,14 @@ export function getMockTechTransfers(count = 6): IntelligenceTechTransfer[] {
     transferType: ['独占许可', '普通许可', '技术转让', '合作开发'][i % 4],
     patentNo: `CN${String(Math.floor(Math.random() * 9000000 + 1000000))}`,
     price: Math.floor(Math.random() * 5000 + 500),
-    institution: ['浙江大学', '中科院材料所', '清华大学', '上海交大', '西湖大学', '华中科大'][i],
+    institution: [
+      '四川大学',
+      '中科院成都分院',
+      '电子科技大学',
+      '西南交大',
+      '西南石油大学',
+      '成都理工大学',
+    ][i],
     status: (['available', 'negotiating', 'transferred'] as const)[i % 3],
   }))
 }

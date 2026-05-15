@@ -1,6 +1,6 @@
 <template>
   <div class="page-container map-page">
-    <PageHeader title="产业集群分布" subtitle="查看产业集群在地图上的聚合分布">
+    <PageHeader title="产业集群分布" subtitle="查看3+1+1主导产业集聚情况，支持切换不同产业热力图">
       <template #actions>
         <el-button type="primary" :icon="Download">导出</el-button>
       </template>
@@ -33,13 +33,29 @@
           <div class="cluster-list__title">产业集群列表</div>
           <div
             v-for="cluster in filteredClusters"
-            :key="cluster.name"
+            :key="cluster.id"
             class="cluster-item"
             @click="handleClusterClick(cluster)"
           >
             <div class="cluster-item__header">
               <span class="cluster-item__name">{{ cluster.name }}</span>
               <span class="cluster-item__count">{{ cluster.count }}家</span>
+            </div>
+            <div class="cluster-item__meta">
+              <el-tag
+                size="small"
+                :type="
+                  cluster.industry === '高端装备制造' ||
+                  cluster.industry === '新材料' ||
+                  cluster.industry === '电子信息'
+                    ? 'danger'
+                    : cluster.industry === '生物医药' || cluster.industry === '新能源'
+                      ? 'warning'
+                      : 'info'
+                "
+                >{{ cluster.industry }}</el-tag
+              >
+              <span class="cluster-item__region">{{ cluster.region }}</span>
             </div>
             <el-progress
               :percentage="(cluster.count / maxCount) * 100"
@@ -72,7 +88,7 @@
         </div>
       </MapControlPanel>
       <div class="map-page__map">
-        <MaptalksMap :center="[104.612, 30.884]" :zoom="15" @ready="onMapReady" />
+        <MaptalksMap :center="[104.612, 30.884]" :zoom="10" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <MapLegend :items="legendItems" />
       </div>
@@ -88,7 +104,6 @@ import MaptalksMap from '@/components/map/MaptalksMap.vue'
 import MapControlPanel from '@/components/map/MapControlPanel.vue'
 import MapToolbar from '@/components/map/MapToolbar.vue'
 import MapLegend from '@/components/map/MapLegend.vue'
-import { getMockClusterData } from '@/api/mock/map'
 
 const industries = [
   '高端装备制造',
@@ -101,25 +116,175 @@ const industries = [
   '现代服务业',
 ]
 
+interface ClusterData {
+  id: string
+  name: string
+  industry: string
+  count: number
+  lng: number
+  lat: number
+  enterprises: number
+  parks: number
+  institutions: number
+  region: string
+}
+
+const allClusters: ClusterData[] = [
+  {
+    id: 'c1',
+    name: '凯州新城高端装备制造集群',
+    industry: '高端装备制造',
+    count: 186,
+    lng: 104.612,
+    lat: 30.884,
+    enterprises: 112,
+    parks: 18,
+    institutions: 56,
+    region: '凯州新城核心区',
+  },
+  {
+    id: 'c2',
+    name: '辑庆新材料产业集群',
+    industry: '新材料',
+    count: 142,
+    lng: 104.623,
+    lat: 30.92,
+    enterprises: 89,
+    parks: 24,
+    institutions: 29,
+    region: '辑庆片区',
+  },
+  {
+    id: 'c3',
+    name: '兴隆电子信息产业集群',
+    industry: '电子信息',
+    count: 128,
+    lng: 104.595,
+    lat: 30.871,
+    enterprises: 78,
+    parks: 20,
+    institutions: 30,
+    region: '兴隆片区',
+  },
+  {
+    id: 'c4',
+    name: '成巴东生物医药产业集群',
+    industry: '生物医药',
+    count: 96,
+    lng: 104.65,
+    lat: 30.86,
+    enterprises: 62,
+    parks: 14,
+    institutions: 20,
+    region: '成巴东片区',
+  },
+  {
+    id: 'c5',
+    name: '凯州新城新能源产业集群',
+    industry: '新能源',
+    count: 78,
+    lng: 104.608,
+    lat: 30.892,
+    enterprises: 48,
+    parks: 12,
+    institutions: 18,
+    region: '凯州新城核心区',
+  },
+  {
+    id: 'c6',
+    name: '辑庆节能环保产业集群',
+    industry: '节能环保',
+    count: 56,
+    lng: 104.631,
+    lat: 30.903,
+    enterprises: 34,
+    parks: 8,
+    institutions: 14,
+    region: '辑庆片区',
+  },
+  {
+    id: 'c7',
+    name: '中江数字创意产业集群',
+    industry: '数字创意',
+    count: 45,
+    lng: 104.803,
+    lat: 30.885,
+    enterprises: 30,
+    parks: 6,
+    institutions: 9,
+    region: '中江县',
+  },
+  {
+    id: 'c8',
+    name: '德阳现代服务业集群',
+    industry: '现代服务业',
+    count: 68,
+    lng: 104.398,
+    lat: 31.127,
+    enterprises: 42,
+    parks: 10,
+    institutions: 16,
+    region: '德阳市',
+  },
+  {
+    id: 'c9',
+    name: '兴隆高端装备配套集群',
+    industry: '高端装备制造',
+    count: 52,
+    lng: 104.588,
+    lat: 30.862,
+    enterprises: 32,
+    parks: 8,
+    institutions: 12,
+    region: '兴隆片区',
+  },
+  {
+    id: 'c10',
+    name: '成巴东新材料延伸集群',
+    industry: '新材料',
+    count: 38,
+    lng: 104.658,
+    lat: 30.855,
+    enterprises: 24,
+    parks: 6,
+    institutions: 8,
+    region: '成巴东片区',
+  },
+  {
+    id: 'c11',
+    name: '凯州新城电子信息配套集群',
+    industry: '电子信息',
+    count: 64,
+    lng: 104.618,
+    lat: 30.878,
+    enterprises: 40,
+    parks: 10,
+    institutions: 14,
+    region: '凯州新城核心区',
+  },
+  {
+    id: 'c12',
+    name: '德阳高端装备制造集群',
+    industry: '高端装备制造',
+    count: 210,
+    lng: 104.405,
+    lat: 31.118,
+    enterprises: 135,
+    parks: 28,
+    institutions: 47,
+    region: '德阳市',
+  },
+]
+
 const selectedIndustry = ref('')
 const clusterRadius = ref(5)
-const allClusters = getMockClustersWithExtra()
 
 let mapInstance: any = null
 let clusterLayer: any = null
 
-function getMockClustersWithExtra() {
-  return getMockClusterData().map((c, i) => ({
-    ...c,
-    enterprises: Math.floor(c.count * 0.6),
-    parks: Math.floor(c.count * 0.2),
-    institutions: Math.floor(c.count * 0.2),
-  }))
-}
-
 const filteredClusters = computed(() => {
   if (!selectedIndustry.value) return allClusters
-  return allClusters.filter((c) => c.name === selectedIndustry.value)
+  return allClusters.filter((c) => c.industry === selectedIndustry.value)
 })
 
 const maxCount = computed(() => Math.max(...filteredClusters.value.map((c) => c.count)))
@@ -232,7 +397,7 @@ function handleZoomOut() {
 }
 function handleReset() {
   mapInstance?.setCenter([104.612, 30.884])
-  mapInstance?.setZoom(15)
+  mapInstance?.setZoom(10)
   selectedIndustry.value = ''
   clusterRadius.value = 5
 }
@@ -314,6 +479,18 @@ onUnmounted(() => {
   font-size: 13px;
   font-weight: $font-weight-semibold;
   color: $color-primary;
+}
+
+.cluster-item__meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.cluster-item__region {
+  font-size: 12px;
+  color: $text-secondary;
 }
 
 .stats-section {

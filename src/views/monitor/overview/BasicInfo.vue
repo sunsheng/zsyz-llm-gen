@@ -153,12 +153,14 @@ onMounted(() => {
       {
         name: '本地占比',
         type: 'bar',
+        barMaxWidth: 32,
         stack: 'equity',
         data: enterprises.map((e) => e.localShareholderRatio),
       },
       {
         name: '外资占比',
         type: 'bar',
+        barMaxWidth: 32,
         stack: 'equity',
         data: enterprises.map((e) => e.foreignShareholderRatio),
       },

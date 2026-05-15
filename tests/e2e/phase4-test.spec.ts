@@ -1,7 +1,7 @@
 /**
  * Phase 4 功能测试 — 产业招商平台
  * 测试范围: 产业动态(4) + 区域对标(8) + 风险预警(6) + 区域地图(3)
- *          + 精准招商(39) + 招商情报(9) + 企业监测(17) = 86页
+ *          + 精准招商(39) + 招商情报(9) + 企业监测(16) = 85页
  * 迁移自: phase4-test.spec.py
  */
 import { test, expect } from '@playwright/test'
@@ -10,109 +10,174 @@ import { capturePageLogs } from './helpers/log-capture'
 import type { RouteDef } from './helpers/types'
 
 const DYNAMICS_ROUTES: RouteDef[] = [
-  { route: '/dynamics/news', title: '行业动态', pageType: 'list' },
-  { route: '/dynamics/policy', title: '政策速递', pageType: 'list' },
-  { route: '/dynamics/event', title: '产业事件', pageType: 'list' },
-  { route: '/dynamics/insight', title: '行业洞察', pageType: 'list' },
+  // 产业新闻热点 (2)
+  { route: '/dynamics/news-hotspot/collection', title: '产业新闻热点采集', pageType: 'list' },
+  { route: '/dynamics/news-hotspot/analysis', title: '产业新闻热点智能分析', pageType: 'list' },
+  // 产业政策规划 (2)
+  { route: '/dynamics/policy-plan/compilation', title: '政策汇编', pageType: 'list' },
+  { route: '/dynamics/policy-plan/monitoring', title: '政策实施监测', pageType: 'list' },
 ]
 
 const BENCHMARKING_ROUTES: RouteDef[] = [
-  { route: '/benchmarking/overview', title: '对标总览', pageType: 'dashboard' },
-  { route: '/benchmarking/economy', title: '经济对标', pageType: 'dashboard' },
-  { route: '/benchmarking/industry', title: '产业对标', pageType: 'dashboard' },
-  { route: '/benchmarking/innovation', title: '创新对标', pageType: 'dashboard' },
-  { route: '/benchmarking/investment', title: '招商对标', pageType: 'dashboard' },
-  { route: '/benchmarking/ranking', title: '区域排名', pageType: 'list' },
-  { route: '/benchmarking/swot', title: 'SWOT分析', pageType: 'dashboard' },
-  { route: '/benchmarking/report', title: '对标报告', pageType: 'dashboard' },
+  // 产业对比分析 (5)
+  { route: '/benchmarking/industry-compare/scale', title: '产业规模', pageType: 'dashboard' },
+  { route: '/benchmarking/industry-compare/structure', title: '产业结构', pageType: 'dashboard' },
+  { route: '/benchmarking/industry-compare/benefit', title: '经济效益', pageType: 'dashboard' },
+  { route: '/benchmarking/industry-compare/innovation', title: '创新能力', pageType: 'dashboard' },
+  { route: '/benchmarking/industry-compare/talent', title: '人才资源', pageType: 'dashboard' },
+  // 产业占比分析 (3)
+  {
+    route: '/benchmarking/proportion-analysis/global-distribution',
+    title: '全局产业分布',
+    pageType: 'dashboard',
+  },
+  { route: '/benchmarking/proportion-analysis/heatmap', title: '地图热力图', pageType: 'map' },
+  {
+    route: '/benchmarking/proportion-analysis/dashboard',
+    title: '动态数据看板',
+    pageType: 'dashboard',
+  },
 ]
 
 const WARNING_ROUTES: RouteDef[] = [
-  { route: '/warning/overview', title: '预警总览', pageType: 'dashboard' },
-  { route: '/warning/enterprise', title: '企业风险', pageType: 'list' },
-  { route: '/warning/industry', title: '产业风险', pageType: 'dashboard' },
-  { route: '/warning/policy', title: '政策风险', pageType: 'dashboard' },
-  { route: '/warning/supply', title: '供应链风险', pageType: 'dashboard' },
-  { route: '/warning/alert', title: '风险报警', pageType: 'list' },
+  // 产业发展预警 (3)
+  { route: '/warning/industry-warning/indicators', title: '核心监测指标', pageType: 'dashboard' },
+  { route: '/warning/industry-warning/threshold', title: '动态阈值设定', pageType: 'dashboard' },
+  { route: '/warning/industry-warning/model', title: '预警分析模型', pageType: 'dashboard' },
+  // 企业外迁预警 (3)
+  {
+    route: '/warning/relocation-warning/indicator-system',
+    title: '预警指标体系',
+    pageType: 'dashboard',
+  },
+  { route: '/warning/relocation-warning/risk-signal', title: '间接风险信号', pageType: 'list' },
+  {
+    route: '/warning/relocation-warning/scoring-model',
+    title: '风险评分模型',
+    pageType: 'dashboard',
+  },
 ]
 
 const REGIONAL_MAP_ROUTES: RouteDef[] = [
-  { route: '/regional-map/overview', title: '区域总览', pageType: 'dashboard' },
-  { route: '/regional-map/compare', title: '区域对比', pageType: 'dashboard' },
-  { route: '/regional-map/detail', title: '区域详情', pageType: 'dashboard' },
+  // 园区榜单 (3)
+  {
+    route: '/regional-map/park-ranking/indicator-system',
+    title: '榜单指标体系',
+    pageType: 'dashboard',
+  },
+  { route: '/regional-map/park-ranking/enterprise-ranking', title: '企业综合榜', pageType: 'list' },
+  { route: '/regional-map/park-ranking/chain-ranking', title: '产业链协同榜', pageType: 'list' },
 ]
 
 const INVEST_ROUTES: RouteDef[] = [
-  { route: '/invest/chain/target', title: '目标筛选', pageType: 'list' },
-  { route: '/invest/chain/match', title: '链式匹配', pageType: 'list' },
-  { route: '/invest/chain/recommend', title: '智能推荐', pageType: 'list' },
-  { route: '/invest/chain/result', title: '推荐结果', pageType: 'list' },
-  { route: '/invest/map/target', title: '地图选商', pageType: 'map' },
-  { route: '/invest/map/nearby', title: '周边搜索', pageType: 'map' },
-  { route: '/invest/map/resource', title: '资源匹配', pageType: 'map' },
-  { route: '/invest/map/result', title: '招商结果', pageType: 'list' },
-  { route: '/invest/extension/analysis', title: '缺链分析', pageType: 'dashboard' },
-  { route: '/invest/extension/target', title: '补链目标', pageType: 'list' },
-  { route: '/invest/extension/result', title: '补链结果', pageType: 'list' },
+  // 产业链招商 (4)
+  { route: '/invest/chain/structure', title: '产业链结构', pageType: 'dashboard' },
+  { route: '/invest/chain/key-node', title: '关键节点', pageType: 'list' },
+  { route: '/invest/chain/competitiveness', title: '竞争力评估', pageType: 'dashboard' },
+  { route: '/invest/chain/smart-recommend', title: '目标企业智能推荐', pageType: 'list' },
+  // 产业地图招商 (4)
+  { route: '/invest/map-invest/resource-distribution', title: '产业资源分布', pageType: 'map' },
+  { route: '/invest/map-invest/space-atlas', title: '产业链空间图谱', pageType: 'map' },
+  { route: '/invest/map-invest/advantage-identify', title: '优势环节识别', pageType: 'map' },
+  { route: '/invest/map-invest/extension-recommend', title: '延伸方向推荐', pageType: 'list' },
+  // 强延补链招商 (3)
+  { route: '/invest/strengthen/benchmark', title: '对标管理工具', pageType: 'dashboard' },
+  { route: '/invest/strengthen/gap-diagnosis', title: '缺口智能诊断', pageType: 'dashboard' },
+  { route: '/invest/strengthen/fill-target', title: '补链目标库', pageType: 'list' },
+  // 关系链招商 (3)
   { route: '/invest/relation/graph', title: '关系图谱', pageType: 'graph' },
-  { route: '/invest/relation/target', title: '关系目标', pageType: 'list' },
-  { route: '/invest/relation/result', title: '关系招商结果', pageType: 'list' },
-  { route: '/invest/merchant/anchor', title: '锚点企业', pageType: 'list' },
-  { route: '/invest/merchant/derive', title: '衍生搜索', pageType: 'list' },
-  { route: '/invest/merchant/result', title: '以商招商结果', pageType: 'list' },
-  { route: '/invest/listed/ranking', title: '榜单列表', pageType: 'list' },
-  { route: '/invest/listed/detail', title: '榜单详情', pageType: 'list' },
-  { route: '/invest/listed/target', title: '榜单目标', pageType: 'list' },
-  { route: '/invest/listed/result', title: '榜单招商结果', pageType: 'list' },
-  { route: '/invest/leading/overview', title: '龙头总览', pageType: 'dashboard' },
-  { route: '/invest/leading/detail', title: '龙头详情', pageType: 'dashboard' },
-  { route: '/invest/leading/target', title: '龙头目标', pageType: 'list' },
-  { route: '/invest/qualified/list', title: '资质列表', pageType: 'list' },
-  { route: '/invest/qualified/detail', title: '资质详情', pageType: 'dashboard' },
-  { route: '/invest/qualified/target', title: '资质企业目标', pageType: 'list' },
-  { route: '/invest/fund/overview', title: '基金总览', pageType: 'dashboard' },
-  { route: '/invest/fund/detail', title: '基金详情', pageType: 'dashboard' },
-  { route: '/invest/fund/target', title: '基金招商目标', pageType: 'list' },
-  { route: '/invest/research/overview', title: '机构总览', pageType: 'dashboard' },
-  { route: '/invest/research/detail', title: '机构详情', pageType: 'dashboard' },
-  { route: '/invest/research/target', title: '科研招商目标', pageType: 'list' },
-  { route: '/invest/owner/match', title: '链主匹配', pageType: 'list' },
-  { route: '/invest/owner/detail', title: '链主详情', pageType: 'dashboard' },
-  { route: '/invest/owner/result', title: '链主适配结果', pageType: 'list' },
-  { route: '/invest/park/overview', title: '园区总览', pageType: 'dashboard' },
-  { route: '/invest/park/detail', title: '园区详情', pageType: 'dashboard' },
-  { route: '/invest/park/target', title: '园区招商目标', pageType: 'list' },
+  { route: '/invest/relation/radiation', title: '链主企业辐射力分析', pageType: 'dashboard' },
+  { route: '/invest/relation/secondary', title: '二级关联招商', pageType: 'list' },
+  // 以商招商 (3)
+  { route: '/invest/merchant/driving-portrait', title: '带动能力画像', pageType: 'dashboard' },
+  { route: '/invest/merchant/eco-network', title: '生态网络挖掘', pageType: 'graph' },
+  { route: '/invest/merchant/incentive-policy', title: '招商激励政策', pageType: 'list' },
+  // 名企榜单招商 (4)
+  { route: '/invest/ranking/vertical', title: '垂直榜单', pageType: 'list' },
+  { route: '/invest/ranking/featured', title: '特色榜单', pageType: 'list' },
+  { route: '/invest/ranking/empower-tool', title: '榜单赋能招商工具', pageType: 'list' },
+  { route: '/invest/ranking/brand-linkage', title: '品牌联动与传播', pageType: 'list' },
+  // 龙头骨干招商 (3)
+  { route: '/invest/leading/identify', title: '龙头骨干企业识别与评估', pageType: 'dashboard' },
+  { route: '/invest/leading/strategy', title: '精准招商策略生成', pageType: 'dashboard' },
+  { route: '/invest/leading/eco-build', title: '生态构建与协同', pageType: 'dashboard' },
+  // 资质企业招商 (3)
+  { route: '/invest/qualified/smart-identify', title: '资质企业智能识别', pageType: 'list' },
+  { route: '/invest/qualified/demand-portrait', title: '资质企业需求画像', pageType: 'dashboard' },
+  { route: '/invest/qualified/resource-match', title: '资源智能匹配', pageType: 'list' },
+  // 投行基金招商 (3)
+  { route: '/invest/fund/guide', title: '产业基金引导', pageType: 'dashboard' },
+  { route: '/invest/fund/project-lib', title: '项目库管理', pageType: 'list' },
+  { route: '/invest/fund/capital-docking', title: '资本对接', pageType: 'dashboard' },
+  // 科研机构招商 (3)
+  { route: '/invest/research/panorama', title: '科研资源全景库', pageType: 'dashboard' },
+  { route: '/invest/research/tech-transfer', title: '技术转化潜力评估', pageType: 'dashboard' },
+  { route: '/invest/research/talent-mechanism', title: '人才流动与共享机制', pageType: 'list' },
+  // 链主适配招商 (3)
+  { route: '/invest/chain-owner/portrait', title: '链主画像与需求解析', pageType: 'dashboard' },
+  { route: '/invest/chain-owner/gap-diagnosis', title: '产业链缺口诊断', pageType: 'dashboard' },
+  { route: '/invest/chain-owner/smart-match', title: '适配企业智能匹配', pageType: 'list' },
+  // 园区招商 (3)
+  { route: '/invest/park/panorama', title: '园区资源全景展示', pageType: 'dashboard' },
+  { route: '/invest/park/smart-match', title: '智能企业匹配引擎', pageType: 'list' },
+  { route: '/invest/park/chain-collaborate', title: '产业链协同招商', pageType: 'list' },
 ]
 
 const INTELLIGENCE_ROUTES: RouteDef[] = [
-  { route: '/intelligence/news', title: '招商资讯', pageType: 'list' },
-  { route: '/intelligence/project', title: '项目信息', pageType: 'list' },
-  { route: '/intelligence/technology', title: '技术转移', pageType: 'list' },
-  { route: '/intelligence/qualification', title: '资质变更', pageType: 'list' },
-  { route: '/intelligence/capital', title: '资本动态', pageType: 'list' },
-  { route: '/intelligence/talent', title: '人才流动', pageType: 'list' },
-  { route: '/intelligence/event', title: '招商活动', pageType: 'list' },
-  { route: '/intelligence/track', title: '情报追踪', pageType: 'list' },
-  { route: '/intelligence/report', title: '情报报告', pageType: 'dashboard' },
+  // 资讯招商情报 (1)
+  { route: '/intelligence/news-invest/index', title: '资讯招商情报', pageType: 'list' },
+  // 项目招商情报 (1)
+  { route: '/intelligence/project-invest/index', title: '项目招商情报', pageType: 'list' },
+  // 技术招商情报 (1)
+  { route: '/intelligence/tech-invest/index', title: '技术招商情报', pageType: 'list' },
+  // 资质招商情报 (1)
+  { route: '/intelligence/qual-invest/index', title: '资质招商情报', pageType: 'list' },
+  // 资本招商情报 (1)
+  { route: '/intelligence/capital-invest/index', title: '资本招商情报', pageType: 'list' },
+  // 招商风险监测 (2)
+  { route: '/intelligence/risk-monitor/monitor', title: '招商风险监测', pageType: 'dashboard' },
+  {
+    route: '/intelligence/risk-monitor/classification',
+    title: '风险分类体系',
+    pageType: 'dashboard',
+  },
+  // 招商情报搜索 (1)
+  { route: '/intelligence/search/index', title: '招商情报搜索', pageType: 'list' },
+  // 我的招商情报 (1)
+  { route: '/intelligence/mine/index', title: '我的招商情报', pageType: 'list' },
 ]
 
 const MONITOR_ROUTES: RouteDef[] = [
-  { route: '/monitor/overview/summary', title: '监测总览', pageType: 'dashboard' },
-  { route: '/monitor/overview/dashboard', title: '监测仪表盘', pageType: 'dashboard' },
-  { route: '/monitor/overview/map', title: '监测地图', pageType: 'map' },
-  { route: '/monitor/health/overview', title: '健康度总览', pageType: 'dashboard' },
-  { route: '/monitor/health/detail', title: '健康度详情', pageType: 'dashboard' },
-  { route: '/monitor/health/trend', title: '健康度趋势', pageType: 'dashboard' },
-  { route: '/monitor/rankings/revenue', title: '营收榜单', pageType: 'list' },
-  { route: '/monitor/rankings/growth', title: '成长榜单', pageType: 'list' },
-  { route: '/monitor/filter/enterprise', title: '企业筛选', pageType: 'list' },
-  { route: '/monitor/filter/industry', title: '行业筛选', pageType: 'list' },
-  { route: '/monitor/filter/region', title: '区域筛选', pageType: 'list' },
-  { route: '/monitor/filter/custom', title: '自定义筛选', pageType: 'list' },
-  { route: '/monitor/portrait/overview', title: '画像总览', pageType: 'dashboard' },
-  { route: '/monitor/portrait/detail', title: '画像详情', pageType: 'dashboard' },
-  { route: '/monitor/portrait/compare', title: '画像对比', pageType: 'dashboard' },
-  { route: '/monitor/evaluation/index', title: '评价指数', pageType: 'dashboard' },
+  // 企业总览 (3)
+  { route: '/monitor/overview/basic-info', title: '基础信息总览', pageType: 'dashboard' },
+  {
+    route: '/monitor/overview/economic-contribution',
+    title: '经济贡献分析',
+    pageType: 'dashboard',
+  },
+  { route: '/monitor/overview/dynamic-ranking', title: '动态排名', pageType: 'list' },
+  // 经营健康度监测 (3)
+  { route: '/monitor/health/key-dashboard', title: '关键指标看板', pageType: 'dashboard' },
+  { route: '/monitor/health/chain-collaborate', title: '产业链协同监测', pageType: 'dashboard' },
+  { route: '/monitor/health/sustainable', title: '可持续发展监测', pageType: 'dashboard' },
+  // 企业榜单 (2)
+  { route: '/monitor/rankings/multi-source', title: '多源榜单动态整合', pageType: 'list' },
+  {
+    route: '/monitor/rankings/fluctuation-warning',
+    title: '榜单波动预警体系',
+    pageType: 'dashboard',
+  },
+  // 企业筛选器 (4)
+  { route: '/monitor/filter/basic-info', title: '基础信息筛选', pageType: 'list' },
+  { route: '/monitor/filter/business-qual', title: '经营与资质筛选', pageType: 'list' },
+  { route: '/monitor/filter/chain-relation', title: '产业链关联筛选', pageType: 'list' },
+  { route: '/monitor/filter/risk-compliance', title: '风险与合规筛选', pageType: 'list' },
+  // 企业画像 (3)
+  { route: '/monitor/portrait/health-index', title: '企业健康指数', pageType: 'dashboard' },
+  { route: '/monitor/portrait/multi-dimension', title: '多维度画像', pageType: 'dashboard' },
+  { route: '/monitor/portrait/chain-relation', title: '产业链关联', pageType: 'dashboard' },
+  // 企业综合评价 (1)
+  { route: '/monitor/evaluation/five-dimension', title: '五维评价模型', pageType: 'dashboard' },
 ]
 
 // Helper: type-specific assertions
@@ -126,9 +191,17 @@ async function assertPageType(
     const chartPanelCount = await page.locator('.chart-panel').count()
     const canvasCount = await page.locator('canvas').count()
     const tableCount = await page.locator('.el-table').count()
+    const cardCount = await page.locator('.el-card').count()
+    const formCount = await page.locator('.el-form').count()
     const hasDashboard =
-      statCount > 0 || chartCount > 0 || chartPanelCount > 0 || canvasCount > 0 || tableCount > 0
-    expect(hasDashboard, '仪表盘内容应存在').toBeTruthy()
+      statCount > 0 ||
+      chartCount > 0 ||
+      chartPanelCount > 0 ||
+      canvasCount > 0 ||
+      tableCount > 0 ||
+      cardCount > 0 ||
+      formCount > 0
+    expect(hasDashboard, '页面内容应存在').toBeTruthy()
   } else if (pageType === 'list') {
     const tableCount = await page.locator('.el-table').count()
     const cardCount = await page.locator('.el-card').count()

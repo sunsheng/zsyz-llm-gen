@@ -28,4 +28,5 @@ export interface MapLayer {
   type: 'marker' | 'heatmap' | 'boundary' | 'cluster'
   visible: boolean
   data?: unknown
+  color?: string
 }

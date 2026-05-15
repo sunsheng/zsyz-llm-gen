@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="智能推荐" subtitle="基于产业链分析的智能招商推荐">
+    <PageHeader title="目标企业智能推荐" subtitle="基于产业链分析的目标企业智能推荐">
       <template #actions>
         <el-button type="primary">生成推荐</el-button>
       </template>
@@ -87,7 +87,7 @@ onMounted(() => {
       data: ['60-65%', '65-70%', '70-75%', '75-80%', '80-85%', '85-90%', '90-95%'],
     },
     yAxis: { type: 'value' },
-    series: [{ type: 'bar', data: [5, 8, 15, 22, 18, 12, 6], barWidth: '40%' }],
+    series: [{ type: 'bar', barMaxWidth: 32, data: [5, 8, 15, 22, 18, 12, 6], barWidth: '40%' }],
   }
 
   industryPieOption.value = {

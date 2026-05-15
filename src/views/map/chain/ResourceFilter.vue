@@ -8,7 +8,7 @@
     <div class="map-page__body">
       <MapControlPanel title="资源筛选">
         <div class="filter-section">
-          <div class="filter-label">产业类型</div>
+          <div class="filter-label">所属产业</div>
           <el-select
             v-model="filters.industry"
             placeholder="全部产业"
@@ -20,7 +20,19 @@
           </el-select>
         </div>
         <div class="filter-section">
-          <div class="filter-label">企业规模</div>
+          <div class="filter-label">所属行业</div>
+          <el-select
+            v-model="filters.industryCategory"
+            placeholder="全部行业"
+            clearable
+            style="width: 100%"
+            @change="applyFilters"
+          >
+            <el-option v-for="item in industryCategories" :key="item" :label="item" :value="item" />
+          </el-select>
+        </div>
+        <div class="filter-section">
+          <div class="filter-label">企业规模（规上企业）</div>
           <el-select
             v-model="filters.scale"
             placeholder="全部规模"
@@ -34,7 +46,7 @@
           </el-select>
         </div>
         <div class="filter-section">
-          <div class="filter-label">所在区域</div>
+          <div class="filter-label">所属区域</div>
           <el-select
             v-model="filters.region"
             placeholder="全部区域"
@@ -51,11 +63,27 @@
           </el-select>
         </div>
         <div class="filter-section">
+          <div class="filter-label">所属空间</div>
+          <el-select
+            v-model="filters.space"
+            placeholder="全部空间"
+            clearable
+            style="width: 100%"
+            @change="applyFilters"
+          >
+            <el-option v-for="item in spaceOptions" :key="item" :label="item" :value="item" />
+          </el-select>
+        </div>
+        <div class="filter-section">
+          <div class="filter-label">是否百强</div>
+          <el-switch v-model="filters.top100" active-text="百强" @change="applyFilters" />
+        </div>
+        <div class="filter-section">
           <div class="filter-label">资源类型</div>
           <el-checkbox-group v-model="filters.types" @change="applyFilters">
-            <el-checkbox value="enterprise">企业</el-checkbox>
-            <el-checkbox value="park">园区</el-checkbox>
-            <el-checkbox value="institution">机构</el-checkbox>
+            <el-checkbox label="enterprise">企业</el-checkbox>
+            <el-checkbox label="park">园区</el-checkbox>
+            <el-checkbox label="institution">机构</el-checkbox>
           </el-checkbox-group>
         </div>
         <div class="filter-section">
@@ -106,7 +134,7 @@
         </div>
       </MapControlPanel>
       <div class="map-page__map">
-        <MaptalksMap :center="[104.612, 30.884]" :zoom="15" @ready="onMapReady" />
+        <MaptalksMap :center="[104.612, 30.884]" :zoom="14" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <MapLegend :items="legendItems" />
       </div>
@@ -135,7 +163,25 @@ const industries = [
   '数字创意',
   '现代服务业',
 ]
-const regions = getMockGeoFeatures('zhejiang').map((f) => f.properties)
+const industryCategories = [
+  '通用设备制造',
+  '专用设备制造',
+  '电气机械制造',
+  '化学原料制造',
+  '电子元件制造',
+  '医药制造',
+  '软件和信息技术',
+  '商务服务',
+]
+const spaceOptions = [
+  '凯州新城核心区',
+  '辑庆片区',
+  '兴隆片区',
+  '成巴东片区',
+  '凯州科技创新产业园',
+  '凯州新城高端装备产业园',
+]
+const regions = getMockGeoFeatures('kaizhou').map((f) => f.properties)
 
 const allMarkers = ref<MapMarker[]>(getMockMarkers(80))
 let mapInstance: any = null
@@ -143,8 +189,11 @@ let markerLayer: any = null
 
 const filters = reactive({
   industry: '',
+  industryCategory: '',
   scale: '',
   region: '',
+  space: '',
+  top100: false,
   types: ['enterprise', 'park', 'institution'] as string[],
   minValue: undefined as number | undefined,
   maxValue: undefined as number | undefined,
@@ -160,6 +209,10 @@ const filteredMarkers = computed(() => {
   let list = allMarkers.value
   if (filters.industry) {
     list = list.filter((m) => m.category === filters.industry)
+  }
+  if (filters.industryCategory) {
+    const extra = (m: MapMarker) => (m.extra as any) || {}
+    list = list.filter((m) => extra(m).industryCategory === filters.industryCategory)
   }
   if (filters.scale) {
     const extra = (m: MapMarker) => (m.extra as any) || {}
@@ -181,6 +234,14 @@ const filteredMarkers = computed(() => {
         return dist < 0.6
       })
     }
+  }
+  if (filters.space) {
+    const extra = (m: MapMarker) => (m.extra as any) || {}
+    list = list.filter((m) => extra(m).space === filters.space)
+  }
+  if (filters.top100) {
+    const extra = (m: MapMarker) => (m.extra as any) || {}
+    list = list.filter((m) => extra(m).top100 === true)
   }
   if (filters.types.length > 0 && filters.types.length < 3) {
     list = list.filter((m) => filters.types.includes(m.type))
@@ -253,8 +314,11 @@ function applyFilters() {
 
 function resetFilters() {
   filters.industry = ''
+  filters.industryCategory = ''
   filters.scale = ''
   filters.region = ''
+  filters.space = ''
+  filters.top100 = false
   filters.types = ['enterprise', 'park', 'institution']
   filters.minValue = undefined
   filters.maxValue = undefined
@@ -264,7 +328,7 @@ function resetFilters() {
 function handleMarkerClick(marker: MapMarker) {
   if (mapInstance) {
     mapInstance.setCenter([marker.longitude, marker.latitude])
-    mapInstance.setZoom(15)
+    mapInstance.setZoom(14)
   }
 }
 
@@ -276,7 +340,7 @@ function handleZoomOut() {
 }
 function handleReset() {
   mapInstance?.setCenter([104.612, 30.884])
-  mapInstance?.setZoom(15)
+  mapInstance?.setZoom(14)
   resetFilters()
 }
 

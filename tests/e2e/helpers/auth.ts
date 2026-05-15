@@ -4,11 +4,23 @@ const MOCK_TOKEN = 'mock-token-123456'
 const MOCK_USER = JSON.stringify({ username: 'admin', role: 'admin' })
 
 /**
+ * Convert a Vue Router path to a hash-history URL fragment.
+ * The app uses createWebHashHistory(), so routes must be prefixed with /#.
+ */
+export function hashRoute(route: string): string {
+  return '/#' + route
+}
+
+/**
  * Navigate to a route with mock authentication injected.
  * Must go to the site first to have a valid origin for localStorage.
  */
 export async function gotoWithAuth(page: Page, route: string) {
-  // Navigate to the app root first to establish a valid origin for localStorage
+  // Navigate to a blank page first to ensure a clean full-page load
+  await page.goto('about:blank')
+  await page.waitForLoadState('domcontentloaded')
+
+  // Navigate to the app root to establish a valid origin for localStorage
   await page.goto('/')
   await page.waitForLoadState('domcontentloaded')
 
@@ -21,8 +33,9 @@ export async function gotoWithAuth(page: Page, route: string) {
     [MOCK_TOKEN, MOCK_USER],
   )
 
-  // Now navigate to the target route
-  await page.goto(route)
+  // Now navigate to the target route (hash-history format)
+  // Using the full absolute URL forces a proper page load
+  await page.goto(hashRoute(route))
   await page.waitForLoadState('networkidle')
   await page.waitForTimeout(2500)
 
@@ -35,7 +48,7 @@ export async function gotoWithAuth(page: Page, route: string) {
       },
       [MOCK_TOKEN, MOCK_USER],
     )
-    await page.goto(route)
+    await page.goto(hashRoute(route))
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(2500)
   }
