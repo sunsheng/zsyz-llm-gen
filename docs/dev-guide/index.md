@@ -255,9 +255,13 @@ zsyz-llm-gen/
 │   └── directives/                   # 自定义指令
 │       └── permission.ts             # v-permission 权限控制
 │
-├── docs/                             # 文档 (本文件所在位置)
-│   ├── PRD.md                       # 产品需求文档
-│   └── FrontendDevPrompt.md          # 本文件 (前端开发提示词)
+├── docs/                             # 文档
+│   ├── prd/                          # 产品需求
+│   │   ├── index.md                  # 产品需求文档 (PRD)
+│   │   └── 产业招商平台.xlsx          # 功能依据原始数据
+│   ├── dev-guide/                    # 开发指南
+│   │   └── index.md                  # 本文件 (前端开发指南)
+│   └── reports/                      # 分析报告
 │
 ├── nginx.conf                        # Nginx 部署配置
 ├── .env                              # 环境变量 (公共)
