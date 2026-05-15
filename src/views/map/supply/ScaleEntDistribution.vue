@@ -88,7 +88,7 @@
           <StatCard
             icon="DataLine"
             label="平均增速"
-            value="6.8"
+            :value="avgGrowth"
             unit="%"
             trend="up"
             trend-value="+1.2"
@@ -104,11 +104,48 @@
             icon-bg-color="#F3F0FF"
           />
         </div>
-        <MaptalksMap :center="[120.5, 30.6]" :zoom="11" @ready="onMapReady" />
+        <MaptalksMap :center="[104.612, 30.884]" :zoom="14" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <MapLegend :items="legendItems" />
       </div>
     </div>
+
+    <!-- Enterprise Detail Dialog -->
+    <el-dialog v-model="detailVisible" :title="detailData?.name" width="560px">
+      <template v-if="detailData">
+        <el-descriptions :column="2" border size="small">
+          <el-descriptions-item label="企业名称">{{ detailData.name }}</el-descriptions-item>
+          <el-descriptions-item label="所属行业">{{ detailData.industry }}</el-descriptions-item>
+          <el-descriptions-item label="所属区域">{{ detailData.region }}</el-descriptions-item>
+          <el-descriptions-item label="企业地址">{{ detailData.address }}</el-descriptions-item>
+          <el-descriptions-item label="产值">
+            {{ detailData.output.toLocaleString() }} 万元
+          </el-descriptions-item>
+          <el-descriptions-item label="增速">
+            <span :style="{ color: detailData.growth >= 0 ? '#4ECB73' : '#F2637B' }">
+              {{ detailData.growth >= 0 ? '+' : '' }}{{ detailData.growth }}%
+            </span>
+          </el-descriptions-item>
+          <el-descriptions-item label="联系电话">{{ detailData.contact }}</el-descriptions-item>
+          <el-descriptions-item label="企业网站">
+            <el-link type="primary" :underline="false">{{ detailData.website }}</el-link>
+          </el-descriptions-item>
+          <el-descriptions-item label="地理位置">
+            经度 {{ detailData.lng.toFixed(3) }}，纬度 {{ detailData.lat.toFixed(3) }}
+          </el-descriptions-item>
+          <el-descriptions-item label="经营信息">
+            {{ detailData.businessInfo }}
+          </el-descriptions-item>
+        </el-descriptions>
+        <div class="ent-detail-image">
+          <el-image :src="detailData.image" fit="cover" class="ent-detail-image__img">
+            <template #error>
+              <div class="ent-detail-image__placeholder">企业图片</div>
+            </template>
+          </el-image>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -133,36 +170,98 @@ interface Enterprise {
   growth: number
   website: string
   contact: string
+  address: string
+  image: string
+  businessInfo: string
 }
 
-const regions = ['梧桐街道', '凤鸣街道', '崇福镇', '乌镇镇', '濮院镇', '洲泉镇', '大麻镇', '石门镇']
+const regions = ['辑庆片区', '兴隆片区', '成巴东片区', '凯州新城核心区', '中江县', '德阳市']
 const industries = [
   '高端装备制造',
   '新材料',
   '电子信息',
   '生物医药',
   '新能源',
-  '现代纺织',
-  '时尚产业',
+  '节能环保',
+  '数字创意',
+]
+
+// 各区域中心坐标，用于生成企业分布点
+const regionCenters: Record<string, [number, number]> = {
+  辑庆片区: [104.623, 30.92],
+  兴隆片区: [104.595, 30.871],
+  成巴东片区: [104.65, 30.86],
+  凯州新城核心区: [104.612, 30.884],
+  中江县: [104.803, 30.885],
+  德阳市: [104.398, 31.127],
+}
+
+const enterpriseNamePool = [
+  '东方电机',
+  '国机重装',
+  '宏华石油',
+  '华庆机械',
+  '长虹佳华',
+  '天域半导体',
+  '芯源集成',
+  '博远生物',
+  '昌盛药业',
+  '绿能科技',
+  '华创新材',
+  '瑞丰新材',
+  '中科智联',
+  '鼎盛环保',
+  '创想数字',
+  '恒达装备',
+  '铭远精密',
+  '亿能动力',
+  '安泰环保',
+  '智汇信息',
+  '云帆数据',
+  '盛达新材',
+  '恒宇光电',
+  '宏图半导体',
+  '金辉科技',
 ]
 
 function generateEnterprises(): Enterprise[] {
+  const addressPool = [
+    '凯州新城智能制造产业园A栋',
+    '辑庆镇工业集中区3号路',
+    '兴隆镇科技创新园B区',
+    '成巴东产业新城5号楼',
+    '中江县工业发展区8号',
+    '德阳经济技术开发区2号路',
+  ]
+  const businessPool = [
+    '主要从事高端装备研发与制造，年产能超5000台套',
+    '专注于新材料研发生产，产品覆盖西南地区',
+    '电子信息产品制造，拥有自主知识产权30余项',
+    '生物医药研发与生产，通过GMP认证',
+    '新能源装备制造，年产值持续增长',
+    '节能环保设备研发，服务于成渝地区',
+    '数字创意产业服务，拥有专业团队200余人',
+  ]
   const enterprises: Enterprise[] = []
   regions.forEach((region, ri) => {
     const count = 5 + Math.floor(Math.random() * 8)
+    const center = regionCenters[region]
     for (let i = 0; i < count; i++) {
       const industry = industries[Math.floor(Math.random() * industries.length)]
       enterprises.push({
         id: `ent-${ri}-${i}`,
-        name: `${region}${industry}${i + 1}号企业`,
+        name: `${enterpriseNamePool[(ri * 5 + i) % enterpriseNamePool.length]}${region === '德阳市' ? '(德阳)' : '(凯州)'}`,
         region,
         industry,
-        lng: 120.2 + Math.random() * 0.8,
-        lat: 30.5 + Math.random() * 0.3,
+        lng: center[0] + (Math.random() - 0.5) * 0.06,
+        lat: center[1] + (Math.random() - 0.5) * 0.04,
         output: Math.floor(Math.random() * 80000 + 5000),
         growth: +(Math.random() * 20 - 5).toFixed(1),
         website: `www.ent${ri}${i}.example.com`,
-        contact: `0573-88${ri}8${i}8${i}8`,
+        contact: `0838-7${ri}8${i}8${i}8`,
+        address: addressPool[ri] + `${i + 1}号`,
+        image: `https://via.placeholder.com/400x200?text=${encodeURIComponent(industry)}`,
+        businessInfo: businessPool[Math.floor(Math.random() * businessPool.length)],
       })
     }
   })
@@ -175,6 +274,8 @@ const selectedIndustry = ref('')
 
 let mapInstance: any = null
 let markerLayer: any = null
+const detailVisible = ref(false)
+const detailData = ref<Enterprise | null>(null)
 
 const filteredEnterprises = computed(() => {
   let list = allEnterprises.value
@@ -190,6 +291,11 @@ const filteredEnterprises = computed(() => {
 const totalOutput = computed(() => {
   const total = filteredEnterprises.value.reduce((s, e) => s + e.output, 0)
   return (total / 10000).toFixed(1)
+})
+
+const avgGrowth = computed(() => {
+  const list = filteredEnterprises.value
+  return list.length ? (list.reduce((s, e) => s + e.growth, 0) / list.length).toFixed(1) : '0'
 })
 
 const activeRegions = computed(() => {
@@ -249,6 +355,8 @@ function handleEntClick(ent: Enterprise) {
     mapInstance.setCenter([ent.lng, ent.lat])
     mapInstance.setZoom(14)
   }
+  detailData.value = ent
+  detailVisible.value = true
 }
 
 function handleZoomIn() {
@@ -258,8 +366,8 @@ function handleZoomOut() {
   mapInstance?.zoomOut()
 }
 function handleReset() {
-  mapInstance?.setCenter([120.5, 30.6])
-  mapInstance?.setZoom(11)
+  mapInstance?.setCenter([104.612, 30.884])
+  mapInstance?.setZoom(14)
   selectedRegion.value = ''
   selectedIndustry.value = ''
 }
@@ -401,5 +509,27 @@ onUnmounted(() => {
   font-weight: $font-weight-semibold;
   color: $color-primary;
   white-space: nowrap;
+}
+
+.ent-detail-image {
+  margin-top: 16px;
+}
+
+.ent-detail-image__img {
+  width: 100%;
+  height: 160px;
+  border-radius: $radius-base;
+}
+
+.ent-detail-image__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 160px;
+  font-size: 14px;
+  color: $text-secondary;
+  background: $bg-hover;
+  border-radius: $radius-base;
 }
 </style>

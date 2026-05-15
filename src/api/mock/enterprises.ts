@@ -12,7 +12,7 @@ const industries = [
   '现代服务业',
 ]
 const tags = ['高新技术企业', '专精特新', '上市公司', '独角兽', '瞪羚企业', '科技型中小企业']
-const cities = ['杭州市', '宁波市', '温州市', '嘉兴市', '湖州市', '绍兴市', '金华市', '台州市']
+const cities = ['德阳市', '成都市', '绵阳市', '宜宾市', '泸州市', '南充市', '达州市', '乐山市']
 const scales: Enterprise['scale'][] = ['large', 'medium', 'small', 'micro']
 const statuses: Enterprise['status'][] = ['operating', 'revoked', 'moved', 'dissolved']
 const qualifiers = ['ISO9001', 'ISO14001', 'CMMI5', 'IATF16949', '知识产权贯标', '两化融合贯标']
@@ -73,13 +73,13 @@ function generateEnterprise(): Enterprise {
   return {
     id: `ent-${idCounter}`,
     name: companyNames[(idCounter - 1) % companyNames.length],
-    unifiedCode: `91330${String(Math.floor(Math.random() * 100000000)).padStart(8, '0')}${String(Math.floor(Math.random() * 10))}`,
+    unifiedCode: `915106${String(Math.floor(Math.random() * 100000000)).padStart(8, '0')}${String(Math.floor(Math.random() * 10))}`,
     industry: randomItem(industries),
     industryCode: `C${Math.floor(Math.random() * 40 + 13)}`,
     registeredCapital: Math.floor(Math.random() * 50000 + 100),
     establishedDate: `${2005 + Math.floor(Math.random() * 18)}-${String(Math.floor(Math.random() * 12 + 1)).padStart(2, '0')}-${String(Math.floor(Math.random() * 28 + 1)).padStart(2, '0')}`,
     legalPerson: ['张明', '李强', '王伟', '刘洋', '陈静', '赵磊', '黄海', '周波'][idCounter % 8],
-    address: `浙江省${randomItem(cities)}${randomItem(['经济开发区', '高新技术区', '产业园区', '科技城'])}创新路${Math.floor(Math.random() * 200 + 1)}号`,
+    address: `四川省${randomItem(cities)}${randomItem(['凯州新城产业园', '高新技术区', '经济开发区', '科技城'])}创新路${Math.floor(Math.random() * 200 + 1)}号`,
     businessScope: randomItem(industries) + '相关产品的研发、生产与销售',
     status: Math.random() > 0.1 ? 'operating' : randomItem(statuses.slice(1)),
     scale,
@@ -89,12 +89,12 @@ function generateEnterprise(): Enterprise {
     employeeCount: Math.floor(
       Math.random() * 5000 + (scale === 'large' ? 500 : scale === 'medium' ? 100 : 10),
     ),
-    province: '浙江省',
+    province: '四川省',
     city: randomItem(cities),
-    district: randomItem(['西湖区', '滨江区', '余杭区', '萧山区', '江北区', '镇海区']),
-    longitude: 118 + Math.random() * 4,
-    latitude: 28 + Math.random() * 4,
-    phone: `0571-${String(Math.floor(Math.random() * 90000000 + 10000000))}`,
+    district: randomItem(['旌阳区', '罗江区', '中江县', '广汉市', '什邡市', '绵竹市']),
+    longitude: 104 + Math.random() * 1.5,
+    latitude: 30.5 + Math.random() * 1.5,
+    phone: `0838-${String(Math.floor(Math.random() * 90000000 + 10000000))}`,
     website: `www.ent${idCounter}.com`,
     email: `contact@ent${idCounter}.com`,
     riskScore: Math.floor(Math.random() * 40 + 10),

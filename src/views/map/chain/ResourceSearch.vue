@@ -31,10 +31,10 @@
         <div class="filter-section">
           <div class="filter-label">资源类型</div>
           <el-radio-group v-model="selectedType" @change="handleSearch">
-            <el-radio-button value="">全部</el-radio-button>
-            <el-radio-button value="enterprise">企业</el-radio-button>
-            <el-radio-button value="park">园区</el-radio-button>
-            <el-radio-button value="institution">机构</el-radio-button>
+            <el-radio-button label="">全部</el-radio-button>
+            <el-radio-button label="enterprise">企业</el-radio-button>
+            <el-radio-button label="park">园区</el-radio-button>
+            <el-radio-button label="institution">机构</el-radio-button>
           </el-radio-group>
         </div>
         <div class="results-section">
@@ -66,7 +66,7 @@
       <div class="map-page__map">
         <MaptalksMap
           :center="[104.612, 30.884]"
-          :zoom="15"
+          :zoom="14"
           @ready="onMapReady"
           @click="onMapClick"
         />
@@ -204,7 +204,7 @@ function handleMarkerClick(marker: MapMarker) {
   activeMarkerId.value = marker.id
   if (mapInstance) {
     mapInstance.setCenter([marker.longitude, marker.latitude])
-    mapInstance.setZoom(15)
+    mapInstance.setZoom(14)
   }
   addMarkersToMap()
 }
@@ -224,7 +224,7 @@ function handleZoomOut() {
 
 function handleReset() {
   mapInstance?.setCenter([104.612, 30.884])
-  mapInstance?.setZoom(15)
+  mapInstance?.setZoom(14)
   activeMarkerId.value = ''
   searchText.value = ''
   selectedIndustry.value = ''

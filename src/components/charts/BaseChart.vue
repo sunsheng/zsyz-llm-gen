@@ -5,6 +5,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
+import 'echarts-wordcloud'
 import type { EChartsOption } from 'echarts'
 
 const props = withDefaults(

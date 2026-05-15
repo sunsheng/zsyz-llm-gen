@@ -27,7 +27,7 @@
         </div>
       </MapControlPanel>
       <div class="map-page__map">
-        <MaptalksMap :center="[104.612, 30.884]" :zoom="15" @ready="onMapReady" />
+        <MaptalksMap :center="[104.612, 30.884]" :zoom="14" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <MapLegend :items="currentLegendItems" />
       </div>
@@ -44,25 +44,19 @@ import MapControlPanel from '@/components/map/MapControlPanel.vue'
 import MapToolbar from '@/components/map/MapToolbar.vue'
 import MapLegend from '@/components/map/MapLegend.vue'
 import MapLayerToggle from '@/components/map/MapLayerToggle.vue'
-import {
-  getMockLayers,
-  getMockMarkers,
-  getMockHeatmapData,
-  getMockClusterData,
-} from '@/api/mock/map'
+import { getMockLayers, getMockMarkers, getMockHeatmapData } from '@/api/mock/map'
 import type { LayerItem } from '@/components/map/MapLayerToggle.vue'
 
 const mapLayers = getMockLayers()
 const allMarkers = getMockMarkers(60)
 const heatmapData = getMockHeatmapData()
-const clusterData = getMockClusterData()
 
 const layerColors: Record<string, string> = {
   enterprise: '#1889E8',
-  park: '#4ECB73',
+  space: '#4ECB73',
+  scaleEnterprise: '#FBD437',
   heatmap: '#F2637B',
   boundary: '#975FE5',
-  cluster: '#36CBCB',
 }
 
 function getLayerColor(id: string) {
@@ -112,28 +106,33 @@ const layerStats = computed(() => {
       value: allMarkers.filter((m) => m.type === 'enterprise').length.toString(),
     })
   }
-  if (activeLayers.value.includes('park')) {
+  if (activeLayers.value.includes('space')) {
     stats.push({
-      label: '园区数',
+      label: '产业空间',
       value: allMarkers.filter((m) => m.type === 'park').length.toString(),
+    })
+  }
+  if (activeLayers.value.includes('scaleEnterprise')) {
+    stats.push({
+      label: '规上企业',
+      value: allMarkers
+        .filter((m) => m.type === 'enterprise' && (m.value || 0) > 30000)
+        .length.toString(),
     })
   }
   if (activeLayers.value.includes('heatmap')) {
     stats.push({ label: '热力点', value: heatmapData.length.toString() })
-  }
-  if (activeLayers.value.includes('cluster')) {
-    stats.push({ label: '产业集群', value: clusterData.length.toString() })
   }
   return stats
 })
 
 async function onMapReady(map: any) {
   mapInstance = map
-  const maptalks = await import('maptalks')
+  await import('maptalks')
   renderActiveLayers()
 }
 
-function handleLayerChange(active: string[]) {
+function handleLayerChange(_active: string[]) {
   renderActiveLayers()
 }
 
@@ -145,7 +144,9 @@ async function renderActiveLayers() {
   Object.values(layerRefs).forEach((layer) => {
     try {
       layer?.remove()
-    } catch {}
+    } catch {
+      // layer may already be removed
+    }
   })
   Object.keys(layerRefs).forEach((k) => delete layerRefs[k])
 
@@ -172,9 +173,9 @@ async function renderActiveLayers() {
     layerRefs['enterprise'] = layer
   }
 
-  // Park markers
-  if (activeLayers.value.includes('park')) {
-    const layer = new maptalks.VectorLayer('park-layer').addTo(mapInstance)
+  // Industry space markers (产业空间)
+  if (activeLayers.value.includes('space')) {
+    const layer = new maptalks.VectorLayer('space-layer').addTo(mapInstance)
     allMarkers
       .filter((m) => m.type === 'park')
       .forEach((m) => {
@@ -192,7 +193,30 @@ async function renderActiveLayers() {
           }),
         )
       })
-    layerRefs['park'] = layer
+    layerRefs['space'] = layer
+  }
+
+  // Scale enterprise markers (规上企业)
+  if (activeLayers.value.includes('scaleEnterprise')) {
+    const layer = new maptalks.VectorLayer('scale-enterprise-layer').addTo(mapInstance)
+    allMarkers
+      .filter((m) => m.type === 'enterprise' && (m.value || 0) > 30000)
+      .forEach((m) => {
+        layer.addGeometry(
+          new maptalks.Marker([m.longitude, m.latitude], {
+            symbol: {
+              markerType: 'ellipse',
+              markerFill: '#FBD437',
+              markerFillOpacity: 0.9,
+              markerLineColor: '#fff',
+              markerLineWidth: 2,
+              markerWidth: 14,
+              markerHeight: 14,
+            },
+          }),
+        )
+      })
+    layerRefs['scaleEnterprise'] = layer
   }
 
   // Heatmap layer (simulated with colored circles)
@@ -220,7 +244,7 @@ async function renderActiveLayers() {
     const cities = [
       { name: '凯州新城核心区', lng: 104.612, lat: 30.884 },
       { name: '辑庆片区', lng: 104.623, lat: 30.92 },
-      { name: '兴隆片区', lng: 104.612, lat: 30.884 },
+      { name: '兴隆片区', lng: 104.595, lat: 30.871 },
       { name: '成巴东片区', lng: 104.65, lat: 30.86 },
       { name: '中江县', lng: 104.803, lat: 30.885 },
       { name: '德阳市', lng: 104.398, lat: 31.127 },
@@ -246,38 +270,6 @@ async function renderActiveLayers() {
     })
     layerRefs['boundary'] = layer
   }
-
-  // Cluster layer
-  if (activeLayers.value.includes('cluster')) {
-    const layer = new maptalks.VectorLayer('cluster-layer').addTo(mapInstance)
-    clusterData.forEach((c) => {
-      const radius = Math.max(16, Math.min(40, c.count / 5))
-      layer.addGeometry(
-        new maptalks.Circle([c.lng, c.lat], radius * 1000, {
-          symbol: {
-            polygonFill: '#36CBCB',
-            polygonOpacity: 0.35,
-            lineColor: '#36CBCB',
-            lineWidth: 1.5,
-            lineOpacity: 0.6,
-          },
-        }),
-      )
-      layer.addGeometry(
-        new maptalks.Marker([c.lng, c.lat], {
-          symbol: {
-            textName: `${c.name}\n${c.count}家`,
-            textSize: 11,
-            textFill: '#fff',
-            textHaloFill: '#36CBCB',
-            textHaloRadius: 3,
-            textWeight: 'bold',
-          },
-        }),
-      )
-    })
-    layerRefs['cluster'] = layer
-  }
 }
 
 function handleZoomIn() {
@@ -288,14 +280,16 @@ function handleZoomOut() {
 }
 function handleReset() {
   mapInstance?.setCenter([104.612, 30.884])
-  mapInstance?.setZoom(15)
+  mapInstance?.setZoom(14)
 }
 
 onUnmounted(() => {
   Object.values(layerRefs).forEach((layer) => {
     try {
       layer?.remove()
-    } catch {}
+    } catch {
+      // layer may already be removed
+    }
   })
   mapInstance = null
 })

@@ -34,6 +34,25 @@ const enterpriseNames = [
   '宏图半导体',
 ]
 
+const spaceNames = [
+  '凯州新城核心区',
+  '辑庆片区',
+  '兴隆片区',
+  '成巴东片区',
+  '凯州科技创新产业园',
+  '凯州新城高端装备产业园',
+]
+const industryCategories = [
+  '通用设备制造',
+  '专用设备制造',
+  '电气机械制造',
+  '化学原料制造',
+  '电子元件制造',
+  '医药制造',
+  '软件和信息技术',
+  '商务服务',
+]
+
 function randomCoords(): [number, number] {
   // 凯州新城智能制造产业园范围附近（兴隆镇周边）
   return [104.55 + Math.random() * 0.12, 30.85 + Math.random() * 0.08]
@@ -56,6 +75,9 @@ export function getMockMarkers(count = 50): MapMarker[] {
         revenue: Math.floor(Math.random() * 100000 + 5000),
         employees: Math.floor(Math.random() * 5000 + 50),
         established: `${2010 + Math.floor(Math.random() * 14)}-${String(Math.floor(Math.random() * 12 + 1)).padStart(2, '0')}`,
+        industryCategory: industryCategories[i % industryCategories.length],
+        space: spaceNames[i % spaceNames.length],
+        top100: Math.random() < 0.1,
       },
     }
   })
@@ -97,15 +119,15 @@ export function getMockGeoFeatures(region: string): GeoFeature[] {
 export function getMockLayers(): MapLayer[] {
   return [
     { id: 'enterprise', name: '企业分布', type: 'marker', visible: true },
-    { id: 'park', name: '园区分布', type: 'marker', visible: true },
-    { id: 'heatmap', name: '热力图', type: 'heatmap', visible: false },
+    { id: 'space', name: '产业空间', type: 'marker', visible: true },
+    { id: 'scaleEnterprise', name: '规上企业', type: 'marker', visible: false },
+    { id: 'heatmap', name: '产业集群热力图', type: 'heatmap', visible: false },
     { id: 'boundary', name: '行政边界', type: 'boundary', visible: true },
-    { id: 'cluster', name: '聚合标记', type: 'cluster', visible: false },
   ]
 }
 
 export function getMockClusterData(): { name: string; count: number; lng: number; lat: number }[] {
-  return industries.map((name, i) => {
+  return industries.map((name) => {
     const [lng, lat] = randomCoords()
     return { name, count: Math.floor(Math.random() * 200 + 20), lng, lat }
   })

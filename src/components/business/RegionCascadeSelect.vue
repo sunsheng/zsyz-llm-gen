@@ -40,52 +40,44 @@ watch(
 
 const regionOptions = [
   {
-    code: 'zhejiang',
-    name: '浙江省',
+    code: 'sichuan',
+    name: '四川省',
     children: [
       {
-        code: 'hangzhou',
-        name: '杭州市',
+        code: 'deyang',
+        name: '德阳市',
         children: [
-          { code: 'xihu', name: '西湖区' },
-          { code: 'binjiang', name: '滨江区' },
-          { code: 'yuhang', name: '余杭区' },
+          { code: 'jingyang', name: '旌阳区' },
+          { code: 'luojiang', name: '罗江区' },
+          { code: 'zhongjiang', name: '中江县' },
+          { code: 'guanghan', name: '广汉市' },
+          { code: 'shifang', name: '什邡市' },
+          { code: 'mianzhu', name: '绵竹市' },
         ],
       },
       {
-        code: 'ningbo',
-        name: '宁波市',
+        code: 'chengdu',
+        name: '成都市',
         children: [
-          { code: 'haishu', name: '海曙区' },
-          { code: 'jiangbei', name: '江北区' },
-          { code: 'beilun', name: '北仑区' },
+          { code: 'jinjiang', name: '锦江区' },
+          { code: 'wuhou', name: '武侯区' },
+          { code: 'gaoxin', name: '高新区' },
         ],
       },
-      {
-        code: 'jiaxing',
-        name: '嘉兴市',
-        children: [
-          { code: 'nanhu', name: '南湖区' },
-          { code: 'xiuzhou', name: '秀洲区' },
-          { code: 'tongxiang', name: '桐乡市' },
-          { code: 'haiNing', name: '海宁市' },
-          { code: 'pinghu', name: '平湖市' },
-        ],
-      },
-      { code: 'huzhou', name: '湖州市' },
-      { code: 'shaoxing', name: '绍兴市' },
+      { code: 'mianyang', name: '绵阳市' },
+      { code: 'yibin', name: '宜宾市' },
+      { code: 'luzhou', name: '泸州市' },
     ],
   },
   {
-    code: 'jiangsu',
-    name: '江苏省',
+    code: 'chongqing',
+    name: '重庆市',
     children: [
-      { code: 'nanjing', name: '南京市' },
-      { code: 'suzhou', name: '苏州市' },
-      { code: 'wuxi', name: '无锡市' },
+      { code: 'yuzhong', name: '渝中区' },
+      { code: 'jiangbei', name: '江北区' },
+      { code: 'yubei', name: '渝北区' },
     ],
   },
-  { code: 'shanghai', name: '上海市' },
   {
     code: 'guangdong',
     name: '广东省',
@@ -96,6 +88,7 @@ const regionOptions = [
     ],
   },
   { code: 'beijing', name: '北京市' },
+  { code: 'shanghai', name: '上海市' },
 ]
 
 function handleChange(val: string | string[] | null | undefined) {

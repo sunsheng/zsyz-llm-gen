@@ -31,6 +31,7 @@ const containerRef = ref<HTMLElement | null>(null)
 
 let simulation: d3types.Simulation<d3types.SimulationNodeDatum, undefined> | null = null
 let svgSelection: unknown = null
+let zoomBehavior: unknown = null
 
 async function render() {
   if (!containerRef.value || !props.nodes.length) return
@@ -60,6 +61,7 @@ async function render() {
       g.attr('transform', event.transform)
     })
   svg.call(zoom)
+  zoomBehavior = zoom
 
   const g = svg.append('g')
 
@@ -252,7 +254,34 @@ watch([() => props.nodes, () => props.edges], () => {
   render()
 })
 
-defineExpose({ render })
+async function zoomIn() {
+  if (!svgSelection || !zoomBehavior) return
+  const d3 = await import('d3')
+  d3.select(svgSelection as SVGSVGElement)
+    .transition()
+    .duration(300)
+    .call((zoomBehavior as d3types.ZoomBehavior<SVGSVGElement, unknown>).scaleBy, 1.3)
+}
+
+async function zoomOut() {
+  if (!svgSelection || !zoomBehavior) return
+  const d3 = await import('d3')
+  d3.select(svgSelection as SVGSVGElement)
+    .transition()
+    .duration(300)
+    .call((zoomBehavior as d3types.ZoomBehavior<SVGSVGElement, unknown>).scaleBy, 0.7)
+}
+
+async function resetZoom() {
+  if (!svgSelection || !zoomBehavior) return
+  const d3 = await import('d3')
+  d3.select(svgSelection as SVGSVGElement)
+    .transition()
+    .duration(500)
+    .call((zoomBehavior as d3types.ZoomBehavior<SVGSVGElement, unknown>).transform, d3.zoomIdentity)
+}
+
+defineExpose({ render, zoomIn, zoomOut, resetZoom })
 </script>
 
 <style lang="scss" scoped>

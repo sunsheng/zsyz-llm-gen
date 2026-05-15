@@ -199,11 +199,11 @@ const activeTab = ref('basemap')
 
 // Basemap config
 const basemapConfig = reactive({
-  type: 'tianditu',
-  apiKey: '',
-  centerLng: '120.5',
-  centerLat: '30.6',
-  defaultZoom: 11,
+  type: 'amap',
+  apiKey: 'c8a3d5e7f9b1a2c4d6e8f0a1b2c3d4e5',
+  centerLng: '104.612',
+  centerLat: '30.88',
+  defaultZoom: 14,
 })
 
 // POI management
@@ -219,35 +219,42 @@ interface POI {
 const poiList = ref<POI[]>([
   {
     id: '1',
-    name: '新材料产业园',
+    name: '凯州科技创新产业园',
     type: '园区',
-    lng: '120.565',
-    lat: '30.632',
+    lng: '104.612',
+    lat: '30.884',
     category: '产业空间',
   },
   {
     id: '2',
-    name: '数字经济产业园',
+    name: '凯州新城高端装备产业园',
     type: '园区',
-    lng: '120.485',
-    lat: '30.745',
+    lng: '104.623',
+    lat: '30.892',
     category: '产业空间',
   },
-  { id: '3', name: '桐昆集团', type: '企业', lng: '120.392', lat: '30.523', category: '规上企业' },
+  {
+    id: '3',
+    name: '东方电机有限公司',
+    type: '企业',
+    lng: '104.398',
+    lat: '31.127',
+    category: '规上企业',
+  },
   {
     id: '4',
-    name: '新凤鸣集团',
+    name: '中国二重集团',
     type: '企业',
-    lng: '120.283',
-    lat: '30.558',
+    lng: '104.405',
+    lat: '31.118',
     category: '规上企业',
   },
   {
     id: '5',
-    name: '桐乡市第一人民医院',
+    name: '中江县人民医院',
     type: '配套',
-    lng: '120.552',
-    lat: '30.618',
+    lng: '104.803',
+    lat: '30.885',
     category: '配套资源',
   },
 ])

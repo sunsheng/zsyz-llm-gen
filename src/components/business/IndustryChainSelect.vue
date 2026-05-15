@@ -43,19 +43,15 @@ const chainOptions = [
   {
     code: 'high-end-equipment',
     name: '高端装备制造',
-    children: [
-      { code: 'he-auto', name: '汽车汽配' },
-      { code: 'he-precision', name: '精密仪器' },
-      { code: 'he-robot', name: '工业机器人' },
-    ],
+    children: [{ code: 'he-auto', name: '汽车汽配' }],
   },
   {
     code: 'frontier-material',
     name: '前沿材料',
     children: [
-      { code: 'fm-glass', name: '玻纤复合材料' },
-      { code: 'fm-carbon', name: '碳纤维' },
+      { code: 'fm-glass-fiber', name: '玻纤及复合材料' },
       { code: 'fm-new-energy', name: '新能源材料' },
+      { code: 'fm-carbon-fiber', name: '碳纤维及复合材料' },
     ],
   },
   {
@@ -71,19 +67,12 @@ const chainOptions = [
   {
     code: 'fashion',
     name: '时尚产业',
-    children: [
-      { code: 'fa-textile', name: '纺织服装' },
-      { code: 'fa-leather', name: '皮革毛皮' },
-    ],
+    children: [],
   },
   {
     code: 'modern-service',
     name: '现代服务业',
-    children: [
-      { code: 'ms-finance', name: '金融服务' },
-      { code: 'ms-logistics', name: '现代物流' },
-      { code: 'ms-it', name: '信息技术服务' },
-    ],
+    children: [],
   },
 ]
 

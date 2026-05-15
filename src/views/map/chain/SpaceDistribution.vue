@@ -1,6 +1,6 @@
 <template>
   <div class="page-container map-page">
-    <PageHeader title="产业空间分布" subtitle="查看产业资源的空间分布热力图">
+    <PageHeader title="产业空间分布" subtitle="查看3+1园区平台及产业空间载体地理分布">
       <template #actions>
         <el-button type="primary" :icon="Download">导出</el-button>
       </template>
@@ -26,9 +26,18 @@
         <div class="filter-section">
           <div class="filter-label">显示模式</div>
           <el-radio-group v-model="displayMode" @change="updateHeatmap">
-            <el-radio-button value="heatmap">热力图</el-radio-button>
-            <el-radio-button value="bubble">气泡图</el-radio-button>
+            <el-radio-button label="heatmap">热力图</el-radio-button>
+            <el-radio-button label="bubble">气泡图</el-radio-button>
           </el-radio-group>
+        </div>
+        <div class="filter-section">
+          <div class="filter-label">园区平台</div>
+          <el-checkbox-group v-model="visibleParks" @change="updateHeatmap">
+            <el-checkbox label="kzzx">凯州新城核心区</el-checkbox>
+            <el-checkbox label="jqpq">辑庆片区</el-checkbox>
+            <el-checkbox label="xlpq">兴隆片区</el-checkbox>
+            <el-checkbox label="cbdpq">成巴东片区</el-checkbox>
+          </el-checkbox-group>
         </div>
         <div class="stats-section">
           <div class="stats-title">分布统计</div>
@@ -62,7 +71,7 @@
         </div>
       </MapControlPanel>
       <div class="map-page__map">
-        <MaptalksMap :center="[104.612, 30.884]" :zoom="15" @ready="onMapReady" />
+        <MaptalksMap :center="[104.612, 30.884]" :zoom="13" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <MapLegend :items="legendItems" />
       </div>
@@ -94,10 +103,20 @@ const industries = [
 const selectedIndustry = ref('')
 const intensity = ref(5)
 const displayMode = ref('heatmap')
+const visibleParks = ref<string[]>(['kzzx', 'jqpq', 'xlpq', 'cbdpq'])
 const allHeatmapData = getMockHeatmapData()
+
+// "3+1" 园区平台
+const parkPlatforms = [
+  { id: 'kzzx', name: '凯州新城核心区', lng: 104.612, lat: 30.884, radius: 5000 },
+  { id: 'jqpq', name: '辑庆片区', lng: 104.623, lat: 30.92, radius: 4000 },
+  { id: 'xlpq', name: '兴隆片区', lng: 104.595, lat: 30.871, radius: 4000 },
+  { id: 'cbdpq', name: '成巴东片区', lng: 104.65, lat: 30.86, radius: 3500 },
+]
 
 let mapInstance: any = null
 let heatLayer: any = null
+let parkLayer: any = null
 
 const heatmapData = computed(() => {
   if (!selectedIndustry.value) return allHeatmapData
@@ -135,6 +154,7 @@ async function onMapReady(map: any) {
   mapInstance = map
   const maptalks = await import('maptalks')
   heatLayer = new maptalks.VectorLayer('heat-layer').addTo(map)
+  parkLayer = new maptalks.VectorLayer('park-layer').addTo(map)
   updateHeatmap()
 }
 
@@ -142,6 +162,7 @@ async function updateHeatmap() {
   if (!heatLayer) return
   const maptalks = await import('maptalks')
   heatLayer.clear()
+  parkLayer?.clear()
 
   const factor = intensity.value / 5
 
@@ -174,6 +195,39 @@ async function updateHeatmap() {
       )
     }
   })
+
+  // Render park platform overlays
+  if (parkLayer) {
+    parkPlatforms
+      .filter((p) => visibleParks.value.includes(p.id))
+      .forEach((p) => {
+        parkLayer.addGeometry(
+          new maptalks.Circle([p.lng, p.lat], p.radius, {
+            symbol: {
+              polygonFill: '#4ECB73',
+              polygonOpacity: 0.08,
+              lineColor: '#4ECB73',
+              lineWidth: 2,
+              lineOpacity: 0.6,
+              lineDasharray: [8, 4],
+            },
+          }),
+        )
+        parkLayer.addGeometry(
+          new maptalks.Marker([p.lng, p.lat], {
+            symbol: {
+              textName: p.name,
+              textSize: 12,
+              textFill: '#4ECB73',
+              textHaloFill: '#fff',
+              textHaloRadius: 2,
+              textWeight: 'bold',
+              textDy: -10,
+            },
+          }),
+        )
+      })
+  }
 }
 
 function getHeatColor(ratio: number): string {
@@ -190,7 +244,7 @@ function handleZoomOut() {
 }
 function handleReset() {
   mapInstance?.setCenter([104.612, 30.884])
-  mapInstance?.setZoom(15)
+  mapInstance?.setZoom(13)
   selectedIndustry.value = ''
   intensity.value = 5
   displayMode.value = 'heatmap'
@@ -198,6 +252,7 @@ function handleReset() {
 
 onUnmounted(() => {
   heatLayer = null
+  parkLayer = null
   mapInstance = null
 })
 </script>

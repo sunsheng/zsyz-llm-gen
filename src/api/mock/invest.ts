@@ -44,7 +44,7 @@ const industries = [
   '数字创意',
   '现代服务业',
 ]
-const regions = ['北京市', '上海市', '深圳市', '广州市', '苏州市', '成都市', '武汉市', '南京市']
+const regions = ['北京市', '上海市', '深圳市', '广州市', '成都市', '重庆市', '武汉市', '西安市']
 const chainPositions = [
   '上游-原材料',
   '上游-核心部件',
@@ -224,11 +224,11 @@ export function getMockFunds() {
 // 科研机构数据
 export function getMockResearchInstitutions() {
   return [
-    '浙江大学',
-    '中科院宁波材料所',
-    '西湖大学',
-    '浙江工业大学',
-    '杭州电子科技大学',
+    '四川大学',
+    '电子科技大学',
+    '西南交通大学',
+    '西南石油大学',
+    '成都理工大学',
     '中国美术学院',
   ].map((name, i) => ({
     id: `inst-${i}`,
@@ -377,8 +377,8 @@ export function getMockMapTargets() {
   return Array.from({ length: 20 }, (_, i) => ({
     id: `map-target-${i}`,
     name: companyNames[i % companyNames.length],
-    lng: 118 + Math.random() * 4,
-    lat: 28 + Math.random() * 4,
+    lng: 104.5 + Math.random() * 1.2,
+    lat: 30.5 + Math.random() * 1.2,
     industry: industries[i % industries.length],
     matchScore: Math.floor(Math.random() * 30 + 70),
     investmentAmount: Math.floor(Math.random() * 80000 + 5000),

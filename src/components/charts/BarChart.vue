@@ -42,7 +42,7 @@ const chartOption = computed<EChartsOption>(() => ({
     name: s.name,
     type: 'bar',
     data: s.data,
-    barMaxWidth: 40,
+    barMaxWidth: 24,
     emphasis: { focus: 'series' },
   })),
 }))
