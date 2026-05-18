@@ -27,12 +27,6 @@ const props = withDefaults(
   },
 )
 
-const defaultColorStops = [
-  { offset: 0.2, color: '#67C23A' },
-  { offset: 0.5, color: '#E6A23C' },
-  { offset: 0.8, color: '#F56C6C' },
-]
-
 const chartOption = computed<EChartsOption>(() => ({
   series: [
     {
@@ -40,7 +34,18 @@ const chartOption = computed<EChartsOption>(() => ({
       min: props.min,
       max: props.max,
       progress: { show: true, width: 14 },
-      axisLine: { lineStyle: { width: 14 } },
+      axisLine: {
+        lineStyle: {
+          width: 14,
+          color: (props.colorStops?.length
+            ? props.colorStops
+            : [
+                { offset: 0.2, color: '#67C23A' },
+                { offset: 0.5, color: '#E6A23C' },
+                { offset: 0.8, color: '#F56C6C' },
+              ]) as any,
+        },
+      },
       axisTick: { show: false },
       splitLine: { length: 10, lineStyle: { width: 2, color: '#999' } },
       axisLabel: { distance: 20, fontSize: 12, color: '#909399' },

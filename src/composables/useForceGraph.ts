@@ -1,5 +1,5 @@
 // D3 Force Graph 生命周期封装
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import type { Ref } from 'vue'
 import type * as d3types from 'd3'
 

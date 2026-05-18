@@ -69,7 +69,7 @@ export interface FilterField {
   options?: FilterOption[]
 }
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     searchPlaceholder?: string
     filters?: FilterField[]

@@ -1,8 +1,6 @@
 // 运行分析 Mock 数据工厂
 import type { KpiCard, ChartData } from '@/api/types/analysis'
 
-const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
-
 const months = [
   '1月',
   '2月',
@@ -91,10 +89,6 @@ export function getMockKpiCards(): KpiCard[] {
 
 function randomLineData(count = 12) {
   return Array.from({ length: count }, () => Math.floor(Math.random() * 500 + 200))
-}
-
-function randomBarData(count = 12) {
-  return Array.from({ length: count }, () => Math.floor(Math.random() * 300 + 100))
 }
 
 export function getMockChartData(type: string): ChartData {

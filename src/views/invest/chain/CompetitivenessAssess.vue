@@ -65,8 +65,6 @@ import BaseChart from '@/components/charts/BaseChart.vue'
 import { fetchCompetitiveness } from '@/api/modules/investApi'
 import type { CompetitivenessData } from '@/api/types/invest'
 
-const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
-
 const loading = ref(false)
 const compData = ref<CompetitivenessData | null>(null)
 
