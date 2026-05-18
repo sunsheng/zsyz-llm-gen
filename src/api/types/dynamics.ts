@@ -42,10 +42,11 @@ export type PolicyType = 'industry-plan' | 'industry-support' | 'talent' | 'hous
 
 /** 政策信息 */
 export interface DynamicsPolicy {
+  id: number
   title: string
   department: string
-  level: PolicyLevel
-  policyType: PolicyType
+  level: string
+  policyType: string
   publishDate: string
   status: '现行' | '废止'
   url: string
@@ -61,4 +62,29 @@ export interface PolicyMonitor {
   keyNode: '资金拨付' | '项目验收'
   deadline: string
   responsible: string
+}
+
+/** 产业动态 KPI 卡片 */
+export interface DynamicsKpiCard {
+  key: string
+  label: string
+  value: number
+  unit: string
+  trend: 'up' | 'down' | 'flat'
+  trendValue: string
+  icon: string
+  iconColor: string
+  iconBgColor: string
+}
+
+/** 新闻采集汇总 */
+export interface NewsCollectionData {
+  kpiCards: DynamicsKpiCard[]
+  newsList: DynamicsNews[]
+}
+
+/** 政策汇编汇总 */
+export interface PolicyCompilationData {
+  kpiCards: DynamicsKpiCard[]
+  policyList: DynamicsPolicy[]
 }

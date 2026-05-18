@@ -2,7 +2,7 @@
   <div class="page-container">
     <PageHeader title="报告模板" subtitle="运行分析报告模板管理">
       <template #actions>
-        <el-button type="primary">新建模板</el-button>
+        <el-button type="primary" :icon="Plus" @click="handleAdd">新建模板</el-button>
       </template>
     </PageHeader>
 
@@ -21,11 +21,12 @@
         </div>
         <div class="template-card__actions">
           <el-button type="primary" link @click="handlePreview(tpl)">预览</el-button>
-          <el-button type="primary" link @click="handleGenerate(tpl)">生成</el-button>
+          <el-button type="danger" link @click="handleDelete(tpl)">删除</el-button>
         </div>
       </div>
     </div>
 
+    <!-- 预览弹窗 -->
     <el-dialog v-model="previewVisible" :title="previewTemplate?.name + ' - 预览'" width="720px">
       <div v-if="previewTemplate" class="preview-content">
         <h3>{{ previewTemplate.name }}</h3>
@@ -44,96 +45,150 @@
         }}</el-tag>
       </div>
     </el-dialog>
+
+    <!-- 新建/编辑模板弹窗 -->
+    <el-dialog v-model="formVisible" :title="form.id ? '编辑模板' : '新建模板'" width="600px">
+      <el-form :model="form" label-width="100px">
+        <el-form-item label="模板名称" required>
+          <el-input v-model="form.name" placeholder="请输入模板名称" />
+        </el-form-item>
+        <el-form-item label="模板描述" required>
+          <el-input
+            v-model="form.description"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入模板描述"
+          />
+        </el-form-item>
+        <el-form-item label="报告周期" required>
+          <el-select v-model="form.cycle" style="width: 100%">
+            <el-option label="月度" value="月度" />
+            <el-option label="季度" value="季度" />
+            <el-option label="年度" value="年度" />
+            <el-option label="按需" value="按需" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="模板颜色">
+          <el-color-picker v-model="form.color" />
+        </el-form-item>
+        <el-form-item label="核心指标">
+          <el-select
+            v-model="form.indicatorList"
+            multiple
+            filterable
+            allow-create
+            style="width: 100%"
+            placeholder="输入指标名称后回车添加"
+          >
+            <el-option label="产值" value="产值" />
+            <el-option label="增速" value="增速" />
+            <el-option label="产业结构" value="产业结构" />
+            <el-option label="利润率" value="利润率" />
+            <el-option label="入驻率" value="入驻率" />
+            <el-option label="企业数" value="企业数" />
+            <el-option label="同比增速" value="同比增速" />
+            <el-option label="环比增速" value="环比增速" />
+            <el-option label="投资规模" value="投资规模" />
+            <el-option label="创新能力" value="创新能力" />
+            <el-option label="人才资源" value="人才资源" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="formVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleSave">确定</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Document } from '@element-plus/icons-vue'
+import { ref, reactive, onMounted } from 'vue'
+import { Document, Plus } from '@element-plus/icons-vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import PageHeader from '@/components/common/PageHeader.vue'
+import { fetchReportTemplates } from '@/api/modules/analysisApi'
+import type { ReportTemplate } from '@/api/types/analysis'
 
 const previewVisible = ref(false)
-const previewTemplate = ref<any>(null)
+const previewTemplate = ref<ReportTemplate | null>(null)
+const templates = ref<ReportTemplate[]>([])
+const formVisible = ref(false)
 
-const templates = ref([
-  {
-    id: 1,
-    name: '月度运行分析报告',
-    description: '月度产业运行数据汇总分析，包含产值、增速、结构等核心指标',
-    cycle: '月度',
-    indicators: 28,
-    color: '#1889E8',
-    indicatorList: ['产值', '增速', '产业结构', '利润率', '入驻率', '企业数'],
-    structure: [
-      {
-        label: '一、总体运行概况',
-        children: [{ label: '1.1 产值与增速' }, { label: '1.2 入驻与空置' }],
-      },
-      {
-        label: '二、产业结构分析',
-        children: [{ label: '2.1 二级产业占比' }, { label: '2.2 重点企业表现' }],
-      },
-      { label: '三、问题与建议' },
-    ],
-  },
-  {
-    id: 2,
-    name: '季度运行分析报告',
-    description: '季度深度分析报告，增加趋势对比与预测分析',
-    cycle: '季度',
-    indicators: 42,
-    color: '#36CBCB',
-    indicatorList: ['季度产值', '同比增速', '环比增速', '预测值', '置信区间'],
-    structure: [
-      {
-        label: '一、季度运行总览',
-        children: [{ label: '1.1 核心指标' }, { label: '1.2 环比分析' }],
-      },
-      { label: '二、深度分析', children: [{ label: '2.1 产业链' }, { label: '2.2 区域对比' }] },
-      { label: '三、趋势预测' },
-    ],
-  },
-  {
-    id: 3,
-    name: '年度运行分析报告',
-    description: '年度综合分析报告，全面回顾与展望',
-    cycle: '年度',
-    indicators: 65,
-    color: '#4ECB73',
-    indicatorList: ['年度产值', '增长趋势', '投资规模', '创新能力', '人才资源'],
-    structure: [
-      { label: '一、年度总览', children: [{ label: '1.1 核心指标' }, { label: '1.2 年度对比' }] },
-      {
-        label: '二、多维度分析',
-        children: [{ label: '2.1 产业' }, { label: '2.2 区域' }, { label: '2.3 企业' }],
-      },
-      { label: '三、下年度展望' },
-    ],
-  },
-  {
-    id: 4,
-    name: '专项分析报告',
-    description: '针对特定产业或区域的专项深度分析',
-    cycle: '按需',
-    indicators: 35,
-    color: '#F2637B',
-    indicatorList: ['专项指标', '对标分析', 'SWOT分析', '政策建议'],
-    structure: [
-      { label: '一、专项背景' },
-      { label: '二、数据深度分析', children: [{ label: '2.1 现状' }, { label: '2.2 问题' }] },
-      { label: '三、对策建议' },
-    ],
-  },
-])
+const defaultForm = {
+  id: 0,
+  name: '',
+  description: '',
+  cycle: '月度',
+  indicators: 0,
+  color: '#1889E8',
+  indicatorList: [] as string[],
+  structure: [] as { label: string; children?: { label: string }[] }[],
+}
 
-function handlePreview(tpl: any) {
+const form = reactive({ ...defaultForm })
+
+async function loadData() {
+  const data = await fetchReportTemplates()
+  templates.value = data.templates
+}
+
+function handlePreview(tpl: ReportTemplate) {
   previewTemplate.value = tpl
   previewVisible.value = true
 }
 
-function handleGenerate(_tpl: any) {
-  // Would trigger report generation
+function handleAdd() {
+  Object.assign(form, { ...defaultForm, id: 0, indicatorList: [] })
+  formVisible.value = true
 }
+
+function handleDelete(tpl: ReportTemplate) {
+  ElMessageBox.confirm(`确定删除模板"${tpl.name}"吗？`, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).then(() => {
+    templates.value = templates.value.filter((t) => t.id !== tpl.id)
+    ElMessage.success('删除成功')
+  })
+}
+
+function handleSave() {
+  if (!form.name) {
+    ElMessage.warning('请输入模板名称')
+    return
+  }
+  if (!form.description) {
+    ElMessage.warning('请输入模板描述')
+    return
+  }
+
+  const newTemplate: ReportTemplate = {
+    id: form.id || Date.now(),
+    name: form.name,
+    description: form.description,
+    cycle: form.cycle,
+    indicators: form.indicatorList.length,
+    color: form.color,
+    indicatorList: [...form.indicatorList],
+    structure: form.indicatorList.map((ind, i) => ({ label: `${i + 1}. ${ind}` })),
+  }
+
+  if (form.id) {
+    const idx = templates.value.findIndex((t) => t.id === form.id)
+    if (idx !== -1) templates.value[idx] = newTemplate
+  } else {
+    templates.value.push(newTemplate)
+  }
+
+  formVisible.value = false
+  ElMessage.success(form.id ? '编辑成功' : '新建成功')
+}
+
+onMounted(() => {
+  loadData()
+})
 </script>
 
 <style lang="scss" scoped>

@@ -1,10 +1,6 @@
 <template>
   <div class="page-container map-page">
-    <PageHeader title="产业集群分布" subtitle="查看3+1+1主导产业集聚情况，支持切换不同产业热力图">
-      <template #actions>
-        <el-button type="primary" :icon="Download">导出</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="产业集群分布" subtitle="查看3+1+1主导产业集聚情况，支持切换不同产业热力图" />
     <div class="map-page__body">
       <MapControlPanel title="集群分析">
         <div class="filter-section">
@@ -97,13 +93,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onUnmounted } from 'vue'
-import { Download } from '@element-plus/icons-vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import MaptalksMap from '@/components/map/MaptalksMap.vue'
 import MapControlPanel from '@/components/map/MapControlPanel.vue'
 import MapToolbar from '@/components/map/MapToolbar.vue'
 import MapLegend from '@/components/map/MapLegend.vue'
+import { fetchClusterDistribution } from '@/api/modules/mapApi'
+import type { ClusterData } from '@/api/types/map'
 
 const industries = [
   '高端装备制造',
@@ -116,175 +113,20 @@ const industries = [
   '现代服务业',
 ]
 
-interface ClusterData {
-  id: string
-  name: string
-  industry: string
-  count: number
-  lng: number
-  lat: number
-  enterprises: number
-  parks: number
-  institutions: number
-  region: string
-}
-
-const allClusters: ClusterData[] = [
-  {
-    id: 'c1',
-    name: '凯州新城高端装备制造集群',
-    industry: '高端装备制造',
-    count: 186,
-    lng: 104.612,
-    lat: 30.884,
-    enterprises: 112,
-    parks: 18,
-    institutions: 56,
-    region: '凯州新城核心区',
-  },
-  {
-    id: 'c2',
-    name: '辑庆新材料产业集群',
-    industry: '新材料',
-    count: 142,
-    lng: 104.623,
-    lat: 30.92,
-    enterprises: 89,
-    parks: 24,
-    institutions: 29,
-    region: '辑庆片区',
-  },
-  {
-    id: 'c3',
-    name: '兴隆电子信息产业集群',
-    industry: '电子信息',
-    count: 128,
-    lng: 104.595,
-    lat: 30.871,
-    enterprises: 78,
-    parks: 20,
-    institutions: 30,
-    region: '兴隆片区',
-  },
-  {
-    id: 'c4',
-    name: '成巴东生物医药产业集群',
-    industry: '生物医药',
-    count: 96,
-    lng: 104.65,
-    lat: 30.86,
-    enterprises: 62,
-    parks: 14,
-    institutions: 20,
-    region: '成巴东片区',
-  },
-  {
-    id: 'c5',
-    name: '凯州新城新能源产业集群',
-    industry: '新能源',
-    count: 78,
-    lng: 104.608,
-    lat: 30.892,
-    enterprises: 48,
-    parks: 12,
-    institutions: 18,
-    region: '凯州新城核心区',
-  },
-  {
-    id: 'c6',
-    name: '辑庆节能环保产业集群',
-    industry: '节能环保',
-    count: 56,
-    lng: 104.631,
-    lat: 30.903,
-    enterprises: 34,
-    parks: 8,
-    institutions: 14,
-    region: '辑庆片区',
-  },
-  {
-    id: 'c7',
-    name: '中江数字创意产业集群',
-    industry: '数字创意',
-    count: 45,
-    lng: 104.803,
-    lat: 30.885,
-    enterprises: 30,
-    parks: 6,
-    institutions: 9,
-    region: '中江县',
-  },
-  {
-    id: 'c8',
-    name: '德阳现代服务业集群',
-    industry: '现代服务业',
-    count: 68,
-    lng: 104.398,
-    lat: 31.127,
-    enterprises: 42,
-    parks: 10,
-    institutions: 16,
-    region: '德阳市',
-  },
-  {
-    id: 'c9',
-    name: '兴隆高端装备配套集群',
-    industry: '高端装备制造',
-    count: 52,
-    lng: 104.588,
-    lat: 30.862,
-    enterprises: 32,
-    parks: 8,
-    institutions: 12,
-    region: '兴隆片区',
-  },
-  {
-    id: 'c10',
-    name: '成巴东新材料延伸集群',
-    industry: '新材料',
-    count: 38,
-    lng: 104.658,
-    lat: 30.855,
-    enterprises: 24,
-    parks: 6,
-    institutions: 8,
-    region: '成巴东片区',
-  },
-  {
-    id: 'c11',
-    name: '凯州新城电子信息配套集群',
-    industry: '电子信息',
-    count: 64,
-    lng: 104.618,
-    lat: 30.878,
-    enterprises: 40,
-    parks: 10,
-    institutions: 14,
-    region: '凯州新城核心区',
-  },
-  {
-    id: 'c12',
-    name: '德阳高端装备制造集群',
-    industry: '高端装备制造',
-    count: 210,
-    lng: 104.405,
-    lat: 31.118,
-    enterprises: 135,
-    parks: 28,
-    institutions: 47,
-    region: '德阳市',
-  },
-]
-
+const allClusters = ref<ClusterData[]>([])
 const selectedIndustry = ref('')
 const clusterRadius = ref(5)
 
 let mapInstance: any = null
 let clusterLayer: any = null
 
+async function loadData() {
+  allClusters.value = await fetchClusterDistribution()
+}
+
 const filteredClusters = computed(() => {
-  if (!selectedIndustry.value) return allClusters
-  return allClusters.filter((c) => c.industry === selectedIndustry.value)
+  if (!selectedIndustry.value) return allClusters.value
+  return allClusters.value.filter((c) => c.industry === selectedIndustry.value)
 })
 
 const maxCount = computed(() => Math.max(...filteredClusters.value.map((c) => c.count)))
@@ -401,6 +243,10 @@ function handleReset() {
   selectedIndustry.value = ''
   clusterRadius.value = 5
 }
+
+onMounted(() => {
+  loadData()
+})
 
 onUnmounted(() => {
   clusterLayer = null

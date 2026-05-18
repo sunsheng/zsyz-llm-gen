@@ -5,6 +5,8 @@ import {
   getMockHotspotEvents,
   getMockPolicyList,
   getMockPolicyMonitorList,
+  getMockNewsCollection,
+  getMockPolicyCompilation,
 } from '@/api/mock/dynamics'
 
 export function fetchNewsList(count = 10) {
@@ -34,5 +36,19 @@ export function fetchPolicyList(count = 10) {
 export function fetchPolicyMonitorList() {
   return new Promise((resolve) => {
     setTimeout(() => resolve(getMockPolicyMonitorList()), 200)
+  })
+}
+
+export function fetchNewsCollection(): Promise<import('@/api/types/dynamics').NewsCollectionData> {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(getMockNewsCollection()), 200)
+  })
+}
+
+export function fetchPolicyCompilation(): Promise<
+  import('@/api/types/dynamics').PolicyCompilationData
+> {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(getMockPolicyCompilation()), 200)
   })
 }

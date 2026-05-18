@@ -1,10 +1,6 @@
 <template>
   <div class="page-container map-page">
-    <PageHeader title="规上企业分布" subtitle="全市各区域规上企业分布GIS展示分析">
-      <template #actions>
-        <el-button type="primary" :icon="Download">导出</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="规上企业分布" subtitle="全市各区域规上企业分布GIS展示分析" />
     <div class="map-page__body">
       <MapControlPanel title="规上企业筛选">
         <div class="filter-section">
@@ -150,30 +146,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onUnmounted } from 'vue'
-import { Download } from '@element-plus/icons-vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import MaptalksMap from '@/components/map/MaptalksMap.vue'
 import MapControlPanel from '@/components/map/MapControlPanel.vue'
 import MapToolbar from '@/components/map/MapToolbar.vue'
 import MapLegend from '@/components/map/MapLegend.vue'
-
-interface Enterprise {
-  id: string
-  name: string
-  region: string
-  industry: string
-  lng: number
-  lat: number
-  output: number
-  growth: number
-  website: string
-  contact: string
-  address: string
-  image: string
-  businessInfo: string
-}
+import { fetchScaleEnterprises } from '@/api/modules/mapApi'
+import type { ScaleEnterprise } from '@/api/types/map'
 
 const regions = ['辑庆片区', '兴隆片区', '成巴东片区', '凯州新城核心区', '中江县', '德阳市']
 const industries = [
@@ -186,96 +167,18 @@ const industries = [
   '数字创意',
 ]
 
-// 各区域中心坐标，用于生成企业分布点
-const regionCenters: Record<string, [number, number]> = {
-  辑庆片区: [104.623, 30.92],
-  兴隆片区: [104.595, 30.871],
-  成巴东片区: [104.65, 30.86],
-  凯州新城核心区: [104.612, 30.884],
-  中江县: [104.803, 30.885],
-  德阳市: [104.398, 31.127],
-}
-
-const enterpriseNamePool = [
-  '东方电机',
-  '国机重装',
-  '宏华石油',
-  '华庆机械',
-  '长虹佳华',
-  '天域半导体',
-  '芯源集成',
-  '博远生物',
-  '昌盛药业',
-  '绿能科技',
-  '华创新材',
-  '瑞丰新材',
-  '中科智联',
-  '鼎盛环保',
-  '创想数字',
-  '恒达装备',
-  '铭远精密',
-  '亿能动力',
-  '安泰环保',
-  '智汇信息',
-  '云帆数据',
-  '盛达新材',
-  '恒宇光电',
-  '宏图半导体',
-  '金辉科技',
-]
-
-function generateEnterprises(): Enterprise[] {
-  const addressPool = [
-    '凯州新城智能制造产业园A栋',
-    '辑庆镇工业集中区3号路',
-    '兴隆镇科技创新园B区',
-    '成巴东产业新城5号楼',
-    '中江县工业发展区8号',
-    '德阳经济技术开发区2号路',
-  ]
-  const businessPool = [
-    '主要从事高端装备研发与制造，年产能超5000台套',
-    '专注于新材料研发生产，产品覆盖西南地区',
-    '电子信息产品制造，拥有自主知识产权30余项',
-    '生物医药研发与生产，通过GMP认证',
-    '新能源装备制造，年产值持续增长',
-    '节能环保设备研发，服务于成渝地区',
-    '数字创意产业服务，拥有专业团队200余人',
-  ]
-  const enterprises: Enterprise[] = []
-  regions.forEach((region, ri) => {
-    const count = 5 + Math.floor(Math.random() * 8)
-    const center = regionCenters[region]
-    for (let i = 0; i < count; i++) {
-      const industry = industries[Math.floor(Math.random() * industries.length)]
-      enterprises.push({
-        id: `ent-${ri}-${i}`,
-        name: `${enterpriseNamePool[(ri * 5 + i) % enterpriseNamePool.length]}${region === '德阳市' ? '(德阳)' : '(凯州)'}`,
-        region,
-        industry,
-        lng: center[0] + (Math.random() - 0.5) * 0.06,
-        lat: center[1] + (Math.random() - 0.5) * 0.04,
-        output: Math.floor(Math.random() * 80000 + 5000),
-        growth: +(Math.random() * 20 - 5).toFixed(1),
-        website: `www.ent${ri}${i}.example.com`,
-        contact: `0838-7${ri}8${i}8${i}8`,
-        address: addressPool[ri] + `${i + 1}号`,
-        image: `https://via.placeholder.com/400x200?text=${encodeURIComponent(industry)}`,
-        businessInfo: businessPool[Math.floor(Math.random() * businessPool.length)],
-      })
-    }
-  })
-  return enterprises
-}
-
-const allEnterprises = ref<Enterprise[]>(generateEnterprises())
+const allEnterprises = ref<ScaleEnterprise[]>([])
 const selectedRegion = ref('')
 const selectedIndustry = ref('')
 
 let mapInstance: any = null
 let markerLayer: any = null
 const detailVisible = ref(false)
-const detailData = ref<Enterprise | null>(null)
+const detailData = ref<ScaleEnterprise | null>(null)
+
+async function loadData() {
+  allEnterprises.value = await fetchScaleEnterprises()
+}
 
 const filteredEnterprises = computed(() => {
   let list = allEnterprises.value
@@ -350,7 +253,7 @@ async function updateMap() {
   })
 }
 
-function handleEntClick(ent: Enterprise) {
+function handleEntClick(ent: ScaleEnterprise) {
   if (mapInstance) {
     mapInstance.setCenter([ent.lng, ent.lat])
     mapInstance.setZoom(14)
@@ -371,6 +274,10 @@ function handleReset() {
   selectedRegion.value = ''
   selectedIndustry.value = ''
 }
+
+onMounted(() => {
+  loadData()
+})
 
 onUnmounted(() => {
   markerLayer = null
