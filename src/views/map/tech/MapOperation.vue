@@ -98,27 +98,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { ZoomIn, ZoomOut, FullScreen, Search, View } from '@element-plus/icons-vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import MaptalksMap from '@/components/map/MaptalksMap.vue'
 import MapControlPanel from '@/components/map/MapControlPanel.vue'
 import MapToolbar from '@/components/map/MapToolbar.vue'
-
-interface SearchResult {
-  id: string
-  name: string
-  address: string
-  lng: number
-  lat: number
-}
+import { fetchMapOperation } from '@/api/modules/mapApi'
+import type { MapSearchResult } from '@/api/types/map'
 
 const searchKeyword = ref('')
 const measureMode = ref<'distance' | 'area' | ''>('')
 const measureResult = ref('')
 const eagleEyeVisible = ref(false)
 const visibleLayers = ref<string[]>(['enterprise', 'park', 'heatmap', 'boundary'])
-const searchResults = ref<SearchResult[]>([])
+const searchResults = ref<MapSearchResult[]>([])
 
 let mapInstance: any = null
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -129,13 +123,18 @@ const measurePoints: [number, number][] = []
 let mapClickHandler: any = null
 let mapDblClickHandler: any = null
 
-const mockSearchResults: SearchResult[] = [
-  { id: 's1', name: '凯州新城管委会', address: '中江县辑庆镇凯州新城', lng: 104.612, lat: 30.884 },
-  { id: 's2', name: '凯州科技创新产业园', address: '中江县辑庆镇', lng: 104.623, lat: 30.892 },
-  { id: 's3', name: '凯州新城高端装备产业园', address: '中江县兴隆镇', lng: 104.605, lat: 30.871 },
-  { id: 's4', name: '辑庆工业园', address: '中江县辑庆镇', lng: 104.631, lat: 30.903 },
-  { id: 's5', name: '兴隆工业园', address: '中江县兴隆镇', lng: 104.598, lat: 30.862 },
-]
+const allSearchResults = ref<MapSearchResult[]>([])
+const enterpriseMarkers = ref<{ lng: number; lat: number }[]>([])
+const parkMarkers = ref<{ lng: number; lat: number }[]>([])
+const boundaryLabels = ref<{ name: string; lng: number; lat: number }[]>([])
+
+async function loadData() {
+  const data = await fetchMapOperation()
+  allSearchResults.value = data.searchResults
+  enterpriseMarkers.value = data.enterpriseMarkers
+  parkMarkers.value = data.parkMarkers
+  boundaryLabels.value = data.boundaryLabels
+}
 
 async function onMapReady(map: any) {
   mapInstance = map
@@ -353,12 +352,12 @@ function handleSearch() {
     return
   }
   const kw = searchKeyword.value.toLowerCase()
-  searchResults.value = mockSearchResults.filter(
+  searchResults.value = allSearchResults.value.filter(
     (r) => r.name.toLowerCase().includes(kw) || r.address.toLowerCase().includes(kw),
   )
 }
 
-function handleResultClick(result: SearchResult) {
+function handleResultClick(result: MapSearchResult) {
   if (mapInstance) {
     mapInstance.setCenter([result.lng, result.lat])
     mapInstance.setZoom(14)
@@ -371,9 +370,9 @@ async function updateLayers() {
   const maptalks = await import('maptalks')
 
   if (visibleLayers.value.includes('enterprise')) {
-    for (let i = 0; i < 20; i++) {
+    enterpriseMarkers.value.forEach((m) => {
       dataLayer.addGeometry(
-        new maptalks.Marker([104.4 + Math.random() * 0.5, 30.8 + Math.random() * 0.2], {
+        new maptalks.Marker([m.lng, m.lat], {
           symbol: {
             markerType: 'ellipse',
             markerFill: '#1889E8',
@@ -385,13 +384,13 @@ async function updateLayers() {
           },
         }),
       )
-    }
+    })
   }
 
   if (visibleLayers.value.includes('park')) {
-    for (let i = 0; i < 8; i++) {
+    parkMarkers.value.forEach((m) => {
       dataLayer.addGeometry(
-        new maptalks.Marker([104.4 + Math.random() * 0.5, 30.8 + Math.random() * 0.2], {
+        new maptalks.Marker([m.lng, m.lat], {
           symbol: {
             markerType: 'ellipse',
             markerFill: '#4ECB73',
@@ -403,19 +402,11 @@ async function updateLayers() {
           },
         }),
       )
-    }
+    })
   }
 
   if (visibleLayers.value.includes('boundary')) {
-    const boundaryLabels = [
-      { name: '凯州新城核心区', lng: 104.612, lat: 30.884 },
-      { name: '辑庆片区', lng: 104.623, lat: 30.92 },
-      { name: '兴隆片区', lng: 104.595, lat: 30.871 },
-      { name: '成巴东片区', lng: 104.65, lat: 30.86 },
-      { name: '中江县', lng: 104.803, lat: 30.885 },
-      { name: '德阳市', lng: 104.398, lat: 31.127 },
-    ]
-    boundaryLabels.forEach((c) => {
+    boundaryLabels.value.forEach((c) => {
       dataLayer.addGeometry(
         new maptalks.Marker([c.lng, c.lat], {
           symbol: {
@@ -431,6 +422,10 @@ async function updateLayers() {
     })
   }
 }
+
+onMounted(() => {
+  loadData()
+})
 
 onUnmounted(() => {
   measureLayer = null

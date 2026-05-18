@@ -1,15 +1,13 @@
 <template>
   <div class="page-container">
-    <PageHeader title="数据采集与整合" subtitle="企业运行数据采集与整合管理">
-      <template #actions>
-        <el-button type="primary" @click="handleRefresh">刷新状态</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="数据采集与整合" subtitle="企业运行数据采集与整合管理" />
 
     <div class="source-cards">
       <div v-for="source in dataSources" :key="source.name" class="source-card">
         <div class="source-card__header">
-          <el-icon :size="28" :color="source.color"><component :is="source.icon" /></el-icon>
+          <el-icon :size="28" :color="source.color"
+            ><component :is="iconMap[source.icon]"
+          /></el-icon>
           <h4>{{ source.name }}</h4>
           <el-tag
             :type="
@@ -71,99 +69,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Document, DataLine, Monitor, Connection } from '@element-plus/icons-vue'
 import PageHeader from '@/components/common/PageHeader.vue'
+import { fetchEntReportDataCollection } from '@/api/modules/analysisApi'
+import type { DataSourceInfo, IntegrationTask } from '@/api/types/analysis'
 
-const dataSources = ref([
-  {
-    name: '企业填报',
-    icon: Document,
-    color: '#1889E8',
-    status: '正常',
-    count: '8,562条',
-    frequency: '每日',
-    lastUpdate: '2024-12-15 09:30',
-    completion: 92,
-  },
-  {
-    name: '政府部门',
-    icon: DataLine,
-    color: '#4ECB73',
-    status: '正常',
-    count: '5,230条',
-    frequency: '每周',
-    lastUpdate: '2024-12-14 18:00',
-    completion: 85,
-  },
-  {
-    name: '互联网公开',
-    icon: Monitor,
-    color: '#FBD437',
-    status: '延迟',
-    count: '18,350条',
-    frequency: '实时',
-    lastUpdate: '2024-12-15 06:15',
-    completion: 68,
-  },
-  {
-    name: '第三方数据',
-    icon: Connection,
-    color: '#975FE5',
-    status: '正常',
-    count: '12,860条',
-    frequency: '每日',
-    lastUpdate: '2024-12-15 07:45',
-    completion: 78,
-  },
-])
+const iconMap: Record<string, any> = { Document, DataLine, Monitor, Connection }
 
-const integrationTasks = ref([
-  {
-    name: '企业基础数据整合',
-    source: '企业填报 + 政府部门',
-    status: '已完成',
-    progress: 100,
-    records: 8562,
-    updateTime: '2024-12-15 09:00',
-  },
-  {
-    name: '财务数据对齐',
-    source: '企业填报 + 第三方数据',
-    status: '进行中',
-    progress: 82,
-    records: 6845,
-    updateTime: '2024-12-15 08:45',
-  },
-  {
-    name: '创新能力评估数据',
-    source: '全部来源',
-    status: '进行中',
-    progress: 55,
-    records: 4280,
-    updateTime: '2024-12-14 22:30',
-  },
-  {
-    name: '风险预警数据整合',
-    source: '政府部门 + 第三方数据',
-    status: '进行中',
-    progress: 42,
-    records: 3160,
-    updateTime: '2024-12-14 20:00',
-  },
-  {
-    name: 'ESG数据计算',
-    source: '互联网公开 + 第三方数据',
-    status: '待开始',
-    progress: 0,
-    records: 0,
-    updateTime: '-',
-  },
-])
+const dataSources = ref<DataSourceInfo[]>([])
+const integrationTasks = ref<IntegrationTask[]>([])
 
-function handleRefresh() {
-  // Simulate refresh
+async function loadData() {
+  const data = await fetchEntReportDataCollection()
+  dataSources.value = data.dataSources
+  integrationTasks.value = data.integrationTasks
 }
+
+onMounted(() => {
+  loadData()
+})
 </script>
 
 <style lang="scss" scoped>

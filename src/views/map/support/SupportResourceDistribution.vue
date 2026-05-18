@@ -1,10 +1,6 @@
 <template>
   <div class="page-container map-page">
-    <PageHeader title="配套资源分布" subtitle="全市各区域产业配套资源GIS展示">
-      <template #actions>
-        <el-button type="primary" :icon="Download">导出</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="配套资源分布" subtitle="全市各区域产业配套资源GIS展示" />
     <div class="map-page__body">
       <MapControlPanel title="配套资源筛选">
         <div class="filter-section">
@@ -101,37 +97,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onUnmounted } from 'vue'
-import { Download } from '@element-plus/icons-vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import MaptalksMap from '@/components/map/MaptalksMap.vue'
 import MapControlPanel from '@/components/map/MapControlPanel.vue'
 import MapToolbar from '@/components/map/MapToolbar.vue'
 import MapLegend from '@/components/map/MapLegend.vue'
-
-type ResourceType = 'education' | 'medical' | 'bank' | 'government' | 'transport' | 'hotel'
-
-interface Resource {
-  id: string
-  name: string
-  type: ResourceType
-  region: string
-  lng: number
-  lat: number
-}
+import { fetchSupportResources } from '@/api/modules/mapApi'
+import type { ResourceType, SupportResource } from '@/api/types/map'
 
 const regions = ['辑庆片区', '兴隆片区', '成巴东片区', '凯州新城核心区', '中江县', '德阳市']
-
-// 各区域中心坐标
-const regionCenters: Record<string, [number, number]> = {
-  辑庆片区: [104.623, 30.92],
-  兴隆片区: [104.595, 30.871],
-  成巴东片区: [104.65, 30.86],
-  凯州新城核心区: [104.612, 30.884],
-  中江县: [104.803, 30.885],
-  德阳市: [104.398, 31.127],
-}
 
 const typeLabels: Record<ResourceType, string> = {
   education: '教育机构',
@@ -151,75 +127,7 @@ const typeColors: Record<ResourceType, string> = {
   hotel: '#36CBCB',
 }
 
-// 真实化的资源名称
-const resourceNames: Record<ResourceType, string[]> = {
-  education: [
-    '凯州新城第一小学',
-    '辑庆镇中心校',
-    '兴隆镇中学',
-    '中江职业技术学校',
-    '凯州新城幼儿园',
-    '成巴东小学',
-  ],
-  medical: [
-    '凯州新城社区卫生中心',
-    '辑庆镇卫生院',
-    '中江县人民医院',
-    '兴隆镇卫生室',
-    '德阳市第五医院',
-    '成巴东卫生站',
-  ],
-  bank: [
-    '工商银行凯州新城支行',
-    '农业银行辑庆分理处',
-    '建设银行中江支行',
-    '农商行兴隆支行',
-    '中国银行德阳分行',
-    '邮储银行成巴东支行',
-  ],
-  government: [
-    '凯州新城管委会',
-    '辑庆镇政府',
-    '中江县政府',
-    '兴隆镇便民中心',
-    '德阳市政务中心',
-    '成巴东社区服务站',
-  ],
-  transport: [
-    '凯州新城公交站',
-    '辑庆客运站',
-    '中江高铁站',
-    '兴隆公交枢纽',
-    '德阳火车站',
-    '成巴东巴士站',
-  ],
-  hotel: ['凯州大酒店', '辑庆商务宾馆', '中江假日酒店', '兴隆美食街', '德阳宾馆', '成巴东美食广场'],
-}
-
-function generateResources(): Resource[] {
-  const types: ResourceType[] = ['education', 'medical', 'bank', 'government', 'transport', 'hotel']
-  const resources: Resource[] = []
-  regions.forEach((region, ri) => {
-    types.forEach((type, ti) => {
-      const count = 2 + Math.floor(Math.random() * 3)
-      const center = regionCenters[region]
-      const names = resourceNames[type]
-      for (let i = 0; i < count; i++) {
-        resources.push({
-          id: `res-${ri}-${ti}-${i}`,
-          name: names[(ri + i) % names.length],
-          type,
-          region,
-          lng: center[0] + (Math.random() - 0.5) * 0.06,
-          lat: center[1] + (Math.random() - 0.5) * 0.04,
-        })
-      }
-    })
-  })
-  return resources
-}
-
-const allResources = ref<Resource[]>(generateResources())
+const allResources = ref<SupportResource[]>([])
 const selectedTypes = ref<string[]>([
   'education',
   'medical',
@@ -232,6 +140,10 @@ const selectedRegion = ref('')
 
 let mapInstance: any = null
 let markerLayer: any = null
+
+async function loadData() {
+  allResources.value = await fetchSupportResources()
+}
 
 const filteredResources = computed(() => {
   let list = allResources.value
@@ -299,7 +211,7 @@ async function updateMap() {
   })
 }
 
-function handleResourceClick(res: Resource) {
+function handleResourceClick(res: SupportResource) {
   if (mapInstance) {
     mapInstance.setCenter([res.lng, res.lat])
     mapInstance.setZoom(14)
@@ -318,6 +230,10 @@ function handleReset() {
   selectedTypes.value = ['education', 'medical', 'bank', 'government', 'transport', 'hotel']
   selectedRegion.value = ''
 }
+
+onMounted(() => {
+  loadData()
+})
 
 onUnmounted(() => {
   markerLayer = null

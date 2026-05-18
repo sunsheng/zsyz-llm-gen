@@ -1,15 +1,13 @@
 <template>
   <div class="page-container">
-    <PageHeader title="数据采集与整合" subtitle="运行分析数据采集与整合管理">
-      <template #actions>
-        <el-button type="primary" @click="handleRefresh">刷新状态</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="数据采集与整合" subtitle="运行分析数据采集与整合管理" />
 
     <div class="source-cards">
       <div v-for="source in dataSources" :key="source.name" class="source-card">
         <div class="source-card__header">
-          <el-icon :size="28" :color="source.color"><component :is="source.icon" /></el-icon>
+          <el-icon :size="28" :color="source.color"
+            ><component :is="iconMap[source.icon]"
+          /></el-icon>
           <h4>{{ source.name }}</h4>
           <el-tag
             :type="
@@ -71,89 +69,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Document, DataLine, Monitor } from '@element-plus/icons-vue'
 import PageHeader from '@/components/common/PageHeader.vue'
+import { fetchReportDataCollection } from '@/api/modules/analysisApi'
+import type { DataSourceInfo, IntegrationTask } from '@/api/types/analysis'
 
-const dataSources = ref([
-  {
-    name: '企业填报',
-    icon: Document,
-    color: '#1889E8',
-    status: '正常',
-    count: '12,586条',
-    frequency: '每日',
-    lastUpdate: '2024-12-15 08:30',
-    completion: 95,
-  },
-  {
-    name: '政府部门',
-    icon: DataLine,
-    color: '#4ECB73',
-    status: '正常',
-    count: '8,432条',
-    frequency: '每周',
-    lastUpdate: '2024-12-14 18:00',
-    completion: 88,
-  },
-  {
-    name: '互联网公开',
-    icon: Monitor,
-    color: '#FBD437',
-    status: '延迟',
-    count: '25,120条',
-    frequency: '实时',
-    lastUpdate: '2024-12-15 06:15',
-    completion: 72,
-  },
-])
+const iconMap: Record<string, any> = { Document, DataLine, Monitor }
 
-const integrationTasks = ref([
-  {
-    name: '企业基础数据整合',
-    source: '企业填报 + 政府部门',
-    status: '已完成',
-    progress: 100,
-    records: 12586,
-    updateTime: '2024-12-15 09:00',
-  },
-  {
-    name: '财务数据对齐',
-    source: '企业填报 + 互联网公开',
-    status: '进行中',
-    progress: 78,
-    records: 8234,
-    updateTime: '2024-12-15 08:45',
-  },
-  {
-    name: '产业链关系映射',
-    source: '政府部门 + 互联网公开',
-    status: '进行中',
-    progress: 62,
-    records: 5620,
-    updateTime: '2024-12-14 22:30',
-  },
-  {
-    name: '区域经济数据整合',
-    source: '全部来源',
-    status: '进行中',
-    progress: 45,
-    records: 3280,
-    updateTime: '2024-12-14 20:00',
-  },
-  {
-    name: '创新能力指标计算',
-    source: '企业填报 + 政府部门',
-    status: '待开始',
-    progress: 0,
-    records: 0,
-    updateTime: '-',
-  },
-])
+const dataSources = ref<DataSourceInfo[]>([])
+const integrationTasks = ref<IntegrationTask[]>([])
 
-function handleRefresh() {
-  // Simulate refresh
+async function loadData() {
+  const data = await fetchReportDataCollection()
+  dataSources.value = data.dataSources
+  integrationTasks.value = data.integrationTasks
 }
+
+onMounted(() => {
+  loadData()
+})
 </script>
 
 <style lang="scss" scoped>

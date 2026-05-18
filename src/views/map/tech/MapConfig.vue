@@ -190,77 +190,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { Check, Plus } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import PageHeader from '@/components/common/PageHeader.vue'
+import { fetchMapConfig } from '@/api/modules/mapApi'
+import type { MapPOI, MapConfigLayer } from '@/api/types/map'
 
 const activeTab = ref('basemap')
+const loading = ref(false)
 
 // Basemap config
 const basemapConfig = reactive({
   type: 'amap',
-  apiKey: 'c8a3d5e7f9b1a2c4d6e8f0a1b2c3d4e5',
+  apiKey: '',
   centerLng: '104.612',
   centerLat: '30.88',
   defaultZoom: 14,
 })
 
 // POI management
-interface POI {
-  id: string
-  name: string
-  type: string
-  lng: string
-  lat: string
-  category: string
-}
-
-const poiList = ref<POI[]>([
-  {
-    id: '1',
-    name: '凯州科技创新产业园',
-    type: '园区',
-    lng: '104.612',
-    lat: '30.884',
-    category: '产业空间',
-  },
-  {
-    id: '2',
-    name: '凯州新城高端装备产业园',
-    type: '园区',
-    lng: '104.623',
-    lat: '30.892',
-    category: '产业空间',
-  },
-  {
-    id: '3',
-    name: '东方电机有限公司',
-    type: '企业',
-    lng: '104.398',
-    lat: '31.127',
-    category: '规上企业',
-  },
-  {
-    id: '4',
-    name: '中国二重集团',
-    type: '企业',
-    lng: '104.405',
-    lat: '31.118',
-    category: '规上企业',
-  },
-  {
-    id: '5',
-    name: '中江县人民医院',
-    type: '配套',
-    lng: '104.803',
-    lat: '30.885',
-    category: '配套资源',
-  },
-])
+const poiList = ref<MapPOI[]>([])
 
 const poiDialogVisible = ref(false)
-const poiForm = reactive<POI & { id: string }>({
+const poiForm = reactive<MapPOI>({
   id: '',
   name: '',
   type: '企业',
@@ -269,85 +222,55 @@ const poiForm = reactive<POI & { id: string }>({
   category: '产业集群',
 })
 
+async function loadData() {
+  loading.value = true
+  try {
+    const data = await fetchMapConfig()
+    Object.assign(basemapConfig, data.basemap)
+    poiList.value = data.poiList
+    layerList.value = data.layerList
+  } finally {
+    loading.value = false
+  }
+}
+
 function addPOI() {
   Object.assign(poiForm, { id: '', name: '', type: '企业', lng: '', lat: '', category: '产业集群' })
   poiDialogVisible.value = true
 }
 
-function editPOI(row: POI) {
+function editPOI(row: MapPOI) {
   Object.assign(poiForm, row)
   poiDialogVisible.value = true
 }
 
-function deletePOI(row: POI) {
+async function deletePOI(row: MapPOI) {
+  await ElMessageBox.confirm(`确定删除标注「${row.name}」？`, '删除确认', { type: 'warning' })
   poiList.value = poiList.value.filter((p) => p.id !== row.id)
+  ElMessage.success('标注已删除')
 }
 
 function savePOI() {
+  if (!poiForm.name) {
+    ElMessage.warning('请输入标注名称')
+    return
+  }
   if (poiForm.id) {
     const idx = poiList.value.findIndex((p) => p.id === poiForm.id)
     if (idx !== -1) poiList.value[idx] = { ...poiForm }
+    ElMessage.success('标注已更新')
   } else {
     poiList.value.push({ ...poiForm, id: String(Date.now()) })
+    ElMessage.success('标注已添加')
   }
   poiDialogVisible.value = false
 }
 
 // Layer management
-interface Layer {
-  id: string
-  name: string
-  type: string
-  dataSource: string
-  visible: boolean
-  updateTime: string
-}
-
-const layerList = ref<Layer[]>([
-  {
-    id: '1',
-    name: '企业分布图层',
-    type: '矢量',
-    dataSource: '工商数据',
-    visible: true,
-    updateTime: '2025-01-15',
-  },
-  {
-    id: '2',
-    name: '产业集群热力图',
-    type: '热力',
-    dataSource: '行业数据',
-    visible: true,
-    updateTime: '2025-01-14',
-  },
-  {
-    id: '3',
-    name: '产业空间图层',
-    type: '矢量',
-    dataSource: '园区数据',
-    visible: true,
-    updateTime: '2025-01-13',
-  },
-  {
-    id: '4',
-    name: '规上企业图层',
-    type: '矢量',
-    dataSource: '规上数据',
-    visible: false,
-    updateTime: '2025-01-12',
-  },
-  {
-    id: '5',
-    name: '行政边界图层',
-    type: '栅格',
-    dataSource: '自然资源局',
-    visible: true,
-    updateTime: '2025-01-10',
-  },
-])
+const layerList = ref<MapConfigLayer[]>([])
 
 const layerDialogVisible = ref(false)
-const layerForm = reactive<Layer>({
+const layerForm = reactive<Omit<MapConfigLayer, 'updateTime'> & { updateTime: string }>({
   id: '',
   name: '',
   type: '矢量',
@@ -368,26 +291,34 @@ function addLayer() {
   layerDialogVisible.value = true
 }
 
-function editLayer(row: Layer) {
+function editLayer(row: MapConfigLayer) {
   Object.assign(layerForm, row)
   layerDialogVisible.value = true
 }
 
-function deleteLayer(row: Layer) {
+async function deleteLayer(row: MapConfigLayer) {
+  await ElMessageBox.confirm(`确定删除图层「${row.name}」？`, '删除确认', { type: 'warning' })
   layerList.value = layerList.value.filter((l) => l.id !== row.id)
+  ElMessage.success('图层已删除')
 }
 
 function saveLayer() {
+  if (!layerForm.name) {
+    ElMessage.warning('请输入图层名称')
+    return
+  }
   if (layerForm.id) {
     const idx = layerList.value.findIndex((l) => l.id === layerForm.id)
     if (idx !== -1)
       layerList.value[idx] = { ...layerForm, updateTime: new Date().toISOString().slice(0, 10) }
+    ElMessage.success('图层已更新')
   } else {
     layerList.value.push({
       ...layerForm,
       id: String(Date.now()),
       updateTime: new Date().toISOString().slice(0, 10),
     })
+    ElMessage.success('图层已添加')
   }
   layerDialogVisible.value = false
 }
@@ -402,10 +333,16 @@ function getLayerTagType(type: string): 'primary' | 'success' | 'warning' {
 }
 
 function handleSave() {
+  if (!basemapConfig.apiKey) {
+    ElMessage.warning('请填写底图API密钥')
+    return
+  }
   ElMessage.success('配置已保存')
 }
+onMounted(() => {
+  loadData()
+})
 </script>
-
 <style lang="scss" scoped>
 .config-layout {
   padding: 0 20px 20px;

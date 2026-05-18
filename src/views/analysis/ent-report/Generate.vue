@@ -1,10 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="报告生成与输出" subtitle="企业运行报告配置与生成">
-      <template #actions>
-        <el-button>历史报告</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="报告生成与输出" subtitle="企业运行报告配置与生成" />
 
     <div class="form-section">
       <el-form :model="form" label-width="120px" style="max-width: 640px">
@@ -18,7 +14,7 @@
 
         <el-form-item label="目标企业">
           <el-select v-model="form.enterprise" placeholder="选择企业" style="width: 100%">
-            <el-option v-for="e in enterprises" :key="e" :label="e" :value="e" />
+            <el-option v-for="e in enterprises" :key="e.id" :label="e.name" :value="e.name" />
           </el-select>
         </el-form-item>
 
@@ -113,28 +109,17 @@
           </div>
         </div>
       </div>
-
-      <div class="download-actions">
-        <el-button v-for="fmt in generatedReport.formats" :key="fmt" type="primary" plain>
-          <el-icon><Download /></el-icon> 下载 {{ fmt }}
-        </el-button>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Download } from '@element-plus/icons-vue'
+import { ref, onMounted } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
+import { fetchEntReportEnterprises } from '@/api/modules/analysisApi'
+import type { EntReportEnterprise } from '@/api/types/analysis'
 
-const enterprises = [
-  '华芯微电子科技有限公司',
-  '博创智能装备有限公司',
-  '前沿材料科技有限公司',
-  '数字智联科技有限公司',
-  '现代服务科技有限公司',
-]
+const enterprises = ref<EntReportEnterprise[]>([])
 
 const form = ref({
   type: 'standard',
@@ -148,17 +133,23 @@ const form = ref({
 const generating = ref(false)
 const generatedReport = ref<any>(null)
 
+async function loadData() {
+  const data = await fetchEntReportEnterprises()
+  enterprises.value = data.enterprises
+}
+
 async function handleGenerate() {
   generating.value = true
-  // Simulate generation
   await new Promise((resolve) => setTimeout(resolve, 1500))
-  const ent = enterprises.find((e) => e === form.value.enterprise) || enterprises[0]
-  generatedReport.value = {
-    name: `${ent} - ${form.value.type === 'standard' ? '标准' : form.value.type === 'special' ? '专项' : '定制'}运行分析报告`,
-    enterprise: ent,
-    period: '2024年度',
-    time: new Date().toLocaleString(),
-    formats: form.value.formats,
+  const ent =
+    enterprises.value.find((e) => e.name === form.value.enterprise) || enterprises.value[0]
+  if (ent) {
+    generatedReport.value = {
+      name: `${ent.name} - ${form.value.type === 'standard' ? '标准' : form.value.type === 'special' ? '专项' : '定制'}运行分析报告`,
+      enterprise: ent.name,
+      period: '2024年度',
+      time: new Date().toLocaleString(),
+    }
   }
   generating.value = false
 }
@@ -174,6 +165,10 @@ function handleReset() {
   }
   generatedReport.value = null
 }
+
+onMounted(() => {
+  loadData()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -198,11 +193,6 @@ function handleReset() {
   font-size: $font-size-md;
   font-weight: $font-weight-semibold;
   color: $text-primary;
-}
-.download-actions {
-  display: flex;
-  gap: $spacing-sm;
-  margin-top: $spacing-base;
 }
 
 .preview-section {
