@@ -37,7 +37,7 @@ const chartOption = computed<EChartsOption>(() => ({
   series: [
     {
       type: 'radar',
-      data: props.seriesData.map((s, i) => ({
+      data: props.seriesData.map((s) => ({
         name: s.name,
         value: s.data,
         areaStyle: { opacity: 0.15 },

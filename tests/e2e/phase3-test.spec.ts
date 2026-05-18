@@ -119,8 +119,6 @@ const ANALYSIS_ROUTES: RouteDef[] = [
   },
 ]
 
-const ALL_ROUTES = [...MAP_ROUTES, ...ATLAS_ROUTES, ...ANALYSIS_ROUTES]
-
 test.describe('Phase 3: 产业地图', () => {
   for (const { route, title } of MAP_ROUTES) {
     test(`${title} (${route})`, async ({ page }) => {

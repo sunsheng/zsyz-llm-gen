@@ -81,8 +81,6 @@ import MapLegend from '@/components/map/MapLegend.vue'
 import { fetchExtensionDirections } from '@/api/modules/investApi'
 import type { ExtensionDirection } from '@/api/types/invest'
 
-const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
-
 const mapRef = ref()
 const loading = ref(false)
 const directions = ref<ExtensionDirection[]>([])
@@ -121,7 +119,7 @@ const legendItems = computed(() => [
   { label: '目标区域', color: '#4ECB73' },
 ])
 
-function locateDirection(dir: ExtensionDirection) {
+function locateDirection(_dir: ExtensionDirection) {
   if (!mapInstance) return
   const center = (mapInstance as any).getCenter?.()
   if (center) {

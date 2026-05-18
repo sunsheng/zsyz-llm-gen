@@ -51,8 +51,6 @@ import MapLegend from '@/components/map/MapLegend.vue'
 import { fetchSpaceAtlasEdges } from '@/api/modules/investApi'
 import type { SpaceAtlasEdge } from '@/api/types/invest'
 
-const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
-
 const mapRef = ref()
 const loading = ref(false)
 const edges = ref<SpaceAtlasEdge[]>([])

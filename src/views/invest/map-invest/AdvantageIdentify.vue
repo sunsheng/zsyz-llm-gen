@@ -92,8 +92,6 @@ import MapLegend from '@/components/map/MapLegend.vue'
 import { fetchAdvantageLinks } from '@/api/modules/investApi'
 import type { AdvantageLink } from '@/api/types/invest'
 
-const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
-
 const mapRef = ref()
 const loading = ref(false)
 const links = ref<AdvantageLink[]>([])
@@ -117,7 +115,7 @@ const legendItems = computed(() => [
   { label: '一般环节 (<阈值)', color: '#909399' },
 ])
 
-function locateLink(link: AdvantageLink) {
+function locateLink(_link: AdvantageLink) {
   if (!mapInstance) return
   // Pan to center as a visual indicator
   const center = (mapInstance as any).getCenter?.()

@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
 import ScoreRing from '@/components/business/ScoreRing.vue'

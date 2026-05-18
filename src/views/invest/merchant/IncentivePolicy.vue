@@ -54,8 +54,6 @@ import type { FilterField } from '@/components/common/SearchFilterBar.vue'
 import { fetchIncentivePolicies } from '@/api/modules/investApi'
 import type { IncentivePolicy } from '@/api/types/invest'
 
-const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
-
 const filters: FilterField[] = [
   {
     key: 'type',

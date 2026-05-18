@@ -17,15 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-
-const props = defineProps<{
-  name: string
-  tag?: string
-  tagType?: 'primary' | 'success' | 'warning' | 'danger' | 'info'
-  metrics?: { label: string; value: string }[]
-}>()
-
 withDefaults(
   defineProps<{
     name: string
