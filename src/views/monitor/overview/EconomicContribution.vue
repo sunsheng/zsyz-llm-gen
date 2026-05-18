@@ -74,8 +74,8 @@ import { ref, onMounted } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
-import { getMockEconomicContribution } from '@/api/mock/monitor'
-import type { MonitorKpi } from '@/api/mock/monitor'
+import { fetchEconomicContribution } from '@/api/modules/monitorApi'
+import type { MonitorKpi, EconomicContributionData } from '@/api/mock/monitor'
 
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
@@ -85,8 +85,8 @@ const economicTableData = ref<any[]>([])
 const trendOption = ref({})
 const compositionOption = ref({})
 
-onMounted(() => {
-  const data = getMockEconomicContribution()
+async function loadData() {
+  const data = (await fetchEconomicContribution()) as EconomicContributionData
 
   kpiCards.value = [
     {
@@ -196,6 +196,10 @@ onMounted(() => {
 
   // 表格数据
   economicTableData.value = data.outputTrend
+}
+
+onMounted(() => {
+  loadData()
 })
 </script>
 

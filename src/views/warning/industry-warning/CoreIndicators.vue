@@ -3,12 +3,24 @@
     <PageHeader title="核心监测指标" subtitle="产业发展核心指标实时监测与预警">
       <template #actions>
         <el-button>导出</el-button>
-        <el-button type="primary">刷新</el-button>
+        <el-button type="primary" @click="loadData">刷新</el-button>
       </template>
     </PageHeader>
 
     <div class="stat-cards">
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />
+    </div>
+
+    <!-- 指标分类 Tab -->
+    <div class="filter-bar">
+      <el-radio-group v-model="activeCategory" @change="onCategoryChange">
+        <el-radio-button label="all">全部</el-radio-button>
+        <el-radio-button label="scale">规模指标</el-radio-button>
+        <el-radio-button label="efficiency">效益指标</el-radio-button>
+        <el-radio-button label="risk">风险指标</el-radio-button>
+        <el-radio-button label="sustainable">可持续指标</el-radio-button>
+        <el-radio-button label="innovation">创新指标</el-radio-button>
+      </el-radio-group>
     </div>
 
     <div class="chart-grid">
@@ -24,27 +36,43 @@
 
     <div class="table-section">
       <h4 class="chart-panel__title">核心监测指标明细</h4>
-      <el-table :data="indicatorData" stripe border style="width: 100%">
+      <el-table :data="filteredIndicators" stripe border style="width: 100%">
         <el-table-column prop="name" label="指标名称" min-width="180" />
-        <el-table-column prop="current" label="当前值" width="120" />
-        <el-table-column prop="threshold" label="预警阈值" width="120" />
-        <el-table-column prop="status" label="状态" width="100">
+        <el-table-column prop="categoryName" label="指标分类" width="120">
+          <template #default="{ row }">
+            <el-tag size="small">{{ row.categoryName }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="当前值" width="120">
+          <template #default="{ row }"> {{ row.currentValue }}{{ row.unit }} </template>
+        </el-table-column>
+        <el-table-column label="预警阈值" width="120">
+          <template #default="{ row }"> {{ row.warnThreshold }}{{ row.unit }} </template>
+        </el-table-column>
+        <el-table-column label="超限阈值" width="120">
+          <template #default="{ row }"> {{ row.criticalThreshold }}{{ row.unit }} </template>
+        </el-table-column>
+        <el-table-column prop="status" label="状态" width="80">
           <template #default="{ row }">
             <el-tag
               :type="
-                row.status === '正常' ? 'success' : row.status === '预警' ? 'warning' : 'danger'
+                row.status === 'normal'
+                  ? 'success'
+                  : row.status === 'warning'
+                    ? 'warning'
+                    : 'danger'
               "
               size="small"
             >
-              {{ row.status }}
+              {{ row.status === 'normal' ? '正常' : row.status === 'warning' ? '预警' : '超限' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="change" label="变化趋势" width="100">
+        <el-table-column label="变化趋势" width="100">
           <template #default="{ row }">
-            <span :style="{ color: row.change >= 0 ? '#4ECB73' : '#F2637B' }"
-              >{{ row.change >= 0 ? '+' : '' }}{{ row.change }}%</span
-            >
+            <span :style="{ color: row.change >= 0 ? '#4ECB73' : '#F2637B' }">
+              {{ row.change >= 0 ? '+' : '' }}{{ row.change }}%
+            </span>
           </template>
         </el-table-column>
         <el-table-column prop="updateTime" label="更新时间" width="160" />
@@ -54,133 +82,98 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
+import { fetchCoreIndicators } from '@/api/modules/warningApi'
+import type { CoreIndicatorSummary, IndicatorCategory } from '@/api/types/warning'
 
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
-const kpiCards = [
-  {
-    key: 'monitoring',
-    label: '监测指标',
-    value: 36,
-    unit: '项',
-    trend: 'up' as const,
-    trendValue: '+2',
-    icon: 'Monitor',
-    iconColor: '#1889E8',
-    iconBgColor: '#ECF5FF',
-  },
-  {
-    key: 'normal',
-    label: '正常指标',
-    value: 28,
-    unit: '项',
-    trend: 'up' as const,
-    trendValue: '+3',
-    icon: 'CircleCheck',
-    iconColor: '#4ECB73',
-    iconBgColor: '#EDFAF0',
-  },
-  {
-    key: 'warning',
-    label: '预警指标',
-    value: 6,
-    unit: '项',
-    trend: 'down' as const,
-    trendValue: '-2',
-    icon: 'Warning',
-    iconColor: '#FBD437',
-    iconBgColor: '#FFF8E6',
-  },
-  {
-    key: 'critical',
-    label: '超限指标',
-    value: 2,
-    unit: '项',
-    trend: 'down' as const,
-    trendValue: '-1',
-    icon: 'CircleClose',
-    iconColor: '#F2637B',
-    iconBgColor: '#FEF0F0',
-  },
-]
+const summary = ref<CoreIndicatorSummary | null>(null)
+const activeCategory = ref<string>('all')
+
+const kpiCards = computed(() => {
+  if (!summary.value) return []
+  const kpi = summary.value.kpiCards
+  return [
+    {
+      key: 'total',
+      label: '监测指标',
+      value: kpi.totalIndicators,
+      unit: '项',
+      trend: 'up' as const,
+      trendValue: '+2',
+      icon: 'Monitor',
+      iconColor: '#1889E8',
+      iconBgColor: '#ECF5FF',
+    },
+    {
+      key: 'normal',
+      label: '正常指标',
+      value: kpi.normalCount,
+      unit: '项',
+      trend: 'up' as const,
+      trendValue: '+3',
+      icon: 'CircleCheck',
+      iconColor: '#4ECB73',
+      iconBgColor: '#EDFAF0',
+    },
+    {
+      key: 'warning',
+      label: '预警指标',
+      value: kpi.warningCount,
+      unit: '项',
+      trend: 'down' as const,
+      trendValue: '-2',
+      icon: 'Warning',
+      iconColor: '#FBD437',
+      iconBgColor: '#FFF8E6',
+    },
+    {
+      key: 'critical',
+      label: '超限指标',
+      value: kpi.criticalCount,
+      unit: '项',
+      trend: 'down' as const,
+      trendValue: '-1',
+      icon: 'CircleClose',
+      iconColor: '#F2637B',
+      iconBgColor: '#FEF0F0',
+    },
+  ]
+})
+
+const filteredIndicators = computed(() => {
+  if (!summary.value) return []
+  if (activeCategory.value === 'all') return summary.value.indicators
+  return summary.value.indicators.filter(
+    (i) => i.category === (activeCategory.value as IndicatorCategory),
+  )
+})
 
 const trendOption = ref({})
 const healthOption = ref({})
 
-const indicatorData = ref([
-  {
-    name: '产业增加值增速',
-    current: '8.5%',
-    threshold: '5.0%',
-    status: '正常',
-    change: 1.2,
-    updateTime: '2025-05-14 10:00',
-  },
-  {
-    name: '企业亏损面',
-    current: '18.2%',
-    threshold: '20.0%',
-    status: '预警',
-    change: -2.5,
-    updateTime: '2025-05-14 10:00',
-  },
-  {
-    name: '产能利用率',
-    current: '76.8%',
-    threshold: '70.0%',
-    status: '正常',
-    change: 0.8,
-    updateTime: '2025-05-14 10:00',
-  },
-  {
-    name: 'PMI指数',
-    current: '48.5',
-    threshold: '50.0',
-    status: '超限',
-    change: -1.5,
-    updateTime: '2025-05-14 09:00',
-  },
-  {
-    name: '工业用电量增速',
-    current: '6.2%',
-    threshold: '3.0%',
-    status: '正常',
-    change: 0.5,
-    updateTime: '2025-05-14 09:00',
-  },
-  {
-    name: '新开工项目数',
-    current: '125',
-    threshold: '100',
-    status: '正常',
-    change: 8.0,
-    updateTime: '2025-05-14 08:00',
-  },
-])
+function buildCharts() {
+  if (!summary.value) return
 
-onMounted(() => {
-  const months = ['1月', '2月', '3月', '4月', '5月', '6月']
+  const { trendData, healthDistribution } = summary.value
+
   trendOption.value = {
     color: chartColors,
     tooltip: { trigger: 'axis' },
-    legend: { data: ['产业增加值', '产能利用率', 'PMI'] },
+    legend: { data: trendData.series.map((s) => s.name) },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    xAxis: { type: 'category', data: months },
+    xAxis: { type: 'category', data: trendData.months },
     yAxis: { type: 'value' },
-    series: [
-      { name: '产业增加值', type: 'line', smooth: true, data: [7.2, 7.8, 8.0, 8.2, 8.5, 8.5] },
-      {
-        name: '产能利用率',
-        type: 'line',
-        smooth: true,
-        data: [75.2, 75.8, 76.0, 76.5, 76.8, 76.8],
-      },
-      { name: 'PMI', type: 'line', smooth: true, data: [50.2, 49.8, 49.5, 49.0, 48.8, 48.5] },
-    ],
+    series: trendData.series.map((s) => ({
+      name: s.name,
+      type: 'line',
+      smooth: true,
+      data: s.data,
+    })),
   }
 
   healthOption.value = {
@@ -193,14 +186,23 @@ onMounted(() => {
         radius: ['40%', '70%'],
         itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
         label: { show: true, formatter: '{b}: {c}项' },
-        data: [
-          { name: '正常', value: 28 },
-          { name: '预警', value: 6 },
-          { name: '超限', value: 2 },
-        ],
+        data: healthDistribution,
       },
     ],
   }
+}
+
+function onCategoryChange() {
+  // 切换分类时不需要重新请求，filteredIndicators 是计算属性
+}
+
+async function loadData() {
+  summary.value = await fetchCoreIndicators()
+  buildCharts()
+}
+
+onMounted(() => {
+  loadData()
 })
 </script>
 
@@ -212,6 +214,9 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
+  margin-bottom: 20px;
+}
+.filter-bar {
   margin-bottom: 20px;
 }
 .chart-grid {

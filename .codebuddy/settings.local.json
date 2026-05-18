@@ -1,0 +1,5 @@
+{
+  "enabledPlugins": {
+    "webapp-testing@codebuddy-plugins-official": true
+  }
+}

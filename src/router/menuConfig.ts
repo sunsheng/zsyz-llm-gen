@@ -204,20 +204,20 @@ export const menuConfig: MenuItem[] = [
     children: [
       {
         title: '产业发展预警',
-        path: '/warning/industry-warning',
+        path: '/warning/dev',
         children: [
-          { title: '核心监测指标', path: '/warning/industry-warning/indicators' },
-          { title: '动态阈值设定', path: '/warning/industry-warning/threshold' },
-          { title: '预警分析模型', path: '/warning/industry-warning/model' },
+          { title: '核心监测指标', path: '/warning/dev/indicators' },
+          { title: '动态阈值设定', path: '/warning/dev/threshold' },
+          { title: '预警分析模型', path: '/warning/dev/model' },
         ],
       },
       {
         title: '企业外迁预警',
-        path: '/warning/relocation-warning',
+        path: '/warning/relocation',
         children: [
-          { title: '预警指标体系', path: '/warning/relocation-warning/indicator-system' },
-          { title: '间接风险信号', path: '/warning/relocation-warning/risk-signal' },
-          { title: '风险评分模型', path: '/warning/relocation-warning/scoring-model' },
+          { title: '预警指标体系', path: '/warning/relocation/indicators' },
+          { title: '间接风险信号', path: '/warning/relocation/signals' },
+          { title: '风险评分模型', path: '/warning/relocation/model' },
         ],
       },
     ],
@@ -229,11 +229,11 @@ export const menuConfig: MenuItem[] = [
     children: [
       {
         title: '园区榜单',
-        path: '/regional-map/park-ranking',
+        path: '/regional-map/ranking',
         children: [
-          { title: '榜单指标体系', path: '/regional-map/park-ranking/indicator-system' },
-          { title: '企业综合榜', path: '/regional-map/park-ranking/enterprise-ranking' },
-          { title: '产业链协同榜', path: '/regional-map/park-ranking/chain-ranking' },
+          { title: '榜单指标体系', path: '/regional-map/ranking/indicator-system' },
+          { title: '企业综合榜', path: '/regional-map/ranking/enterprise-comprehensive' },
+          { title: '产业链协同榜', path: '/regional-map/ranking/chain-synergy' },
         ],
       },
     ],
@@ -361,31 +361,11 @@ export const menuConfig: MenuItem[] = [
     icon: 'Bell',
     path: '/intelligence',
     children: [
-      {
-        title: '资讯招商情报',
-        path: '/intelligence/news-invest',
-        children: [{ title: '资讯招商情报', path: '/intelligence/news-invest/index' }],
-      },
-      {
-        title: '项目招商情报',
-        path: '/intelligence/project-invest',
-        children: [{ title: '项目招商情报', path: '/intelligence/project-invest/index' }],
-      },
-      {
-        title: '技术招商情报',
-        path: '/intelligence/tech-invest',
-        children: [{ title: '技术招商情报', path: '/intelligence/tech-invest/index' }],
-      },
-      {
-        title: '资质招商情报',
-        path: '/intelligence/qual-invest',
-        children: [{ title: '资质招商情报', path: '/intelligence/qual-invest/index' }],
-      },
-      {
-        title: '资本招商情报',
-        path: '/intelligence/capital-invest',
-        children: [{ title: '资本招商情报', path: '/intelligence/capital-invest/index' }],
-      },
+      { title: '资讯招商情报', path: '/intelligence/news-invest/index' },
+      { title: '项目招商情报', path: '/intelligence/project-invest/index' },
+      { title: '技术招商情报', path: '/intelligence/tech-invest/index' },
+      { title: '资质招商情报', path: '/intelligence/qual-invest/index' },
+      { title: '资本招商情报', path: '/intelligence/capital-invest/index' },
       {
         title: '招商风险监测',
         path: '/intelligence/risk-monitor',
@@ -394,16 +374,8 @@ export const menuConfig: MenuItem[] = [
           { title: '风险分类体系', path: '/intelligence/risk-monitor/classification' },
         ],
       },
-      {
-        title: '招商情报搜索',
-        path: '/intelligence/search',
-        children: [{ title: '招商情报搜索', path: '/intelligence/search/index' }],
-      },
-      {
-        title: '我的招商情报',
-        path: '/intelligence/mine',
-        children: [{ title: '我的招商情报', path: '/intelligence/mine/index' }],
-      },
+      { title: '招商情报搜索', path: '/intelligence/search/index' },
+      { title: '我的招商情报', path: '/intelligence/mine/index' },
     ],
   },
   {

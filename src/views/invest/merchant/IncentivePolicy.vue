@@ -1,33 +1,36 @@
 <template>
   <div class="page-container">
-    <PageHeader title="招商激励政策" subtitle="以商招商激励政策管理">
-      <template #actions>
-        <el-button type="primary">查询</el-button>
-        <el-button>重置</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="招商激励政策" subtitle="以商招商激励政策管理" />
 
     <SearchFilterBar
-      search-placeholder="请输入关键词搜索"
+      search-placeholder="请输入政策名称搜索"
       :filters="filters"
       @search="handleSearch"
-      @filter="handleSearch"
-      @reset="handleSearch"
+      @filter="handleFilter"
+      @reset="handleReset"
     />
 
     <div class="content-card">
-      <el-table :data="tableData" stripe border style="width: 100%">
-        <el-table-column prop="name" label="名称" min-width="160" />
-        <el-table-column prop="category" label="分类" width="140" />
-        <el-table-column prop="status" label="状态" width="100">
+      <el-table v-loading="loading" :data="filteredList" stripe border size="small">
+        <el-table-column prop="name" label="政策名称" min-width="160" />
+        <el-table-column prop="type" label="类型" width="120">
           <template #default="{ row }">
-            <el-tag :type="row.status === '活跃' ? 'success' : 'info'" size="small">{{
-              row.status
+            <el-tag size="small" :type="typeTagMap[row.type] || ('info' as any)">{{
+              typeLabelMap[row.type] || row.type
             }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="updateTime" label="更新时间" width="160" />
-        <el-table-column label="操作" width="120" fixed="right">
+        <el-table-column prop="rewardRate" label="奖励比例" width="100" />
+        <el-table-column prop="targetEnterprise" label="目标企业" min-width="140" />
+        <el-table-column prop="conditions" label="条件" min-width="200" show-overflow-tooltip />
+        <el-table-column prop="status" label="状态" width="100">
+          <template #default="{ row }">
+            <el-tag size="small" :type="statusTagMap[row.status] || ('info' as any)">{{
+              statusLabelMap[row.status] || row.status
+            }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="80" fixed="right">
           <template #default>
             <el-button type="primary" link size="small">查看</el-button>
           </template>
@@ -43,28 +46,123 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import SearchFilterBar from '@/components/common/SearchFilterBar.vue'
 import PaginationBar from '@/components/common/PaginationBar.vue'
 import type { FilterField } from '@/components/common/SearchFilterBar.vue'
+import { fetchIncentivePolicies } from '@/api/modules/investApi'
+import type { IncentivePolicy } from '@/api/types/invest'
 
-const filters: FilterField[] = [{ key: 'category', label: '分类', type: 'select', options: [] }]
-const tableData = ref<any[]>([])
-const pagination = reactive({ current: 1, total: 0 })
+const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
-function handleSearch() {
-  tableData.value = []
-  pagination.total = 0
+const filters: FilterField[] = [
+  {
+    key: 'type',
+    label: '类型',
+    type: 'select',
+    options: [
+      { label: '现金奖励', value: 'cash-reward' },
+      { label: '资源倾斜', value: 'resource-priority' },
+      { label: '免租优惠', value: 'rent-free' },
+    ],
+  },
+  {
+    key: 'status',
+    label: '状态',
+    type: 'select',
+    options: [
+      { label: '生效中', value: 'active' },
+      { label: '已过期', value: 'expired' },
+      { label: '草稿', value: 'draft' },
+    ],
+  },
+]
+
+const typeLabelMap: Record<string, string> = {
+  'cash-reward': '现金奖励',
+  'resource-priority': '资源倾斜',
+  'rent-free': '免租优惠',
+}
+
+const typeTagMap: Record<string, '' | 'primary' | 'success' | 'warning' | 'danger' | 'info'> = {
+  'cash-reward': 'warning',
+  'resource-priority': 'success',
+  'rent-free': '',
+}
+
+const statusLabelMap: Record<string, string> = {
+  active: '生效中',
+  expired: '已过期',
+  draft: '草稿',
+}
+
+const statusTagMap: Record<string, '' | 'primary' | 'success' | 'warning' | 'danger' | 'info'> = {
+  active: 'success',
+  expired: 'info',
+  draft: 'warning',
+}
+
+const loading = ref(false)
+const tableData = ref<IncentivePolicy[]>([])
+const searchKeyword = ref('')
+const filterValues = ref<Record<string, string>>({})
+const pagination = reactive({ current: 1, total: 0, pageSize: 15 })
+
+const filteredList = computed(() => {
+  let list = tableData.value
+  if (searchKeyword.value) {
+    const kw = searchKeyword.value.toLowerCase()
+    list = list.filter(
+      (item) =>
+        item.name.toLowerCase().includes(kw) || item.targetEnterprise.toLowerCase().includes(kw),
+    )
+  }
+  if (filterValues.value.type) {
+    list = list.filter((item) => item.type === filterValues.value.type)
+  }
+  if (filterValues.value.status) {
+    list = list.filter((item) => item.status === filterValues.value.status)
+  }
+  return list
+})
+
+function handleSearch(keyword: string) {
+  searchKeyword.value = keyword
+  pagination.current = 1
+  pagination.total = filteredList.value.length
+}
+
+function handleReset() {
+  searchKeyword.value = ''
+  filterValues.value = {}
+  pagination.current = 1
+  pagination.total = filteredList.value.length
+}
+
+function handleFilter(filters: Record<string, unknown>) {
+  filterValues.value = filters as Record<string, string>
+  pagination.current = 1
+  pagination.total = filteredList.value.length
 }
 
 function handlePageChange(page: number) {
   pagination.current = page
-  handleSearch()
+}
+
+async function loadData() {
+  loading.value = true
+  try {
+    const data = await fetchIncentivePolicies()
+    tableData.value = data
+    pagination.total = data.length
+  } finally {
+    loading.value = false
+  }
 }
 
 onMounted(() => {
-  handleSearch()
+  loadData()
 })
 </script>
 
@@ -72,39 +170,9 @@ onMounted(() => {
 .page-container {
   padding: 20px;
 }
+
 .content-card {
   padding: 20px;
-  background: $bg-card;
-  border-radius: $radius-base;
-  box-shadow: $shadow-card;
-}
-.stat-cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-bottom: 20px;
-}
-.chart-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  margin-bottom: 20px;
-}
-.chart-panel {
-  padding: 20px;
-  background: $bg-card;
-  border-radius: $radius-base;
-  box-shadow: $shadow-card;
-}
-.chart-panel__title {
-  margin: 0 0 16px;
-  font-size: 16px;
-  font-weight: $font-weight-semibold;
-  color: $text-primary;
-}
-.filter-panel {
-  padding: 20px;
-  margin-bottom: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
