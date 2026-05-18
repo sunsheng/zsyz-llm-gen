@@ -44,7 +44,7 @@
         </el-table-column>
         <el-table-column label="操作" width="120" fixed="right">
           <template #default>
-            <el-link type="primary" :underline="false">编辑</el-link>
+            <el-link type="primary" underline="never">编辑</el-link>
           </template>
         </el-table-column>
       </el-table>

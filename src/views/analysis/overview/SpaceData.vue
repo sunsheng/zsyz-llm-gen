@@ -3,8 +3,8 @@
     <PageHeader title="载体空间数据" subtitle="园区与载体空间资源分布">
       <template #actions>
         <el-radio-group v-model="timeDimension" size="small" style="margin-right: 12px">
-          <el-radio-button label="week">按周</el-radio-button>
-          <el-radio-button label="month">按月</el-radio-button>
+          <el-radio-button value="week">按周</el-radio-button>
+          <el-radio-button value="month">按月</el-radio-button>
         </el-radio-group>
         <el-button>导出</el-button>
       </template>

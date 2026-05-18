@@ -60,7 +60,7 @@
             class="news-card__link"
             >查看详情</a
           >
-          <el-link v-else type="primary" :underline="false">查看详情</el-link>
+          <el-link v-else type="primary" underline="never">查看详情</el-link>
         </div>
       </el-card>
     </div>

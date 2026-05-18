@@ -9,9 +9,9 @@
 
     <div class="rank-tabs">
       <el-radio-group v-model="sortBy" @change="handleSortChange">
-        <el-radio-button label="tax">纳税排名</el-radio-button>
-        <el-radio-button label="employment">就业排名</el-radio-button>
-        <el-radio-button label="rd">研发投入排名</el-radio-button>
+        <el-radio-button value="tax">纳税排名</el-radio-button>
+        <el-radio-button value="employment">就业排名</el-radio-button>
+        <el-radio-button value="rd">研发投入排名</el-radio-button>
       </el-radio-group>
     </div>
 

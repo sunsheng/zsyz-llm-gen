@@ -128,7 +128,7 @@
           </el-descriptions-item>
           <el-descriptions-item label="联系电话">{{ detailData.contact }}</el-descriptions-item>
           <el-descriptions-item label="企业网站">
-            <el-link type="primary" :underline="false">{{ detailData.website }}</el-link>
+            <el-link type="primary" underline="never">{{ detailData.website }}</el-link>
           </el-descriptions-item>
           <el-descriptions-item label="地理位置">
             经度 {{ detailData.lng.toFixed(3) }}，纬度 {{ detailData.lat.toFixed(3) }}

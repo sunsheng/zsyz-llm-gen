@@ -106,7 +106,7 @@
           </el-form-item>
           <div class="login-page__options">
             <el-checkbox v-model="loginForm.remember">记住密码</el-checkbox>
-            <el-link type="primary" :underline="false">忘记密码?</el-link>
+            <el-link type="primary" underline="never">忘记密码?</el-link>
           </div>
           <el-form-item>
             <el-button
@@ -120,9 +120,9 @@
           </el-form-item>
         </el-form>
         <div class="login-page__footer">
-          <el-link type="info" :underline="false">用户协议</el-link>
+          <el-link type="info" underline="never">用户协议</el-link>
           <span class="login-page__divider">|</span>
-          <el-link type="info" :underline="false">隐私政策</el-link>
+          <el-link type="info" underline="never">隐私政策</el-link>
         </div>
       </div>
     </div>

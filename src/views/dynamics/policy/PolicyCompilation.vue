@@ -51,7 +51,7 @@
               class="policy-link"
               >查看</a
             >
-            <el-link v-else type="primary" :underline="false">查看</el-link>
+            <el-link v-else type="primary" underline="never">查看</el-link>
           </template>
         </el-table-column>
       </el-table>

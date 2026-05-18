@@ -14,10 +14,10 @@
     <div class="metric-switcher">
       <span class="metric-switcher__label">指标维度：</span>
       <el-radio-group v-model="activeMetric" @change="handleMetricChange">
-        <el-radio-button label="output">产值占比</el-radio-button>
-        <el-radio-button label="tax">税收贡献</el-radio-button>
-        <el-radio-button label="enterprise">企业数量</el-radio-button>
-        <el-radio-button label="employment">就业人数</el-radio-button>
+        <el-radio-button value="output">产值占比</el-radio-button>
+        <el-radio-button value="tax">税收贡献</el-radio-button>
+        <el-radio-button value="enterprise">企业数量</el-radio-button>
+        <el-radio-button value="employment">就业人数</el-radio-button>
       </el-radio-group>
     </div>
 
