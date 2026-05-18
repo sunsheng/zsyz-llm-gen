@@ -1,10 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="政策实施监测" subtitle="政策执行效果跟踪与评估监测">
-      <template #actions>
-        <el-button>导出报告</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="政策实施监测" subtitle="政策执行效果跟踪与评估监测" />
 
     <div class="stat-cards">
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />

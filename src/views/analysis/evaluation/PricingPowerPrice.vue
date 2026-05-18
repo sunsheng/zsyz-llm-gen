@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="议价能力指数" subtitle="产业议价能力与价格趋势">
-      <template #actions>
-        <el-button>导出</el-button>
-        <el-button type="primary">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="议价能力指数" subtitle="产业议价能力与价格趋势" />
 
     <div class="chart-grid">
       <div class="chart-panel full-width">

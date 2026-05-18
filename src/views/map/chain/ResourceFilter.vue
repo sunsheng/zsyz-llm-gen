@@ -1,10 +1,6 @@
 <template>
   <div class="page-container map-page">
-    <PageHeader title="产业资源筛选" subtitle="多维度筛选产业资源">
-      <template #actions>
-        <el-button type="primary" :icon="Download">导出</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="产业资源筛选" subtitle="多维度筛选产业资源" />
     <div class="map-page__body">
       <MapControlPanel title="资源筛选">
         <div class="filter-section">
@@ -144,7 +140,6 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onUnmounted } from 'vue'
-import { Download } from '@element-plus/icons-vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import MaptalksMap from '@/components/map/MaptalksMap.vue'
 import MapControlPanel from '@/components/map/MapControlPanel.vue'

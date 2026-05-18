@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="动态排名" subtitle="按纳税/就业/研发投入生成企业榜单">
-      <template #actions>
-        <el-button>导出</el-button>
-        <el-button type="primary">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="动态排名" subtitle="按纳税/就业/研发投入生成企业榜单" />
 
     <div class="rank-tabs">
       <el-radio-group v-model="sortBy" @change="handleSortChange">

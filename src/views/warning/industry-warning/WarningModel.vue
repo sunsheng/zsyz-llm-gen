@@ -2,7 +2,6 @@
   <div class="page-container">
     <PageHeader title="预警分析模型" subtitle="产业发展预警模型配置与运行管理">
       <template #actions>
-        <el-button>导出报告</el-button>
         <el-button type="primary">新建模型</el-button>
       </template>
     </PageHeader>

@@ -12,7 +12,6 @@
           <el-option label="龙头集中度" value="leading" />
           <el-option label="市场份额" value="market" />
         </el-select>
-        <el-button :icon="Download" @click="handleExport">导出报告</el-button>
       </template>
     </PageHeader>
 
@@ -217,15 +216,12 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
-import { Download, Promotion } from '@element-plus/icons-vue'
+import { Promotion } from '@element-plus/icons-vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import IndustryChainSelect from '@/components/business/IndustryChainSelect.vue'
-import { useExport } from '@/composables/useExport'
 import VChart from 'vue-echarts'
-
-const { exportToExcel } = useExport()
 
 interface EnterpriseDetail {
   name: string
@@ -455,10 +451,6 @@ const radarOption = computed(() => {
 
 function handleNodeClick(node: KeyNode) {
   activeNode.value = node
-}
-
-function handleExport() {
-  exportToExcel('产业链关键环节识别')
 }
 
 watch(selectedChain, () => {

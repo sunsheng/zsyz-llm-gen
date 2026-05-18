@@ -1,10 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="渠道空间数据" subtitle="招商渠道分布与效果分析">
-      <template #actions>
-        <el-button>导出</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="渠道空间数据" subtitle="招商渠道分布与效果分析" />
 
     <div class="stat-cards">
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />

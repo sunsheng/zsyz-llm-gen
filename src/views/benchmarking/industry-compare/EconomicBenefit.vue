@@ -1,10 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="经济效益" subtitle="各区域产业经济效益对比分析">
-      <template #actions>
-        <el-button type="primary" @click="handleExport">导出报告</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="经济效益" subtitle="各区域产业经济效益对比分析" />
 
     <ComparisonSelector @compare="handleCompare" />
 
@@ -234,10 +230,6 @@ async function handleCompare(regionIds: string[], regionNames: string[]) {
       },
     ],
   }
-}
-
-function handleExport() {
-  // 导出报告
 }
 </script>
 

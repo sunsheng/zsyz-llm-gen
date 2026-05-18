@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="核心监测指标" subtitle="产业发展核心指标实时监测与预警">
-      <template #actions>
-        <el-button>导出</el-button>
-        <el-button type="primary" @click="loadData">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="核心监测指标" subtitle="产业发展核心指标实时监测与预警" />
 
     <div class="stat-cards">
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />

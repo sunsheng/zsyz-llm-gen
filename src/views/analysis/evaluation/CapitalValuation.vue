@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="资本估值指数" subtitle="产业资本估值与上市公司分析">
-      <template #actions>
-        <el-button>导出</el-button>
-        <el-button type="primary">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="资本估值指数" subtitle="产业资本估值与上市公司分析" />
 
     <div class="chart-grid">
       <div class="chart-panel">

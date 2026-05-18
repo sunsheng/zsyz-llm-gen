@@ -6,7 +6,6 @@
           <el-radio-button value="region">按区域</el-radio-button>
           <el-radio-button value="industry">按行业</el-radio-button>
         </el-radio-group>
-        <el-button>导出</el-button>
       </template>
     </PageHeader>
 

@@ -5,7 +5,6 @@
         <el-select v-model="currentDimension" style="width: 160px">
           <el-option v-for="d in dimensions" :key="d.value" :label="d.label" :value="d.value" />
         </el-select>
-        <el-button>导出</el-button>
       </template>
     </PageHeader>
 

@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="产业结构分析" subtitle="产业内部结构与效益分析">
-      <template #actions>
-        <el-button>导出</el-button>
-        <el-button type="primary">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="产业结构分析" subtitle="产业内部结构与效益分析" />
 
     <div class="chart-grid">
       <div class="chart-panel">

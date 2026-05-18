@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="企业运行指标体系" subtitle="五维企业运行评估指标">
-      <template #actions>
-        <el-button>导出</el-button>
-        <el-button type="primary">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="企业运行指标体系" subtitle="五维企业运行评估指标" />
 
     <div class="chart-layout">
       <div class="radar-section">

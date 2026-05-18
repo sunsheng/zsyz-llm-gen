@@ -6,7 +6,6 @@
           <el-option v-for="r in regionOptions" :key="r.code" :label="r.name" :value="r.code" />
         </el-select>
         <el-button type="primary" :icon="Plus" @click="handleCreate">新建图谱</el-button>
-        <el-button :icon="Download" @click="handleExport">导出</el-button>
       </template>
     </PageHeader>
 
@@ -228,15 +227,12 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, reactive } from 'vue'
-import { Plus, Search, Download, Close } from '@element-plus/icons-vue'
+import { Plus, Search, Close } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
-import { useExport } from '@/composables/useExport'
-
-const { exportToExcel } = useExport()
 
 interface GraphItem {
   id: string
@@ -483,10 +479,6 @@ function removeEnterprise(index: number) {
 
 function addEnterprise() {
   configGraph.value?.linkedEnterprises.push('新关联企业')
-}
-
-function handleExport() {
-  exportToExcel('区域产业链图谱管理')
 }
 
 onMounted(() => {

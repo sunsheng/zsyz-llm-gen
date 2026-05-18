@@ -1,10 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="全局产业分布" subtitle="全国产业空间分布与占比分析">
-      <template #actions>
-        <el-button>导出</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="全局产业分布" subtitle="全国产业空间分布与占比分析" />
 
     <div class="stat-cards">
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />

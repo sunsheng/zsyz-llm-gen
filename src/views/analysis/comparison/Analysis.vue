@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="报告分析" subtitle="多园区运行对比分析报告">
-      <template #actions>
-        <el-button>导出报告</el-button>
-        <el-button type="primary">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="报告分析" subtitle="多园区运行对比分析报告" />
 
     <div class="selector-section">
       <span class="selector-label">对比园区:</span>

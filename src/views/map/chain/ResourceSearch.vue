@@ -1,10 +1,6 @@
 <template>
   <div class="page-container map-page">
-    <PageHeader title="产业资源搜索" subtitle="搜索并定位产业资源在地图上的分布">
-      <template #actions>
-        <el-button type="primary" :icon="Download">导出</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="产业资源搜索" subtitle="搜索并定位产业资源在地图上的分布" />
     <div class="map-page__body">
       <MapControlPanel title="资源搜索">
         <div class="search-section">
@@ -79,7 +75,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onUnmounted } from 'vue'
-import { Search, Download } from '@element-plus/icons-vue'
+import { Search } from '@element-plus/icons-vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import MaptalksMap from '@/components/map/MaptalksMap.vue'
 import MapControlPanel from '@/components/map/MapControlPanel.vue'

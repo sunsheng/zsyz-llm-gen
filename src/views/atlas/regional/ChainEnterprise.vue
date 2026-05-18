@@ -18,7 +18,6 @@
           style="width: 180px"
           :prefix-icon="Search"
         />
-        <el-button :icon="Download" @click="handleExport">导出</el-button>
       </template>
     </PageHeader>
 
@@ -215,14 +214,11 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
-import { Search, Download } from '@element-plus/icons-vue'
+import { Search } from '@element-plus/icons-vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import IndustryChainSelect from '@/components/business/IndustryChainSelect.vue'
-import { useExport } from '@/composables/useExport'
-
-const { exportToExcel } = useExport()
 
 interface ChainNode {
   id: string
@@ -460,10 +456,6 @@ function handleNodeSelect(node: ChainNode) {
 function handleEnterpriseClick(enterprise: EnterpriseItem) {
   selectedEnterprise.value = enterprise
   drawerVisible.value = true
-}
-
-function handleExport() {
-  exportToExcel('区域产业链关联企业')
 }
 
 watch([selectedRegion, selectedChain], () => {

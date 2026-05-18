@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="投资热点分析" subtitle="产业投资热点与区域分布">
-      <template #actions>
-        <el-button>导出</el-button>
-        <el-button type="primary">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="投资热点分析" subtitle="产业投资热点与区域分布" />
 
     <div class="chart-grid">
       <div class="chart-panel">

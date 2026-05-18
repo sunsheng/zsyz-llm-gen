@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="经济贡献分析" subtitle="年度总产值与税收贡献">
-      <template #actions>
-        <el-button>导出</el-button>
-        <el-button type="primary">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="经济贡献分析" subtitle="年度总产值与税收贡献" />
 
     <div class="stat-cards">
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />

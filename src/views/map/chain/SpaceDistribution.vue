@@ -1,10 +1,6 @@
 <template>
   <div class="page-container map-page">
-    <PageHeader title="产业空间分布" subtitle="查看3+1园区平台及产业空间载体地理分布">
-      <template #actions>
-        <el-button type="primary" :icon="Download">导出</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="产业空间分布" subtitle="查看3+1园区平台及产业空间载体地理分布" />
     <div class="map-page__body">
       <MapControlPanel title="分布分析">
         <div class="filter-section">
@@ -81,7 +77,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onUnmounted } from 'vue'
-import { Download } from '@element-plus/icons-vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import MaptalksMap from '@/components/map/MaptalksMap.vue'
 import MapControlPanel from '@/components/map/MapControlPanel.vue'

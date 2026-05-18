@@ -1,10 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="对比指标" subtitle="园区对比指标选择与可视化">
-      <template #actions>
-        <el-button>导出</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="对比指标" subtitle="园区对比指标选择与可视化" />
 
     <div class="selector-section">
       <span class="selector-label">指标类型:</span>

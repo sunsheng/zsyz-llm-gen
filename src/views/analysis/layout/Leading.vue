@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="龙头企业" subtitle="龙头重点企业关键指标">
-      <template #actions>
-        <el-button>导出</el-button>
-        <el-button type="primary">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="龙头企业" subtitle="龙头重点企业关键指标" />
 
     <div class="stat-cards">
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />

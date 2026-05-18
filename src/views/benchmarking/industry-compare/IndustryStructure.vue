@@ -1,10 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="产业结构" subtitle="各区域产业结构对比分析">
-      <template #actions>
-        <el-button type="primary" @click="handleExport">导出报告</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="产业结构" subtitle="各区域产业结构对比分析" />
 
     <ComparisonSelector @compare="handleCompare" />
 
@@ -224,10 +220,6 @@ async function handleCompare(regionIds: string[], regionNames: string[]) {
       { name: '传统产业', type: 'bar', data: compareData.value.map((d) => d.traditionalRatio) },
     ],
   }
-}
-
-function handleExport() {
-  // 导出报告
 }
 </script>
 

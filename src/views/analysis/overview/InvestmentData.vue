@@ -5,8 +5,6 @@
         <el-select v-model="selectedPark" placeholder="选择园区" clearable style="width: 180px">
           <el-option v-for="park in parkOptions" :key="park" :label="park" :value="park" />
         </el-select>
-        <el-button :icon="Refresh" @click="handleRefresh">刷新</el-button>
-        <el-button :icon="Download" @click="handleExport">导出</el-button>
       </template>
     </PageHeader>
 
@@ -60,7 +58,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Refresh, Download } from '@element-plus/icons-vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
@@ -215,14 +212,6 @@ const occupancyTrendOption = ref({})
 const rentalStatusOption = ref({})
 const hotHousingOption = ref({})
 const parkCompareOption = ref({})
-
-function handleRefresh() {
-  // Refresh data
-}
-
-function handleExport() {
-  // Export logic
-}
 
 onMounted(() => {
   const months = [
