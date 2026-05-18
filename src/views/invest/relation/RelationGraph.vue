@@ -295,6 +295,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@use 'sass:color';
 .page-container {
   padding: 20px;
 }
@@ -415,7 +416,7 @@ onMounted(() => {
   transition: background 0.2s;
 
   &:hover {
-    background: darken($bg-card, 3%);
+    background: color.adjust($bg-card, $lightness: -3%);
   }
 }
 

@@ -19,10 +19,10 @@
         <div class="control-section">
           <div class="control-section__title">区域类型</div>
           <el-radio-group v-model="selectedType" @change="handleTypeChange">
-            <el-radio label="all">全部</el-radio>
-            <el-radio label="高密度工业区">高密度工业区</el-radio>
-            <el-radio label="新兴科技园区">新兴科技园区</el-radio>
-            <el-radio label="传统产业区">传统产业区</el-radio>
+            <el-radio value="all">全部</el-radio>
+            <el-radio value="高密度工业区">高密度工业区</el-radio>
+            <el-radio value="新兴科技园区">新兴科技园区</el-radio>
+            <el-radio value="传统产业区">传统产业区</el-radio>
           </el-radio-group>
         </div>
 

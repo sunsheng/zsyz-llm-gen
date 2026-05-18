@@ -13,9 +13,9 @@
     <!-- 直接/间接信号 Tab -->
     <div class="filter-bar">
       <el-radio-group v-model="signalFilter" @change="onFilterChange">
-        <el-radio-button label="all">全部指标</el-radio-button>
-        <el-radio-button label="direct">直接外迁信号</el-radio-button>
-        <el-radio-button label="indirect">间接风险信号</el-radio-button>
+        <el-radio-button value="all">全部指标</el-radio-button>
+        <el-radio-button value="direct">直接外迁信号</el-radio-button>
+        <el-radio-button value="indirect">间接风险信号</el-radio-button>
       </el-radio-group>
     </div>
 

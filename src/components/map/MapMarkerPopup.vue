@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="map-marker-popup__footer">
-      <el-link type="primary" :underline="false" @click="$emit('detail')"> 查看详情 &gt; </el-link>
+      <el-link type="primary" underline="never" @click="$emit('detail')"> 查看详情 &gt; </el-link>
     </div>
   </div>
 </template>

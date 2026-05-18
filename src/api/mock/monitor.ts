@@ -219,7 +219,13 @@ export interface EconomicContributionData {
   advancedMaterialOutput: number // 先进材料产值(万元)
   electronicsOutput: number // 电子信息产值(万元)
   taxTop3: { name: string; tax: number; industry: string }[]
-  outputTrend: { year: number; totalOutput: number; cleanEnergyOutput: number }[]
+  outputTrend: {
+    year: number
+    totalOutput: number
+    cleanEnergyOutput: number
+    advancedMaterialOutput: number
+    electronicsOutput: number
+  }[]
 }
 
 export interface DynamicRankingItem {
@@ -281,6 +287,8 @@ export function getMockEconomicContribution(): EconomicContributionData {
       year: currentYear - 4 + i,
       totalOutput: 2100000 + i * 280000 + Math.floor(Math.random() * 100000),
       cleanEnergyOutput: 850000 + i * 110000 + Math.floor(Math.random() * 50000),
+      advancedMaterialOutput: 420000 + i * 65000 + Math.floor(Math.random() * 30000),
+      electronicsOutput: 380000 + i * 55000 + Math.floor(Math.random() * 25000),
     })),
   }
 }

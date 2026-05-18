@@ -25,11 +25,11 @@
       <div class="table-header">
         <h4 class="chart-panel__title">企业综合排行</h4>
         <el-radio-group v-model="sortBy" size="small" @change="onSortChange">
-          <el-radio-button label="total">综合评分</el-radio-button>
-          <el-radio-button label="economic">经济效益</el-radio-button>
-          <el-radio-button label="innovation">创新活力</el-radio-button>
-          <el-radio-button label="social">社会贡献</el-radio-button>
-          <el-radio-button label="growth">成长潜力</el-radio-button>
+          <el-radio-button value="total">综合评分</el-radio-button>
+          <el-radio-button value="economic">经济效益</el-radio-button>
+          <el-radio-button value="innovation">创新活力</el-radio-button>
+          <el-radio-button value="social">社会贡献</el-radio-button>
+          <el-radio-button value="growth">成长潜力</el-radio-button>
         </el-radio-group>
       </div>
       <el-table :data="sortedRankings" stripe border style="width: 100%">

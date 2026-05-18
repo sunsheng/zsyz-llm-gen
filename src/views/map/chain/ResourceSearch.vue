@@ -31,10 +31,10 @@
         <div class="filter-section">
           <div class="filter-label">资源类型</div>
           <el-radio-group v-model="selectedType" @change="handleSearch">
-            <el-radio-button label="">全部</el-radio-button>
-            <el-radio-button label="enterprise">企业</el-radio-button>
-            <el-radio-button label="park">园区</el-radio-button>
-            <el-radio-button label="institution">机构</el-radio-button>
+            <el-radio-button value="">全部</el-radio-button>
+            <el-radio-button value="enterprise">企业</el-radio-button>
+            <el-radio-button value="park">园区</el-radio-button>
+            <el-radio-button value="institution">机构</el-radio-button>
           </el-radio-group>
         </div>
         <div class="results-section">

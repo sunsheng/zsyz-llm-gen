@@ -72,7 +72,7 @@
               type="qualify"
             />
           </div>
-          <el-link type="primary" :underline="false">查看详情</el-link>
+          <el-link type="primary" underline="never">查看详情</el-link>
         </div>
       </div>
     </div>

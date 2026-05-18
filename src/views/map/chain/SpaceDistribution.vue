@@ -26,8 +26,8 @@
         <div class="filter-section">
           <div class="filter-label">显示模式</div>
           <el-radio-group v-model="displayMode" @change="updateHeatmap">
-            <el-radio-button label="heatmap">热力图</el-radio-button>
-            <el-radio-button label="bubble">气泡图</el-radio-button>
+            <el-radio-button value="heatmap">热力图</el-radio-button>
+            <el-radio-button value="bubble">气泡图</el-radio-button>
           </el-radio-group>
         </div>
         <div class="filter-section">

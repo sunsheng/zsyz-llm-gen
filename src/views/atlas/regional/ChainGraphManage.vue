@@ -156,9 +156,9 @@
         </el-form-item>
         <el-form-item label="图谱类型" prop="graphType">
           <el-radio-group v-model="formData.graphType">
-            <el-radio label="chain">产业链图谱</el-radio>
-            <el-radio label="enterprise">企业关系图谱</el-radio>
-            <el-radio label="tech">技术图谱</el-radio>
+            <el-radio value="chain">产业链图谱</el-radio>
+            <el-radio value="enterprise">企业关系图谱</el-radio>
+            <el-radio value="tech">技术图谱</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="数据来源" prop="dataSource">
@@ -184,9 +184,9 @@
           </el-form-item>
           <el-form-item label="布局方式">
             <el-radio-group v-model="configGraph.layout">
-              <el-radio label="force">力导向布局</el-radio>
-              <el-radio label="hierarchical">层级布局</el-radio>
-              <el-radio label="circular">环形布局</el-radio>
+              <el-radio value="force">力导向布局</el-radio>
+              <el-radio value="hierarchical">层级布局</el-radio>
+              <el-radio value="circular">环形布局</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="节点样式">

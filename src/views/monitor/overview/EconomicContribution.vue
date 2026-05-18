@@ -48,20 +48,30 @@
       <el-table :data="economicTableData" stripe border style="width: 100%">
         <el-table-column prop="year" label="年份" width="100" />
         <el-table-column prop="totalOutput" label="年度总产值(万元)" width="160">
-          <template #default="{ row }">{{ row.totalOutput.toLocaleString() }}</template>
+          <template #default="{ row }">{{ (row.totalOutput ?? 0).toLocaleString() }}</template>
         </el-table-column>
         <el-table-column prop="cleanEnergyOutput" label="清洁能源装备产值(万元)" width="200">
-          <template #default="{ row }">{{ row.cleanEnergyOutput.toLocaleString() }}</template>
+          <template #default="{ row }">{{
+            (row.cleanEnergyOutput ?? 0).toLocaleString()
+          }}</template>
         </el-table-column>
         <el-table-column prop="advancedMaterialOutput" label="先进材料产值(万元)" width="180">
-          <template #default="{ row }">{{ row.advancedMaterialOutput.toLocaleString() }}</template>
+          <template #default="{ row }">{{
+            (row.advancedMaterialOutput ?? 0).toLocaleString()
+          }}</template>
         </el-table-column>
         <el-table-column prop="electronicsOutput" label="电子信息产值(万元)" width="180">
-          <template #default="{ row }">{{ row.electronicsOutput.toLocaleString() }}</template>
+          <template #default="{ row }">{{
+            (row.electronicsOutput ?? 0).toLocaleString()
+          }}</template>
         </el-table-column>
         <el-table-column label="清洁能源占比" width="140">
           <template #default="{ row }">
-            {{ ((row.cleanEnergyOutput / row.totalOutput) * 100).toFixed(1) }}%
+            {{
+              row.totalOutput
+                ? ((row.cleanEnergyOutput / row.totalOutput) * 100).toFixed(1)
+                : '0.0'
+            }}%
           </template>
         </el-table-column>
       </el-table>

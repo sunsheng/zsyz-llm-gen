@@ -10,9 +10,9 @@
       <el-form :model="form" label-width="120px" style="max-width: 640px">
         <el-form-item label="报告类型">
           <el-radio-group v-model="form.type">
-            <el-radio-button label="standard">标准报告</el-radio-button>
-            <el-radio-button label="special">专项报告</el-radio-button>
-            <el-radio-button label="custom">定制报告</el-radio-button>
+            <el-radio-button value="standard">标准报告</el-radio-button>
+            <el-radio-button value="special">专项报告</el-radio-button>
+            <el-radio-button value="custom">定制报告</el-radio-button>
           </el-radio-group>
         </el-form-item>
 

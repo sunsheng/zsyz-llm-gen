@@ -9,12 +9,12 @@
     <div class="selector-section">
       <span class="selector-label">指标类型:</span>
       <el-radio-group v-model="indicatorType" size="small">
-        <el-radio-button label="common">通用指标</el-radio-button>
-        <el-radio-button label="special">特色指标</el-radio-button>
+        <el-radio-button value="common">通用指标</el-radio-button>
+        <el-radio-button value="special">特色指标</el-radio-button>
       </el-radio-group>
       <span class="selector-label" style="margin-left: 20px">对比园区:</span>
       <el-checkbox-group v-model="selectedParks" size="small">
-        <el-checkbox-button v-for="park in parks" :key="park" :label="park">{{
+        <el-checkbox-button v-for="park in parks" :key="park" :value="park">{{
           park
         }}</el-checkbox-button>
       </el-checkbox-group>

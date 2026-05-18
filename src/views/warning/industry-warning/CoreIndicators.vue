@@ -14,12 +14,12 @@
     <!-- 指标分类 Tab -->
     <div class="filter-bar">
       <el-radio-group v-model="activeCategory" @change="onCategoryChange">
-        <el-radio-button label="all">全部</el-radio-button>
-        <el-radio-button label="scale">规模指标</el-radio-button>
-        <el-radio-button label="efficiency">效益指标</el-radio-button>
-        <el-radio-button label="risk">风险指标</el-radio-button>
-        <el-radio-button label="sustainable">可持续指标</el-radio-button>
-        <el-radio-button label="innovation">创新指标</el-radio-button>
+        <el-radio-button value="all">全部</el-radio-button>
+        <el-radio-button value="scale">规模指标</el-radio-button>
+        <el-radio-button value="efficiency">效益指标</el-radio-button>
+        <el-radio-button value="risk">风险指标</el-radio-button>
+        <el-radio-button value="sustainable">可持续指标</el-radio-button>
+        <el-radio-button value="innovation">创新指标</el-radio-button>
       </el-radio-group>
     </div>
 

@@ -3,8 +3,8 @@
     <PageHeader title="产业规模及预测" subtitle="产业规模趋势与预测分析">
       <template #actions>
         <el-radio-group v-model="dimension" size="small">
-          <el-radio-button label="region">按区域</el-radio-button>
-          <el-radio-button label="industry">按行业</el-radio-button>
+          <el-radio-button value="region">按区域</el-radio-button>
+          <el-radio-button value="industry">按行业</el-radio-button>
         </el-radio-group>
         <el-button>导出</el-button>
       </template>

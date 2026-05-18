@@ -61,9 +61,9 @@
           <div class="panel-header">
             <h3 class="panel-title">关键环节识别</h3>
             <el-radio-group v-model="filterType" size="small">
-              <el-radio-button label="all">全部</el-radio-button>
-              <el-radio-button label="dominant">主导</el-radio-button>
-              <el-radio-button label="weak">薄弱</el-radio-button>
+              <el-radio-button value="all">全部</el-radio-button>
+              <el-radio-button value="dominant">主导</el-radio-button>
+              <el-radio-button value="weak">薄弱</el-radio-button>
             </el-radio-group>
           </div>
           <div class="node-list">

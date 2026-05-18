@@ -10,7 +10,7 @@
     <div class="selector-section">
       <span class="selector-label">对比园区:</span>
       <el-checkbox-group v-model="selectedParks">
-        <el-checkbox v-for="park in parks" :key="park" :label="park">{{ park }}</el-checkbox>
+        <el-checkbox v-for="park in parks" :key="park" :value="park">{{ park }}</el-checkbox>
       </el-checkbox-group>
     </div>
 
