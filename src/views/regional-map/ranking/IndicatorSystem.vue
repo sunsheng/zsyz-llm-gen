@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="预警指标体系" subtitle="企业外迁预警指标体系配置与管理">
+    <PageHeader title="榜单指标体系" subtitle="园区榜单评价指标体系配置与管理">
       <template #actions>
         <el-button type="primary">新增指标</el-button>
       </template>
@@ -10,45 +10,52 @@
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />
     </div>
 
-    <!-- 直接/间接信号 Tab -->
-    <div class="filter-bar">
-      <el-radio-group v-model="signalFilter" @change="onFilterChange">
-        <el-radio-button label="all">全部指标</el-radio-button>
-        <el-radio-button label="direct">直接外迁信号</el-radio-button>
-        <el-radio-button label="indirect">间接风险信号</el-radio-button>
-      </el-radio-group>
-    </div>
-
     <div class="chart-grid">
       <div class="chart-panel">
         <h4 class="chart-panel__title">指标维度分布</h4>
         <BaseChart :option="dimensionOption" height="320px" />
       </div>
       <div class="chart-panel">
-        <h4 class="chart-panel__title">指标权重分布</h4>
+        <h4 class="chart-panel__title">维度权重分布</h4>
         <BaseChart :option="weightOption" height="320px" />
       </div>
     </div>
 
     <div class="table-section">
-      <h4 class="chart-panel__title">预警指标明细</h4>
+      <div class="table-header">
+        <h4 class="chart-panel__title">指标体系明细</h4>
+        <el-radio-group v-model="activeDimension" size="small" @change="onDimensionChange">
+          <el-radio-button label="all">全部</el-radio-button>
+          <el-radio-button label="economic">经济效益</el-radio-button>
+          <el-radio-button label="innovation">创新活力</el-radio-button>
+          <el-radio-button label="social">社会贡献</el-radio-button>
+          <el-radio-button label="growth">成长潜力</el-radio-button>
+        </el-radio-group>
+      </div>
       <el-table :data="filteredIndicators" stripe border style="width: 100%">
-        <el-table-column prop="name" label="指标名称" min-width="200" />
-        <el-table-column label="信号类型" width="140">
+        <el-table-column prop="name" label="指标名称" min-width="160" />
+        <el-table-column prop="dimension" label="所属维度" width="120">
           <template #default="{ row }">
-            <el-tag :type="row.isDirectSignal ? 'danger' : 'info'" size="small">
-              {{ row.isDirectSignal ? '直接信号' : '间接信号' }}
+            <el-tag :type="dimensionTagType(row.dimension)" size="small">
+              {{ DIMENSION_LABEL[row.dimension as IndicatorDimension] }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="dimensionName" label="所属维度" width="120" />
-        <el-table-column prop="weight" label="权重(%)" width="100" />
-        <el-table-column prop="dataSource" label="数据来源" width="140" />
-        <el-table-column prop="frequency" label="更新频率" width="120" />
-        <el-table-column prop="enabled" label="状态" width="80">
+        <el-table-column prop="weight" label="权重(%)" width="120">
           <template #default="{ row }">
-            <el-tag :type="row.enabled ? 'success' : 'info'" size="small">
-              {{ row.enabled ? '启用' : '停用' }}
+            <el-progress
+              :percentage="row.weight"
+              :stroke-width="8"
+              :color="dimensionColor(row.dimension)"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column prop="calcMethod" label="计算方式" width="120" />
+        <el-table-column prop="dataSource" label="数据来源" width="120" />
+        <el-table-column prop="status" label="状态" width="80">
+          <template #default="{ row }">
+            <el-tag :type="row.status === 'active' ? 'success' : 'info'" size="small">
+              {{ row.status === 'active' ? '启用' : '停用' }}
             </el-tag>
           </template>
         </el-table-column>
@@ -62,13 +69,17 @@ import { ref, computed, onMounted } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
-import { fetchRelocationIndicators } from '@/api/modules/warningApi'
-import type { RelocationIndicatorSummary } from '@/api/types/warning'
+import { fetchIndicatorSystem } from '@/api/modules/regionalMapApi'
+import {
+  DIMENSION_LABEL,
+  type IndicatorDimension,
+  type IndicatorSystemSummary,
+} from '@/api/types/regional-map'
 
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
-const summary = ref<RelocationIndicatorSummary | null>(null)
-const signalFilter = ref<string>('all')
+const summary = ref<IndicatorSystemSummary | null>(null)
+const activeDimension = ref('all')
 
 const kpiCards = computed(() => {
   if (!summary.value) return []
@@ -76,19 +87,19 @@ const kpiCards = computed(() => {
   return [
     {
       key: 'indicators',
-      label: '预警指标',
+      label: '评价指标',
       value: kpi.totalIndicators,
       unit: '项',
       trend: 'up' as const,
-      trendValue: '+3',
+      trendValue: '+4',
       icon: 'DataBoard',
       iconColor: '#1889E8',
       iconBgColor: '#ECF5FF',
     },
     {
       key: 'dimensions',
-      label: '指标维度',
-      value: kpi.dimensionCount,
+      label: '评价维度',
+      value: kpi.dimensions,
       unit: '类',
       trend: 'flat' as const,
       trendValue: '',
@@ -97,23 +108,23 @@ const kpiCards = computed(() => {
       iconBgColor: '#E6F7F7',
     },
     {
-      key: 'realtime',
-      label: '实时指标',
-      value: kpi.realtimeCount,
+      key: 'quantitative',
+      label: '定量指标',
+      value: kpi.quantitative,
       unit: '项',
       trend: 'up' as const,
-      trendValue: '+2',
-      icon: 'Timer',
+      trendValue: '+3',
+      icon: 'TrendCharts',
       iconColor: '#4ECB73',
       iconBgColor: '#EDFAF0',
     },
     {
       key: 'coverage',
       label: '数据覆盖率',
-      value: kpi.coverage,
+      value: kpi.coverageRate,
       unit: '%',
       trend: 'up' as const,
-      trendValue: '+1.5%',
+      trendValue: '+1.2%',
       icon: 'CircleCheck',
       iconColor: '#975FE5',
       iconBgColor: '#F3ECFF',
@@ -123,20 +134,34 @@ const kpiCards = computed(() => {
 
 const filteredIndicators = computed(() => {
   if (!summary.value) return []
-  if (signalFilter.value === 'all') return summary.value.indicators
-  if (signalFilter.value === 'direct')
-    return summary.value.indicators.filter((i) => i.isDirectSignal)
-  return summary.value.indicators.filter((i) => !i.isDirectSignal)
+  if (activeDimension.value === 'all') return summary.value.indicators
+  return summary.value.indicators.filter((i) => i.dimension === activeDimension.value)
 })
 
 const dimensionOption = ref({})
 const weightOption = ref({})
 
-function buildCharts() {
-  if (!summary.value) return
+function dimensionTagType(dim: string): 'primary' | 'success' | 'warning' | 'danger' | 'info' {
+  const map: Record<string, 'primary' | 'success' | 'warning' | 'danger' | 'info'> = {
+    economic: 'primary',
+    innovation: 'success',
+    social: 'warning',
+    growth: 'danger',
+  }
+  return map[dim] || 'info'
+}
 
-  const { dimensionDistribution, weightDistribution } = summary.value
+function dimensionColor(dim: string): string {
+  const map: Record<string, string> = {
+    economic: '#1889E8',
+    innovation: '#4ECB73',
+    social: '#FBD437',
+    growth: '#F2637B',
+  }
+  return map[dim] || '#1889E8'
+}
 
+function updateCharts(data: IndicatorSystemSummary) {
   dimensionOption.value = {
     color: chartColors,
     tooltip: { trigger: 'item' },
@@ -147,7 +172,7 @@ function buildCharts() {
         radius: ['40%', '70%'],
         itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
         label: { show: true, formatter: '{b}: {c}项' },
-        data: dimensionDistribution,
+        data: data.dimensionDistribution,
       },
     ],
   }
@@ -156,29 +181,27 @@ function buildCharts() {
     color: chartColors,
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    xAxis: { type: 'category', data: weightDistribution.map((w) => w.dimension) },
+    xAxis: { type: 'category', data: data.weightDistribution.map((d) => d.dimension) },
     yAxis: { type: 'value', name: '%' },
     series: [
       {
         type: 'bar',
         barMaxWidth: 32,
-        data: weightDistribution.map((w) => w.weight),
+        barWidth: '40%',
+        data: data.weightDistribution.map((d) => d.weight),
       },
     ],
   }
 }
 
-function onFilterChange() {
-  // filteredIndicators is computed
+function onDimensionChange() {
+  // 筛选由 computed 自动处理
 }
 
-async function loadData() {
-  summary.value = await fetchRelocationIndicators()
-  buildCharts()
-}
-
-onMounted(() => {
-  loadData()
+onMounted(async () => {
+  const data = await fetchIndicatorSystem()
+  summary.value = data
+  updateCharts(data)
 })
 </script>
 
@@ -190,9 +213,6 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  margin-bottom: 20px;
-}
-.filter-bar {
   margin-bottom: 20px;
 }
 .chart-grid {
@@ -218,5 +238,11 @@ onMounted(() => {
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
+}
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
 }
 </style>

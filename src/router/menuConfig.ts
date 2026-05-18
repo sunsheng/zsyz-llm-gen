@@ -204,20 +204,20 @@ export const menuConfig: MenuItem[] = [
     children: [
       {
         title: '产业发展预警',
-        path: '/warning/industry-warning',
+        path: '/warning/dev',
         children: [
-          { title: '核心监测指标', path: '/warning/industry-warning/indicators' },
-          { title: '动态阈值设定', path: '/warning/industry-warning/threshold' },
-          { title: '预警分析模型', path: '/warning/industry-warning/model' },
+          { title: '核心监测指标', path: '/warning/dev/indicators' },
+          { title: '动态阈值设定', path: '/warning/dev/threshold' },
+          { title: '预警分析模型', path: '/warning/dev/model' },
         ],
       },
       {
         title: '企业外迁预警',
-        path: '/warning/relocation-warning',
+        path: '/warning/relocation',
         children: [
-          { title: '预警指标体系', path: '/warning/relocation-warning/indicator-system' },
-          { title: '间接风险信号', path: '/warning/relocation-warning/risk-signal' },
-          { title: '风险评分模型', path: '/warning/relocation-warning/scoring-model' },
+          { title: '预警指标体系', path: '/warning/relocation/indicators' },
+          { title: '间接风险信号', path: '/warning/relocation/signals' },
+          { title: '风险评分模型', path: '/warning/relocation/model' },
         ],
       },
     ],
@@ -229,11 +229,11 @@ export const menuConfig: MenuItem[] = [
     children: [
       {
         title: '园区榜单',
-        path: '/regional-map/park-ranking',
+        path: '/regional-map/ranking',
         children: [
-          { title: '榜单指标体系', path: '/regional-map/park-ranking/indicator-system' },
-          { title: '企业综合榜', path: '/regional-map/park-ranking/enterprise-ranking' },
-          { title: '产业链协同榜', path: '/regional-map/park-ranking/chain-ranking' },
+          { title: '榜单指标体系', path: '/regional-map/ranking/indicator-system' },
+          { title: '企业综合榜', path: '/regional-map/ranking/enterprise-comprehensive' },
+          { title: '产业链协同榜', path: '/regional-map/ranking/chain-synergy' },
         ],
       },
     ],
