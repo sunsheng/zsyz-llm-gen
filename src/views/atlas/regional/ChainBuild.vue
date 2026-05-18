@@ -6,7 +6,6 @@
           <el-option v-for="r in regionOptions" :key="r.code" :label="r.name" :value="r.code" />
         </el-select>
         <IndustryChainSelect v-model="selectedChain" placeholder="选择产业链" />
-        <el-button :icon="Download" @click="handleExport">导出</el-button>
       </template>
     </PageHeader>
     <div class="graph-page__body">
@@ -53,7 +52,6 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { Download } from '@element-plus/icons-vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import ForceGraph from '@/components/graph/ForceGraph.vue'
 import GraphControls from '@/components/graph/GraphControls.vue'
@@ -61,13 +59,10 @@ import GraphNodeDetailDrawer from '@/components/graph/GraphNodeDetailDrawer.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import IndustryChainSelect from '@/components/business/IndustryChainSelect.vue'
 import { fetchChainGraph } from '@/api/modules/atlasApi'
-import { useExport } from '@/composables/useExport'
 import type { GraphNodeData, GraphEdgeData } from '@/composables/useForceGraph'
 import type { ChainGraph } from '@/api/types/industry'
 
 const route = useRoute()
-const { exportToImage } = useExport()
-
 const regionOptions = [
   { code: 'kaizhou', name: '凯州新城' },
   { code: 'chengyu', name: '成渝区域' },
@@ -116,10 +111,6 @@ function handleZoomOut() {
 }
 function handleReset() {
   forceGraphRef.value?.resetZoom()
-}
-
-function handleExport() {
-  exportToImage('区域产业链图谱构建')
 }
 
 async function loadGraph(chainCode: string) {

@@ -36,7 +36,6 @@
             <el-icon><List /></el-icon>
           </el-button>
         </el-button-group>
-        <el-button size="small" @click="handleExport">导出</el-button>
       </div>
     </div>
 
@@ -251,10 +250,6 @@ function handlePageChange(current: number, pageSize: number) {
 
 function handleView(_item: QualifiedEnterprise) {
   // 查看详情 - 预留
-}
-
-function handleExport() {
-  // 导出 - 预留
 }
 
 async function loadData() {

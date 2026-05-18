@@ -1,10 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="招商管理数据" subtitle="招商项目全流程管理数据">
-      <template #actions>
-        <el-button>导出</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="招商管理数据" subtitle="招商项目全流程管理数据" />
 
     <div class="stat-cards">
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />

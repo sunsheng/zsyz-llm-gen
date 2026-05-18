@@ -87,7 +87,6 @@
             </el-table-column>
             <el-table-column label="操作" width="120" fixed="right">
               <template #default>
-                <el-button type="primary" link size="small">下载</el-button>
                 <el-button link size="small">预览</el-button>
               </template>
             </el-table-column>

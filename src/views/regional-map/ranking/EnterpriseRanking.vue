@@ -1,10 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="企业综合榜" subtitle="园区企业综合实力排名与评估">
-      <template #actions>
-        <el-button>导出</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="企业综合榜" subtitle="园区企业综合实力排名与评估" />
 
     <div class="stat-cards">
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />

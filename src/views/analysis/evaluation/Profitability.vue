@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="盈利能力" subtitle="产业盈利能力综合评估">
-      <template #actions>
-        <el-button>导出</el-button>
-        <el-button type="primary">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="盈利能力" subtitle="产业盈利能力综合评估" />
 
     <div class="stat-cards">
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />

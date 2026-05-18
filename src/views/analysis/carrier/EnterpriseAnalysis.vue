@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="关联企业分析" subtitle="企业属性与分布分析">
-      <template #actions>
-        <el-button>导出</el-button>
-        <el-button type="primary">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="关联企业分析" subtitle="企业属性与分布分析" />
 
     <div class="chart-grid">
       <div class="chart-panel">

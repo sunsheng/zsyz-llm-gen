@@ -6,7 +6,6 @@
           <el-radio-button value="week">按周</el-radio-button>
           <el-radio-button value="month">按月</el-radio-button>
         </el-radio-group>
-        <el-button>导出</el-button>
       </template>
     </PageHeader>
 

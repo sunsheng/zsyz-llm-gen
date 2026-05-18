@@ -2,7 +2,6 @@
   <div class="page-container">
     <PageHeader title="风险评分模型" subtitle="企业外迁风险综合评分与等级评定">
       <template #actions>
-        <el-button>导出</el-button>
         <el-button type="primary" @click="loadData">重新计算</el-button>
       </template>
     </PageHeader>

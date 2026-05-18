@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="投资扩张指数" subtitle="产业投资扩张趋势分析">
-      <template #actions>
-        <el-button>导出</el-button>
-        <el-button type="primary">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="投资扩张指数" subtitle="产业投资扩张趋势分析" />
 
     <div class="chart-grid">
       <div class="chart-panel">

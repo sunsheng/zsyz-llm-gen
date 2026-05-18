@@ -1,10 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="产业链协同榜" subtitle="园区产业链协同发展水平排名">
-      <template #actions>
-        <el-button>导出</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="产业链协同榜" subtitle="园区产业链协同发展水平排名" />
 
     <div class="stat-cards">
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />

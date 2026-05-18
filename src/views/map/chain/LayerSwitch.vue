@@ -1,10 +1,6 @@
 <template>
   <div class="page-container map-page">
-    <PageHeader title="产业图层切换" subtitle="切换不同产业数据图层">
-      <template #actions>
-        <el-button type="primary" :icon="Download">导出</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="产业图层切换" subtitle="切换不同产业数据图层" />
     <div class="map-page__body">
       <MapControlPanel title="图层控制">
         <MapLayerToggle v-model="activeLayers" :layers="layerItems" @change="handleLayerChange" />
@@ -37,7 +33,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onUnmounted } from 'vue'
-import { Download } from '@element-plus/icons-vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import MaptalksMap from '@/components/map/MaptalksMap.vue'
 import MapControlPanel from '@/components/map/MapControlPanel.vue'

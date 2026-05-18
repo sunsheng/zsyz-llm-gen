@@ -1,10 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="产业新闻热点智能分析" subtitle="基于AI的产业新闻热点趋势分析与洞察">
-      <template #actions>
-        <el-button>导出报告</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="产业新闻热点智能分析" subtitle="基于AI的产业新闻热点趋势分析与洞察" />
 
     <div class="stat-cards">
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />

@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="议价能力指数(产能)" subtitle="产业产能利用率与能源消耗分析">
-      <template #actions>
-        <el-button>导出</el-button>
-        <el-button type="primary">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="议价能力指数(产能)" subtitle="产业产能利用率与能源消耗分析" />
 
     <div class="gauge-row">
       <div v-for="gauge in gaugeItems" :key="gauge.name" class="gauge-card">

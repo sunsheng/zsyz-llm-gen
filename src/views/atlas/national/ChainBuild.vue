@@ -3,7 +3,6 @@
     <PageHeader title="产业链图谱构建" subtitle="全国产业链上下游关系与节点详情">
       <template #actions>
         <IndustryChainSelect v-model="selectedChain" placeholder="请选择产业链" />
-        <el-button :icon="Download" @click="handleExport">导出</el-button>
       </template>
     </PageHeader>
     <div class="graph-page__body">
@@ -44,7 +43,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { Download } from '@element-plus/icons-vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import ForceGraph from '@/components/graph/ForceGraph.vue'
 import GraphControls from '@/components/graph/GraphControls.vue'
@@ -52,13 +50,10 @@ import GraphNodeDetailDrawer from '@/components/graph/GraphNodeDetailDrawer.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import IndustryChainSelect from '@/components/business/IndustryChainSelect.vue'
 import { fetchChainGraph } from '@/api/modules/atlasApi'
-import { useExport } from '@/composables/useExport'
 import type { GraphNodeData, GraphEdgeData } from '@/composables/useForceGraph'
 import type { ChainGraph } from '@/api/types/industry'
 
 const route = useRoute()
-const { exportToImage } = useExport()
-
 const selectedChain = ref<string | string[]>('')
 const loading = ref(false)
 const graphNodes = ref<GraphNodeData[]>([])
@@ -103,10 +98,6 @@ function handleZoomOut() {
 }
 function handleReset() {
   forceGraphRef.value?.resetZoom()
-}
-
-function handleExport() {
-  exportToImage('产业链图谱构建')
 }
 
 async function loadGraph(code: string) {

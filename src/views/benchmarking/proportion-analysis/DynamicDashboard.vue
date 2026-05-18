@@ -5,7 +5,6 @@
         <el-button @click="toggleFullscreen">
           {{ isFullscreen ? '退出全屏' : '全屏' }}
         </el-button>
-        <el-button type="primary" @click="handleRefresh">刷新</el-button>
       </template>
     </PageHeader>
 

@@ -1,11 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="产业空间分布" subtitle="产业区域空间布局分析">
-      <template #actions>
-        <el-button>导出</el-button>
-        <el-button type="primary">刷新</el-button>
-      </template>
-    </PageHeader>
+    <PageHeader title="产业空间分布" subtitle="产业区域空间布局分析" />
 
     <div class="radar-grid">
       <div class="chart-panel">
