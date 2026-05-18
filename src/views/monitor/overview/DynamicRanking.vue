@@ -71,7 +71,7 @@
 import { ref, computed, onMounted } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
-import { getMockDynamicRanking } from '@/api/mock/monitor'
+import { fetchDynamicRanking } from '@/api/modules/monitorApi'
 import type { DynamicRankingItem } from '@/api/mock/monitor'
 
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
@@ -90,8 +90,8 @@ function handleSortChange() {
   loadRankingData()
 }
 
-function loadRankingData() {
-  rankingData.value = getMockDynamicRanking(20, sortBy.value)
+async function loadRankingData() {
+  rankingData.value = (await fetchDynamicRanking(20, sortBy.value)) as DynamicRankingItem[]
   updateCharts()
 }
 

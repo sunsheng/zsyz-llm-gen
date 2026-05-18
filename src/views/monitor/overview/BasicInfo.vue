@@ -96,10 +96,10 @@ import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
 import {
-  getMockOverviewKpi,
-  getMockEnterpriseBasicList,
-  getMockEnterpriseDistribution,
-} from '@/api/mock/monitor'
+  fetchOverviewKpi,
+  fetchEnterpriseBasicList,
+  fetchEnterpriseDistribution,
+} from '@/api/modules/monitorApi'
 import type { MonitorKpi, EnterpriseBasicInfo } from '@/api/mock/monitor'
 
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
@@ -115,11 +115,15 @@ const filteredTableData = computed(() => {
   return tableData.value.filter((item) => item.name.includes(searchKeyword.value))
 })
 
-onMounted(() => {
-  kpiCards.value = getMockOverviewKpi()
-  tableData.value = getMockEnterpriseBasicList(20)
+async function loadData() {
+  const [kpi, list, distData] = await Promise.all([
+    fetchOverviewKpi() as Promise<MonitorKpi[]>,
+    fetchEnterpriseBasicList(20) as Promise<EnterpriseBasicInfo[]>,
+    fetchEnterpriseDistribution() as Promise<{ name: string; value: number }[]>,
+  ])
+  kpiCards.value = kpi
+  tableData.value = list
 
-  const distData = getMockEnterpriseDistribution()
   industryPieOption.value = {
     color: chartColors,
     tooltip: { trigger: 'item' },
@@ -166,6 +170,10 @@ onMounted(() => {
       },
     ],
   }
+}
+
+onMounted(() => {
+  loadData()
 })
 </script>
 
