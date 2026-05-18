@@ -981,74 +981,34 @@ export const routes: RouteRecordRaw[] = [
         redirect: '/intelligence/news-invest/index',
         children: [
           {
-            path: 'news-invest',
-            name: 'IntelligenceNewsInvest',
+            path: 'news-invest/index',
+            name: 'IntelligenceNewsInvestIndex',
+            component: lazy('intelligence/news-invest/NewsInvest'),
             meta: { title: '资讯招商情报' },
-            redirect: '/intelligence/news-invest/index',
-            children: [
-              {
-                path: 'index',
-                name: 'IntelligenceNewsInvestIndex',
-                component: lazy('intelligence/news-invest/NewsInvest'),
-                meta: { title: '资讯招商情报' },
-              },
-            ],
           },
           {
-            path: 'project-invest',
-            name: 'IntelligenceProjectInvest',
+            path: 'project-invest/index',
+            name: 'IntelligenceProjectInvestIndex',
+            component: lazy('intelligence/project-invest/ProjectInvest'),
             meta: { title: '项目招商情报' },
-            redirect: '/intelligence/project-invest/index',
-            children: [
-              {
-                path: 'index',
-                name: 'IntelligenceProjectInvestIndex',
-                component: lazy('intelligence/project-invest/ProjectInvest'),
-                meta: { title: '项目招商情报' },
-              },
-            ],
           },
           {
-            path: 'tech-invest',
-            name: 'IntelligenceTechInvest',
+            path: 'tech-invest/index',
+            name: 'IntelligenceTechInvestIndex',
+            component: lazy('intelligence/tech-invest/TechInvest'),
             meta: { title: '技术招商情报' },
-            redirect: '/intelligence/tech-invest/index',
-            children: [
-              {
-                path: 'index',
-                name: 'IntelligenceTechInvestIndex',
-                component: lazy('intelligence/tech-invest/TechInvest'),
-                meta: { title: '技术招商情报' },
-              },
-            ],
           },
           {
-            path: 'qual-invest',
-            name: 'IntelligenceQualInvest',
+            path: 'qual-invest/index',
+            name: 'IntelligenceQualInvestIndex',
+            component: lazy('intelligence/qual-invest/QualInvest'),
             meta: { title: '资质招商情报' },
-            redirect: '/intelligence/qual-invest/index',
-            children: [
-              {
-                path: 'index',
-                name: 'IntelligenceQualInvestIndex',
-                component: lazy('intelligence/qual-invest/QualInvest'),
-                meta: { title: '资质招商情报' },
-              },
-            ],
           },
           {
-            path: 'capital-invest',
-            name: 'IntelligenceCapitalInvest',
+            path: 'capital-invest/index',
+            name: 'IntelligenceCapitalInvestIndex',
+            component: lazy('intelligence/capital-invest/CapitalInvest'),
             meta: { title: '资本招商情报' },
-            redirect: '/intelligence/capital-invest/index',
-            children: [
-              {
-                path: 'index',
-                name: 'IntelligenceCapitalInvestIndex',
-                component: lazy('intelligence/capital-invest/CapitalInvest'),
-                meta: { title: '资本招商情报' },
-              },
-            ],
           },
           {
             path: 'risk-monitor',
@@ -1071,32 +1031,16 @@ export const routes: RouteRecordRaw[] = [
             ],
           },
           {
-            path: 'search',
-            name: 'IntelligenceSearch',
+            path: 'search/index',
+            name: 'IntelligenceSearchIndex',
+            component: lazy('intelligence/search/IntelligenceSearch'),
             meta: { title: '招商情报搜索' },
-            redirect: '/intelligence/search/index',
-            children: [
-              {
-                path: 'index',
-                name: 'IntelligenceSearchIndex',
-                component: lazy('intelligence/search/IntelligenceSearch'),
-                meta: { title: '招商情报搜索' },
-              },
-            ],
           },
           {
-            path: 'mine',
-            name: 'IntelligenceMine',
+            path: 'mine/index',
+            name: 'IntelligenceMineIndex',
+            component: lazy('intelligence/mine/MyIntelligence'),
             meta: { title: '我的招商情报' },
-            redirect: '/intelligence/mine/index',
-            children: [
-              {
-                path: 'index',
-                name: 'IntelligenceMineIndex',
-                component: lazy('intelligence/mine/MyIntelligence'),
-                meta: { title: '我的招商情报' },
-              },
-            ],
           },
         ],
       },

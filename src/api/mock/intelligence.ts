@@ -76,6 +76,81 @@ const projectNames = [
   '量子通信设备产业化项目',
 ]
 
+const techNames = [
+  '碳纤维复合材料制备技术',
+  'mRNA疫苗生产技术',
+  '人工智能芯片设计技术',
+  '固态电池制备工艺',
+  '量子加密通信技术',
+  '工业视觉检测技术',
+  '基因编辑靶向治疗技术',
+  '第三代半导体外延技术',
+  '超导材料制备工艺',
+  '脑机接口通信技术',
+]
+
+const techInstitutions = [
+  '四川大学',
+  '中科院成都分院',
+  '电子科技大学',
+  '西南交大',
+  '西南石油大学',
+  '成都理工大学',
+  '重庆大学',
+  '西华大学',
+  '四川农业大学',
+  '成都信息工程大学',
+]
+
+const capitalEnterprises = [
+  '华创新材',
+  '天域半导体',
+  '绿能新源',
+  '芯源集成',
+  '博远生物',
+  '鼎盛环保',
+  '恒宇光电',
+  '云帆数据',
+  '智联科技',
+  '瑞昇新材',
+]
+
+const capitalInvestors = [
+  '红杉资本',
+  '高瓴资本',
+  '深创投',
+  '达晨财智',
+  'IDG资本',
+  '经纬中国',
+  '启明创投',
+  '真格基金',
+  '光速中国',
+  '源码资本',
+]
+
+const trackTargets = [
+  '中芯国际',
+  '宁德时代',
+  '隆基绿能',
+  '比亚迪半导体',
+  '药明康德',
+  '迈瑞医疗',
+  '京东方科技',
+  '通威股份',
+  '天合光能',
+  '长电科技',
+  '三一重工',
+  '大疆创新',
+  '蔚来汽车',
+  '小鹏汽车',
+  '理想汽车',
+  '科大讯飞',
+  '商汤科技',
+  '地平线机器人',
+  '寒武纪',
+  '海光信息',
+]
+
 const industries = [
   '高端装备制造',
   '新材料',
@@ -116,26 +191,12 @@ export function getMockProjectList(count = 8): IntelligenceProject[] {
 export function getMockTechTransfers(count = 6): IntelligenceTechTransfer[] {
   return Array.from({ length: count }, (_, i) => ({
     id: `tech-${i + 1}`,
-    name: [
-      '碳纤维复合材料制备技术',
-      'mRNA疫苗生产技术',
-      '人工智能芯片设计技术',
-      '固态电池制备工艺',
-      '量子加密通信技术',
-      '工业视觉检测技术',
-    ][i],
+    name: techNames[i % techNames.length],
     field: industries[i % industries.length],
     transferType: ['独占许可', '普通许可', '技术转让', '合作开发'][i % 4],
     patentNo: `CN${String(Math.floor(Math.random() * 9000000 + 1000000))}`,
     price: Math.floor(Math.random() * 5000 + 500),
-    institution: [
-      '四川大学',
-      '中科院成都分院',
-      '电子科技大学',
-      '西南交大',
-      '西南石油大学',
-      '成都理工大学',
-    ][i],
+    institution: techInstitutions[i % techInstitutions.length],
     status: (['available', 'negotiating', 'transferred'] as const)[i % 3],
   }))
 }
@@ -143,41 +204,27 @@ export function getMockTechTransfers(count = 6): IntelligenceTechTransfer[] {
 export function getMockCapitalList(count = 8): IntelligenceCapital[] {
   return Array.from({ length: count }, (_, i) => ({
     id: `cap-${i + 1}`,
-    enterprise: [
-      '华创新材',
-      '天域半导体',
-      '绿能新源',
-      '芯源集成',
-      '博远生物',
-      '鼎盛环保',
-      '恒宇光电',
-      '云帆数据',
-    ][i],
+    enterprise: capitalEnterprises[i % capitalEnterprises.length],
     type: (['融资', '并购', '上市', '投资'] as const)[i % 4],
     amount: Math.floor(Math.random() * 100000 + 5000),
     date: `2025-${String(Math.floor(Math.random() * 3 + 1)).padStart(2, '0')}-${String(Math.floor(Math.random() * 28 + 1)).padStart(2, '0')}`,
-    investor: [
-      '红杉资本',
-      '高瓴资本',
-      '深创投',
-      '达晨财智',
-      'IDG资本',
-      '经纬中国',
-      '启明创投',
-      '真格基金',
-    ][i],
+    investor: capitalInvestors[i % capitalInvestors.length],
     industry: industries[i % industries.length],
   }))
 }
 
+const talentNames = ['陈博士', '王教授', '李总工', '张首席', '刘总监', '赵研究员']
+const talentTitles = ['CTO', '首席科学家', '研发总监', '技术VP', '工程总监', '高级研究员']
+const talentFromCompanies = ['华为', '阿里巴巴', '腾讯', '百度', '字节跳动', '大疆']
+
 export function getMockTalentList(count = 6): IntelligenceTalent[] {
   return Array.from({ length: count }, (_, i) => ({
     id: `talent-${i + 1}`,
-    name: ['陈博士', '王教授', '李总工', '张首席', '刘总监', '赵研究员'][i],
-    title: ['CTO', '首席科学家', '研发总监', '技术VP', '工程总监', '高级研究员'][i],
+    name: talentNames[i % talentNames.length],
+    title: talentTitles[i % talentTitles.length],
     field: industries[i % industries.length],
-    fromCompany: ['华为', '阿里巴巴', '腾讯', '百度', '字节跳动', '大疆'][i],
-    toCompany: ['本地企业A', '本地企业B', '本地企业C', '本地企业D', '本地企业E', '本地企业F'][i],
+    fromCompany: talentFromCompanies[i % talentFromCompanies.length],
+    toCompany: `本地企业${String.fromCharCode(65 + (i % 10))}`,
     moveDate: `2025-${String(Math.floor(Math.random() * 3 + 1)).padStart(2, '0')}`,
     level: (['高管', '技术骨干', '核心研发'] as const)[i % 3],
   }))
@@ -198,16 +245,7 @@ export function getMockQualificationChanges(count = 8): IntelligenceQualificatio
   const qualTypes = ['高新技术企业', '专精特新', '科技型中小企业', '技术先进型服务企业']
   return Array.from({ length: count }, (_, i) => ({
     id: `qual-${i + 1}`,
-    enterprise: [
-      '华创新材',
-      '天域半导体',
-      '绿能新源',
-      '芯源集成',
-      '博远生物',
-      '鼎盛环保',
-      '恒宇光电',
-      '云帆数据',
-    ][i % 8],
+    enterprise: capitalEnterprises[i % capitalEnterprises.length],
     qualType: qualTypes[i % qualTypes.length],
     changeType: (['新增', '升级', '到期', '撤销'] as const)[i % 4],
     date: `2025-${String(Math.floor(Math.random() * 3 + 1)).padStart(2, '0')}-${String(Math.floor(Math.random() * 28 + 1)).padStart(2, '0')}`,
@@ -231,20 +269,11 @@ export interface IntelligenceInvestEvent {
 export function getMockInvestEvents(count = 8): IntelligenceInvestEvent[] {
   return Array.from({ length: count }, (_, i) => ({
     id: `event-${i + 1}`,
-    title: `${['华创新材', '天域半导体', '绿能新源', '芯源集成', '博远生物', '鼎盛环保', '恒宇光电', '云帆数据'][i % 8]}完成${['A轮', 'B轮', 'C轮', '战略融资', 'Pre-IPO'][i % 5]}融资`,
+    title: `${capitalEnterprises[i % capitalEnterprises.length]}完成${['A轮', 'B轮', 'C轮', '战略融资', 'Pre-IPO'][i % 5]}融资`,
     type: (['融资', '并购', '上市', '投资'] as const)[i % 4],
     amount: Math.floor(Math.random() * 100000 + 5000),
     date: `2025-${String(Math.floor(Math.random() * 3 + 1)).padStart(2, '0')}-${String(Math.floor(Math.random() * 28 + 1)).padStart(2, '0')}`,
-    enterprise: [
-      '华创新材',
-      '天域半导体',
-      '绿能新源',
-      '芯源集成',
-      '博远生物',
-      '鼎盛环保',
-      '恒宇光电',
-      '云帆数据',
-    ][i % 8],
+    enterprise: capitalEnterprises[i % capitalEnterprises.length],
     industry: industries[i % industries.length],
     description: '本次融资将用于扩大产能和技术研发，加速产业布局。',
   }))
@@ -264,7 +293,7 @@ export interface IntelligenceTrackItem {
 export function getMockTrackList(count = 6): IntelligenceTrackItem[] {
   return Array.from({ length: count }, (_, i) => ({
     id: `track-${i + 1}`,
-    targetName: ['中芯国际', '宁德时代', '隆基绿能', '比亚迪半导体', '药明康德', '迈瑞医疗'][i],
+    targetName: trackTargets[i % trackTargets.length],
     trackType: (['企业动态', '投资意向', '政策变化', '竞争情报'] as const)[i % 4],
     updateTime: `2025-${String(Math.floor(Math.random() * 3 + 1)).padStart(2, '0')}-${String(Math.floor(Math.random() * 28 + 1)).padStart(2, '0')}`,
     status: (['进行中', '已完成', '已搁置'] as const)[i % 3],

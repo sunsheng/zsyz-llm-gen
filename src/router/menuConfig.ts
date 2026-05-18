@@ -361,31 +361,11 @@ export const menuConfig: MenuItem[] = [
     icon: 'Bell',
     path: '/intelligence',
     children: [
-      {
-        title: '资讯招商情报',
-        path: '/intelligence/news-invest',
-        children: [{ title: '资讯招商情报', path: '/intelligence/news-invest/index' }],
-      },
-      {
-        title: '项目招商情报',
-        path: '/intelligence/project-invest',
-        children: [{ title: '项目招商情报', path: '/intelligence/project-invest/index' }],
-      },
-      {
-        title: '技术招商情报',
-        path: '/intelligence/tech-invest',
-        children: [{ title: '技术招商情报', path: '/intelligence/tech-invest/index' }],
-      },
-      {
-        title: '资质招商情报',
-        path: '/intelligence/qual-invest',
-        children: [{ title: '资质招商情报', path: '/intelligence/qual-invest/index' }],
-      },
-      {
-        title: '资本招商情报',
-        path: '/intelligence/capital-invest',
-        children: [{ title: '资本招商情报', path: '/intelligence/capital-invest/index' }],
-      },
+      { title: '资讯招商情报', path: '/intelligence/news-invest/index' },
+      { title: '项目招商情报', path: '/intelligence/project-invest/index' },
+      { title: '技术招商情报', path: '/intelligence/tech-invest/index' },
+      { title: '资质招商情报', path: '/intelligence/qual-invest/index' },
+      { title: '资本招商情报', path: '/intelligence/capital-invest/index' },
       {
         title: '招商风险监测',
         path: '/intelligence/risk-monitor',
@@ -394,16 +374,8 @@ export const menuConfig: MenuItem[] = [
           { title: '风险分类体系', path: '/intelligence/risk-monitor/classification' },
         ],
       },
-      {
-        title: '招商情报搜索',
-        path: '/intelligence/search',
-        children: [{ title: '招商情报搜索', path: '/intelligence/search/index' }],
-      },
-      {
-        title: '我的招商情报',
-        path: '/intelligence/mine',
-        children: [{ title: '我的招商情报', path: '/intelligence/mine/index' }],
-      },
+      { title: '招商情报搜索', path: '/intelligence/search/index' },
+      { title: '我的招商情报', path: '/intelligence/mine/index' },
     ],
   },
   {

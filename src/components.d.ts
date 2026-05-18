@@ -102,4 +102,7 @@ declare module 'vue' {
     TrendIndicator: typeof import('./components/business/TrendIndicator.vue')['default']
     WordCloud: typeof import('./components/charts/WordCloud.vue')['default']
   }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
+  }
 }

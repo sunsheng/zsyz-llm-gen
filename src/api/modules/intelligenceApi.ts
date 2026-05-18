@@ -5,6 +5,10 @@ import {
   getMockTechTransfers,
   getMockCapitalList,
   getMockTalentList,
+  getMockQualificationChanges,
+  getMockInvestEvents,
+  getMockTrackList,
+  getMockReportList,
 } from '@/api/mock/intelligence'
 
 export function fetchNewsList(count = 30) {
@@ -34,5 +38,29 @@ export function fetchCapitalList(count = 10) {
 export function fetchTalentList(count = 10) {
   return new Promise((resolve) => {
     setTimeout(() => resolve(getMockTalentList(count)), 200)
+  })
+}
+
+export function fetchQualificationChanges(count = 10) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(getMockQualificationChanges(count)), 200)
+  })
+}
+
+export function fetchInvestEvents(count = 10) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(getMockInvestEvents(count)), 200)
+  })
+}
+
+export function fetchTrackList(count = 10) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(getMockTrackList(count)), 200)
+  })
+}
+
+export function fetchReportList(count = 10) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(getMockReportList(count)), 200)
   })
 }
