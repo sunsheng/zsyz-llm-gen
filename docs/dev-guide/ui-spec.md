@@ -35,7 +35,9 @@
   --el-color-primary-light-7: #c6e2ff;
   --el-color-primary-light-9: #ecf5ff;
   --el-border-radius-base: 4px;
-  --el-font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --el-font-family:
+    'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Arial, sans-serif;
   --el-box-shadow-light: 0 2px 12px 0 rgba(0, 0, 0, 0.06); // 比默认更轻
   --el-table-header-bg-color: #fafafa; // 表头灰底
 }
@@ -161,7 +163,51 @@ margin-bottom: 16px                            // 卡片间距
 - 高度: 3px
 - 在 router beforeEach 开始，afterEach 结束
 
-### 5.10 响应式注意事项
+### 5.10 字体排版规范
+
+**字体族**（定义在 `src/assets/styles/variables.scss` 的 `$font-family`）:
+
+```
+'PingFang SC'       — macOS 中文字体（首选）
+'Microsoft YaHei'   — Windows 中文字体
+'Helvetica Neue'    — macOS 西文字体
+-apple-system       — macOS 系统字体
+BlinkMacSystemFont  — macOS Chrome 系统字体
+'Segoe UI'          — Windows 西文字体
+Arial               — 通用西文回退
+sans-serif          — 最终回退
+```
+
+**字号阶梯**（`variables.scss` 中定义）:
+
+| 变量               | 值   | 用途                   |
+| ------------------ | ---- | ---------------------- |
+| `$font-size-xs`    | 12px | 辅助文字、标签、时间戳 |
+| `$font-size-sm`    | 13px | 表格正文、列表项       |
+| `$font-size-base`  | 14px | 页面正文（默认）       |
+| `$font-size-md`    | 16px | 卡片标题、小节标题     |
+| `$font-size-lg`    | 18px | 面板标题               |
+| `$font-size-xl`    | 20px | 页面主标题             |
+| `$font-size-xxl`   | 24px | 大标题                 |
+| `$font-size-title` | 28px | 首屏/登录页主标题      |
+
+**字重**:
+
+| 变量                    | 值  | 用途                     |
+| ----------------------- | --- | ------------------------ |
+| `$font-weight-normal`   | 400 | 正文、辅助文字           |
+| `$font-weight-medium`   | 500 | 强调文字、小节标题       |
+| `$font-weight-semibold` | 600 | 卡片标题、表头、面板标题 |
+| `$font-weight-bold`     | 700 | 页面主标题、数据指标     |
+
+**使用规则**:
+
+- 所有中文内容使用 `$font-family`，不单独指定其他字体
+- 字号必须从上述变量中选取，禁止硬编码 px 值（rem 适配会自动转换）
+- 表头固定使用 `$font-weight-semibold`，通过 `--el-table-header-font-weight` 全局生效
+- 数据指标（统计卡数值、图表标注）使用 `$font-weight-bold` + `$font-size-xl` 以上
+
+### 5.11 响应式注意事项
 
 本项目**仅面向 1920x1080 大屏**，不做移动端适配。
 
