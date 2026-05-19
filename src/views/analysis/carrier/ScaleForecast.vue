@@ -44,9 +44,9 @@ const breakdownOption = ref({})
 const forecastOption = ref({})
 
 function buildScaleTrendOption() {
-  const years = ['2019', '2020', '2021', '2022', '2023', '2024', '2025(预)', '2026(预)', '2027(预)']
-  const output = [856, 912, 1058, 1185, 1285, 1398, null, null, null]
-  const forecastOutput = [null, null, null, null, null, 1398, 1520, 1658, 1812]
+  const years = ['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026(预)', '2027(预)']
+  const output = [856, 912, 1058, 1185, 1285, 1398, 1520, null, null]
+  const forecastOutput = [null, null, null, null, null, null, 1520, 1658, 1812]
   const growth = [null, 6.5, 16.0, 12.0, 8.4, 8.8, 8.7, 9.1, 9.3]
 
   scaleTrendOption.value = {
@@ -71,7 +71,7 @@ function buildScaleTrendOption() {
           silent: true,
           data: [
             [
-              { xAxis: '2024', itemStyle: { color: 'rgba(24,137,232,0.05)' } },
+              { xAxis: '2025', itemStyle: { color: 'rgba(24,137,232,0.05)' } },
               { xAxis: '2027(预)' },
             ],
           ],
@@ -147,7 +147,7 @@ function buildBreakdownOption() {
 }
 
 function buildForecastOption() {
-  const years = ['2024', '2025', '2026', '2027']
+  const years = ['2025', '2026', '2027']
   forecastOption.value = {
     color: chartColors,
     tooltip: { trigger: 'axis' },
@@ -159,15 +159,15 @@ function buildForecastOption() {
         name: '乐观',
         type: 'line',
         smooth: true,
-        data: [1398, 1580, 1790, 2020],
+        data: [1580, 1790, 2020],
         lineStyle: { type: 'dashed' },
       },
-      { name: '基准', type: 'line', smooth: true, data: [1398, 1520, 1658, 1812] },
+      { name: '基准', type: 'line', smooth: true, data: [1520, 1658, 1812] },
       {
         name: '保守',
         type: 'line',
         smooth: true,
-        data: [1398, 1460, 1530, 1610],
+        data: [1460, 1530, 1610],
         lineStyle: { type: 'dashed' },
       },
     ],

@@ -36,7 +36,7 @@ const equityInvestOption = ref({})
 const equityGrowthOption = ref({})
 
 onMounted(() => {
-  const years = ['2019', '2020', '2021', '2022', '2023', '2024']
+  const years = ['2019', '2020', '2021', '2022', '2023', '2024', '2025']
 
   fixedInvestOption.value = {
     color: chartColors,
@@ -50,14 +50,14 @@ onMounted(() => {
         name: '产业增速',
         type: 'line',
         smooth: true,
-        data: [8.5, 6.2, 12.3, 9.8, 11.5, 13.2],
+        data: [8.5, 6.2, 12.3, 9.8, 11.5, 13.2, 10.8],
         areaStyle: { opacity: 0.1 },
       },
       {
         name: '全国增速',
         type: 'line',
         smooth: true,
-        data: [5.4, 2.9, 4.9, 5.1, 3.0, 5.2],
+        data: [5.4, 2.9, 4.9, 5.1, 3.0, 5.2, 4.8],
         lineStyle: { type: 'dashed' },
       },
     ],
@@ -73,7 +73,7 @@ onMounted(() => {
       {
         type: 'line',
         smooth: true,
-        data: [386, 412, 458, 502, 548, 602],
+        data: [386, 412, 458, 502, 548, 602, 658],
         areaStyle: { opacity: 0.15 },
       },
     ],
@@ -89,7 +89,7 @@ onMounted(() => {
       {
         type: 'line',
         smooth: true,
-        data: [125.3, 98.6, 186.2, 165.8, 210.5, 258.3],
+        data: [125.3, 98.6, 186.2, 165.8, 210.5, 258.3, 285.6],
         areaStyle: { opacity: 0.15 },
       },
     ],
@@ -105,7 +105,7 @@ onMounted(() => {
       {
         type: 'line',
         smooth: true,
-        data: [null, -21.3, 88.8, -10.9, 27.0, 22.7],
+        data: [null, -21.3, 88.8, -10.9, 27.0, 22.7, 10.6],
         areaStyle: { opacity: 0.1 },
         markPoint: {
           data: [

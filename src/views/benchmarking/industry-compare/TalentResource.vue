@@ -54,25 +54,30 @@
         <h4 class="section-title">人才资源指标明细</h4>
         <el-table :data="compareData" stripe border style="width: 100%">
           <el-table-column prop="regionName" label="区域" width="100" fixed />
-          <el-table-column prop="totalEmployees" label="从业人员(万人)" width="140" sortable />
+          <el-table-column prop="totalEmployees" label="从业人员(万人)" min-width="140" sortable />
           <el-table-column
             prop="seniorTalentRatio"
             label="高层次人才占比(%)"
-            width="160"
+            min-width="160"
             sortable
           />
-          <el-table-column prop="talentPolicyScore" label="政策力度评分" width="130" sortable />
-          <el-table-column prop="universities" label="高校(所)" width="100" sortable />
-          <el-table-column prop="researchInstitutes" label="科研机构(所)" width="120" sortable />
-          <el-table-column prop="rdTalentCount" label="研发人才(万人)" width="130" sortable />
-          <el-table-column prop="netInflowRate" label="净流入率(%)" width="120" sortable>
+          <el-table-column prop="talentPolicyScore" label="政策力度评分" min-width="130" sortable />
+          <el-table-column prop="universities" label="高校(所)" min-width="100" sortable />
+          <el-table-column
+            prop="researchInstitutes"
+            label="科研机构(所)"
+            min-width="120"
+            sortable
+          />
+          <el-table-column prop="rdTalentCount" label="研发人才(万人)" min-width="130" sortable />
+          <el-table-column prop="netInflowRate" label="净流入率(%)" min-width="120" sortable>
             <template #default="{ row }">
               <span :style="{ color: row.netInflowRate >= 0 ? '#4ECB73' : '#F2637B' }">
                 {{ row.netInflowRate >= 0 ? '+' : '' }}{{ row.netInflowRate }}%
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="avgSalary" label="平均薪资(万元)" width="140" sortable />
+          <el-table-column prop="avgSalary" label="平均薪资(万元)" min-width="140" sortable />
         </el-table>
       </div>
     </template>

@@ -426,10 +426,49 @@ function handleNodeClick(node: KeyNode) {
 
 watch([selectedRegion, selectedChain], () => {
   loading.value = true
+  const code = Array.isArray(selectedChain.value)
+    ? selectedChain.value[selectedChain.value.length - 1]
+    : selectedChain.value
+  const region = selectedRegion.value || '凯州新城'
+  generateNodesForChain(code, region)
   setTimeout(() => {
     loading.value = false
   }, 300)
 })
+
+function generateNodesForChain(code: string, region: string) {
+  // 根据产业链代码调整各环节的分数
+  const adjustments: Record<string, { offset: number; weakNode: string }[]> = {
+    'high-end-equipment': [
+      { offset: 0, weakNode: '核心零部件' },
+      { offset: 5, weakNode: '检测认证' },
+    ],
+    'frontier-material': [
+      { offset: -5, weakNode: '合成制备' },
+      { offset: 3, weakNode: '性能改性' },
+    ],
+    'digital-economy': [
+      { offset: -8, weakNode: '晶圆制造' },
+      { offset: -3, weakNode: '算法优化' },
+    ],
+  }
+  const adjustment = adjustments[code] || []
+  // 对现有节点做分数调整并更新 region
+  nodes.value = nodes.value.map((n) => {
+    const adj = adjustment.find((a) => n.name.includes(a.weakNode))
+    const offset = adj ? adj.offset : 0
+    return {
+      ...n,
+      name: n.name,
+      region: region,
+      outputScore: Math.max(10, Math.min(95, n.outputScore + offset)),
+      leadingScore: Math.max(10, Math.min(95, n.leadingScore + offset)),
+      marketScore: Math.max(10, Math.min(95, n.marketScore + offset)),
+      compositeScore: Math.max(10, Math.min(95, n.compositeScore + offset)),
+    }
+  })
+  activeNode.value = null
+}
 
 onMounted(() => {
   loading.value = true

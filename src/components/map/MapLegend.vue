@@ -2,7 +2,7 @@
   <div class="map-legend" :class="{ 'is-collapsed': collapsed }">
     <div class="map-legend__header" @click="collapsed = !collapsed">
       <span>图例</span>
-      <el-icon :size="14"><component :is="collapsed ? 'ArrowUp' : 'ArrowDown'" /></el-icon>
+      <el-icon :size="14"><component :is="collapsed ? 'ArrowDown' : 'ArrowUp'" /></el-icon>
     </div>
     <div v-if="!collapsed" class="map-legend__body">
       <div v-for="item in items" :key="item.label" class="map-legend__item">

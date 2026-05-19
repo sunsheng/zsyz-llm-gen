@@ -54,24 +54,29 @@
         <h4 class="section-title">产业结构指标明细</h4>
         <el-table :data="tableData" stripe border style="width: 100%">
           <el-table-column prop="regionName" label="区域" width="100" fixed />
-          <el-table-column prop="highTechRatio" label="高新技术占比(%)" width="150" sortable />
+          <el-table-column prop="highTechRatio" label="高新技术占比(%)" min-width="150" sortable />
           <el-table-column
             prop="advancedManufacturingRatio"
             label="先进制造业占比(%)"
-            width="160"
+            min-width="160"
             sortable
           />
-          <el-table-column prop="traditionalRatio" label="传统产业占比(%)" width="150" sortable />
-          <el-table-column label="产业链完整度(%)" width="130">
+          <el-table-column
+            prop="traditionalRatio"
+            label="传统产业占比(%)"
+            min-width="150"
+            sortable
+          />
+          <el-table-column label="产业链完整度(%)" min-width="130">
             <template #default="{ row }"> {{ row.chainCompleteness.overall }}% </template>
           </el-table-column>
-          <el-table-column label="上游(%)" width="100">
+          <el-table-column label="上游(%)" min-width="100">
             <template #default="{ row }">{{ row.chainCompleteness.upstream }}%</template>
           </el-table-column>
-          <el-table-column label="中游(%)" width="100">
+          <el-table-column label="中游(%)" min-width="100">
             <template #default="{ row }">{{ row.chainCompleteness.midstream }}%</template>
           </el-table-column>
-          <el-table-column label="下游(%)" width="100">
+          <el-table-column label="下游(%)" min-width="100">
             <template #default="{ row }">{{ row.chainCompleteness.downstream }}%</template>
           </el-table-column>
         </el-table>

@@ -27,10 +27,6 @@
             <span class="stat-label">更新频率</span>
             <span class="stat-value">{{ source.frequency }}</span>
           </div>
-          <div class="stat-item">
-            <span class="stat-label">最后更新</span>
-            <span class="stat-value">{{ source.lastUpdate }}</span>
-          </div>
         </div>
         <el-progress :percentage="source.completion" :stroke-width="8" :color="source.color" />
         <div class="source-card__footer">
@@ -62,7 +58,6 @@
           </template>
         </el-table-column>
         <el-table-column prop="records" label="数据条数" width="120" />
-        <el-table-column prop="updateTime" label="更新时间" width="180" />
       </el-table>
     </div>
   </div>
@@ -122,7 +117,7 @@ onMounted(() => {
 }
 .source-card__stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: $spacing-sm;
   margin-bottom: $spacing-md;
 }

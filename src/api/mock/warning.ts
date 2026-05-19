@@ -865,6 +865,7 @@ const riskScores: RiskScore[] = [
     assetScore: 90,
     relationScore: 88,
     governanceScore: 82,
+    relocationProb: 72,
     trend: 'up',
   },
   {
@@ -878,6 +879,7 @@ const riskScores: RiskScore[] = [
     assetScore: 68,
     relationScore: 72,
     governanceScore: 80,
+    relocationProb: 65,
     trend: 'up',
   },
   {
@@ -891,6 +893,7 @@ const riskScores: RiskScore[] = [
     assetScore: 55,
     relationScore: 65,
     governanceScore: 60,
+    relocationProb: 42,
     trend: 'stable',
   },
   {
@@ -904,6 +907,7 @@ const riskScores: RiskScore[] = [
     assetScore: 60,
     relationScore: 55,
     governanceScore: 58,
+    relocationProb: 38,
     trend: 'down',
   },
   {
@@ -917,6 +921,7 @@ const riskScores: RiskScore[] = [
     assetScore: 28,
     relationScore: 38,
     governanceScore: 32,
+    relocationProb: 15,
     trend: 'down',
   },
   {
@@ -930,6 +935,7 @@ const riskScores: RiskScore[] = [
     assetScore: 22,
     relationScore: 30,
     governanceScore: 28,
+    relocationProb: 10,
     trend: 'stable',
   },
   {
@@ -943,6 +949,7 @@ const riskScores: RiskScore[] = [
     assetScore: 75,
     relationScore: 68,
     governanceScore: 72,
+    relocationProb: 58,
     trend: 'up',
   },
   {
@@ -956,6 +963,7 @@ const riskScores: RiskScore[] = [
     assetScore: 45,
     relationScore: 58,
     governanceScore: 50,
+    relocationProb: 32,
     trend: 'up',
   },
 ]

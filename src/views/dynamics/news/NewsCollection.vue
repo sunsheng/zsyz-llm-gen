@@ -42,7 +42,6 @@
             }}
           </el-tag>
           <span class="news-card__source">{{ news.source }}</span>
-          <span class="news-card__date">{{ news.publishDate }}</span>
         </div>
         <h4 class="news-card__title">{{ news.title }}</h4>
         <p class="news-card__summary">{{ news.summary }}</p>
