@@ -373,12 +373,4 @@ onMounted(() => {
   flex-wrap: wrap;
   gap: 4px;
 }
-
-.content-card {
-  padding: 20px;
-  margin-bottom: 16px;
-  background: $bg-card;
-  border-radius: $radius-base;
-  box-shadow: $shadow-card;
-}
 </style>

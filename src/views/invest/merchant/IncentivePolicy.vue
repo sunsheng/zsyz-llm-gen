@@ -11,7 +11,7 @@
     />
 
     <div class="content-card">
-      <el-table v-loading="loading" :data="filteredList" stripe border size="small">
+      <el-table v-loading="loading" :data="filteredList" stripe border>
         <el-table-column prop="name" label="政策名称" min-width="160" />
         <el-table-column prop="type" label="类型" width="120">
           <template #default="{ row }">
@@ -167,12 +167,5 @@ onMounted(() => {
 <style lang="scss" scoped>
 .page-container {
   padding: 20px;
-}
-
-.content-card {
-  padding: 20px;
-  background: $bg-card;
-  border-radius: $radius-base;
-  box-shadow: $shadow-card;
 }
 </style>

@@ -188,16 +188,6 @@ onMounted(() => {
   gap: 20px;
   align-items: start;
 }
-.content-card {
-  padding: 20px;
-  background: $bg-card;
-  border-radius: $radius-base;
-  box-shadow: $shadow-card;
-
-  & + & {
-    margin-top: 16px;
-  }
-}
 .panel-title {
   margin: 0 0 16px;
   font-size: 16px;

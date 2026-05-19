@@ -236,13 +236,6 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 
-.content-card {
-  padding: 20px;
-  background: $bg-card;
-  border-radius: $radius-base;
-  box-shadow: $shadow-card;
-}
-
 .card-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

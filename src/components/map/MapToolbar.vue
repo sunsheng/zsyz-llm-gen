@@ -30,7 +30,7 @@ defineEmits<{
   z-index: 10;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   align-items: center;
 
   :deep(.el-button + .el-button) {

@@ -39,19 +39,19 @@
 
         <el-form-item v-if="form.type === 'custom'" label="自定义指标">
           <el-checkbox-group v-model="form.indicators">
-            <el-checkbox label="经营健康度" />
-            <el-checkbox label="创新能力" />
-            <el-checkbox label="人力资源" />
-            <el-checkbox label="可持续发展" />
-            <el-checkbox label="风险预警" />
+            <el-checkbox value="经营健康度" label="经营健康度" />
+            <el-checkbox value="创新能力" label="创新能力" />
+            <el-checkbox value="人力资源" label="人力资源" />
+            <el-checkbox value="可持续发展" label="可持续发展" />
+            <el-checkbox value="风险预警" label="风险预警" />
           </el-checkbox-group>
         </el-form-item>
 
         <el-form-item label="输出格式">
           <el-checkbox-group v-model="form.formats">
-            <el-checkbox label="PDF" />
-            <el-checkbox label="Word" />
-            <el-checkbox label="Excel" />
+            <el-checkbox value="PDF" label="PDF" />
+            <el-checkbox value="Word" label="Word" />
+            <el-checkbox value="Excel" label="Excel" />
           </el-checkbox-group>
         </el-form-item>
 

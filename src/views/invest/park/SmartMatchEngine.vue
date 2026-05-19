@@ -146,12 +146,6 @@ onMounted(() => {
 .page-container {
   padding: 20px;
 }
-.content-card {
-  padding: 20px;
-  background: $bg-card;
-  border-radius: $radius-base;
-  box-shadow: $shadow-card;
-}
 .match-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

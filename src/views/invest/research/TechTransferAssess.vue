@@ -229,12 +229,6 @@ onMounted(() => {
   font-weight: $font-weight-semibold;
   color: $text-primary;
 }
-.content-card {
-  padding: 20px;
-  background: $bg-card;
-  border-radius: $radius-base;
-  box-shadow: $shadow-card;
-}
 .transfer-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

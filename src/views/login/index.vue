@@ -243,6 +243,15 @@ async function handleLogin() {
   width: 100%;
   max-width: 420px;
   padding: 40px;
+  background: $bg-card;
+  border-radius: 8px;
+  box-shadow: $shadow-card;
+}
+
+.login-page__form-card {
+  :deep(.el-input__wrapper) {
+    height: 44px;
+  }
 }
 
 .login-page__form-title {

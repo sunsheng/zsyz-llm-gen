@@ -199,18 +199,4 @@ onMounted(async () => {
   font-weight: $font-weight-semibold;
   color: $text-primary;
 }
-
-.content-card {
-  padding: 20px;
-  background: $bg-card;
-  border-radius: $radius-base;
-  box-shadow: $shadow-card;
-}
-
-.content-card__title {
-  margin: 0 0 16px;
-  font-size: 16px;
-  font-weight: $font-weight-semibold;
-  color: $text-primary;
-}
 </style>

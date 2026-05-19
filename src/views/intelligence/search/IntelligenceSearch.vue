@@ -242,12 +242,6 @@ onMounted(() => {
     border-radius: 8px;
   }
 }
-.content-card {
-  padding: 20px;
-  background: $bg-card;
-  border-radius: $radius-base;
-  box-shadow: $shadow-card;
-}
 .result-tabs {
   margin-bottom: 20px;
 }

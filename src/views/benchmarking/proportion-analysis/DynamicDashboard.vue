@@ -12,10 +12,10 @@
     <div class="metric-config">
       <span class="metric-config__label">指标组合：</span>
       <el-checkbox-group v-model="selectedMetrics" @change="handleMetricChange">
-        <el-checkbox label="output">产值占比</el-checkbox>
-        <el-checkbox label="tax">税收贡献</el-checkbox>
-        <el-checkbox label="enterprise">企业数量</el-checkbox>
-        <el-checkbox label="employment">就业人数</el-checkbox>
+        <el-checkbox value="output">产值占比</el-checkbox>
+        <el-checkbox value="tax">税收贡献</el-checkbox>
+        <el-checkbox value="enterprise">企业数量</el-checkbox>
+        <el-checkbox value="employment">就业人数</el-checkbox>
       </el-checkbox-group>
       <el-divider direction="vertical" />
       <span class="metric-config__label">自动刷新：</span>

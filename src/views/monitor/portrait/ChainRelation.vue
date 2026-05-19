@@ -34,7 +34,7 @@
 
         <div class="relation-table">
           <h4 class="card-title">关系详情</h4>
-          <el-table :data="edges" stripe border size="small" style="width: 100%" max-height="400">
+          <el-table :data="edges" stripe border style="width: 100%" max-height="400">
             <el-table-column prop="relationType" label="关系" width="90" />
             <el-table-column label="关联企业" min-width="140">
               <template #default="{ row }">
