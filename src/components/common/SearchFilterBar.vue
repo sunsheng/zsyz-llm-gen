@@ -10,7 +10,6 @@
         @keyup.enter="handleSearch"
         @clear="handleSearch"
       />
-      <el-button type="primary" :icon="Search" @click="handleSearch">搜索</el-button>
       <template v-for="filter in filters" :key="filter.key">
         <el-select
           v-if="filter.type === 'select'"
@@ -45,7 +44,10 @@
           @change="handleFilterChange"
         />
       </template>
-      <el-button :icon="RefreshLeft" @click="handleReset">重置</el-button>
+      <div class="search-filter-bar__actions">
+        <el-button type="primary" :icon="Search" @click="handleSearch">搜索</el-button>
+        <el-button :icon="RefreshLeft" @click="handleReset">重置</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -136,5 +138,12 @@ function handleReset() {
 .search-filter-bar__input {
   flex-shrink: 0;
   width: 280px;
+}
+
+.search-filter-bar__actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+  margin-left: auto;
 }
 </style>
