@@ -1,17 +1,16 @@
 <template>
   <div class="search-filter-bar">
-    <div class="search-filter-bar__search">
+    <div class="search-filter-bar__row">
       <el-input
         v-model="keyword"
         :placeholder="searchPlaceholder"
         clearable
         :prefix-icon="Search"
+        class="search-filter-bar__input"
         @keyup.enter="handleSearch"
         @clear="handleSearch"
       />
       <el-button type="primary" :icon="Search" @click="handleSearch">搜索</el-button>
-    </div>
-    <div v-if="filters.length" class="search-filter-bar__filters">
       <template v-for="filter in filters" :key="filter.key">
         <el-select
           v-if="filter.type === 'select'"
@@ -108,27 +107,34 @@ function handleReset() {
 
 <style lang="scss" scoped>
 .search-filter-bar {
-  padding: 20px;
+  padding: 16px 20px;
   margin-bottom: 16px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
 }
 
-.search-filter-bar__search {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 12px;
-
-  .el-input {
-    max-width: 400px;
-  }
-}
-
-.search-filter-bar__filters {
+.search-filter-bar__row {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
+
+  > .el-select {
+    width: 180px;
+  }
+
+  > .el-cascader {
+    width: 240px;
+  }
+
+  > .el-date-editor {
+    width: 300px;
+  }
+}
+
+.search-filter-bar__input {
+  flex-shrink: 0;
+  width: 280px;
 }
 </style>

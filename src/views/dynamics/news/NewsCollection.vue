@@ -47,15 +47,9 @@
         <h4 class="news-card__title">{{ news.title }}</h4>
         <p class="news-card__summary">{{ news.summary }}</p>
         <div class="news-card__footer">
-          <a
-            v-if="news.url"
-            :href="news.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="news-card__link"
+          <a :href="news.url" target="_blank" rel="noopener noreferrer" class="news-card__link"
             >查看详情</a
           >
-          <el-link v-else type="primary" underline="never">查看详情</el-link>
         </div>
       </el-card>
     </div>

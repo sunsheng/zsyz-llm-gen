@@ -442,7 +442,7 @@ export function getMockNewsCollection(): import('@/api/types/dynamics').NewsColl
         '21世纪经济报道',
       ][i % 10],
       publishDate: `2025-05-${String(1 + i).padStart(2, '0')}`,
-      url: i % 3 === 0 ? `https://example.com/news/${i + 1}` : '',
+      url: `https://example.com/news/${i + 1}`,
     })),
   }
 }
@@ -526,7 +526,7 @@ export function getMockPolicyCompilation(): import('@/api/types/dynamics').Polic
       ],
       publishDate: `2025-0${3 + (i % 3)}-${String(5 + i).padStart(2, '0')}`,
       status: i % 5 === 0 ? '废止' : '现行',
-      url: i % 3 === 0 ? `https://example.com/policy/${i + 1}` : '',
+      url: `https://example.com/policy/${i + 1}`,
     })),
   }
 }

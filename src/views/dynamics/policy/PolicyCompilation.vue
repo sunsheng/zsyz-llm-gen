@@ -42,15 +42,9 @@
         </el-table-column>
         <el-table-column label="操作" width="120" fixed="right">
           <template #default="{ row }">
-            <a
-              v-if="row.url"
-              :href="row.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="policy-link"
+            <a :href="row.url" target="_blank" rel="noopener noreferrer" class="policy-link"
               >查看</a
             >
-            <el-link v-else type="primary" underline="never">查看</el-link>
           </template>
         </el-table-column>
       </el-table>
@@ -242,7 +236,7 @@ function handleSavePolicy() {
     policyType: addForm.policyType as any,
     publishDate: addForm.publishDate || new Date().toISOString().slice(0, 10),
     status: addForm.status as any,
-    url: '',
+    url: `https://example.com/policy/${Date.now()}`,
   })
   addDialogVisible.value = false
   currentPage.value = 1
