@@ -27,8 +27,8 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="80" fixed="right">
-          <template #default>
-            <el-button type="primary" link size="small">查看</el-button>
+          <template #default="{ row }">
+            <el-button type="primary" link size="small" @click="handleDetail(row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -39,6 +39,16 @@
         @change="handlePageChange"
       />
     </div>
+
+    <el-dialog v-model="detailVisible" title="资讯详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="标题">{{ detailData.title }}</el-descriptions-item>
+        <el-descriptions-item label="来源">{{ detailData.source }}</el-descriptions-item>
+        <el-descriptions-item label="行业分类">{{ detailData.category }}</el-descriptions-item>
+        <el-descriptions-item label="发布日期">{{ detailData.publishDate }}</el-descriptions-item>
+        <el-descriptions-item label="重要程度">{{ detailData.importance }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -95,6 +105,13 @@ const allData = ref<IntelligenceNews[]>([])
 const searchKeyword = ref('')
 const filterValues = ref<Record<string, unknown>>({})
 const pagination = reactive({ current: 1, total: 0, pageSize: 20 })
+const detailVisible = ref(false)
+const detailData = ref<any>({})
+
+function handleDetail(row: any) {
+  detailData.value = row
+  detailVisible.value = true
+}
 
 function applyFilters() {
   let filtered = [...allData.value]

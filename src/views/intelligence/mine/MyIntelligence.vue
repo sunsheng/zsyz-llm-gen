@@ -45,9 +45,13 @@
             </el-table-column>
             <el-table-column prop="updateTime" label="更新时间" width="120" />
             <el-table-column label="操作" width="120" fixed="right">
-              <template #default>
-                <el-button type="primary" link size="small">查看</el-button>
-                <el-button type="danger" link size="small">取消</el-button>
+              <template #default="{ row }">
+                <el-button type="primary" link size="small" @click="handleViewTrack(row)"
+                  >查看</el-button
+                >
+                <el-button type="danger" link size="small" @click="handleCancelTrack(row)"
+                  >取消</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -87,8 +91,8 @@
               </template>
             </el-table-column>
             <el-table-column label="操作" width="120" fixed="right">
-              <template #default>
-                <el-button link size="small">预览</el-button>
+              <template #default="{ row }">
+                <el-button link size="small" @click="handlePreviewReport(row)">预览</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -101,11 +105,55 @@
         </div>
       </el-tab-pane>
     </el-tabs>
+
+    <!-- 追踪详情弹窗 -->
+    <el-dialog v-model="trackDetailVisible" title="追踪详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="追踪目标">{{
+          trackDetailData.targetName
+        }}</el-descriptions-item>
+        <el-descriptions-item label="追踪类型">{{
+          trackDetailData.trackType
+        }}</el-descriptions-item>
+        <el-descriptions-item label="状态">{{ trackDetailData.status }}</el-descriptions-item>
+        <el-descriptions-item label="更新时间">{{
+          trackDetailData.updateTime
+        }}</el-descriptions-item>
+        <el-descriptions-item label="进度" :span="2">
+          <el-progress :percentage="trackDetailData.progress" :stroke-width="8" />
+        </el-descriptions-item>
+        <el-descriptions-item v-if="trackDetailData.keyEvents?.length" label="关键事件" :span="2">
+          {{ trackDetailData.keyEvents?.join('、') }}
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
+
+    <!-- 报告预览弹窗 -->
+    <el-dialog v-model="reportPreviewVisible" title="报告预览" width="960px">
+      <template v-if="reportPreviewData">
+        <el-descriptions :column="2" border size="small" style="margin-bottom: 16px">
+          <el-descriptions-item label="报告标题">{{
+            reportPreviewData.title
+          }}</el-descriptions-item>
+          <el-descriptions-item label="报告类型">{{ reportPreviewData.type }}</el-descriptions-item>
+          <el-descriptions-item label="作者/部门">{{
+            reportPreviewData.author
+          }}</el-descriptions-item>
+          <el-descriptions-item label="创建日期">{{
+            reportPreviewData.createDate
+          }}</el-descriptions-item>
+        </el-descriptions>
+        <div style="padding: 16px; line-height: 1.8; background: #f5f7fa; border-radius: 8px">
+          {{ reportPreviewData.summary }}
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import PageHeader from '@/components/common/PageHeader.vue'
 import SearchFilterBar from '@/components/common/SearchFilterBar.vue'
 import PaginationBar from '@/components/common/PaginationBar.vue'
@@ -137,6 +185,39 @@ const reportTypeMap: Record<string, TagType> = {
 }
 
 const activeTab = ref('track')
+
+// --- 详情弹窗 ---
+const trackDetailVisible = ref(false)
+const trackDetailData = ref<any>({})
+const reportPreviewVisible = ref(false)
+const reportPreviewData = ref<any>({})
+
+function handleViewTrack(row: any) {
+  trackDetailData.value = row
+  trackDetailVisible.value = true
+}
+
+function handleCancelTrack(row: any) {
+  ElMessageBox.confirm('确认取消追踪该情报？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => {
+      const idx = allTrackData.value.findIndex((item) => item.id === row.id)
+      if (idx > -1) {
+        allTrackData.value.splice(idx, 1)
+      }
+      applyTrackFilters()
+      ElMessage.success('已取消追踪')
+    })
+    .catch(() => {})
+}
+
+function handlePreviewReport(row: any) {
+  reportPreviewData.value = row
+  reportPreviewVisible.value = true
+}
 
 // --- 情报追踪 ---
 const trackLoading = ref(false)

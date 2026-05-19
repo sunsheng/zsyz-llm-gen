@@ -442,12 +442,60 @@ export function getMockNewsCollection(): import('@/api/types/dynamics').NewsColl
         '21世纪经济报道',
       ][i % 10],
       publishDate: `2025-05-${String(1 + i).padStart(2, '0')}`,
-      url: `https://example.com/news/${i + 1}`,
+      url: [
+        'https://www.gov.cn/zhengce/zhengceku/202412/content_6994622.htm',
+        'https://auto.cctv.com/2025/05/16/ARTIBawLC7s06qqSmYDasUBT250516.shtml',
+        'https://www.cas.cn/yw/202503/t20250304_5048593.shtml',
+        'https://www.sina.cn/news/detail/5281374263313733.html',
+        'https://www.gov.cn/zhengce/zhengceku/202601/content_7054201.htm',
+        'https://finance.china.com.cn/industry/medicine/20260516/6307864.shtml',
+        'https://finance.sina.com.cn/tech/roll/2026-05-13/doc-inhxsxzu9463974.shtml',
+        'https://gr.cri.cn/20260210/0a0c4073-8b6d-4646-b6c9-d2bff15cf514.html',
+        'https://www.gov.cn/zhengce/zhengceku/202509/content_7039199.htm',
+        'https://data.eastmoney.com/report/zw_industry.jshtml?infocode=AP202510311772517660',
+        'https://tv.cctv.cn/2025/03/17/VIDEa2vURXBcBuMdVURnWM8g250317.shtml',
+        'https://news.cctv.cn/2025/11/25/ARTI2ASmiM05qLPOUKos9uz5251125.shtml',
+        'https://www.miit.gov.cn/xwfb/mtbd/twbd/art/2025/art_b6a6ae7673f942efb3932b460239d8aa.html',
+        'https://www.thepaper.cn/newsDetail_forward_30603605',
+        'https://www.gov.cn/zhengce/zhengceku/202504/content_7020558.htm',
+        'https://baijiahao.baidu.com/s?id=1864901750507438900',
+        'https://baijiahao.baidu.com/s?id=1855455598650973740',
+        'https://www.xinhuanet.com/tech/20260120/022efb2fbec0450db7c4234d8f84da83/c.html',
+        'https://zhangxianda.com/2025/10/09/2025-10-09-quantum-secure-backbone/',
+        'https://baijiahao.baidu.com/s?id=1848214371873622515',
+        'https://www.news.cn/tech/20251219/55ec48807c39490087bfbf65da5a19cc/c.html',
+        'https://news.cctv.cn/2025/09/20/ARTInknoUw8hup10dolDCs0V250920.shtml',
+        'https://www.sohu.com/a/985823453_120491669',
+        'https://tv.cctv.cn/2025/12/05/VIDE3oyVBEJVUTGMlbUha1fm251205.shtml',
+        'https://www.thepaper.cn/newsDetail_forward_32760792',
+      ][i],
     })),
   }
 }
 
 export function getMockPolicyCompilation(): import('@/api/types/dynamics').PolicyCompilationData {
+  const compilationPolicyUrls = [
+    'https://www.gov.cn/zhengce/zhengceku/202412/content_6994622.htm',
+    'https://www.gov.cn/zhengce/zhengceku/202509/content_7039199.htm',
+    'https://www.gov.cn/zhengce/zhengceku/202601/content_7054201.htm',
+    'https://www.gov.cn/zhengce/content/2020-11/02/content_5556716.htm',
+    'https://www.tj.gov.cn/zwgk/szfwj/tjsrmzfbgt/202502/t20250206_6851236.html',
+    'https://www.miit.gov.cn/ztzl/rdzt/xclcyfz/index.html',
+    'https://www.gov.cn/zhengce/zhengceku/202312/content_6923270.htm',
+    'https://www.gov.cn/zhengce/202408/content_6967663.htm',
+    'https://www.gov.cn/zhengce/content/2022-01/12/content_5667817.htm',
+    'https://www.ndrc.gov.cn/xxgk/zcfb/tz/202504/t20250401_1396946.html',
+    'https://www.ndrc.gov.cn/xxgk/zcfb/ghwb/202203/t20220323_1320038.html',
+    'https://www.gov.cn/zhengce/zhengceku/202504/content_7020558.htm',
+    'https://www.gov.cn/zhengce/202601/content_7054663.htm',
+    'https://www.miit.gov.cn/jgsj/xxjsfzs/gzdt/art/2025/art_c195b1b6c1f343e392ee83bf960af9f6.html',
+    'https://www.gov.cn/zhengce/202604/content_7066623.htm',
+    'https://www.gov.cn/zhengce/content/202604/content_7066483.htm',
+    'https://www.ndrc.gov.cn/wsdwhfz/202407/t20240703_1391456.html',
+    'https://www.gov.cn/zhengce/zhengceku/202402/content_6930751.htm',
+    'https://www.gov.cn/zhengce/zhengceku/202412/content_6992542.htm',
+    'https://www.gov.cn/zhengce/zhengceku/202509/content_7041869.htm',
+  ]
   return {
     kpiCards: [
       {
@@ -526,7 +574,7 @@ export function getMockPolicyCompilation(): import('@/api/types/dynamics').Polic
       ],
       publishDate: `2025-0${3 + (i % 3)}-${String(5 + i).padStart(2, '0')}`,
       status: i % 5 === 0 ? '废止' : '现行',
-      url: `https://example.com/policy/${i + 1}`,
+      url: compilationPolicyUrls[i],
     })),
   }
 }

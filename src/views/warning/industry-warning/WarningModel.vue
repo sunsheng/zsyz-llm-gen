@@ -2,7 +2,7 @@
   <div class="page-container">
     <PageHeader title="预警分析模型" subtitle="产业发展预警模型配置与运行管理">
       <template #actions>
-        <el-button type="primary">新建模型</el-button>
+        <el-button type="primary" @click="handleAddModel">新建模型</el-button>
       </template>
     </PageHeader>
 
@@ -45,18 +45,53 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="160" fixed="right">
-          <template #default>
-            <el-link type="primary" underline="never">运行</el-link>
-            <el-link type="primary" underline="never" style="margin-left: 8px">编辑</el-link>
+          <template #default="{ row }">
+            <el-link type="primary" underline="never" @click="handleRunModel(row)">运行</el-link>
+            <el-link
+              type="primary"
+              underline="never"
+              style="margin-left: 8px"
+              @click="handleEditModel(row)"
+              >编辑</el-link
+            >
           </template>
         </el-table-column>
       </el-table>
     </div>
+
+    <!-- 新建/编辑模型弹窗 -->
+    <el-dialog v-model="modelDialogVisible" :title="isEdit ? '编辑模型' : '新建模型'" width="780px">
+      <el-form :model="modelForm" label-width="80px">
+        <el-form-item label="模型名称" required>
+          <el-input v-model="modelForm.name" placeholder="请输入模型名称" />
+        </el-form-item>
+        <el-form-item label="模型类型" required>
+          <el-select v-model="modelForm.type" placeholder="请选择模型类型" style="width: 100%">
+            <el-option label="趋势预测" value="趋势预测" />
+            <el-option label="异常检测" value="异常检测" />
+            <el-option label="关联分析" value="关联分析" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="描述">
+          <el-input
+            v-model="modelForm.description"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入模型描述"
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="modelDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleModelSubmit">确定</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
@@ -66,6 +101,70 @@ import type { WarningModelSummary } from '@/api/types/warning'
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
 const summary = ref<WarningModelSummary | null>(null)
+
+const modelDialogVisible = ref(false)
+const isEdit = ref(false)
+const editingRow = ref<any>(null)
+const modelForm = reactive({ name: '', type: '', description: '' })
+
+function handleAddModel() {
+  modelForm.name = ''
+  modelForm.type = ''
+  modelForm.description = ''
+  isEdit.value = false
+  editingRow.value = null
+  modelDialogVisible.value = true
+}
+
+function handleEditModel(row: any) {
+  modelForm.name = row.name
+  modelForm.type = row.typeName
+  modelForm.description = ''
+  isEdit.value = true
+  editingRow.value = row
+  modelDialogVisible.value = true
+}
+
+function handleModelSubmit() {
+  if (!modelForm.name) {
+    ElMessage.warning('请输入模型名称')
+    return
+  }
+  if (isEdit.value && editingRow.value) {
+    editingRow.value.name = modelForm.name
+    editingRow.value.typeName = modelForm.type
+    ElMessage.success('模型编辑成功')
+  } else {
+    const models = summary.value?.models
+    if (models) {
+      models.unshift({
+        id: Date.now().toString(),
+        name: modelForm.name,
+        type: 'time_series' as any,
+        typeName: modelForm.type,
+        accuracy: 0,
+        recall: 0,
+        lastRun: '-',
+        running: false,
+      })
+    }
+    ElMessage.success('模型创建成功')
+  }
+  modelDialogVisible.value = false
+}
+
+function handleRunModel(row: any) {
+  ElMessageBox.confirm('确认运行该模型？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => {
+      row.running = true
+      ElMessage.success('模型运行已启动')
+    })
+    .catch(() => {})
+}
 
 const kpiCards = computed(() => {
   if (!summary.value) return []

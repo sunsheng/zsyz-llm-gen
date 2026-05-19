@@ -89,7 +89,9 @@
           </div>
           <div class="recommend-card__footer">
             <span class="recommend-card__investment">{{ item.investmentAmount }}</span>
-            <el-button type="primary" link size="small">查看详情</el-button>
+            <el-button type="primary" link size="small" @click="handleDetail(item)"
+              >查看详情</el-button
+            >
           </div>
         </div>
       </div>
@@ -100,6 +102,20 @@
         @change="handlePageChange"
       />
     </div>
+
+    <el-dialog v-model="detailVisible" title="企业详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="企业名称">{{ detailData.name }}</el-descriptions-item>
+        <el-descriptions-item label="行业">{{ detailData.industry }}</el-descriptions-item>
+        <el-descriptions-item label="区域">{{ detailData.region }}</el-descriptions-item>
+        <el-descriptions-item label="匹配度">{{ detailData.matchScore }}</el-descriptions-item>
+        <el-descriptions-item label="链条位置">{{ detailData.chainPosition }}</el-descriptions-item>
+        <el-descriptions-item label="优先级">{{ detailData.priority }}</el-descriptions-item>
+        <el-descriptions-item label="投资额(万元)">{{
+          detailData.investmentAmount
+        }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -134,6 +150,8 @@ const positionLabelMap: Record<string, string> = {
 const loading = ref(false)
 const fullList = ref<RecommendTarget[]>([])
 const filteredList = ref<RecommendTarget[]>([])
+const detailVisible = ref(false)
+const detailData = ref<Partial<RecommendTarget>>({})
 
 const pagination = ref({
   current: 1,
@@ -197,6 +215,11 @@ const filters: FilterField[] = [
     ],
   },
 ]
+
+function handleDetail(item: any) {
+  detailData.value = item
+  detailVisible.value = true
+}
 
 function handleSearch() {
   // For mock data, just reset to full list and re-filter

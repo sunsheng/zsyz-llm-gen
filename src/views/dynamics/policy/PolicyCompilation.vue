@@ -53,7 +53,7 @@
     <PaginationBar :current="currentPage" :total="filteredData.length" @change="handlePageChange" />
 
     <!-- 新增政策弹窗 -->
-    <el-dialog v-model="addDialogVisible" title="新增政策" width="560px">
+    <el-dialog v-model="addDialogVisible" title="新增政策" width="840px">
       <el-form :model="addForm" label-width="100px">
         <el-form-item label="政策名称" required>
           <el-input v-model="addForm.title" placeholder="请输入政策名称" />

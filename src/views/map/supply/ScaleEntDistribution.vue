@@ -107,7 +107,7 @@
     </div>
 
     <!-- Enterprise Detail Dialog -->
-    <el-dialog v-model="detailVisible" :title="detailData?.name" width="560px">
+    <el-dialog v-model="detailVisible" :title="detailData?.name" width="840px">
       <template v-if="detailData">
         <el-descriptions :column="2" border size="small">
           <el-descriptions-item label="企业名称">{{ detailData.name }}</el-descriptions-item>
@@ -124,7 +124,15 @@
           </el-descriptions-item>
           <el-descriptions-item label="联系电话">{{ detailData.contact }}</el-descriptions-item>
           <el-descriptions-item label="企业网站">
-            <el-link type="primary" underline="never">{{ detailData.website }}</el-link>
+            <a
+              v-if="detailData.website"
+              :href="detailData.website"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="detail-link"
+              >{{ detailData.website }}</a
+            >
+            <span v-else>{{ detailData.website || '暂无' }}</span>
           </el-descriptions-item>
           <el-descriptions-item label="地理位置">
             经度 {{ detailData.lng.toFixed(3) }}，纬度 {{ detailData.lat.toFixed(3) }}
@@ -441,5 +449,14 @@ onUnmounted(() => {
   color: $text-secondary;
   background: $bg-hover;
   border-radius: $radius-base;
+}
+
+.detail-link {
+  color: $color-primary;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 </style>

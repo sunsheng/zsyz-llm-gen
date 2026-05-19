@@ -32,12 +32,26 @@
         <el-table-column prop="nationalProjects" label="国家级项目" width="120" sortable />
         <el-table-column prop="academicianCount" label="院士数" width="90" sortable />
         <el-table-column label="操作" width="100" fixed="right">
-          <template #default>
-            <el-button type="primary" link size="small">查看</el-button>
+          <template #default="{ row }">
+            <el-button type="primary" link size="small" @click="handleDetail(row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
+
+    <el-dialog v-model="detailVisible" title="机构详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="机构名称">{{ detailData.name }}</el-descriptions-item>
+        <el-descriptions-item label="类型">{{ detailData.type }}</el-descriptions-item>
+        <el-descriptions-item label="专利数">{{ detailData.patentCount }}</el-descriptions-item>
+        <el-descriptions-item label="国家级项目">{{
+          detailData.nationalProjects
+        }}</el-descriptions-item>
+        <el-descriptions-item label="院士数">{{
+          detailData.academicianCount
+        }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -60,6 +74,8 @@ const typeTagMap: Record<string, { label: string; type: string }> = {
 
 const loading = ref(false)
 const institutions = ref<ResearchInstitution[]>([])
+const detailVisible = ref(false)
+const detailData = ref<Partial<ResearchInstitution>>({})
 
 const kpiCards = computed(() => {
   const list = institutions.value
@@ -152,6 +168,11 @@ const typeChartOption = computed<EChartsOption>(() => {
     ],
   }
 })
+
+function handleDetail(row: any) {
+  detailData.value = row
+  detailVisible.value = true
+}
 
 async function loadData() {
   loading.value = true

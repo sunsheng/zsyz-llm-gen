@@ -42,12 +42,24 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="100" fixed="right">
-          <template #default>
-            <el-button type="primary" link size="small">详情</el-button>
+          <template #default="{ row }">
+            <el-button type="primary" link size="small" @click="handleDetail(row)">详情</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
+
+    <el-dialog v-model="detailVisible" title="环节详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="环节名称">{{ detailData.segmentName }}</el-descriptions-item>
+        <el-descriptions-item label="本地率">{{ detailData.localRate }}</el-descriptions-item>
+        <el-descriptions-item label="进口率">{{ detailData.importRate }}</el-descriptions-item>
+        <el-descriptions-item label="是否卡脖子">{{
+          detailData.bottleneckFlag
+        }}</el-descriptions-item>
+        <el-descriptions-item label="健康度">{{ detailData.healthLevel }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -62,6 +74,8 @@ import type { OwnerGapDiagnosis } from '@/api/types/invest'
 
 const loading = ref(false)
 const gapData = ref<OwnerGapDiagnosis[]>([])
+const detailVisible = ref(false)
+const detailData = ref<Partial<OwnerGapDiagnosis>>({})
 
 const healthCounts = computed(() => {
   const counts = { healthy: 0, warning: 0, critical: 0 }
@@ -146,6 +160,11 @@ const pieOption = computed<EChartsOption>(() => ({
     },
   ],
 }))
+
+function handleDetail(row: any) {
+  detailData.value = row
+  detailVisible.value = true
+}
 
 function healthTagType(level: string) {
   const map: Record<string, string> = { healthy: 'success', warning: 'warning', critical: 'danger' }

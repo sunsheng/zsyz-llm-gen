@@ -36,12 +36,27 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="80" fixed="right">
-          <template #default>
-            <el-button type="primary" link size="small">详情</el-button>
+          <template #default="{ row }">
+            <el-button type="primary" link size="small" @click="handleDetail(row)">详情</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
+
+    <!-- 风险分类详情弹窗 -->
+    <el-dialog v-model="detailVisible" title="风险分类详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="风险类别">{{ detailData.category }}</el-descriptions-item>
+        <el-descriptions-item label="风险等级">{{ detailData.level }}</el-descriptions-item>
+        <el-descriptions-item label="描述" :span="2">{{
+          detailData.description
+        }}</el-descriptions-item>
+        <el-descriptions-item label="监测指标" :span="2">{{
+          detailData.indicators
+        }}</el-descriptions-item>
+        <el-descriptions-item label="预警数">{{ detailData.warningCount }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -126,6 +141,14 @@ const classificationData = ref([
 
 const categoryPieOption = ref({})
 const levelBarOption = ref({})
+
+const detailVisible = ref(false)
+const detailData = ref<any>({})
+
+function handleDetail(row: any) {
+  detailData.value = row
+  detailVisible.value = true
+}
 
 function initCharts() {
   categoryPieOption.value = {
