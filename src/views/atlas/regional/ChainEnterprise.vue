@@ -100,7 +100,7 @@
 
           <!-- 企业表格 -->
           <div class="enterprise-table">
-            <el-table :data="filteredEnterprises" stripe border style="width: 100%">
+            <el-table :data="pagedEnterprises" stripe border style="width: 100%">
               <el-table-column prop="name" label="企业名称" min-width="180">
                 <template #default="{ row }">
                   <span class="enterprise-name" @click="handleEnterpriseClick(row)">{{
@@ -428,6 +428,11 @@ const filteredEnterprises = computed(() => {
     )
   }
   return list
+})
+
+const pagedEnterprises = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+  return filteredEnterprises.value.slice(start, start + pageSize)
 })
 
 const totalEnterprises = computed(() => enterprises.value.length)

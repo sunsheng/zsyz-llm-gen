@@ -49,7 +49,12 @@
           </template>
         </el-table-column>
       </el-table>
-      <PaginationBar :current="pagination.current" :total="totalCount" @change="handlePageChange" />
+      <PaginationBar
+        :current="pagination.current"
+        :total="totalCount"
+        :page-size="pagination.pageSize"
+        @change="handlePageChange"
+      />
     </div>
   </div>
 </template>
@@ -220,8 +225,8 @@ function handleTabChange() {
   pagination.current = 1
 }
 
-function handlePageChange(page: number) {
-  pagination.current = page
+function handlePageChange(current: number, _pageSize: number) {
+  pagination.current = current
 }
 
 onMounted(() => {

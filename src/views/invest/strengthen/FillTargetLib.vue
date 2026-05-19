@@ -53,6 +53,7 @@
       <PaginationBar
         :current="pagination.current"
         :total="pagination.total"
+        :page-size="pagination.pageSize"
         @change="handlePageChange"
       />
     </div>

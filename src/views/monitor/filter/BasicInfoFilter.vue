@@ -48,6 +48,7 @@
       <PaginationBar
         :current="pagination.current"
         :total="pagination.total"
+        :page-size="pagination.pageSize"
         @change="handlePageChange"
       />
     </div>
@@ -169,8 +170,9 @@ function handleReset() {
   applyFilters()
 }
 
-function handlePageChange(page: number) {
-  pagination.current = page
+function handlePageChange(current: number, pageSize: number) {
+  pagination.current = current
+  pagination.pageSize = pageSize
   applyFilters()
 }
 

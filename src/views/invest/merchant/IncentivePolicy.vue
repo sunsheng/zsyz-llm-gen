@@ -11,7 +11,7 @@
     />
 
     <div class="content-card">
-      <el-table v-loading="loading" :data="filteredList" stripe border>
+      <el-table v-loading="loading" :data="pagedList" stripe border>
         <el-table-column prop="name" label="政策名称" min-width="160" />
         <el-table-column prop="type" label="类型" width="120">
           <template #default="{ row }">
@@ -39,6 +39,7 @@
       <PaginationBar
         :current="pagination.current"
         :total="pagination.total"
+        :page-size="pagination.pageSize"
         @change="handlePageChange"
       />
     </div>
@@ -125,6 +126,11 @@ const filteredList = computed(() => {
   return list
 })
 
+const pagedList = computed(() => {
+  const start = (pagination.current - 1) * pagination.pageSize
+  return filteredList.value.slice(start, start + pagination.pageSize)
+})
+
 function handleSearch(keyword: string) {
   searchKeyword.value = keyword
   pagination.current = 1
@@ -144,8 +150,9 @@ function handleFilter(filters: Record<string, unknown>) {
   pagination.total = filteredList.value.length
 }
 
-function handlePageChange(page: number) {
-  pagination.current = page
+function handlePageChange(current: number, pageSize: number) {
+  pagination.current = current
+  pagination.pageSize = pageSize
 }
 
 async function loadData() {

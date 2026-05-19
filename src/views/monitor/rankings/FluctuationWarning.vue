@@ -61,6 +61,7 @@
       <PaginationBar
         :current="pagination.current"
         :total="pagination.total"
+        :page-size="pagination.pageSize"
         @change="handlePageChange"
       />
     </div>
@@ -243,8 +244,9 @@ function updateCharts(data: FluctuationWarningItem[]) {
   }
 }
 
-function handlePageChange(page: number) {
-  pagination.current = page
+function handlePageChange(current: number, pageSize: number) {
+  pagination.current = current
+  pagination.pageSize = pageSize
   applyPagination()
 }
 
