@@ -71,7 +71,7 @@
               type="qualify"
             />
           </div>
-          <el-link type="primary" underline="never">查看详情</el-link>
+          <el-link type="primary" underline="never" @click="handleDetail(item)">查看详情</el-link>
         </div>
       </div>
     </div>
@@ -118,6 +118,27 @@
       :page-size="pagination.pageSize"
       @change="handlePageChange"
     />
+
+    <!-- 企业详情弹窗 -->
+    <el-dialog v-model="detailVisible" title="企业详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="企业名称">{{ detailData.name }}</el-descriptions-item>
+        <el-descriptions-item label="行业">{{ detailData.industry }}</el-descriptions-item>
+        <el-descriptions-item label="所属区域">{{ detailData.region }}</el-descriptions-item>
+        <el-descriptions-item label="资质类型">{{
+          qualTypeLabel(detailData.qualificationType)
+        }}</el-descriptions-item>
+        <el-descriptions-item label="资质名称">{{
+          detailData.qualificationName
+        }}</el-descriptions-item>
+        <el-descriptions-item label="资质等级">{{
+          levelLabel(detailData.qualificationLevel)
+        }}</el-descriptions-item>
+        <el-descriptions-item v-if="detailData.tags?.length" label="标签" :span="2">
+          {{ detailData.tags?.join('、') }}
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -248,8 +269,16 @@ function handlePageChange(current: number, pageSize: number) {
   pagination.pageSize = pageSize
 }
 
+const detailVisible = ref(false)
+const detailData = ref<any>({})
+
+function handleDetail(item: any) {
+  detailData.value = item
+  detailVisible.value = true
+}
+
 function handleView(_item: QualifiedEnterprise) {
-  // 查看详情 - 预留
+  // 查看详情 - 由 handleDetail 处理
 }
 
 async function loadData() {

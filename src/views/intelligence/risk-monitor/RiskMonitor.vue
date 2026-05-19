@@ -50,8 +50,8 @@
         </el-table-column>
         <el-table-column prop="updateTime" label="更新时间" width="120" />
         <el-table-column label="操作" width="80" fixed="right">
-          <template #default>
-            <el-button type="primary" link size="small">查看</el-button>
+          <template #default="{ row }">
+            <el-button type="primary" link size="small" @click="handleDetail(row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -62,6 +62,16 @@
         @change="handlePageChange"
       />
     </div>
+
+    <el-dialog v-model="detailVisible" title="风险详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="风险项目">{{ detailData.targetName }}</el-descriptions-item>
+        <el-descriptions-item label="风险类别">{{ detailData.trackType }}</el-descriptions-item>
+        <el-descriptions-item label="状态">{{ detailData.status }}</el-descriptions-item>
+        <el-descriptions-item label="进度">{{ detailData.progress }}</el-descriptions-item>
+        <el-descriptions-item label="更新时间">{{ detailData.updateTime }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -121,6 +131,13 @@ const allData = ref<IntelligenceTrackItem[]>([])
 const searchKeyword = ref('')
 const filterValues = ref<Record<string, unknown>>({})
 const pagination = reactive({ current: 1, total: 0, pageSize: 20 })
+const detailVisible = ref(false)
+const detailData = ref<any>({})
+
+function handleDetail(row: any) {
+  detailData.value = row
+  detailVisible.value = true
+}
 
 const kpiCards = computed(() => {
   const data = allData.value

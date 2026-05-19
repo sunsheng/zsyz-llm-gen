@@ -28,8 +28,8 @@
         <el-table-column prop="industry" label="所属行业" width="110" />
         <el-table-column prop="detail" label="详情" min-width="180" show-overflow-tooltip />
         <el-table-column label="操作" width="80" fixed="right">
-          <template #default>
-            <el-button type="primary" link size="small">查看</el-button>
+          <template #default="{ row }">
+            <el-button type="primary" link size="small" @click="handleDetail(row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -40,6 +40,17 @@
         @change="handlePageChange"
       />
     </div>
+
+    <el-dialog v-model="detailVisible" title="资质详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="企业名称">{{ detailData.enterprise }}</el-descriptions-item>
+        <el-descriptions-item label="资质类型">{{ detailData.qualType }}</el-descriptions-item>
+        <el-descriptions-item label="变动类型">{{ detailData.changeType }}</el-descriptions-item>
+        <el-descriptions-item label="日期">{{ detailData.date }}</el-descriptions-item>
+        <el-descriptions-item label="所属行业">{{ detailData.industry }}</el-descriptions-item>
+        <el-descriptions-item label="详情">{{ detailData.detail }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -105,6 +116,13 @@ const allData = ref<IntelligenceQualification[]>([])
 const searchKeyword = ref('')
 const filterValues = ref<Record<string, unknown>>({})
 const pagination = reactive({ current: 1, total: 0, pageSize: 20 })
+const detailVisible = ref(false)
+const detailData = ref<any>({})
+
+function handleDetail(row: any) {
+  detailData.value = row
+  detailVisible.value = true
+}
 
 function applyFilters() {
   let filtered = [...allData.value]

@@ -39,8 +39,8 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="100" fixed="right">
-          <template #default>
-            <el-button type="primary" link size="small">查看</el-button>
+          <template #default="{ row }">
+            <el-button type="primary" link size="small" @click="handleDetail(row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -51,6 +51,21 @@
         @change="handlePageChange"
       />
     </div>
+
+    <el-dialog v-model="detailVisible" title="项目详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="项目名称">{{ detailData.name }}</el-descriptions-item>
+        <el-descriptions-item label="行业">{{ detailData.industry }}</el-descriptions-item>
+        <el-descriptions-item label="类型">{{ detailData.type }}</el-descriptions-item>
+        <el-descriptions-item label="投资额(万元)">{{
+          detailData.investmentAmount
+        }}</el-descriptions-item>
+        <el-descriptions-item label="面积(㎡)">{{ detailData.area }}</el-descriptions-item>
+        <el-descriptions-item label="就业人数">{{ detailData.jobs }}</el-descriptions-item>
+        <el-descriptions-item label="状态">{{ detailData.status }}</el-descriptions-item>
+        <el-descriptions-item label="进度">{{ detailData.progress }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -103,6 +118,8 @@ const filters: FilterField[] = [
 
 const loading = ref(false)
 const tableData = ref<InvestProject[]>([])
+const detailVisible = ref(false)
+const detailData = ref<Partial<InvestProject>>({})
 const pagination = reactive({ current: 1, total: 0, pageSize: 10 })
 
 const pagedData = computed(() => {
@@ -141,6 +158,11 @@ async function loadData() {
   } finally {
     loading.value = false
   }
+}
+
+function handleDetail(row: any) {
+  detailData.value = row
+  detailVisible.value = true
 }
 
 function handleSearch(_keyword: string) {

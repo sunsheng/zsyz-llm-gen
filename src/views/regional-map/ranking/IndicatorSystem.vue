@@ -2,7 +2,7 @@
   <div class="page-container">
     <PageHeader title="榜单指标体系" subtitle="园区榜单评价指标体系配置与管理">
       <template #actions>
-        <el-button type="primary">新增指标</el-button>
+        <el-button type="primary" @click="handleAddIndicator">新增指标</el-button>
       </template>
     </PageHeader>
 
@@ -61,11 +61,44 @@
         </el-table-column>
       </el-table>
     </div>
+
+    <!-- 新增指标弹窗 -->
+    <el-dialog v-model="indicatorDialogVisible" title="新增指标" width="780px">
+      <el-form :model="indicatorForm" label-width="80px">
+        <el-form-item label="指标名称" required>
+          <el-input v-model="indicatorForm.name" placeholder="请输入指标名称" />
+        </el-form-item>
+        <el-form-item label="指标类型" required>
+          <el-select v-model="indicatorForm.type" placeholder="请选择指标类型" style="width: 100%">
+            <el-option label="经济" value="economic" />
+            <el-option label="产业" value="industry" />
+            <el-option label="创新" value="innovation" />
+            <el-option label="生态" value="ecology" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="权重">
+          <el-slider v-model="indicatorForm.weight" :min="0" :max="100" show-input />
+        </el-form-item>
+        <el-form-item label="描述">
+          <el-input
+            v-model="indicatorForm.description"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入指标描述"
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="indicatorDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleIndicatorSubmit">确定</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
 import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
@@ -80,6 +113,37 @@ const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#97
 
 const summary = ref<IndicatorSystemSummary | null>(null)
 const activeDimension = ref('all')
+
+const indicatorDialogVisible = ref(false)
+const indicatorForm = reactive({ name: '', type: '', weight: 50, description: '' })
+
+function handleAddIndicator() {
+  indicatorForm.name = ''
+  indicatorForm.type = ''
+  indicatorForm.weight = 50
+  indicatorForm.description = ''
+  indicatorDialogVisible.value = true
+}
+
+function handleIndicatorSubmit() {
+  if (!indicatorForm.name) {
+    ElMessage.warning('请输入指标名称')
+    return
+  }
+  if (summary.value) {
+    summary.value.indicators.unshift({
+      id: Date.now().toString(),
+      name: indicatorForm.name,
+      dimension: (indicatorForm.type || 'economic') as IndicatorDimension,
+      weight: indicatorForm.weight,
+      calcMethod: '定量',
+      dataSource: '手动录入',
+      status: 'active' as const,
+    })
+  }
+  ElMessage.success('指标新增成功')
+  indicatorDialogVisible.value = false
+}
 
 const kpiCards = computed(() => {
   if (!summary.value) return []

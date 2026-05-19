@@ -124,7 +124,7 @@
     <el-dialog
       v-model="dialogVisible"
       :title="isEditing ? '编辑图谱' : '新建图谱'"
-      width="680px"
+      width="1020px"
       :close-on-click-modal="false"
       :destroy-on-close="true"
     >

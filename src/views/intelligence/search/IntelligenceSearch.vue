@@ -44,8 +44,8 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="80" fixed="right">
-          <template #default>
-            <el-button type="primary" link size="small">查看</el-button>
+          <template #default="{ row }">
+            <el-button type="primary" link size="small" @click="handleDetail(row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -56,6 +56,16 @@
         @change="handlePageChange"
       />
     </div>
+
+    <el-dialog v-model="detailVisible" title="情报详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="名称">{{ detailData.title }}</el-descriptions-item>
+        <el-descriptions-item label="分类">{{ detailData.category }}</el-descriptions-item>
+        <el-descriptions-item label="来源/机构">{{ detailData.source }}</el-descriptions-item>
+        <el-descriptions-item label="日期">{{ detailData.date }}</el-descriptions-item>
+        <el-descriptions-item label="类型">{{ detailData.dataType }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -102,6 +112,13 @@ const loading = ref(false)
 const pagination = reactive({ current: 1, pageSize: 20 })
 
 const allRows = ref<SearchRow[]>([])
+const detailVisible = ref(false)
+const detailData = ref<any>({})
+
+function handleDetail(row: any) {
+  detailData.value = row
+  detailVisible.value = true
+}
 
 function newsToRows(data: IntelligenceNews[]): SearchRow[] {
   return data.map((d) => ({

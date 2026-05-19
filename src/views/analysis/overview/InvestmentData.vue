@@ -47,12 +47,25 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="80" align="center">
-          <template #default>
-            <el-button type="primary" link size="small">详情</el-button>
+          <template #default="{ row }">
+            <el-button type="primary" link size="small" @click="handleDetail(row)">详情</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
+
+    <el-dialog v-model="detailVisible" title="园区详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="园区名">{{ detailData.name }}</el-descriptions-item>
+        <el-descriptions-item label="楼栋数">{{ detailData.buildingCount }}</el-descriptions-item>
+        <el-descriptions-item label="房源数">{{ detailData.housingCount }}</el-descriptions-item>
+        <el-descriptions-item label="总面积(万m²)">{{ detailData.totalArea }}</el-descriptions-item>
+        <el-descriptions-item label="可用面积(万m²)">{{
+          detailData.availableArea
+        }}</el-descriptions-item>
+        <el-descriptions-item label="入驻率">{{ detailData.occupancyRate }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -65,6 +78,8 @@ import BaseChart from '@/components/charts/BaseChart.vue'
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
 const selectedPark = ref('')
+const detailVisible = ref(false)
+const detailData = ref<Record<string, any>>({})
 
 const parkOptions = [
   '凯州科技创新园',
@@ -207,6 +222,11 @@ const parkTableData = [
     occupancyRate: 68,
   },
 ]
+
+function handleDetail(row: any) {
+  detailData.value = row
+  detailVisible.value = true
+}
 
 const occupancyTrendOption = ref({})
 const rentalStatusOption = ref({})

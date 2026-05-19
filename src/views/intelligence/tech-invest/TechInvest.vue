@@ -33,8 +33,8 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="80" fixed="right">
-          <template #default>
-            <el-button type="primary" link size="small">查看</el-button>
+          <template #default="{ row }">
+            <el-button type="primary" link size="small" @click="handleDetail(row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -45,6 +45,18 @@
         @change="handlePageChange"
       />
     </div>
+
+    <el-dialog v-model="detailVisible" title="技术详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="技术名称">{{ detailData.name }}</el-descriptions-item>
+        <el-descriptions-item label="所属领域">{{ detailData.field }}</el-descriptions-item>
+        <el-descriptions-item label="转化类型">{{ detailData.transferType }}</el-descriptions-item>
+        <el-descriptions-item label="专利号">{{ detailData.patentNo }}</el-descriptions-item>
+        <el-descriptions-item label="价格/万元">{{ detailData.price }}</el-descriptions-item>
+        <el-descriptions-item label="所属机构">{{ detailData.institution }}</el-descriptions-item>
+        <el-descriptions-item label="状态">{{ detailData.status }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -111,6 +123,13 @@ const allData = ref<IntelligenceTechTransfer[]>([])
 const searchKeyword = ref('')
 const filterValues = ref<Record<string, unknown>>({})
 const pagination = reactive({ current: 1, total: 0, pageSize: 20 })
+const detailVisible = ref(false)
+const detailData = ref<any>({})
+
+function handleDetail(row: any) {
+  detailData.value = row
+  detailVisible.value = true
+}
 
 function applyFilters() {
   let filtered = [...allData.value]

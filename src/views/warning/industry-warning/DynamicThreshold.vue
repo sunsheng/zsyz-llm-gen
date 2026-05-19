@@ -2,7 +2,7 @@
   <div class="page-container">
     <PageHeader title="动态阈值设定" subtitle="产业预警指标动态阈值配置与管理">
       <template #actions>
-        <el-button type="primary">新增阈值规则</el-button>
+        <el-button type="primary" @click="handleAddThreshold">新增阈值规则</el-button>
       </template>
     </PageHeader>
 
@@ -43,17 +43,55 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="120" fixed="right">
-          <template #default>
-            <el-link type="primary" underline="never">编辑</el-link>
+          <template #default="{ row }">
+            <el-link type="primary" underline="never" @click="handleEditThreshold(row)"
+              >编辑</el-link
+            >
           </template>
         </el-table-column>
       </el-table>
     </div>
+
+    <!-- 新增/编辑阈值规则弹窗 -->
+    <el-dialog
+      v-model="thresholdDialogVisible"
+      :title="isEdit ? '编辑阈值规则' : '新增阈值规则'"
+      width="780px"
+    >
+      <el-form :model="thresholdForm" label-width="80px">
+        <el-form-item label="指标名称" required>
+          <el-input v-model="thresholdForm.indicatorName" placeholder="请输入指标名称" />
+        </el-form-item>
+        <el-form-item label="预警上限">
+          <el-input-number v-model="thresholdForm.upperLimit" :precision="2" style="width: 100%" />
+        </el-form-item>
+        <el-form-item label="预警下限">
+          <el-input-number v-model="thresholdForm.lowerLimit" :precision="2" style="width: 100%" />
+        </el-form-item>
+        <el-form-item label="预警等级" required>
+          <el-select
+            v-model="thresholdForm.warningLevel"
+            placeholder="请选择预警等级"
+            style="width: 100%"
+          >
+            <el-option label="低" value="低" />
+            <el-option label="中" value="中" />
+            <el-option label="高" value="高" />
+            <el-option label="极高" value="极高" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="thresholdDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleThresholdSubmit">确定</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
 import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
@@ -63,6 +101,63 @@ import type { DynamicThresholdSummary } from '@/api/types/warning'
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
 const summary = ref<DynamicThresholdSummary | null>(null)
+
+const thresholdDialogVisible = ref(false)
+const isEdit = ref(false)
+const editingRow = ref<any>(null)
+const thresholdForm = reactive({
+  indicatorName: '',
+  upperLimit: 0,
+  lowerLimit: 0,
+  warningLevel: '',
+})
+
+function handleAddThreshold() {
+  thresholdForm.indicatorName = ''
+  thresholdForm.upperLimit = 0
+  thresholdForm.lowerLimit = 0
+  thresholdForm.warningLevel = ''
+  isEdit.value = false
+  editingRow.value = null
+  thresholdDialogVisible.value = true
+}
+
+function handleEditThreshold(row: any) {
+  thresholdForm.indicatorName = row.indicator
+  thresholdForm.upperLimit = 0
+  thresholdForm.lowerLimit = 0
+  thresholdForm.warningLevel = ''
+  isEdit.value = true
+  editingRow.value = row
+  thresholdDialogVisible.value = true
+}
+
+function handleThresholdSubmit() {
+  if (!thresholdForm.indicatorName) {
+    ElMessage.warning('请输入指标名称')
+    return
+  }
+  if (isEdit.value && editingRow.value) {
+    editingRow.value.indicator = thresholdForm.indicatorName
+    ElMessage.success('阈值规则编辑成功')
+  } else {
+    const rules = summary.value?.rules
+    if (rules) {
+      rules.unshift({
+        id: Date.now().toString(),
+        indicator: thresholdForm.indicatorName,
+        indicatorId: Date.now().toString(),
+        warnThreshold: String(thresholdForm.upperLimit),
+        criticalThreshold: String(thresholdForm.lowerLimit),
+        type: 'dynamic' as const,
+        triggerCount: 0,
+        enabled: true,
+      })
+    }
+    ElMessage.success('阈值规则新增成功')
+  }
+  thresholdDialogVisible.value = false
+}
 
 const kpiCards = computed(() => {
   if (!summary.value) return []

@@ -84,7 +84,7 @@
       </div>
     </div>
 
-    <el-dialog v-model="detailVisible" title="节点详情" width="520px">
+    <el-dialog v-model="detailVisible" title="节点详情" width="780px">
       <template v-if="detailNode">
         <el-descriptions :column="2" border>
           <el-descriptions-item label="节点名称">{{ detailNode.name }}</el-descriptions-item>

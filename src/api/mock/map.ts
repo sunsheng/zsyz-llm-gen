@@ -350,6 +350,25 @@ export function getMockScaleEnterprises(): ScaleEnterprise[] {
     '节能环保',
     '数字创意',
   ]
+  const industryWebsites: Record<string, string> = {
+    高端装备制造: 'www.sinomach.com.cn',
+    新材料: 'www.grinm.com',
+    电子信息: 'www.changhonge.com',
+    生物医药: 'www.bioon.com',
+    新能源: 'www.longi.com',
+    节能环保: 'www.cecep.cn',
+    数字创意: 'www.cicc.com.cn',
+  }
+  const industryImages: Record<string, string> = {
+    高端装备制造:
+      'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400&h=200&fit=crop',
+    新材料: 'https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?w=400&h=200&fit=crop',
+    电子信息: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=200&fit=crop',
+    生物医药: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=400&h=200&fit=crop',
+    新能源: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&h=200&fit=crop',
+    节能环保: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=400&h=200&fit=crop',
+    数字创意: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=200&fit=crop',
+  }
   const addressPool = [
     '凯州新城智能制造产业园A栋',
     '辑庆镇工业集中区3号路',
@@ -384,10 +403,10 @@ export function getMockScaleEnterprises(): ScaleEnterprise[] {
         lat: +(center[1] + ((idx * 5 + i * 2) % 80) / 1000 - 0.02).toFixed(4),
         output: 5000 + ((idx * 13 + i * 37) % 80000),
         growth: +((((idx * 7 + i * 3) % 250) - 50) / 10).toFixed(1),
-        website: `www.ent${ri}${i}.example.com`,
+        website: industryWebsites[industry],
         contact: `0838-7${ri}8${i}8${i}8`,
         address: addressPool[ri] + `${i + 1}号`,
-        image: `https://via.placeholder.com/400x200?text=${encodeURIComponent(industry)}`,
+        image: industryImages[industry],
         businessInfo: businessPool[(ri + i) % businessPool.length],
       })
       idx++

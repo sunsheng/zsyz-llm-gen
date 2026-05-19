@@ -33,8 +33,8 @@
         <el-table-column prop="contactPerson" label="联系人" width="90" />
         <el-table-column prop="createDate" label="创建日期" width="120" />
         <el-table-column label="操作" width="80" fixed="right">
-          <template #default>
-            <el-button type="primary" link size="small">查看</el-button>
+          <template #default="{ row }">
+            <el-button type="primary" link size="small" @click="handleDetail(row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -45,6 +45,20 @@
         @change="handlePageChange"
       />
     </div>
+
+    <el-dialog v-model="detailVisible" title="项目详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="项目名称">{{ detailData.name }}</el-descriptions-item>
+        <el-descriptions-item label="所属行业">{{ detailData.industry }}</el-descriptions-item>
+        <el-descriptions-item label="投资金额/万元">{{
+          detailData.investmentAmount
+        }}</el-descriptions-item>
+        <el-descriptions-item label="项目阶段">{{ detailData.stage }}</el-descriptions-item>
+        <el-descriptions-item label="来源">{{ detailData.source }}</el-descriptions-item>
+        <el-descriptions-item label="联系人">{{ detailData.contactPerson }}</el-descriptions-item>
+        <el-descriptions-item label="创建日期">{{ detailData.createDate }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -102,6 +116,13 @@ const allData = ref<IntelligenceProject[]>([])
 const searchKeyword = ref('')
 const filterValues = ref<Record<string, unknown>>({})
 const pagination = reactive({ current: 1, total: 0, pageSize: 20 })
+const detailVisible = ref(false)
+const detailData = ref<any>({})
+
+function handleDetail(row: any) {
+  detailData.value = row
+  detailVisible.value = true
+}
 
 function applyFilters() {
   let filtered = [...allData.value]

@@ -27,7 +27,7 @@
     </div>
 
     <!-- 预览弹窗 -->
-    <el-dialog v-model="previewVisible" :title="previewTemplate?.name + ' - 预览'" width="720px">
+    <el-dialog v-model="previewVisible" :title="previewTemplate?.name + ' - 预览'" width="1080px">
       <div v-if="previewTemplate" class="preview-content">
         <h3>{{ previewTemplate.name }}</h3>
         <p>{{ previewTemplate.description }}</p>
@@ -47,7 +47,7 @@
     </el-dialog>
 
     <!-- 新建/编辑模板弹窗 -->
-    <el-dialog v-model="formVisible" :title="form.id ? '编辑模板' : '新建模板'" width="600px">
+    <el-dialog v-model="formVisible" :title="form.id ? '编辑模板' : '新建模板'" width="900px">
       <el-form :model="form" label-width="100px">
         <el-form-item label="模板名称" required>
           <el-input v-model="form.name" placeholder="请输入模板名称" />

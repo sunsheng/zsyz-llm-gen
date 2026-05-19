@@ -122,7 +122,7 @@
     <el-dialog
       v-model="poiDialogVisible"
       :title="poiForm.id ? '编辑标注' : '新增标注'"
-      width="500px"
+      width="750px"
     >
       <el-form :model="poiForm" label-width="80px">
         <el-form-item label="标注名称">
@@ -161,7 +161,7 @@
     <el-dialog
       v-model="layerDialogVisible"
       :title="layerForm.id ? '编辑图层' : '新增图层'"
-      width="500px"
+      width="750px"
     >
       <el-form :model="layerForm" label-width="80px">
         <el-form-item label="图层名称">

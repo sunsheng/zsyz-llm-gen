@@ -31,8 +31,8 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="80" fixed="right">
-          <template #default>
-            <el-button type="primary" link size="small">查看</el-button>
+          <template #default="{ row }">
+            <el-button type="primary" link size="small" @click="handleDetail(row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -43,6 +43,19 @@
         @change="handlePageChange"
       />
     </div>
+
+    <el-dialog v-model="detailVisible" title="政策详情" width="840px">
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="政策名称">{{ detailData.name }}</el-descriptions-item>
+        <el-descriptions-item label="类型">{{ detailData.type }}</el-descriptions-item>
+        <el-descriptions-item label="奖励比例">{{ detailData.rewardRate }}</el-descriptions-item>
+        <el-descriptions-item label="目标企业">{{
+          detailData.targetEnterprise
+        }}</el-descriptions-item>
+        <el-descriptions-item label="条件">{{ detailData.conditions }}</el-descriptions-item>
+        <el-descriptions-item label="状态">{{ detailData.status }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -104,6 +117,8 @@ const statusTagMap: Record<string, '' | 'primary' | 'success' | 'warning' | 'dan
 
 const loading = ref(false)
 const tableData = ref<IncentivePolicy[]>([])
+const detailVisible = ref(false)
+const detailData = ref<Partial<IncentivePolicy>>({})
 const searchKeyword = ref('')
 const filterValues = ref<Record<string, string>>({})
 const pagination = reactive({ current: 1, total: 0, pageSize: 15 })
@@ -130,6 +145,11 @@ const pagedList = computed(() => {
   const start = (pagination.current - 1) * pagination.pageSize
   return filteredList.value.slice(start, start + pagination.pageSize)
 })
+
+function handleDetail(row: any) {
+  detailData.value = row
+  detailVisible.value = true
+}
 
 function handleSearch(keyword: string) {
   searchKeyword.value = keyword

@@ -80,17 +80,53 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="80" fixed="right">
-          <template #default>
-            <el-button type="primary" link size="small">跟进</el-button>
+          <template #default="{ row }">
+            <el-button type="primary" link size="small" @click="handleFollowUp(row)"
+              >跟进</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
     </div>
+
+    <el-dialog v-model="followVisible" title="跟进记录" width="840px">
+      <el-descriptions :column="2" border style="margin-bottom: 16px">
+        <el-descriptions-item label="企业名称">{{ followData.name }}</el-descriptions-item>
+        <el-descriptions-item label="类型">{{ followData.type }}</el-descriptions-item>
+        <el-descriptions-item label="关系">{{ followData.relation }}</el-descriptions-item>
+        <el-descriptions-item label="投资潜力">{{
+          followData.investmentPotential
+        }}</el-descriptions-item>
+      </el-descriptions>
+      <el-form :model="followForm" label-width="80px">
+        <el-form-item label="跟进状态">
+          <el-select v-model="followForm.status" placeholder="请选择跟进状态">
+            <el-option label="初次接触" value="初次接触" />
+            <el-option label="深入沟通" value="深入沟通" />
+            <el-option label="实地考察" value="实地考察" />
+            <el-option label="签约洽谈" value="签约洽谈" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input
+            v-model="followForm.remark"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入备注"
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="followVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleFollowSubmit">确认</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
 import PageHeader from '@/components/common/PageHeader.vue'
 import ForceGraph from '@/components/graph/ForceGraph.vue'
 import ScoreRing from '@/components/business/ScoreRing.vue'
@@ -103,6 +139,9 @@ const ecoNetworkNodes = ref<EcoNetworkNode[]>([])
 const selectedOwner = ref('')
 const selectedNode = ref<EcoNetworkNode | null>(null)
 const graphRef = ref<InstanceType<typeof ForceGraph> | null>(null)
+const followVisible = ref(false)
+const followData = ref<Partial<EcoNetworkNode>>({})
+const followForm = reactive({ status: '', remark: '' })
 
 const typeColorMap: Record<string, string> = {
   supplier: '#36CBCB',
@@ -168,6 +207,18 @@ const graphEdges = computed<GraphEdgeData[]>(() => {
       type: n.type,
     }))
 })
+
+function handleFollowUp(row: any) {
+  followData.value = row
+  followForm.status = ''
+  followForm.remark = ''
+  followVisible.value = true
+}
+
+function handleFollowSubmit() {
+  ElMessage.success('跟进记录已提交')
+  followVisible.value = false
+}
 
 function handleOwnerChange() {
   selectedNode.value = null
