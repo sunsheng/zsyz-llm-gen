@@ -29,10 +29,10 @@
         <div class="filter-section">
           <div class="filter-label">园区平台</div>
           <el-checkbox-group v-model="visibleParks" @change="updateHeatmap">
-            <el-checkbox label="kzzx">凯州新城核心区</el-checkbox>
-            <el-checkbox label="jqpq">辑庆片区</el-checkbox>
-            <el-checkbox label="xlpq">兴隆片区</el-checkbox>
-            <el-checkbox label="cbdpq">成巴东片区</el-checkbox>
+            <el-checkbox value="kzzx">凯州新城核心区</el-checkbox>
+            <el-checkbox value="jqpq">辑庆片区</el-checkbox>
+            <el-checkbox value="xlpq">兴隆片区</el-checkbox>
+            <el-checkbox value="cbdpq">成巴东片区</el-checkbox>
           </el-checkbox-group>
         </div>
         <div class="stats-section">
@@ -66,7 +66,7 @@
           </div>
         </div>
       </MapControlPanel>
-      <div class="map-page__map">
+      <div v-loading="loading" class="map-page__map">
         <MaptalksMap :center="[104.612, 30.884]" :zoom="13" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <MapLegend :items="legendItems" />
@@ -100,6 +100,7 @@ const intensity = ref(5)
 const displayMode = ref('heatmap')
 const visibleParks = ref<string[]>(['kzzx', 'jqpq', 'xlpq', 'cbdpq'])
 const allHeatmapData = getMockHeatmapData()
+const loading = ref(false)
 
 // "3+1" 园区平台
 const parkPlatforms = [

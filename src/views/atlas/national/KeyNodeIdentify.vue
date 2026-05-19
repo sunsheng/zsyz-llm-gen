@@ -187,7 +187,7 @@
             <!-- 龙头企业 -->
             <div class="detail-enterprises">
               <h4 class="detail-section-title">龙头企业</h4>
-              <el-table :data="activeNode.enterpriseDetails" stripe border size="small">
+              <el-table :data="activeNode.enterpriseDetails" stripe border>
                 <el-table-column prop="name" label="企业名称" min-width="140" />
                 <el-table-column prop="marketShare" label="市场份额" width="100">
                   <template #default="{ row }">{{ row.marketShare }}%</template>

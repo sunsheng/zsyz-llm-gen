@@ -62,9 +62,10 @@
           </el-input>
           <div v-if="searchResults.length" class="search-results">
             <div
-              v-for="result in searchResults"
+              v-for="(result, index) in searchResults"
               :key="result.id"
               class="search-item"
+              :style="{ animationDelay: `${index * 50}ms` }"
               @click="handleResultClick(result)"
             >
               <div class="search-item__name">{{ result.name }}</div>
@@ -75,14 +76,14 @@
         <div class="tool-section">
           <div class="tool-section__title">图层切换</div>
           <el-checkbox-group v-model="visibleLayers" @change="updateLayers">
-            <el-checkbox label="enterprise">企业分布</el-checkbox>
-            <el-checkbox label="park">产业园区</el-checkbox>
-            <el-checkbox label="heatmap">热力图</el-checkbox>
-            <el-checkbox label="boundary">行政边界</el-checkbox>
+            <el-checkbox value="enterprise">企业分布</el-checkbox>
+            <el-checkbox value="park">产业园区</el-checkbox>
+            <el-checkbox value="heatmap">热力图</el-checkbox>
+            <el-checkbox value="boundary">行政边界</el-checkbox>
           </el-checkbox-group>
         </div>
       </MapControlPanel>
-      <div class="map-page__map">
+      <div v-loading="loading" class="map-page__map">
         <MaptalksMap :center="[104.612, 30.884]" :zoom="14" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <!-- Eagle Eye Panel -->
@@ -127,13 +128,16 @@ const allSearchResults = ref<MapSearchResult[]>([])
 const enterpriseMarkers = ref<{ lng: number; lat: number }[]>([])
 const parkMarkers = ref<{ lng: number; lat: number }[]>([])
 const boundaryLabels = ref<{ name: string; lng: number; lat: number }[]>([])
+const loading = ref(false)
 
 async function loadData() {
+  loading.value = true
   const data = await fetchMapOperation()
   allSearchResults.value = data.searchResults
   enterpriseMarkers.value = data.enterpriseMarkers
   parkMarkers.value = data.parkMarkers
   boundaryLabels.value = data.boundaryLabels
+  loading.value = false
 }
 
 async function onMapReady(map: any) {
@@ -515,9 +519,22 @@ onUnmounted(() => {
   cursor: pointer;
   border-radius: $radius-base;
   transition: background $transition-fast;
+  animation: fade-in-up 300ms ease both;
 
   &:hover {
     background: $bg-hover;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

@@ -87,7 +87,7 @@
 
           <div class="table-panel">
             <h4 class="chart-panel__title">历史引荐记录</h4>
-            <el-table :data="referralTableData" stripe border size="small">
+            <el-table :data="referralTableData" stripe border>
               <el-table-column prop="period" label="时间段" width="120" />
               <el-table-column prop="referrals" label="引荐次数" width="100" />
               <el-table-column prop="signed" label="签约数" width="100" />

@@ -26,17 +26,29 @@ const chartRef = ref<HTMLElement | null>(null)
 let chartInstance: echarts.ECharts | null = null
 let resizeObserver: ResizeObserver | null = null
 
+const ANIMATION_DEFAULTS = {
+  animationDuration: 800,
+  animationEasing: 'cubicOut',
+} as const
+
+function mergeAnimationDefaults(option: EChartsOption): EChartsOption {
+  return {
+    ...ANIMATION_DEFAULTS,
+    ...option,
+  }
+}
+
 function init() {
   if (!chartRef.value) return
   chartInstance = echarts.init(chartRef.value)
   if (props.option) {
-    chartInstance.setOption(props.option)
+    chartInstance.setOption(mergeAnimationDefaults(props.option))
   }
 }
 
 function setOption(option: EChartsOption, notMerge = false) {
   if (!chartInstance) init()
-  chartInstance?.setOption(option, notMerge)
+  chartInstance?.setOption(mergeAnimationDefaults(option), notMerge)
 }
 
 function resize() {

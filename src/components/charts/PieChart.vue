@@ -41,7 +41,7 @@ const chartOption = computed<EChartsOption>(() => ({
         itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' },
       },
       animationType: 'scale',
-      animationEasing: 'elasticOut',
+      animationEasing: 'cubicOut',
     },
   ],
 }))

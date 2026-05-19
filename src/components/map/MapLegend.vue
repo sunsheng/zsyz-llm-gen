@@ -66,7 +66,7 @@ const collapsed = ref(false)
   flex-shrink: 0;
   width: 12px;
   height: 12px;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .map-legend__label {

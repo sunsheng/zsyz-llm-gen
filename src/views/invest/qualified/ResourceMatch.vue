@@ -185,14 +185,6 @@ onMounted(() => {
   padding: 20px;
 }
 
-.content-card {
-  padding: 20px;
-  margin-bottom: 16px;
-  background: $bg-card;
-  border-radius: $radius-base;
-  box-shadow: $shadow-card;
-}
-
 .resource-tags {
   display: flex;
   flex-wrap: wrap;

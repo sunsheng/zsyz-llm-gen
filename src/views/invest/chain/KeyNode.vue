@@ -230,13 +230,6 @@ onMounted(() => {
   gap: 20px;
 }
 
-.content-card {
-  padding: 20px;
-  background: $bg-card;
-  border-radius: $radius-base;
-  box-shadow: $shadow-card;
-}
-
 .card-title {
   margin: 0 0 16px;
   font-size: 16px;

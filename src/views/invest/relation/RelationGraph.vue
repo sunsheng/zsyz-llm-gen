@@ -15,7 +15,7 @@
           <el-checkbox
             v-for="item in relationTypeOptions"
             :key="item.value"
-            :label="item.value"
+            :value="item.value"
             :border="false"
           >
             <span class="type-dot" :style="{ background: item.color }"></span>

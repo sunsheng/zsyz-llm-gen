@@ -77,9 +77,9 @@
         <div class="filter-section">
           <div class="filter-label">资源类型</div>
           <el-checkbox-group v-model="filters.types" @change="applyFilters">
-            <el-checkbox label="enterprise">企业</el-checkbox>
-            <el-checkbox label="park">园区</el-checkbox>
-            <el-checkbox label="institution">机构</el-checkbox>
+            <el-checkbox value="enterprise">企业</el-checkbox>
+            <el-checkbox value="park">园区</el-checkbox>
+            <el-checkbox value="institution">机构</el-checkbox>
           </el-checkbox-group>
         </div>
         <div class="filter-section">

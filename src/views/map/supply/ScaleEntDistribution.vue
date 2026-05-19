@@ -59,7 +59,7 @@
           </div>
         </div>
       </MapControlPanel>
-      <div class="map-page__map">
+      <div v-loading="loading" class="map-page__map">
         <div class="map-page__stat-cards">
           <StatCard
             icon="OfficeBuilding"
@@ -170,6 +170,7 @@ const industries = [
 const allEnterprises = ref<ScaleEnterprise[]>([])
 const selectedRegion = ref('')
 const selectedIndustry = ref('')
+const loading = ref(false)
 
 let mapInstance: any = null
 let markerLayer: any = null
@@ -177,7 +178,9 @@ const detailVisible = ref(false)
 const detailData = ref<ScaleEnterprise | null>(null)
 
 async function loadData() {
+  loading.value = true
   allEnterprises.value = await fetchScaleEnterprises()
+  loading.value = false
 }
 
 const filteredEnterprises = computed(() => {

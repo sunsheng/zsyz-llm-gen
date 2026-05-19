@@ -83,7 +83,7 @@
           </div>
         </div>
       </MapControlPanel>
-      <div class="map-page__map">
+      <div v-loading="loading" class="map-page__map">
         <MaptalksMap :center="[104.612, 30.884]" :zoom="10" @ready="onMapReady" />
         <MapToolbar @zoom-in="handleZoomIn" @zoom-out="handleZoomOut" @reset="handleReset" />
         <MapLegend :items="legendItems" />
@@ -116,12 +116,15 @@ const industries = [
 const allClusters = ref<ClusterData[]>([])
 const selectedIndustry = ref('')
 const clusterRadius = ref(5)
+const loading = ref(false)
 
 let mapInstance: any = null
 let clusterLayer: any = null
 
 async function loadData() {
+  loading.value = true
   allClusters.value = await fetchClusterDistribution()
+  loading.value = false
 }
 
 const filteredClusters = computed(() => {

@@ -56,7 +56,7 @@
                 >
               </div>
             </template>
-            <el-table :data="poiList" stripe border size="small" max-height="400">
+            <el-table :data="poiList" stripe border max-height="400">
               <el-table-column prop="name" label="标注名称" min-width="120" />
               <el-table-column prop="type" label="标注类型" width="100">
                 <template #default="{ row }">
@@ -88,7 +88,7 @@
                 >
               </div>
             </template>
-            <el-table :data="layerList" stripe border size="small" max-height="400">
+            <el-table :data="layerList" stripe border max-height="400">
               <el-table-column prop="name" label="图层名称" min-width="120" />
               <el-table-column prop="type" label="图层类型" width="100">
                 <template #default="{ row }">

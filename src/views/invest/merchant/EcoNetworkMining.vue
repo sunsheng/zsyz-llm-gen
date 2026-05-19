@@ -60,7 +60,7 @@
 
     <div class="target-section">
       <h4 class="section-title">潜在招商目标清单</h4>
-      <el-table v-loading="loading" :data="ecoNetworkNodes" stripe border size="small">
+      <el-table v-loading="loading" :data="ecoNetworkNodes" stripe border>
         <el-table-column prop="name" label="企业名称" min-width="140" />
         <el-table-column prop="type" label="类型" width="120">
           <template #default="{ row }">

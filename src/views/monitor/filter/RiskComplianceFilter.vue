@@ -201,12 +201,6 @@ onMounted(() => {
 .page-container {
   padding: 20px;
 }
-.content-card {
-  padding: 20px;
-  background: $bg-card;
-  border-radius: $radius-base;
-  box-shadow: $shadow-card;
-}
 .result-bar {
   display: flex;
   align-items: center;

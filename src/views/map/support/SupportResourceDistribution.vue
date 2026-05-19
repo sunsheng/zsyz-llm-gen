@@ -6,12 +6,12 @@
         <div class="filter-section">
           <div class="filter-label">资源类型</div>
           <el-checkbox-group v-model="selectedTypes" @change="updateMap">
-            <el-checkbox label="education">教育机构</el-checkbox>
-            <el-checkbox label="medical">医疗机构</el-checkbox>
-            <el-checkbox label="bank">银行分支</el-checkbox>
-            <el-checkbox label="government">政府机构</el-checkbox>
-            <el-checkbox label="transport">交通站点</el-checkbox>
-            <el-checkbox label="hotel">餐饮酒店</el-checkbox>
+            <el-checkbox value="education">教育机构</el-checkbox>
+            <el-checkbox value="medical">医疗机构</el-checkbox>
+            <el-checkbox value="bank">银行分支</el-checkbox>
+            <el-checkbox value="government">政府机构</el-checkbox>
+            <el-checkbox value="transport">交通站点</el-checkbox>
+            <el-checkbox value="hotel">餐饮酒店</el-checkbox>
           </el-checkbox-group>
         </div>
         <div class="filter-section">
@@ -51,7 +51,7 @@
           </div>
         </div>
       </MapControlPanel>
-      <div class="map-page__map">
+      <div v-loading="loading" class="map-page__map">
         <div class="map-page__stat-cards">
           <StatCard
             icon="School"
@@ -137,12 +137,15 @@ const selectedTypes = ref<string[]>([
   'hotel',
 ])
 const selectedRegion = ref('')
+const loading = ref(false)
 
 let mapInstance: any = null
 let markerLayer: any = null
 
 async function loadData() {
+  loading.value = true
   allResources.value = await fetchSupportResources()
+  loading.value = false
 }
 
 const filteredResources = computed(() => {

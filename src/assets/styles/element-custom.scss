@@ -40,6 +40,10 @@
 .el-table {
   --el-table-header-text-color: #{$text-primary};
   --el-table-header-font-weight: #{$font-weight-semibold};
+
+  .el-table__row {
+    cursor: pointer;
+  }
 }
 
 .el-button--primary {
@@ -47,14 +51,34 @@
   --el-button-border-color: #{$color-primary};
   &:hover,
   &:focus {
-    --el-button-hover-bg-color: #{$color-primary-dark};
-    --el-button-hover-border-color: #{$color-primary-dark};
+    --el-button-hover-bg-color: #{darken($color-primary, 10%)};
+    --el-button-hover-border-color: #{darken($color-primary, 10%)};
   }
 }
 
 // Dialog 样式微调
 .el-dialog {
   border-radius: #{$radius-lg};
+}
+
+// Dialog 打开/关闭过渡动画 (覆盖 Element Plus 默认)
+.dialog-fade-enter-active {
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease !important;
+}
+.dialog-fade-leave-active {
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease !important;
+}
+.dialog-fade-enter-from {
+  opacity: 0;
+  transform: scale(0.9) !important;
+}
+.dialog-fade-leave-to {
+  opacity: 0;
+  transform: scale(0.9) !important;
 }
 
 // Menu 激活态
