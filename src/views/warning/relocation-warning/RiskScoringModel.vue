@@ -54,13 +54,30 @@
         <el-table-column prop="assetScore" label="资产维度" width="100" />
         <el-table-column prop="relationScore" label="关联维度" width="100" />
         <el-table-column prop="governanceScore" label="治理维度" width="100" />
-        <el-table-column label="趋势" width="80">
+        <el-table-column prop="relocationProb" label="外迁概率" width="100">
+          <template #default="{ row }">
+            <span
+              :style="{
+                color:
+                  row.relocationProb >= 60
+                    ? '#F2637B'
+                    : row.relocationProb >= 30
+                      ? '#E6A23C'
+                      : '#4ECB73',
+                fontWeight: 'bold',
+              }"
+            >
+              {{ row.relocationProb }}%
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="趋势" width="100">
           <template #default="{ row }">
             <el-tag
               :type="row.trend === 'up' ? 'danger' : row.trend === 'down' ? 'success' : 'info'"
               size="small"
             >
-              {{ row.trend === 'up' ? '↑' : row.trend === 'down' ? '↓' : '→' }}
+              {{ row.trend === 'up' ? '↑ 上升' : row.trend === 'down' ? '↓ 下降' : '→ 稳定' }}
             </el-tag>
           </template>
         </el-table-column>

@@ -5,7 +5,7 @@
     <div class="source-cards">
       <div v-for="source in dataSources" :key="source.name" class="source-card">
         <div class="source-card__header">
-          <el-icon :size="28" :color="source.color"
+          <el-icon :size="24" :color="source.color"
             ><component :is="iconMap[source.icon]"
           /></el-icon>
           <h4>{{ source.name }}</h4>
@@ -27,10 +27,6 @@
             <span class="stat-label">更新频率</span>
             <span class="stat-value">{{ source.frequency }}</span>
           </div>
-          <div class="stat-item">
-            <span class="stat-label">最后更新</span>
-            <span class="stat-value">{{ source.lastUpdate }}</span>
-          </div>
         </div>
         <el-progress :percentage="source.completion" :stroke-width="8" :color="source.color" />
         <div class="source-card__footer">
@@ -43,7 +39,7 @@
       <h4 class="section-title">数据整合进度</h4>
       <el-table :data="integrationTasks" stripe border style="width: 100%">
         <el-table-column prop="name" label="整合任务" min-width="200" />
-        <el-table-column prop="source" label="数据来源" width="180" />
+        <el-table-column prop="source" label="数据来源" width="160" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
             <el-tag
@@ -62,7 +58,6 @@
           </template>
         </el-table-column>
         <el-table-column prop="records" label="数据条数" width="120" />
-        <el-table-column prop="updateTime" label="更新时间" width="180" />
       </el-table>
     </div>
   </div>
@@ -122,7 +117,7 @@ onMounted(() => {
 }
 .source-card__stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: $spacing-sm;
   margin-bottom: $spacing-md;
 }

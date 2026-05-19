@@ -4,15 +4,15 @@
 
     <div class="chart-grid">
       <div class="chart-panel full-width">
-        <h4 class="chart-panel__title">PPI 工业生产者出厂价格指数</h4>
+        <h4 class="chart-panel__title">PPI 工业生产者出厂价格指数（2025年）</h4>
         <BaseChart :option="ppiOption" height="320px" />
       </div>
       <div class="chart-panel full-width">
-        <h4 class="chart-panel__title">CPI 居民消费价格指数</h4>
+        <h4 class="chart-panel__title">CPI 居民消费价格指数（2025年）</h4>
         <BaseChart :option="cpiOption" height="320px" />
       </div>
       <div class="chart-panel full-width">
-        <h4 class="chart-panel__title">大宗商品价格走势</h4>
+        <h4 class="chart-panel__title">大宗商品价格走势（2025年）</h4>
         <BaseChart :option="commodityOption" height="360px" />
       </div>
     </div>

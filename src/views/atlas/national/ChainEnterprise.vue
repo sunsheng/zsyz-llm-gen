@@ -528,12 +528,323 @@ function handleEnterpriseClick(enterprise: EnterpriseItem) {
   drawerVisible.value = true
 }
 
-watch(selectedChain, () => {
+watch(selectedChain, (val) => {
   loading.value = true
+  const code = Array.isArray(val) ? val[val.length - 1] : val
+  // 根据选择的产业链生成不同的侧边栏和表格数据
+  generateDataForChain(code)
   setTimeout(() => {
     loading.value = false
   }, 300)
 })
+
+function generateDataForChain(code: string) {
+  const chainMap: Record<string, { label: string; color: string; nodes: ChainNode[] }[]> = {
+    'high-end-equipment': [
+      {
+        label: '上游',
+        color: '#36CBCB',
+        nodes: [
+          {
+            id: 'up-1',
+            name: '原材料供应',
+            category: '上游',
+            matchCount: 12,
+            matchStatus: 'matched',
+          },
+          {
+            id: 'up-2',
+            name: '核心零部件',
+            category: '上游',
+            matchCount: 8,
+            matchStatus: 'partial',
+          },
+          {
+            id: 'up-3',
+            name: '基础材料研发',
+            category: '上游',
+            matchCount: 3,
+            matchStatus: 'unmatched',
+          },
+          { id: 'up-4', name: '特种钢材', category: '上游', matchCount: 6, matchStatus: 'matched' },
+        ],
+      },
+      {
+        label: '中游',
+        color: '#1889E8',
+        nodes: [
+          {
+            id: 'mid-1',
+            name: '整机装配',
+            category: '中游',
+            matchCount: 15,
+            matchStatus: 'matched',
+          },
+          {
+            id: 'mid-2',
+            name: '系统集成',
+            category: '中游',
+            matchCount: 10,
+            matchStatus: 'partial',
+          },
+          {
+            id: 'mid-3',
+            name: '精密加工',
+            category: '中游',
+            matchCount: 7,
+            matchStatus: 'matched',
+          },
+          {
+            id: 'mid-4',
+            name: '智能控制',
+            category: '中游',
+            matchCount: 9,
+            matchStatus: 'matched',
+          },
+          {
+            id: 'mid-5',
+            name: '检测认证',
+            category: '中游',
+            matchCount: 2,
+            matchStatus: 'unmatched',
+          },
+        ],
+      },
+      {
+        label: '下游',
+        color: '#4ECB73',
+        nodes: [
+          {
+            id: 'down-1',
+            name: '航空航天',
+            category: '下游',
+            matchCount: 11,
+            matchStatus: 'matched',
+          },
+          {
+            id: 'down-2',
+            name: '新能源汽车',
+            category: '下游',
+            matchCount: 14,
+            matchStatus: 'matched',
+          },
+          {
+            id: 'down-3',
+            name: '工业自动化',
+            category: '下游',
+            matchCount: 9,
+            matchStatus: 'partial',
+          },
+          {
+            id: 'down-4',
+            name: '轨道交通',
+            category: '下游',
+            matchCount: 5,
+            matchStatus: 'partial',
+          },
+        ],
+      },
+    ],
+    'frontier-material': [
+      {
+        label: '上游',
+        color: '#36CBCB',
+        nodes: [
+          { id: 'up-1', name: '矿产开采', category: '上游', matchCount: 8, matchStatus: 'matched' },
+          { id: 'up-2', name: '基础化工', category: '上游', matchCount: 5, matchStatus: 'partial' },
+          {
+            id: 'up-3',
+            name: '原料制备',
+            category: '上游',
+            matchCount: 10,
+            matchStatus: 'matched',
+          },
+        ],
+      },
+      {
+        label: '中游',
+        color: '#1889E8',
+        nodes: [
+          {
+            id: 'mid-1',
+            name: '材料加工',
+            category: '中游',
+            matchCount: 12,
+            matchStatus: 'matched',
+          },
+          {
+            id: 'mid-2',
+            name: '合成制备',
+            category: '中游',
+            matchCount: 7,
+            matchStatus: 'partial',
+          },
+          {
+            id: 'mid-3',
+            name: '性能改性',
+            category: '中游',
+            matchCount: 4,
+            matchStatus: 'unmatched',
+          },
+          {
+            id: 'mid-4',
+            name: '复合材料',
+            category: '中游',
+            matchCount: 9,
+            matchStatus: 'matched',
+          },
+        ],
+      },
+      {
+        label: '下游',
+        color: '#4ECB73',
+        nodes: [
+          {
+            id: 'down-1',
+            name: '应用制造',
+            category: '下游',
+            matchCount: 11,
+            matchStatus: 'matched',
+          },
+          {
+            id: 'down-2',
+            name: '产品检测',
+            category: '下游',
+            matchCount: 6,
+            matchStatus: 'partial',
+          },
+          {
+            id: 'down-3',
+            name: '市场销售',
+            category: '下游',
+            matchCount: 8,
+            matchStatus: 'matched',
+          },
+        ],
+      },
+    ],
+    'digital-economy': [
+      {
+        label: '上游',
+        color: '#36CBCB',
+        nodes: [
+          { id: 'up-1', name: '芯片设计', category: '上游', matchCount: 9, matchStatus: 'partial' },
+          {
+            id: 'up-2',
+            name: '晶圆制造',
+            category: '上游',
+            matchCount: 4,
+            matchStatus: 'unmatched',
+          },
+          { id: 'up-3', name: '封装测试', category: '上游', matchCount: 7, matchStatus: 'matched' },
+        ],
+      },
+      {
+        label: '中游',
+        color: '#1889E8',
+        nodes: [
+          {
+            id: 'mid-1',
+            name: '模组组装',
+            category: '中游',
+            matchCount: 11,
+            matchStatus: 'matched',
+          },
+          {
+            id: 'mid-2',
+            name: '系统集成',
+            category: '中游',
+            matchCount: 8,
+            matchStatus: 'matched',
+          },
+          {
+            id: 'mid-3',
+            name: '软件开发',
+            category: '中游',
+            matchCount: 13,
+            matchStatus: 'matched',
+          },
+          {
+            id: 'mid-4',
+            name: '算法优化',
+            category: '中游',
+            matchCount: 3,
+            matchStatus: 'unmatched',
+          },
+        ],
+      },
+      {
+        label: '下游',
+        color: '#4ECB73',
+        nodes: [
+          {
+            id: 'down-1',
+            name: '终端产品',
+            category: '下游',
+            matchCount: 10,
+            matchStatus: 'matched',
+          },
+          {
+            id: 'down-2',
+            name: '运维服务',
+            category: '下游',
+            matchCount: 6,
+            matchStatus: 'partial',
+          },
+          {
+            id: 'down-3',
+            name: '数据服务',
+            category: '下游',
+            matchCount: 8,
+            matchStatus: 'matched',
+          },
+        ],
+      },
+    ],
+  }
+  const defaultChain: { label: string; color: string; nodes: ChainNode[] }[] = [
+    {
+      label: '上游',
+      color: '#36CBCB',
+      nodes: [
+        { id: 'up-1', name: '原料供应', category: '上游', matchCount: 6, matchStatus: 'partial' },
+        { id: 'up-2', name: '基础研发', category: '上游', matchCount: 3, matchStatus: 'unmatched' },
+      ],
+    },
+    {
+      label: '中游',
+      color: '#1889E8',
+      nodes: [
+        { id: 'mid-1', name: '生产制造', category: '中游', matchCount: 10, matchStatus: 'matched' },
+        { id: 'mid-2', name: '品牌运营', category: '中游', matchCount: 5, matchStatus: 'partial' },
+      ],
+    },
+    {
+      label: '下游',
+      color: '#4ECB73',
+      nodes: [
+        { id: 'down-1', name: '渠道销售', category: '下游', matchCount: 7, matchStatus: 'matched' },
+        { id: 'down-2', name: '售后服务', category: '下游', matchCount: 4, matchStatus: 'partial' },
+      ],
+    },
+  ]
+  chainSections.value = chainMap[code] || defaultChain
+  // 更新企业数据中匹配环节名称
+  const allNodeNames = chainSections.value.flatMap((s) => s.nodes.map((n) => n.name))
+  enterprises.value = enterprises.value.map((e) => ({
+    ...e,
+    chainNode: allNodeNames[Math.floor(Math.abs(hashCode(e.id)) % allNodeNames.length)],
+    relatedNodes: [allNodeNames[Math.floor(Math.abs(hashCode(e.id) + 1) % allNodeNames.length)]],
+  }))
+}
+
+function hashCode(s: string): number {
+  let h = 0
+  for (let i = 0; i < s.length; i++) {
+    h = (Math.imul(31, h) + s.charCodeAt(i)) | 0
+  }
+  return h
+}
 
 onMounted(() => {
   loading.value = true

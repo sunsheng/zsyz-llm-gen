@@ -198,6 +198,7 @@ export interface RiskScore {
   assetScore: number
   relationScore: number
   governanceScore: number
+  relocationProb: number // 外迁概率 0-100
   trend: 'up' | 'down' | 'stable'
 }
 

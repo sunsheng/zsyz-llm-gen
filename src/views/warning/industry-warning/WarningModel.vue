@@ -19,6 +19,14 @@
         <h4 class="chart-panel__title">模型准确率对比</h4>
         <BaseChart :option="accuracyOption" height="320px" />
       </div>
+      <div class="chart-panel">
+        <h4 class="chart-panel__title">风险传导路径</h4>
+        <BaseChart :option="传导Option" height="380px" />
+      </div>
+      <div class="chart-panel">
+        <h4 class="chart-panel__title">风险等级月度分布</h4>
+        <BaseChart :option="levelTrendOption" height="380px" />
+      </div>
     </div>
 
     <div class="table-section">
@@ -70,6 +78,7 @@
             <el-option label="趋势预测" value="趋势预测" />
             <el-option label="异常检测" value="异常检测" />
             <el-option label="关联分析" value="关联分析" />
+            <el-option label="风险传导分析" value="风险传导分析" />
           </el-select>
         </el-form-item>
         <el-form-item label="描述">
@@ -219,6 +228,8 @@ const kpiCards = computed(() => {
 
 const trendOption = ref({})
 const accuracyOption = ref({})
+const 传导Option = ref({})
+const levelTrendOption = ref({})
 
 function buildCharts() {
   if (!summary.value) return
@@ -260,6 +271,93 @@ function buildCharts() {
         type: 'bar',
         barMaxWidth: 32,
         data: accuracyComparison.recall,
+      },
+    ],
+  }
+
+  // 风险传导路径桑基图
+  传导Option.value = {
+    color: chartColors,
+    tooltip: { trigger: 'item' },
+    series: [
+      {
+        type: 'sankey',
+        layout: 'none',
+        emphasis: { focus: 'adjacency' },
+        nodeAlign: 'left',
+        data: [
+          { name: '高端装备' },
+          { name: '电子信息' },
+          { name: '新材料' },
+          { name: '新能源' },
+          { name: '生物医药' },
+          { name: '现代服务' },
+          { name: '节能环保' },
+          { name: '数字创意' },
+        ],
+        links: [
+          { source: '高端装备', target: '电子信息', value: 15 },
+          { source: '高端装备', target: '新材料', value: 12 },
+          { source: '电子信息', target: '新能源', value: 10 },
+          { source: '新材料', target: '新能源', value: 8 },
+          { source: '新材料', target: '生物医药', value: 6 },
+          { source: '新能源', target: '节能环保', value: 9 },
+          { source: '电子信息', target: '数字创意', value: 7 },
+          { source: '数字创意', target: '现代服务', value: 5 },
+          { source: '生物医药', target: '节能环保', value: 4 },
+          { source: '高端装备', target: '现代服务', value: 3 },
+        ],
+        lineStyle: { color: 'gradient', curveness: 0.5 },
+      },
+    ],
+  }
+
+  // 风险等级月度分布
+  const months = [
+    '1月',
+    '2月',
+    '3月',
+    '4月',
+    '5月',
+    '6月',
+    '7月',
+    '8月',
+    '9月',
+    '10月',
+    '11月',
+    '12月',
+  ]
+  levelTrendOption.value = {
+    color: ['#F2637B', '#E6A23C', '#4ECB73'],
+    tooltip: { trigger: 'axis' },
+    legend: { data: ['高风险', '中风险', '低风险'] },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'category', data: months },
+    yAxis: { type: 'value', name: '次' },
+    series: [
+      {
+        name: '高风险',
+        type: 'line',
+        smooth: true,
+        stack: 'total',
+        areaStyle: { opacity: 0.3 },
+        data: [3, 2, 4, 3, 5, 4, 3, 2, 4, 3, 2, 3],
+      },
+      {
+        name: '中风险',
+        type: 'line',
+        smooth: true,
+        stack: 'total',
+        areaStyle: { opacity: 0.3 },
+        data: [8, 7, 9, 10, 8, 9, 11, 10, 9, 8, 7, 8],
+      },
+      {
+        name: '低风险',
+        type: 'line',
+        smooth: true,
+        stack: 'total',
+        areaStyle: { opacity: 0.3 },
+        data: [15, 14, 16, 15, 18, 17, 16, 15, 18, 19, 17, 16],
       },
     ],
   }

@@ -53,20 +53,25 @@
       <div class="table-section">
         <h4 class="section-title">产业规模指标明细</h4>
         <el-table :data="compareData" stripe border style="width: 100%">
-          <el-table-column prop="regionName" label="区域" width="100" fixed />
-          <el-table-column prop="enterpriseCount" label="企业数量(家)" width="130" sortable />
-          <el-table-column prop="totalOutput" label="总产值(亿元)" width="130" sortable />
-          <el-table-column prop="addedValue" label="增加值(亿元)" width="130" sortable />
-          <el-table-column prop="taxContribution" label="税收贡献(亿元)" width="140" sortable />
-          <el-table-column prop="fixedAssetInvestment" label="固投(亿元)" width="120" sortable />
+          <el-table-column prop="regionName" label="区域" min-width="100" fixed />
+          <el-table-column prop="enterpriseCount" label="企业数量(家)" min-width="130" sortable />
+          <el-table-column prop="totalOutput" label="总产值(亿元)" min-width="130" sortable />
+          <el-table-column prop="addedValue" label="增加值(亿元)" min-width="130" sortable />
+          <el-table-column prop="taxContribution" label="税收贡献(亿元)" min-width="140" sortable />
+          <el-table-column
+            prop="fixedAssetInvestment"
+            label="固投(亿元)"
+            min-width="120"
+            sortable
+          />
           <el-table-column
             prop="outputPerArea"
             label="单位面积产值(亿元/km²)"
-            width="180"
+            min-width="180"
             sortable
           />
-          <el-table-column prop="outputPerCapita" label="人均产值(万元)" width="130" sortable />
-          <el-table-column prop="growth" label="增速(%)" width="100" sortable>
+          <el-table-column prop="outputPerCapita" label="人均产值(万元)" min-width="130" sortable />
+          <el-table-column prop="growth" label="增速(%)" min-width="100" sortable>
             <template #default="{ row }">
               <span :style="{ color: row.growth >= 0 ? '#4ECB73' : '#F2637B' }">
                 {{ row.growth >= 0 ? '+' : '' }}{{ row.growth }}%

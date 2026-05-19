@@ -54,36 +54,36 @@
         <h4 class="section-title">经济效益指标明细</h4>
         <el-table :data="compareData" stripe border style="width: 100%">
           <el-table-column prop="regionName" label="区域" width="100" fixed />
-          <el-table-column prop="profitRate" label="利润率(%)" width="110" sortable />
-          <el-table-column prop="revenueGrowth" label="营收增长率(%)" width="130" sortable>
+          <el-table-column prop="profitRate" label="利润率(%)" min-width="110" sortable />
+          <el-table-column prop="revenueGrowth" label="营收增长率(%)" min-width="130" sortable>
             <template #default="{ row }">
               <span :style="{ color: row.revenueGrowth >= 0 ? '#4ECB73' : '#F2637B' }">
                 {{ row.revenueGrowth >= 0 ? '+' : '' }}{{ row.revenueGrowth }}%
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="taxGrowth" label="税收增长率(%)" width="130" sortable>
+          <el-table-column prop="taxGrowth" label="税收增长率(%)" min-width="130" sortable>
             <template #default="{ row }">
               <span :style="{ color: row.taxGrowth >= 0 ? '#4ECB73' : '#F2637B' }">
                 {{ row.taxGrowth >= 0 ? '+' : '' }}{{ row.taxGrowth }}%
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="roi" label="投资回报率(%)" width="130" sortable />
+          <el-table-column prop="roi" label="投资回报率(%)" min-width="130" sortable />
           <el-table-column
             prop="outputPerEnergy"
             label="单位能耗产值(万元/吨标煤)"
-            width="200"
+            min-width="200"
             sortable
           />
           <el-table-column
             prop="carbonIntensity"
             label="碳排放强度(tCO₂/万元)"
-            width="180"
+            min-width="180"
             sortable
           />
-          <el-table-column prop="taxPerCapita" label="人均纳税(万元)" width="130" sortable />
-          <el-table-column prop="outputPerCapita" label="人均产值(万元)" width="130" sortable />
+          <el-table-column prop="taxPerCapita" label="人均纳税(万元)" min-width="130" sortable />
+          <el-table-column prop="outputPerCapita" label="人均产值(万元)" min-width="130" sortable />
         </el-table>
       </div>
     </template>

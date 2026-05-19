@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <PageHeader title="招商管理数据" subtitle="招商项目全流程管理数据" />
+    <PageHeader title="招商管理数据" subtitle="招商客户统计与变化趋势分析" />
 
     <div class="stat-cards">
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />
@@ -8,12 +8,23 @@
 
     <div class="chart-grid">
       <div class="chart-panel">
-        <h4 class="chart-panel__title">项目阶段分布</h4>
+        <h4 class="chart-panel__title">客户招商阶段分布</h4>
         <BaseChart :option="stageOption" height="320px" />
       </div>
       <div class="chart-panel">
-        <h4 class="chart-panel__title">月度推进趋势</h4>
-        <BaseChart :option="progressOption" height="320px" />
+        <h4 class="chart-panel__title">客户行业分布</h4>
+        <BaseChart :option="industryOption" height="320px" />
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-panel">
+        <h4 class="chart-panel__title">客户性质分布</h4>
+        <BaseChart :option="natureOption" height="320px" />
+      </div>
+      <div class="chart-panel">
+        <h4 class="chart-panel__title">客户变化趋势</h4>
+        <BaseChart :option="trendOption" height="320px" />
       </div>
     </div>
   </div>
@@ -29,21 +40,32 @@ const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#97
 
 const kpiCards = [
   {
-    key: 'totalProjects',
-    label: '管理项目',
-    value: 89,
-    unit: '个',
+    key: 'totalClients',
+    label: '客户总数',
+    value: 328,
+    unit: '家',
     trend: 'up' as const,
-    trendValue: '+6.8%',
-    icon: 'FolderOpened',
+    trendValue: '+15.8%',
+    icon: 'OfficeBuilding',
     iconColor: '#1889E8',
     iconBgColor: '#ECF5FF',
   },
   {
-    key: 'completedProjects',
-    label: '已完成',
-    value: 46,
-    unit: '个',
+    key: 'intentionClients',
+    label: '意向客户',
+    value: 142,
+    unit: '家',
+    trend: 'up' as const,
+    trendValue: '+8.2%',
+    icon: 'ChatDotRound',
+    iconColor: '#36CBCB',
+    iconBgColor: '#E6F7F7',
+  },
+  {
+    key: 'signedClients',
+    label: '签约客户',
+    value: 86,
+    unit: '家',
     trend: 'up' as const,
     trendValue: '+12.4%',
     icon: 'CircleCheckFilled',
@@ -51,20 +73,9 @@ const kpiCards = [
     iconBgColor: '#EDFAF0',
   },
   {
-    key: 'avgCycle',
-    label: '平均周期',
-    value: 68,
-    unit: '天',
-    trend: 'down' as const,
-    trendValue: '-5.2%',
-    icon: 'Timer',
-    iconColor: '#36CBCB',
-    iconBgColor: '#E6F7F7',
-  },
-  {
-    key: 'completionRate',
-    label: '完成率',
-    value: 51.7,
+    key: 'conversionRate',
+    label: '签约转化率',
+    value: 26.2,
     unit: '%',
     trend: 'up' as const,
     trendValue: '+3.8%',
@@ -75,7 +86,9 @@ const kpiCards = [
 ]
 
 const stageOption = ref({})
-const progressOption = ref({})
+const industryOption = ref({})
+const natureOption = ref({})
+const trendOption = ref({})
 
 onMounted(() => {
   const stages = ['线索获取', '初步对接', '深度洽谈', '方案制定', '签约落地', '投产运营']
@@ -84,15 +97,57 @@ onMounted(() => {
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: stages },
-    yAxis: { type: 'value', name: '个' },
+    yAxis: { type: 'value', name: '家' },
     series: [
       {
-        name: '项目数',
+        name: '客户数',
         type: 'bar',
         barMaxWidth: 32,
-        data: [28, 22, 18, 12, 8, 1],
+        data: [98, 72, 58, 42, 38, 20],
         barWidth: '40%',
         itemStyle: { borderRadius: [4, 4, 0, 0] },
+        label: { show: true, position: 'top', formatter: '{c}家', fontSize: 11 },
+      },
+    ],
+  }
+
+  industryOption.value = {
+    color: chartColors,
+    tooltip: { trigger: 'item' },
+    legend: { orient: 'vertical', left: 'left' },
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        data: [
+          { value: 86, name: '高端装备制造' },
+          { value: 62, name: '前沿材料' },
+          { value: 58, name: '数字经济' },
+          { value: 48, name: '生物医药' },
+          { value: 42, name: '新能源' },
+          { value: 32, name: '其他' },
+        ],
+        label: { show: true, formatter: '{b}: {c}家' },
+      },
+    ],
+  }
+
+  natureOption.value = {
+    color: chartColors.slice(1),
+    tooltip: { trigger: 'item' },
+    legend: { orient: 'vertical', left: 'left' },
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        data: [
+          { value: 45, name: '国有企业' },
+          { value: 168, name: '民营企业' },
+          { value: 52, name: '外资企业' },
+          { value: 38, name: '合资企业' },
+          { value: 25, name: '其他' },
+        ],
+        label: { show: true, formatter: '{b}: {c}家' },
       },
     ],
   }
@@ -111,16 +166,26 @@ onMounted(() => {
     '11月',
     '12月',
   ]
-  progressOption.value = {
+  trendOption.value = {
     color: chartColors,
     tooltip: { trigger: 'axis' },
-    legend: { data: ['新增', '完成'] },
+    legend: { data: ['新增客户', '签约客户'] },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: { type: 'category', data: months },
-    yAxis: { type: 'value', name: '个' },
+    yAxis: { type: 'value', name: '家' },
     series: [
-      { name: '新增', type: 'line', smooth: true, data: [8, 6, 10, 7, 9, 12, 8, 11, 7, 9, 6, 8] },
-      { name: '完成', type: 'line', smooth: true, data: [4, 3, 6, 5, 7, 8, 5, 7, 4, 6, 4, 5] },
+      {
+        name: '新增客户',
+        type: 'line',
+        smooth: true,
+        data: [28, 22, 35, 30, 38, 42, 36, 40, 32, 35, 28, 34],
+      },
+      {
+        name: '签约客户',
+        type: 'line',
+        smooth: true,
+        data: [8, 6, 12, 10, 14, 16, 12, 15, 10, 12, 8, 11],
+      },
     ],
   }
 })
@@ -140,6 +205,7 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: $spacing-lg;
+  margin-bottom: $spacing-lg;
 }
 .chart-panel {
   padding: $spacing-lg;

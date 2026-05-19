@@ -20,13 +20,6 @@
           <el-slider v-model="intensity" :min="1" :max="10" :step="1" @change="updateHeatmap" />
         </div>
         <div class="filter-section">
-          <div class="filter-label">显示模式</div>
-          <el-radio-group v-model="displayMode" @change="updateHeatmap">
-            <el-radio-button value="heatmap">热力图</el-radio-button>
-            <el-radio-button value="bubble">气泡图</el-radio-button>
-          </el-radio-group>
-        </div>
-        <div class="filter-section">
           <div class="filter-label">园区平台</div>
           <el-checkbox-group v-model="visibleParks" @change="updateHeatmap">
             <el-checkbox value="kzzx">凯州新城核心区</el-checkbox>
@@ -97,7 +90,7 @@ const industries = [
 
 const selectedIndustry = ref('')
 const intensity = ref(5)
-const displayMode = ref('heatmap')
+// displayMode removed - heatmap only
 const visibleParks = ref<string[]>(['kzzx', 'jqpq', 'xlpq', 'cbdpq'])
 const allHeatmapData = getMockHeatmapData()
 const loading = ref(false)
@@ -131,20 +124,11 @@ const regionCount = computed(() => {
   return quads.size
 })
 
-const legendItems = computed(() => {
-  if (displayMode.value === 'heatmap') {
-    return [
-      { label: '低密度', color: '#36CBCB' },
-      { label: '中密度', color: '#FBD437' },
-      { label: '高密度', color: '#F2637B' },
-    ]
-  }
-  return [
-    { label: '低产值', color: '#A0CFFF' },
-    { label: '中产值', color: '#1889E8' },
-    { label: '高产值', color: '#0970F0' },
-  ]
-})
+const legendItems = [
+  { label: '低密度', color: '#4ECB73' },
+  { label: '中密度', color: '#FBD437' },
+  { label: '高密度', color: '#F2637B' },
+]
 
 async function onMapReady(map: any) {
   mapInstance = map
@@ -163,33 +147,17 @@ async function updateHeatmap() {
   const factor = intensity.value / 5
 
   heatmapData.value.forEach((p) => {
-    if (displayMode.value === 'heatmap') {
-      const size = (8 + p.value * 0.5) * factor
-      const color = getHeatColor(p.value / 100)
-      heatLayer.addGeometry(
-        new maptalks.Circle([p.lng, p.lat], size, {
-          symbol: {
-            polygonFill: color,
-            polygonOpacity: Math.min(0.15 + (p.value / 100) * 0.4 * factor, 0.6),
-            lineWidth: 0,
-          },
-        }),
-      )
-    } else {
-      const radius = Math.max(2000, p.value * 80 * factor)
-      const color = p.value > 66 ? '#0970F0' : p.value > 33 ? '#1889E8' : '#A0CFFF'
-      heatLayer.addGeometry(
-        new maptalks.Circle([p.lng, p.lat], radius, {
-          symbol: {
-            polygonFill: color,
-            polygonOpacity: 0.5,
-            lineColor: '#fff',
-            lineWidth: 1,
-            lineOpacity: 0.8,
-          },
-        }),
-      )
-    }
+    const size = (8 + p.value * 0.5) * factor
+    const color = getHeatColor(p.value / 100)
+    heatLayer.addGeometry(
+      new maptalks.Circle([p.lng, p.lat], size, {
+        symbol: {
+          polygonFill: color,
+          polygonOpacity: Math.min(0.15 + (p.value / 100) * 0.4 * factor, 0.6),
+          lineWidth: 0,
+        },
+      }),
+    )
   })
 
   // Render park platform overlays
@@ -229,7 +197,7 @@ async function updateHeatmap() {
 function getHeatColor(ratio: number): string {
   if (ratio > 0.66) return '#F2637B'
   if (ratio > 0.33) return '#FBD437'
-  return '#36CBCB'
+  return '#4ECB73'
 }
 
 function handleZoomIn() {
@@ -243,7 +211,6 @@ function handleReset() {
   mapInstance?.setZoom(13)
   selectedIndustry.value = ''
   intensity.value = 5
-  displayMode.value = 'heatmap'
 }
 
 onUnmounted(() => {
@@ -335,7 +302,7 @@ onUnmounted(() => {
 
 .intensity-bar__gradient {
   height: 12px;
-  background: linear-gradient(to right, #36cbcb, #fbd437, #f2637b);
+  background: linear-gradient(to right, #4ecb73, #fbd437, #f2637b);
   border-radius: 6px;
 }
 

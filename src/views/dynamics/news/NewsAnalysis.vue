@@ -51,7 +51,6 @@
         <el-timeline-item
           v-for="event in hotspotEvents"
           :key="event.id"
-          :timestamp="event.date"
           placement="top"
           :type="
             event.type === 'major' ? 'danger' : event.type === 'important' ? 'warning' : 'primary'

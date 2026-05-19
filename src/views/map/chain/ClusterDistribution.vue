@@ -16,14 +16,17 @@
           </el-select>
         </div>
         <div class="filter-section">
-          <div class="filter-label">聚合范围</div>
-          <el-slider
-            v-model="clusterRadius"
-            :min="1"
-            :max="10"
-            :step="1"
-            @change="updateClusters"
-          />
+          <div class="filter-label">热力强度</div>
+          <el-slider v-model="intensity" :min="1" :max="10" :step="1" @change="updateClusters" />
+        </div>
+        <div class="filter-section">
+          <div class="filter-label">园区平台</div>
+          <el-checkbox-group v-model="visibleParks" @change="updateClusters">
+            <el-checkbox value="kzzx">凯州新城核心区</el-checkbox>
+            <el-checkbox value="jqpq">辑庆片区</el-checkbox>
+            <el-checkbox value="xlpq">兴隆片区</el-checkbox>
+            <el-checkbox value="cbdpq">成巴东片区</el-checkbox>
+          </el-checkbox-group>
         </div>
         <div class="cluster-list">
           <div class="cluster-list__title">产业集群列表</div>
@@ -82,6 +85,15 @@
             </div>
           </div>
         </div>
+        <div class="intensity-bar">
+          <div class="intensity-bar__label">强度图例</div>
+          <div class="intensity-bar__gradient"></div>
+          <div class="intensity-bar__labels">
+            <span>低</span>
+            <span>中</span>
+            <span>高</span>
+          </div>
+        </div>
       </MapControlPanel>
       <div v-loading="loading" class="map-page__map">
         <MaptalksMap :center="[104.612, 30.884]" :zoom="10" @ready="onMapReady" />
@@ -115,11 +127,21 @@ const industries = [
 
 const allClusters = ref<ClusterData[]>([])
 const selectedIndustry = ref('')
-const clusterRadius = ref(5)
+const intensity = ref(5)
+const visibleParks = ref<string[]>(['kzzx', 'jqpq', 'xlpq', 'cbdpq'])
 const loading = ref(false)
 
+// "3+1" 园区平台
+const parkPlatforms = [
+  { id: 'kzzx', name: '凯州新城核心区', lng: 104.612, lat: 30.884, radius: 5000 },
+  { id: 'jqpq', name: '辑庆片区', lng: 104.623, lat: 30.92, radius: 4000 },
+  { id: 'xlpq', name: '兴隆片区', lng: 104.595, lat: 30.871, radius: 4000 },
+  { id: 'cbdpq', name: '成巴东片区', lng: 104.65, lat: 30.86, radius: 3500 },
+]
+
 let mapInstance: any = null
-let clusterLayer: any = null
+let heatLayer: any = null
+let parkLayer: any = null
 
 async function loadData() {
   loading.value = true
@@ -140,91 +162,105 @@ const avgCount = computed(() => {
 })
 
 const legendItems = [
-  { label: '大型集群(>150家)', color: '#F2637B' },
-  { label: '中型集群(80-150家)', color: '#FBD437' },
-  { label: '小型集群(<80家)', color: '#36CBCB' },
+  { label: '低密度', color: '#4ECB73' },
+  { label: '中密度', color: '#FBD437' },
+  { label: '高密度', color: '#F2637B' },
+  { label: '园区平台', color: '#975FE5' },
 ]
 
 function getClusterColor(count: number) {
   if (count > 150) return '#F2637B'
   if (count > 80) return '#FBD437'
-  return '#36CBCB'
+  return '#4ECB73'
+}
+
+function getHeatColor(ratio: number): string {
+  if (ratio > 0.66) return '#F2637B'
+  if (ratio > 0.33) return '#FBD437'
+  return '#4ECB73'
 }
 
 async function onMapReady(map: any) {
   mapInstance = map
   const maptalks = await import('maptalks')
-  clusterLayer = new maptalks.VectorLayer('cluster-layer').addTo(map)
+  heatLayer = new maptalks.VectorLayer('heat-layer').addTo(map)
+  parkLayer = new maptalks.VectorLayer('park-layer').addTo(map)
   updateClusters()
 }
 
 async function updateClusters() {
-  if (!clusterLayer) return
+  if (!heatLayer) return
   const maptalks = await import('maptalks')
-  clusterLayer.clear()
+  heatLayer.clear()
+  parkLayer?.clear()
 
-  const radiusFactor = clusterRadius.value / 5
+  const factor = intensity.value / 5
+  const mc = maxCount.value || 1
 
   filteredClusters.value.forEach((c) => {
-    const color = getClusterColor(c.count)
-    const radius = Math.max(8000, c.count * 150 * radiusFactor)
+    const ratio = c.count / mc
+    const color = getHeatColor(ratio)
+    const size = (8 + ratio * 40) * factor
 
-    // Cluster circle
-    clusterLayer.addGeometry(
-      new maptalks.Circle([c.lng, c.lat], radius, {
+    // 热力点
+    heatLayer.addGeometry(
+      new maptalks.Circle([c.lng, c.lat], size, {
         symbol: {
           polygonFill: color,
-          polygonOpacity: 0.3,
-          lineColor: color,
-          lineWidth: 2,
-          lineOpacity: 0.7,
-          lineDasharray: [6, 4],
+          polygonOpacity: Math.min(0.15 + ratio * 0.45 * factor, 0.65),
+          lineWidth: 0,
         },
       }),
     )
 
-    // Center marker
-    clusterLayer.addGeometry(
-      new maptalks.Marker([c.lng, c.lat], {
-        symbol: {
-          markerType: 'ellipse',
-          markerFill: color,
-          markerFillOpacity: 0.9,
-          markerLineColor: '#fff',
-          markerLineWidth: 2,
-          markerWidth: 24,
-          markerHeight: 24,
-        },
-      }),
-    )
-
-    // Label
-    clusterLayer.addGeometry(
-      new maptalks.Marker([c.lng, c.lat + 0.15], {
+    // 名称标签
+    heatLayer.addGeometry(
+      new maptalks.Marker([c.lng, c.lat + 0.02], {
         symbol: {
           textName: c.name,
-          textSize: 13,
+          textSize: 12,
           textFill: '#303133',
           textHaloFill: '#fff',
           textHaloRadius: 2,
           textWeight: 'bold',
-          textDy: -20,
-        },
-      }),
-    )
-
-    // Count label
-    clusterLayer.addGeometry(
-      new maptalks.Marker([c.lng, c.lat], {
-        symbol: {
-          textName: `${c.count}`,
-          textSize: 12,
-          textFill: '#fff',
-          textWeight: 'bold',
+          textDy: -12,
         },
       }),
     )
   })
+
+  // 渲染园区平台圆圈标记
+  if (parkLayer) {
+    parkPlatforms
+      .filter((p) => visibleParks.value.includes(p.id))
+      .forEach((p) => {
+        parkLayer.addGeometry(
+          new maptalks.Circle([p.lng, p.lat], p.radius, {
+            symbol: {
+              polygonFill: '#975FE5',
+              polygonOpacity: 0.06,
+              lineColor: '#975FE5',
+              lineWidth: 2,
+              lineOpacity: 0.6,
+              lineDasharray: [8, 4],
+            },
+          }),
+        )
+        parkLayer.addGeometry(
+          new maptalks.Marker([p.lng, p.lat], {
+            symbol: {
+              textName: p.name,
+              textSize: 12,
+              textFill: '#975FE5',
+              textHaloFill: '#fff',
+              textHaloRadius: 2,
+              textWeight: 'bold',
+              textDy: -10,
+            },
+          }),
+        )
+      })
+  }
 }
 
 function handleClusterClick(cluster: { name: string; lng: number; lat: number }) {
@@ -244,7 +280,7 @@ function handleReset() {
   mapInstance?.setCenter([104.612, 30.884])
   mapInstance?.setZoom(10)
   selectedIndustry.value = ''
-  clusterRadius.value = 5
+  intensity.value = 5
 }
 
 onMounted(() => {
@@ -252,7 +288,8 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  clusterLayer = null
+  heatLayer = null
+  parkLayer = null
   mapInstance = null
 })
 </script>
@@ -375,6 +412,33 @@ onUnmounted(() => {
 }
 
 .stat-item__label {
+  margin-top: 4px;
+  font-size: 12px;
+  color: $text-secondary;
+}
+
+.intensity-bar {
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px solid $border-color-lighter;
+}
+
+.intensity-bar__label {
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: $font-weight-medium;
+  color: $text-primary;
+}
+
+.intensity-bar__gradient {
+  height: 12px;
+  background: linear-gradient(to right, #4ecb73, #fbd437, #f2637b);
+  border-radius: 6px;
+}
+
+.intensity-bar__labels {
+  display: flex;
+  justify-content: space-between;
   margin-top: 4px;
   font-size: 12px;
   color: $text-secondary;

@@ -465,10 +465,272 @@ function handleEnterpriseClick(enterprise: EnterpriseItem) {
 
 watch([selectedRegion, selectedChain], () => {
   loading.value = true
+  // 根据区域和产业链生成不同数据
+  const region = selectedRegion.value || '凯州新城'
+  const code = Array.isArray(selectedChain.value)
+    ? selectedChain.value[selectedChain.value.length - 1]
+    : selectedChain.value
+  updateChainSections(code, region)
   setTimeout(() => {
     loading.value = false
   }, 300)
 })
+
+function updateChainSections(code: string, region: string) {
+  const regionSuffix = region ? `（${region}）` : ''
+  const chainMap: Record<string, { label: string; color: string; nodes: ChainNode[] }[]> = {
+    'high-end-equipment': [
+      {
+        label: '上游',
+        color: '#36CBCB',
+        nodes: [
+          {
+            id: 'up-1',
+            name: `原材料供应${regionSuffix}`,
+            category: '上游',
+            matchCount: 10,
+            matchStatus: 'matched' as const,
+          },
+          {
+            id: 'up-2',
+            name: `核心零部件${regionSuffix}`,
+            category: '上游',
+            matchCount: 6,
+            matchStatus: 'partial' as const,
+          },
+        ],
+      },
+      {
+        label: '中游',
+        color: '#1889E8',
+        nodes: [
+          {
+            id: 'mid-1',
+            name: `整机装配${regionSuffix}`,
+            category: '中游',
+            matchCount: 12,
+            matchStatus: 'matched' as const,
+          },
+          {
+            id: 'mid-2',
+            name: `系统集成${regionSuffix}`,
+            category: '中游',
+            matchCount: 8,
+            matchStatus: 'matched' as const,
+          },
+          {
+            id: 'mid-3',
+            name: `精密加工${regionSuffix}`,
+            category: '中游',
+            matchCount: 5,
+            matchStatus: 'partial' as const,
+          },
+        ],
+      },
+      {
+        label: '下游',
+        color: '#4ECB73',
+        nodes: [
+          {
+            id: 'down-1',
+            name: `新能源汽车${regionSuffix}`,
+            category: '下游',
+            matchCount: 11,
+            matchStatus: 'matched' as const,
+          },
+          {
+            id: 'down-2',
+            name: `航空航天${regionSuffix}`,
+            category: '下游',
+            matchCount: 7,
+            matchStatus: 'partial' as const,
+          },
+        ],
+      },
+    ],
+    'frontier-material': [
+      {
+        label: '上游',
+        color: '#36CBCB',
+        nodes: [
+          {
+            id: 'up-1',
+            name: `矿产开采${regionSuffix}`,
+            category: '上游',
+            matchCount: 7,
+            matchStatus: 'matched' as const,
+          },
+          {
+            id: 'up-2',
+            name: `原料制备${regionSuffix}`,
+            category: '上游',
+            matchCount: 9,
+            matchStatus: 'matched' as const,
+          },
+        ],
+      },
+      {
+        label: '中游',
+        color: '#1889E8',
+        nodes: [
+          {
+            id: 'mid-1',
+            name: `材料加工${regionSuffix}`,
+            category: '中游',
+            matchCount: 10,
+            matchStatus: 'matched' as const,
+          },
+          {
+            id: 'mid-2',
+            name: `合成制备${regionSuffix}`,
+            category: '中游',
+            matchCount: 4,
+            matchStatus: 'partial' as const,
+          },
+        ],
+      },
+      {
+        label: '下游',
+        color: '#4ECB73',
+        nodes: [
+          {
+            id: 'down-1',
+            name: `应用制造${regionSuffix}`,
+            category: '下游',
+            matchCount: 8,
+            matchStatus: 'matched' as const,
+          },
+          {
+            id: 'down-2',
+            name: `产品检测${regionSuffix}`,
+            category: '下游',
+            matchCount: 5,
+            matchStatus: 'partial' as const,
+          },
+        ],
+      },
+    ],
+    'digital-economy': [
+      {
+        label: '上游',
+        color: '#36CBCB',
+        nodes: [
+          {
+            id: 'up-1',
+            name: `芯片设计${regionSuffix}`,
+            category: '上游',
+            matchCount: 8,
+            matchStatus: 'partial' as const,
+          },
+          {
+            id: 'up-2',
+            name: `封装测试${regionSuffix}`,
+            category: '上游',
+            matchCount: 6,
+            matchStatus: 'matched' as const,
+          },
+        ],
+      },
+      {
+        label: '中游',
+        color: '#1889E8',
+        nodes: [
+          {
+            id: 'mid-1',
+            name: `软件开发${regionSuffix}`,
+            category: '中游',
+            matchCount: 14,
+            matchStatus: 'matched' as const,
+          },
+          {
+            id: 'mid-2',
+            name: `模组组装${regionSuffix}`,
+            category: '中游',
+            matchCount: 9,
+            matchStatus: 'matched' as const,
+          },
+        ],
+      },
+      {
+        label: '下游',
+        color: '#4ECB73',
+        nodes: [
+          {
+            id: 'down-1',
+            name: `终端产品${regionSuffix}`,
+            category: '下游',
+            matchCount: 10,
+            matchStatus: 'matched' as const,
+          },
+          {
+            id: 'down-2',
+            name: `数据服务${regionSuffix}`,
+            category: '下游',
+            matchCount: 6,
+            matchStatus: 'partial' as const,
+          },
+        ],
+      },
+    ],
+  }
+  const defaultSections = [
+    {
+      label: '上游',
+      color: '#36CBCB',
+      nodes: [
+        {
+          id: 'up-1',
+          name: `原料供应${regionSuffix}`,
+          category: '上游',
+          matchCount: 5,
+          matchStatus: 'partial' as const,
+        },
+      ],
+    },
+    {
+      label: '中游',
+      color: '#1889E8',
+      nodes: [
+        {
+          id: 'mid-1',
+          name: `生产制造${regionSuffix}`,
+          category: '中游',
+          matchCount: 8,
+          matchStatus: 'matched' as const,
+        },
+      ],
+    },
+    {
+      label: '下游',
+      color: '#4ECB73',
+      nodes: [
+        {
+          id: 'down-1',
+          name: `渠道销售${regionSuffix}`,
+          category: '下游',
+          matchCount: 6,
+          matchStatus: 'matched' as const,
+        },
+      ],
+    },
+  ]
+  chainSections.value = chainMap[code] || defaultSections
+  // 更新企业匹配环节
+  const allNodeNames = chainSections.value.flatMap((s) => s.nodes.map((n) => n.name))
+  enterprises.value = enterprises.value.map((e) => ({
+    ...e,
+    chainNode: allNodeNames[Math.floor(Math.abs(hashStr(e.id)) % allNodeNames.length)],
+    relatedNodes: [allNodeNames[Math.floor(Math.abs(hashStr(e.id) + 1) % allNodeNames.length)]],
+  }))
+}
+
+function hashStr(s: string): number {
+  let h = 0
+  for (let i = 0; i < s.length; i++) {
+    h = (Math.imul(31, h) + s.charCodeAt(i)) | 0
+  }
+  return h
+}
 
 onMounted(() => {
   loading.value = true

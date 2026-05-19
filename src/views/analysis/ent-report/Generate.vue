@@ -18,22 +18,11 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="报告周期">
-          <el-date-picker
-            v-model="form.period"
-            type="daterange"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            style="width: 100%"
-          />
-        </el-form-item>
-
         <el-form-item v-if="form.type === 'special'" label="专项方向">
           <el-select v-model="form.direction" placeholder="选择专项方向" style="width: 100%">
             <el-option label="经营健康度分析" value="health" />
             <el-option label="创新能力评估" value="innovation" />
             <el-option label="风险预警分析" value="risk" />
-            <el-option label="可持续发展评估" value="sustainable" />
           </el-select>
         </el-form-item>
 
@@ -124,7 +113,6 @@ const enterprises = ref<EntReportEnterprise[]>([])
 const form = ref({
   type: 'standard',
   enterprise: '',
-  period: null as any,
   direction: '',
   indicators: ['经营健康度', '创新能力'],
   formats: ['PDF'],
@@ -144,10 +132,16 @@ async function handleGenerate() {
   const ent =
     enterprises.value.find((e) => e.name === form.value.enterprise) || enterprises.value[0]
   if (ent) {
+    const typeLabel =
+      form.value.type === 'standard' ? '标准' : form.value.type === 'special' ? '专项' : '定制'
+    const directionLabel =
+      form.value.type === 'special' && form.value.direction
+        ? ` - ${form.value.direction === 'health' ? '经营健康度分析' : form.value.direction === 'innovation' ? '创新能力评估' : '风险预警分析'}`
+        : ''
     generatedReport.value = {
-      name: `${ent.name} - ${form.value.type === 'standard' ? '标准' : form.value.type === 'special' ? '专项' : '定制'}运行分析报告`,
+      name: `${ent.name} - ${typeLabel}运行分析报告${directionLabel}`,
       enterprise: ent.name,
-      period: '2024年度',
+      period: '2025年度',
       time: new Date().toLocaleString(),
     }
   }
@@ -158,7 +152,6 @@ function handleReset() {
   form.value = {
     type: 'standard',
     enterprise: '',
-    period: null,
     direction: '',
     indicators: ['经营健康度', '创新能力'],
     formats: ['PDF'],

@@ -54,23 +54,28 @@
         <h4 class="section-title">创新能力指标明细</h4>
         <el-table :data="compareData" stripe border style="width: 100%">
           <el-table-column prop="regionName" label="区域" width="100" fixed />
-          <el-table-column prop="rdRatio" label="R&D占比(%)" width="120" sortable />
+          <el-table-column prop="rdRatio" label="R&D占比(%)" min-width="120" sortable />
           <el-table-column
             prop="highTechEnterpriseCount"
             label="高新技术企业(家)"
-            width="160"
+            min-width="160"
             sortable
           />
-          <el-table-column prop="patentCount" label="专利授权量(件)" width="140" sortable />
-          <el-table-column prop="techTradeAmount" label="技术交易额(亿元)" width="150" sortable />
+          <el-table-column prop="patentCount" label="专利授权量(件)" min-width="140" sortable />
+          <el-table-column
+            prop="techTradeAmount"
+            label="技术交易额(亿元)"
+            min-width="150"
+            sortable
+          />
           <el-table-column
             prop="innovationPlatformCount"
             label="创新平台(个)"
-            width="130"
+            min-width="130"
             sortable
           />
-          <el-table-column prop="rdTalentCount" label="研发人员(万人)" width="130" sortable />
-          <el-table-column prop="innovationIndex" label="创新指数" width="110" sortable />
+          <el-table-column prop="rdTalentCount" label="研发人员(万人)" min-width="130" sortable />
+          <el-table-column prop="innovationIndex" label="创新指数" min-width="110" sortable />
         </el-table>
       </div>
     </template>
