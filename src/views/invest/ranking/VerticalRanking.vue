@@ -11,7 +11,7 @@
     />
 
     <div v-loading="loading" class="ranking-grid">
-      <el-card v-for="item in rankingList" :key="item.id" shadow="hover" class="ranking-card">
+      <el-card v-for="item in pagedList" :key="item.id" shadow="hover" class="ranking-card">
         <div class="ranking-card__header">
           <span class="ranking-card__name">{{ item.name }}</span>
           <el-tag :type="categoryTag(item.category) as any" size="small">
@@ -72,13 +72,14 @@
     <PaginationBar
       :current="pagination.current"
       :total="pagination.total"
+      :page-size="pagination.pageSize"
       @change="handlePageChange"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import SearchFilterBar from '@/components/common/SearchFilterBar.vue'
 import PaginationBar from '@/components/common/PaginationBar.vue'
@@ -130,6 +131,11 @@ const searchKeyword = ref('')
 const filterValues = ref<Record<string, unknown>>({})
 
 const pagination = reactive({ current: 1, total: 0, pageSize: 20 })
+
+const pagedList = computed(() => {
+  const start = (pagination.current - 1) * pagination.pageSize
+  return rankingList.value.slice(start, start + pagination.pageSize)
+})
 
 function categoryLabel(cat: RankingCategory) {
   const map: Record<RankingCategory, string> = { industry: '行业', regional: '区域', scale: '规模' }

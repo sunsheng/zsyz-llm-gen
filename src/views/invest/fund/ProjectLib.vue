@@ -11,7 +11,7 @@
     />
 
     <div v-loading="loading" class="content-card">
-      <el-table :data="tableData" stripe border style="width: 100%">
+      <el-table :data="pagedData" stripe border style="width: 100%">
         <el-table-column prop="name" label="项目名称" min-width="160" />
         <el-table-column prop="industry" label="行业" width="120" />
         <el-table-column prop="type" label="类型" width="120" />
@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import SearchFilterBar from '@/components/common/SearchFilterBar.vue'
 import PaginationBar from '@/components/common/PaginationBar.vue'
@@ -104,6 +104,11 @@ const filters: FilterField[] = [
 const loading = ref(false)
 const tableData = ref<InvestProject[]>([])
 const pagination = reactive({ current: 1, total: 0, pageSize: 10 })
+
+const pagedData = computed(() => {
+  const start = (pagination.current - 1) * pagination.pageSize
+  return tableData.value.slice(start, start + pagination.pageSize)
+})
 
 const statusMap: Record<string, { label: string; type: string }> = {
   screening: { label: '筛选', type: 'info' },

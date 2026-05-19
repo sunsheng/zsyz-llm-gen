@@ -54,6 +54,7 @@
           <PaginationBar
             :current="trackPagination.current"
             :total="trackPagination.total"
+            :page-size="trackPagination.pageSize"
             @change="handleTrackPageChange"
           />
         </div>
@@ -94,6 +95,7 @@
           <PaginationBar
             :current="reportPagination.current"
             :total="reportPagination.total"
+            :page-size="reportPagination.pageSize"
             @change="handleReportPageChange"
           />
         </div>
@@ -281,8 +283,9 @@ function handleTrackReset() {
   applyTrackFilters()
 }
 
-function handleTrackPageChange(page: number) {
-  trackPagination.current = page
+function handleTrackPageChange(current: number, pageSize: number) {
+  trackPagination.current = current
+  trackPagination.pageSize = pageSize
   applyTrackFilters()
 }
 
@@ -320,8 +323,9 @@ function handleReportReset() {
   applyReportFilters()
 }
 
-function handleReportPageChange(page: number) {
-  reportPagination.current = page
+function handleReportPageChange(current: number, pageSize: number) {
+  reportPagination.current = current
+  reportPagination.pageSize = pageSize
   applyReportFilters()
 }
 

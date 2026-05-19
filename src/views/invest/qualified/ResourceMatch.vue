@@ -11,7 +11,7 @@
     />
 
     <div v-loading="loading" class="content-card">
-      <el-table :data="filteredList" stripe border style="width: 100%">
+      <el-table :data="pagedList" stripe border style="width: 100%">
         <el-table-column prop="enterpriseName" label="企业名称" min-width="160" />
         <el-table-column label="资质类型" width="100">
           <template #default="{ row }">
@@ -107,6 +107,11 @@ const filteredList = computed(() => {
     list = list.filter((item) => item.qualificationType === filterValues.qualificationType)
   }
   return list
+})
+
+const pagedList = computed(() => {
+  const start = (pagination.current - 1) * pagination.pageSize
+  return filteredList.value.slice(start, start + pagination.pageSize)
 })
 
 function qualTypeLabel(type: QualificationType) {

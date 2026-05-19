@@ -7,8 +7,6 @@
       :total="total"
       layout="total, sizes, prev, pager, next, jumper"
       background
-      @size-change="handleChange"
-      @current-change="handleChange"
     />
   </div>
 </template>
@@ -40,10 +38,6 @@ const pageSizeModel = computed({
   get: () => props.pageSize,
   set: (val) => emit('change', 1, val),
 })
-
-function handleChange() {
-  emit('change', currentPage.value, pageSizeModel.value)
-}
 </script>
 
 <style lang="scss" scoped>
