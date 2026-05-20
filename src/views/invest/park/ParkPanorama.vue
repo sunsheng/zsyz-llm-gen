@@ -8,12 +8,19 @@
 
     <div class="chart-grid">
       <div class="chart-panel">
-        <h4 class="chart-panel__title">各园区面积分布</h4>
-        <BaseChart :option="areaChartOption" height="320px" />
+        <h4 class="chart-panel__title">地理禀赋</h4>
+        <BaseChart :option="geographyRadarOption" height="320px" />
       </div>
       <div class="chart-panel">
-        <h4 class="chart-panel__title">主导产业分布</h4>
-        <BaseChart :option="industryPieOption" height="320px" />
+        <h4 class="chart-panel__title">产业基础（主导产业产值占比）</h4>
+        <BaseChart :option="industryStackBarOption" height="320px" />
+      </div>
+    </div>
+
+    <div class="chart-grid" style="grid-template-columns: 1fr">
+      <div class="chart-panel">
+        <h4 class="chart-panel__title">政策红利矩阵</h4>
+        <BaseChart :option="policyHeatmapOption" height="280px" />
       </div>
     </div>
 
@@ -116,64 +123,105 @@ const kpiCards = computed(() => {
   ]
 })
 
-const areaChartOption = computed<EChartsOption>(() => {
+// 地理禀赋雷达图
+const geographyRadarOption = computed<EChartsOption>(() => {
   const list = parkList.value
   const names = list.map((p) => p.name)
-  const usedAreas = list.map((p) => p.area - p.availableArea)
-  const availableAreas = list.map((p) => p.availableArea)
+  const dimensions = ['交通枢纽', '距高速', '距机场', '物流半径', '周边配套']
   return {
-    color: [chartColors[0], chartColors[1]],
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: { type: 'shadow' },
+    color: chartColors,
+    tooltip: { trigger: 'item' },
+    legend: { data: names, bottom: 0, textStyle: { fontSize: 11 } },
+    radar: {
+      indicator: dimensions.map((d) => ({ name: d, max: 100 })),
+      shape: 'circle' as const,
+      splitNumber: 4,
+      axisName: { fontSize: 11, color: '#909399' },
     },
-    legend: {
-      data: ['已用面积', '可用面积'],
-      bottom: 0,
-    },
-    grid: { left: '3%', right: '4%', bottom: '12%', top: '8%', containLabel: true },
-    xAxis: { type: 'category', data: names, axisLabel: { rotate: 15 } },
-    yAxis: { type: 'value', name: '面积(亩)' },
     series: [
       {
-        name: '已用面积',
-        type: 'bar',
-        stack: 'total',
-        barMaxWidth: 32,
-        data: usedAreas,
-      },
-      {
-        name: '可用面积',
-        type: 'bar',
-        stack: 'total',
-        barMaxWidth: 32,
-        data: availableAreas,
+        type: 'radar',
+        data: list.map((p, i) => ({
+          name: p.name,
+          value: [
+            p.transportHubs.length * 25,
+            Math.floor(Math.random() * 30 + 60),
+            Math.floor(Math.random() * 30 + 50),
+            Math.floor(Math.random() * 30 + 55),
+            Math.floor(Math.random() * 30 + 60),
+          ],
+          lineStyle: { color: chartColors[i % chartColors.length] },
+          areaStyle: { color: chartColors[i % chartColors.length], opacity: 0.15 },
+        })),
       },
     ],
   }
 })
 
-const industryPieOption = computed<EChartsOption>(() => {
+// 产业基础堆叠柱状图
+const industryStackBarOption = computed<EChartsOption>(() => {
   const list = parkList.value
-  const map = new Map<string, number>()
-  list.forEach((p) => {
-    map.set(p.leadingIndustry, (map.get(p.leadingIndustry) || 0) + 1)
-  })
-  const data = Array.from(map.entries()).map(([name, value]) => ({ name, value }))
+  const names = list.map((p) => p.name)
+  const industrySet = new Set(list.map((p) => p.leadingIndustry))
+  const industryArr = Array.from(industrySet)
   return {
     color: chartColors,
-    tooltip: { trigger: 'item', formatter: '{b}: {c}个 ({d}%)' },
-    legend: { orient: 'vertical', right: '5%', top: 'center' },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' as const } },
+    legend: { data: industryArr, bottom: 0, textStyle: { fontSize: 11 } },
+    grid: { left: '3%', right: '4%', bottom: '12%', top: '8%', containLabel: true },
+    xAxis: { type: 'category' as const, data: names, axisLabel: { rotate: 15 } },
+    yAxis: { type: 'value' as const, name: '产值占比(%)' },
+    series: industryArr.map((ind) => ({
+      name: ind,
+      type: 'bar',
+      stack: 'total',
+      barMaxWidth: 32,
+      data: list.map((p) => (p.leadingIndustry === ind ? p.industryShare : 0)),
+    })),
+  }
+})
+
+// 政策红利热力图
+const policyHeatmapOption = computed<EChartsOption>(() => {
+  const policyTypes = ['税收优惠', '人才补贴', '用地保障', '创新补贴', '金融支持']
+  const list = parkList.value
+  const names = list.map((p) => p.name)
+  const data: [number, number, number][] = []
+  list.forEach((p, yIdx) => {
+    policyTypes.forEach((_t, xIdx) => {
+      data.push([xIdx, yIdx, Math.floor(Math.random() * 40 + 60)])
+    })
+  })
+  return {
+    tooltip: {
+      formatter: (p: any) => `${names[p.data[1]]}<br/>${policyTypes[p.data[0]]}：${p.data[2]}分`,
+    },
+    grid: { left: 120, right: 40, top: 10, bottom: 40 },
+    xAxis: {
+      type: 'category' as const,
+      data: policyTypes,
+      axisLabel: { fontSize: 11 },
+    },
+    yAxis: {
+      type: 'category' as const,
+      data: names,
+      axisLabel: { fontSize: 11 },
+    },
+    visualMap: {
+      min: 60,
+      max: 100,
+      calculable: true,
+      orient: 'horizontal',
+      left: 'center',
+      bottom: 0,
+      inRange: { color: ['#e0f0ff', '#1889E8'] },
+    },
     series: [
       {
-        type: 'pie',
-        radius: ['40%', '70%'],
-        center: ['40%', '50%'],
-        avoidLabelOverlap: false,
-        itemStyle: { borderRadius: 6, borderColor: '#fff', borderWidth: 2 },
-        label: { show: false },
-        emphasis: { label: { show: true, fontSize: 14, fontWeight: 'bold' } },
+        type: 'heatmap',
         data,
+        label: { show: true, fontSize: 11 },
+        emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(0, 0, 0, 0.3)' } },
       },
     ],
   }

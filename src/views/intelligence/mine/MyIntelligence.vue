@@ -6,6 +6,28 @@
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />
     </div>
 
+    <div class="region-card">
+      <h4 class="region-card__title">区域概况 — 凯州新城</h4>
+      <div class="region-card__grid">
+        <div class="region-card__item">
+          <span class="region-card__label">所属区域</span>
+          <span class="region-card__value">德阳·凯州新城</span>
+        </div>
+        <div class="region-card__item">
+          <span class="region-card__label">主导产业</span>
+          <span class="region-card__value">高端装备制造、新材料、电子信息</span>
+        </div>
+        <div class="region-card__item">
+          <span class="region-card__label">企业情报</span>
+          <span class="region-card__value region-card__value--primary">32条</span>
+        </div>
+        <div class="region-card__item">
+          <span class="region-card__label">风险预警</span>
+          <span class="region-card__value region-card__value--danger">5条</span>
+        </div>
+      </div>
+    </div>
+
     <el-tabs v-model="activeTab" class="content-tabs">
       <el-tab-pane label="情报追踪" name="track">
         <div class="content-card">
@@ -28,9 +50,12 @@
             />
             <el-table-column prop="trackType" label="追踪类型" width="110">
               <template #default="{ row }">
-                <el-tag :type="trackTypeMap[row.trackType]" size="small">
-                  {{ row.trackType }}
-                </el-tag>
+                <div style="display: flex; flex-wrap: wrap; gap: 4px">
+                  <el-tag :type="trackTypeMap[row.trackType]" size="small">
+                    {{ row.trackType }}
+                  </el-tag>
+                  <el-tag v-if="row.riskWarning" type="danger" size="small"> 风险预警 </el-tag>
+                </div>
               </template>
             </el-table-column>
             <el-table-column prop="status" label="状态" width="90">
@@ -44,6 +69,23 @@
               </template>
             </el-table-column>
             <el-table-column prop="updateTime" label="更新时间" width="120" />
+            <el-table-column
+              prop="regionFeature"
+              label="区域特点"
+              min-width="120"
+              show-overflow-tooltip
+            />
+            <el-table-column
+              prop="riskWarning"
+              label="风险预警"
+              min-width="120"
+              show-overflow-tooltip
+            >
+              <template #default="{ row }">
+                <span v-if="row.riskWarning" style="color: #f2637b">{{ row.riskWarning }}</span>
+                <span v-else style="color: #4ecb73">暂无风险</span>
+              </template>
+            </el-table-column>
             <el-table-column label="操作" width="120" fixed="right">
               <template #default="{ row }">
                 <el-button type="primary" link size="small" @click="handleViewTrack(row)"
@@ -118,6 +160,12 @@
         <el-descriptions-item label="状态">{{ trackDetailData.status }}</el-descriptions-item>
         <el-descriptions-item label="更新时间">{{
           trackDetailData.updateTime
+        }}</el-descriptions-item>
+        <el-descriptions-item label="区域特点">{{
+          trackDetailData.regionFeature || '—'
+        }}</el-descriptions-item>
+        <el-descriptions-item label="风险预警">{{
+          trackDetailData.riskWarning || '暂无风险'
         }}</el-descriptions-item>
         <el-descriptions-item label="进度" :span="2">
           <el-progress :percentage="trackDetailData.progress" :stroke-width="8" />
@@ -440,6 +488,44 @@ onMounted(() => {
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   margin-bottom: 20px;
+}
+.region-card {
+  padding: 20px;
+  margin-bottom: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+.region-card__title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+.region-card__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.region-card__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.region-card__label {
+  font-size: 13px;
+  color: $text-secondary;
+}
+.region-card__value {
+  font-size: 15px;
+  font-weight: 600;
+  color: $text-primary;
+}
+.region-card__value--primary {
+  color: #1889e8;
+}
+.region-card__value--danger {
+  color: #f2637b;
 }
 .content-tabs {
   :deep(.el-tabs__content) {

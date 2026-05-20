@@ -1,54 +1,12 @@
 // 企业数据 Mock 工厂
 import type { Enterprise, EnterpriseListItem, EnterpriseDetail } from '@/api/types/enterprise'
+import { companyNames, industries } from './shared-data'
 
-const industries = [
-  '高端装备制造',
-  '新材料',
-  '生物医药',
-  '电子信息',
-  '新能源',
-  '节能环保',
-  '数字创意',
-  '现代服务业',
-]
 const tags = ['高新技术企业', '专精特新', '上市公司', '独角兽', '瞪羚企业', '科技型中小企业']
 const cities = ['德阳市', '成都市', '绵阳市', '宜宾市', '泸州市', '南充市', '达州市', '乐山市']
 const scales: Enterprise['scale'][] = ['large', 'medium', 'small', 'micro']
 const statuses: Enterprise['status'][] = ['operating', 'revoked', 'moved', 'dissolved']
 const qualifiers = ['ISO9001', 'ISO14001', 'CMMI5', 'IATF16949', '知识产权贯标', '两化融合贯标']
-
-const companyNames = [
-  '华创新材料科技有限公司',
-  '东方精密制造股份有限公司',
-  '博远生物医药集团有限公司',
-  '天域半导体科技有限公司',
-  '绿能新能源股份有限公司',
-  '中科智联信息技术有限公司',
-  '鼎盛环保科技有限公司',
-  '创想数字技术有限公司',
-  '恒达装备制造股份有限公司',
-  '瑞丰新材料科技有限公司',
-  '恒宇光电科技有限公司',
-  '昌盛药业集团有限公司',
-  '芯源集成电路有限公司',
-  '亿能动力电池有限公司',
-  '安泰环保设备有限公司',
-  '智汇信息技术有限公司',
-  '云帆数据科技有限公司',
-  '铭远精密仪器有限公司',
-  '盛达新材料有限公司',
-  '宏图半导体有限公司',
-  '远景智能科技有限公司',
-  '立讯精密工业有限公司',
-  '华大基因科技有限公司',
-  '大疆创新科技有限公司',
-  '宁德时代新能源有限公司',
-  '比亚迪股份有限公司',
-  '隆基绿能科技有限公司',
-  '药明康德集团有限公司',
-  '迈瑞医疗电子有限公司',
-  '三一重工股份有限公司',
-]
 
 function randomItem<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)]

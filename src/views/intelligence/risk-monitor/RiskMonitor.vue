@@ -14,6 +14,31 @@
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />
     </div>
 
+    <div class="lifecycle-flow">
+      <h4 class="lifecycle-flow__title">招商全生命周期风险</h4>
+      <div class="lifecycle-flow__stages">
+        <template v-for="(stage, idx) in lifecycleStages" :key="stage.name">
+          <div
+            class="lifecycle-stage"
+            :class="{ 'lifecycle-stage--active': activeStage === stage.name }"
+            @click="toggleStage(stage.name)"
+          >
+            <div class="lifecycle-stage__icon">
+              <el-icon :size="24"><component :is="stage.icon" /></el-icon>
+            </div>
+            <div class="lifecycle-stage__info">
+              <span class="lifecycle-stage__name">{{ stage.name }}</span>
+              <span class="lifecycle-stage__risk">{{ stage.riskType }}</span>
+            </div>
+            <span class="lifecycle-stage__count">{{ stage.riskCount }}条</span>
+          </div>
+          <div v-if="idx < lifecycleStages.length - 1" class="lifecycle-flow__arrow">
+            <el-icon :size="20"><ArrowRight /></el-icon>
+          </div>
+        </template>
+      </div>
+    </div>
+
     <div class="chart-grid">
       <div class="chart-panel">
         <h4 class="chart-panel__title">风险趋势</h4>
@@ -77,6 +102,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue'
+import { ArrowRight, Document, TrendCharts, OfficeBuilding, Checked } from '@element-plus/icons-vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import SearchFilterBar from '@/components/common/SearchFilterBar.vue'
 import PaginationBar from '@/components/common/PaginationBar.vue'
@@ -87,6 +113,56 @@ import { fetchTrackList } from '@/api/modules/intelligenceApi'
 import type { IntelligenceTrackItem } from '@/api/mock/intelligence'
 
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
+
+const activeStage = ref('')
+
+const lifecycleStages = computed(() => {
+  const data = allData.value
+  return [
+    {
+      name: '政策评估',
+      riskType: '政策风险',
+      riskCount: data.filter((d) => d.trackType === '政策变化').length,
+      icon: Document,
+    },
+    {
+      name: '市场筛选',
+      riskType: '市场风险',
+      riskCount: data.filter((d) => d.trackType === '竞争情报').length,
+      icon: TrendCharts,
+    },
+    {
+      name: '企业对接',
+      riskType: '企业风险',
+      riskCount: data.filter((d) => d.trackType === '企业动态').length,
+      icon: OfficeBuilding,
+    },
+    {
+      name: '履约跟踪',
+      riskType: '履约风险',
+      riskCount: data.filter((d) => d.trackType === '投资意向').length,
+      icon: Checked,
+    },
+  ]
+})
+
+function toggleStage(stageName: string) {
+  activeStage.value = activeStage.value === stageName ? '' : stageName
+  const stageToType: Record<string, string> = {
+    政策评估: '政策变化',
+    市场筛选: '竞争情报',
+    企业对接: '企业动态',
+    履约跟踪: '投资意向',
+  }
+  if (activeStage.value) {
+    filterValues.value = { ...filterValues.value, trackType: stageToType[activeStage.value] }
+  } else {
+    const { trackType, ...rest } = filterValues.value as any
+    filterValues.value = rest
+  }
+  pagination.current = 1
+  applyFilters()
+}
 
 const riskCategoryMap: Record<string, 'info' | 'primary' | 'success' | 'warning' | 'danger'> = {
   企业动态: 'danger',
@@ -331,6 +407,80 @@ onMounted(() => {
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   margin-bottom: 20px;
+}
+.lifecycle-flow {
+  padding: 20px;
+  margin-bottom: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+.lifecycle-flow__title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+.lifecycle-flow__stages {
+  display: flex;
+  gap: 0;
+  align-items: center;
+  justify-content: center;
+}
+.lifecycle-stage {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 24px;
+  cursor: pointer;
+  background: #f5f7fa;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+.lifecycle-stage:hover {
+  background: #ecf5ff;
+}
+.lifecycle-stage--active {
+  background: #ecf5ff;
+  border-color: #1889e8;
+}
+.lifecycle-stage__icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  color: #1889e8;
+  background: #fff;
+  border-radius: 50%;
+}
+.lifecycle-stage__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.lifecycle-stage__name {
+  font-size: 15px;
+  font-weight: 600;
+  color: $text-primary;
+}
+.lifecycle-stage__risk {
+  font-size: 12px;
+  color: $text-secondary;
+}
+.lifecycle-stage__count {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1889e8;
+  white-space: nowrap;
+}
+.lifecycle-flow__arrow {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  color: #c0c4cc;
 }
 .chart-grid {
   display: grid;

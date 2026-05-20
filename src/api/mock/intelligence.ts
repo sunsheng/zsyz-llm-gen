@@ -162,16 +162,37 @@ const industries = [
   '现代服务业',
 ]
 
+const newsSummaries = [
+  '围绕产业发展核心议题，聚焦技术创新与产业升级，推动区域经济高质量发展。',
+  '多个重点项目集中签约落地，招商引资工作取得新突破，为地方经济注入新动能。',
+  '产业链上下游协同创新加速，关键核心技术攻关取得重要进展。',
+  '政策红利持续释放，营商环境优化成效显著，企业投资信心增强。',
+  '绿色低碳转型步伐加快，新能源产业蓬勃发展，产业结构持续优化。',
+  '数字化转型深入推进，智能制造水平显著提升，新业态新模式涌现。',
+  '人才引进培育力度加大，创新平台建设成效显现，科技成果加速转化。',
+  '区域协同发展态势良好，产业转移承接有序推进，集群效应日益凸显。',
+  '专精特新企业培育成效显著，中小企业创新活力持续迸发。',
+  '开放合作水平不断提升，国际产能合作稳步推进，外贸结构持续优化。',
+]
+
 export function getMockNewsList(count = 10): IntelligenceNews[] {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `news-${i + 1}`,
-    title: newsTitles[i % newsTitles.length],
-    source: ['经济日报', '科技日报', '四川日报', '中国工业报', '新华网'][i % 5],
-    category: industries[i % industries.length],
-    publishDate: `2025-${String(Math.floor(Math.random() * 3 + 1)).padStart(2, '0')}-${String(Math.floor(Math.random() * 28 + 1)).padStart(2, '0')}`,
-    summary: '围绕产业发展核心议题，聚焦技术创新与产业升级，推动区域经济高质量发展。',
-    importance: (['high', 'medium', 'low'] as const)[i % 3],
-  }))
+  const seen = new Set<string>()
+  return Array.from({ length: count }, (_, i) => {
+    let title = newsTitles[i % newsTitles.length]
+    if (seen.has(title)) {
+      title = `${title}（第${Math.floor(i / newsTitles.length) + 1}期）`
+    }
+    seen.add(title)
+    return {
+      id: `news-${i + 1}`,
+      title,
+      source: ['经济日报', '科技日报', '四川日报', '中国工业报', '新华网'][i % 5],
+      category: industries[i % industries.length],
+      publishDate: `2025-${String(Math.floor(Math.random() * 3 + 1)).padStart(2, '0')}-${String(Math.floor(Math.random() * 28 + 1)).padStart(2, '0')}`,
+      summary: newsSummaries[i % newsSummaries.length],
+      importance: (['high', 'medium', 'low'] as const)[i % 3],
+    }
+  })
 }
 
 export function getMockProjectList(count = 8): IntelligenceProject[] {
@@ -288,7 +309,29 @@ export interface IntelligenceTrackItem {
   status: '进行中' | '已完成' | '已搁置'
   progress: number
   keyEvents: string[]
+  regionFeature?: string
+  riskWarning?: string
 }
+
+const regionFeatures = [
+  '高端装备制造产业集群，毗邻成渝经济圈',
+  '新材料产业园区，配套设施完善',
+  '电子信息产业基地，人才资源丰富',
+  '新能源产业集聚区，政策扶持力度大',
+  '生物医药创新示范区，研发平台齐全',
+  '数字经济核心区，营商环境优越',
+]
+
+const riskWarnings = [
+  '行业周期下行，市场波动风险较高',
+  '政策补贴退坡，企业投资意愿降低',
+  '企业经营异常，信用评级下调',
+  '投资进度延迟，配套承诺未兑现',
+  '技术替代威胁加剧，竞争力下降',
+  '',
+  '',
+  '',
+]
 
 export function getMockTrackList(count = 6): IntelligenceTrackItem[] {
   return Array.from({ length: count }, (_, i) => ({
@@ -302,6 +345,8 @@ export function getMockTrackList(count = 6): IntelligenceTrackItem[] {
       0,
       Math.floor(Math.random() * 3 + 1),
     ),
+    regionFeature: regionFeatures[i % regionFeatures.length],
+    riskWarning: riskWarnings[i % riskWarnings.length],
   }))
 }
 

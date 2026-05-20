@@ -1,4 +1,5 @@
 // 企业监测 Mock 数据工厂
+import { companyNames, industries } from './shared-data'
 
 export interface MonitorKpi {
   key: string
@@ -33,38 +34,6 @@ export interface RankingItem {
   city: string
 }
 
-const industries = [
-  '清洁能源装备',
-  '先进材料',
-  '电子信息',
-  '高端装备制造',
-  '生物医药',
-  '新能源',
-  '节能环保',
-  '现代服务业',
-]
-const companyNames = [
-  '东方电机有限公司',
-  '中国二重集团',
-  '国机重装',
-  '华创新材料科技',
-  '东方精密制造',
-  '博远生物医药',
-  '天域半导体',
-  '绿能新能源',
-  '中科智联信息',
-  '鼎盛环保科技',
-  '创想数字技术',
-  '恒达装备制造',
-  '瑞丰新材料',
-  '恒宇光电科技',
-  '昌盛药业集团',
-  '芯源集成电路',
-  '亿能动力电池',
-  '安泰环保设备',
-  '智汇信息技术',
-  '云帆数据科技',
-]
 const cities = ['德阳市', '成都市', '绵阳市', '宜宾市', '泸州市', '南充市', '达州市', '乐山市']
 
 export function getMockMonitorKpi(): MonitorKpi[] {
@@ -613,6 +582,8 @@ export interface RankingIntegrationItem {
   category: string
   period: string
   industry: string
+  riskLevel: 'low' | 'medium' | 'high'
+  valueLinkage: string
 }
 
 const rankingSources = [
@@ -625,6 +596,8 @@ const rankingSources = [
 ]
 const rankingCategories = ['综合实力', '行业排名', '区域排名', '专项评价']
 
+const valueLinkageOptions = ['强关联', '中等关联', '弱关联', '无关联']
+
 export function getMockRankingIntegrationList(count = 30): RankingIntegrationItem[] {
   return Array.from({ length: count }, (_, i) => ({
     id: `ri-${i + 1}`,
@@ -634,6 +607,8 @@ export function getMockRankingIntegrationList(count = 30): RankingIntegrationIte
     category: rankingCategories[i % rankingCategories.length],
     period: `2025-Q${(i % 4) + 1}`,
     industry: industries[i % industries.length],
+    riskLevel: (['low', 'medium', 'high'] as const)[i % 3],
+    valueLinkage: valueLinkageOptions[i % valueLinkageOptions.length],
   }))
 }
 
@@ -646,6 +621,7 @@ export interface FluctuationWarningItem {
   reason: string
   rankChange: number
   industry: string
+  triggerRule: '横向波动' | '纵向波动' | '双向波动'
 }
 
 const warningReasons = [
@@ -658,16 +634,29 @@ const warningReasons = [
 ]
 
 export function getMockFluctuationWarningList(count = 20): FluctuationWarningItem[] {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `fw-${i + 1}`,
-    name: companyNames[i % companyNames.length],
-    horizontalFluctuation: Math.floor(Math.random() * 40 + 5),
-    verticalFluctuation: Math.floor(Math.random() * 30 + 5),
-    warningLevel: (['low', 'medium', 'high', 'critical'] as const)[i % 4],
-    reason: warningReasons[i % warningReasons.length],
-    rankChange: Math.floor(Math.random() * 30 - 15),
-    industry: industries[i % industries.length],
-  }))
+  return Array.from({ length: count }, (_, i) => {
+    const hf = Math.floor(Math.random() * 40 + 5)
+    const vf = Math.floor(Math.random() * 30 + 5)
+    const triggerRule =
+      hf >= 20 && vf >= 15
+        ? '双向波动'
+        : hf >= 20
+          ? '横向波动'
+          : vf >= 15
+            ? '纵向波动'
+            : (['横向波动', '纵向波动'] as const)[i % 2]
+    return {
+      id: `fw-${i + 1}`,
+      name: companyNames[i % companyNames.length],
+      horizontalFluctuation: hf,
+      verticalFluctuation: vf,
+      warningLevel: (['low', 'medium', 'high', 'critical'] as const)[i % 4],
+      reason: warningReasons[i % warningReasons.length],
+      rankChange: Math.floor(Math.random() * 30 - 15),
+      industry: industries[i % industries.length],
+      triggerRule,
+    }
+  })
 }
 
 // ===== 10.4 企业筛选器 =====
@@ -689,6 +678,11 @@ export interface FilterEnterpriseItem {
   chainOwnerRelated?: string
   relationType?: string
   complianceLevel?: string
+  taxAmount: number
+  taxVolatility: number
+  taxStability: '稳定' | '一般' | '异常'
+  lng: number
+  lat: number
 }
 
 const scaleOptions = ['大型', '中型', '小型', '微型']
@@ -696,6 +690,8 @@ const statusOptions = ['运营中', '已迁出', '已注销', '休眠']
 const tagOptions = ['高新技术企业', '专精特新', '上市公司', '绿色工厂', '独角兽', '瞪羚企业']
 const complianceLevels = ['优秀', '良好', '一般', '不合规']
 const relationTypes = ['一级供应商', '一级客户', '技术合作方', '控股子公司']
+
+const taxStabilityOptions: ('稳定' | '一般' | '异常')[] = ['稳定', '一般', '异常']
 
 export function getMockFilterEnterpriseList(count = 30): FilterEnterpriseItem[] {
   return Array.from({ length: count }, (_, i) => ({
@@ -715,6 +711,11 @@ export function getMockFilterEnterpriseList(count = 30): FilterEnterpriseItem[] 
     chainOwnerRelated: i % 3 === 0 ? companyNames[i % 3] : undefined,
     relationType: i % 3 === 0 ? relationTypes[i % relationTypes.length] : undefined,
     complianceLevel: complianceLevels[i % complianceLevels.length],
+    taxAmount: Math.floor(Math.random() * 50000 + 100),
+    taxVolatility: +(Math.random() * 30 + 5).toFixed(1),
+    taxStability: taxStabilityOptions[i % 3],
+    lng: 104.39 + Math.random() * 0.5,
+    lat: 30.75 + Math.random() * 0.35,
   }))
 }
 
@@ -774,6 +775,7 @@ export interface MultiDimensionPortraitData {
   branches: string[]
   investments: { name: string; ratio: number }[]
   qualifications: { name: string; status: string; validUntil: string }[]
+  coordinates?: { lng: number; lat: number }
 }
 
 const shareholderTypes = ['国有资本', '民营资本', '外资', '混合所有制']
@@ -811,6 +813,10 @@ export function getMockMultiDimensionPortrait(id = 'ent-1'): MultiDimensionPortr
       status: qualStatuses[Math.floor(Math.random() * qualStatuses.length)],
       validUntil: `2026-${String(Math.floor(Math.random() * 12 + 1)).padStart(2, '0')}`,
     })),
+    coordinates: {
+      lng: 104.3 + Math.random() * 0.8,
+      lat: 30.8 + Math.random() * 0.6,
+    },
   }
 }
 
@@ -820,6 +826,8 @@ export interface ChainRelationNode {
   category: 'core' | 'supplier' | 'customer' | 'partner'
   industry: string
   controlIndex: number
+  orderShare?: number
+  patentCitations?: number
 }
 
 export interface ChainRelationEdge {
@@ -847,6 +855,8 @@ export function getMockChainRelationData(): ChainRelationData {
       category: 'core',
       industry: industries[0],
       controlIndex: 72,
+      orderShare: 35,
+      patentCitations: 128,
     },
   ]
   const edges: ChainRelationEdge[] = []
@@ -861,6 +871,8 @@ export function getMockChainRelationData(): ChainRelationData {
       category,
       industry: industries[(i + 1) % industries.length],
       controlIndex: Math.floor(Math.random() * 50 + 20),
+      orderShare: Math.floor(Math.random() * 30 + 5),
+      patentCitations: Math.floor(Math.random() * 80 + 5),
     })
     edges.push({
       source: category === 'supplier' ? nodeId : coreId,

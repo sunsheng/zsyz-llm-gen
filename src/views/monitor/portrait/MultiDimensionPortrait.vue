@@ -2,6 +2,24 @@
   <div class="page-container">
     <PageHeader title="多维度画像" subtitle="企业多维度综合画像" />
 
+    <div class="enterprise-selector content-card">
+      <span class="selector-label">选择企业：</span>
+      <el-select
+        v-model="selectedEnterpriseId"
+        placeholder="请选择企业"
+        filterable
+        style="width: 320px"
+        @change="handleEnterpriseChange"
+      >
+        <el-option
+          v-for="ent in enterpriseOptions"
+          :key="ent.id"
+          :label="ent.name"
+          :value="ent.id"
+        />
+      </el-select>
+    </div>
+
     <div class="portrait-layout">
       <!-- 左侧面板 -->
       <div class="portrait-side">
@@ -60,6 +78,20 @@
             >
               {{ tag }}
             </el-tag>
+          </div>
+        </div>
+
+        <div v-if="portrait.coordinates" class="info-card">
+          <h4 class="card-title">地理坐标</h4>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">经度</span>
+              <span class="info-value">{{ portrait.coordinates.lng.toFixed(4) }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">纬度</span>
+              <span class="info-value">{{ portrait.coordinates.lat.toFixed(4) }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -139,8 +171,11 @@
 import { ref, onMounted } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
-import { fetchMultiDimensionPortrait } from '@/api/modules/monitorApi'
+import { fetchMultiDimensionPortrait, fetchFilterEnterpriseList } from '@/api/modules/monitorApi'
 import type { MultiDimensionPortraitData } from '@/api/mock/monitor'
+
+const selectedEnterpriseId = ref('')
+const enterpriseOptions = ref<Array<{ id: string; name: string }>>([])
 
 const portrait = ref<MultiDimensionPortraitData>({
   id: '',
@@ -158,12 +193,18 @@ const portrait = ref<MultiDimensionPortraitData>({
   branches: [],
   investments: [],
   qualifications: [],
+  coordinates: undefined,
 })
 
 const scoreGaugeOption = ref({})
 
-async function loadData() {
-  const data = (await fetchMultiDimensionPortrait('ent-1')) as MultiDimensionPortraitData
+async function handleEnterpriseChange(id: string) {
+  if (!id) return
+  await loadPortrait(id)
+}
+
+async function loadPortrait(id: string) {
+  const data = (await fetchMultiDimensionPortrait(id)) as MultiDimensionPortraitData
   portrait.value = data
 
   const score = data.healthScore
@@ -198,12 +239,35 @@ async function loadData() {
   }
 }
 
-onMounted(() => {
-  loadData()
+onMounted(async () => {
+  try {
+    const list = (await fetchFilterEnterpriseList(20)) as Array<{ id: string; name: string }>
+    enterpriseOptions.value = list.map((e) => ({ id: e.id, name: e.name }))
+    if (enterpriseOptions.value.length > 0) {
+      selectedEnterpriseId.value = enterpriseOptions.value[0].id
+      await loadPortrait(selectedEnterpriseId.value)
+    }
+  } catch {
+    // fallback
+    await loadPortrait('ent-1')
+  }
 })
 </script>
 
 <style lang="scss" scoped>
+.enterprise-selector {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+.selector-label {
+  font-size: 14px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+  white-space: nowrap;
+}
 .page-container {
   padding: 20px;
 }

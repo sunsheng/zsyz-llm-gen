@@ -57,6 +57,22 @@
             </el-tag>
           </template>
         </el-table-column>
+        <el-table-column prop="taxStability" label="纳税稳定性" width="110">
+          <template #default="{ row }">
+            <el-tag
+              :type="
+                row.taxStability === '稳定'
+                  ? 'success'
+                  : row.taxStability === '一般'
+                    ? 'warning'
+                    : 'danger'
+              "
+              size="small"
+            >
+              {{ row.taxStability }}
+            </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="tags" label="资质标签" min-width="160">
           <template #default="{ row }">
             <el-tag v-for="tag in row.tags" :key="tag" size="small" type="info" style="margin: 2px">
@@ -120,6 +136,16 @@ const filters: FilterField[] = [
       { label: '低(<2%)', value: 'low' },
     ],
   },
+  {
+    key: 'taxStability',
+    label: '纳税稳定性',
+    type: 'select',
+    options: [
+      { label: '稳定', value: '稳定' },
+      { label: '一般', value: '一般' },
+      { label: '异常', value: '异常' },
+    ],
+  },
 ]
 
 const loading = ref(false)
@@ -154,6 +180,9 @@ function applyFilters() {
       if (level === 'medium') return item.rdRatio >= 2 && item.rdRatio < 5
       return item.rdRatio < 2
     })
+  }
+  if (filterValues.value.taxStability) {
+    filtered = filtered.filter((item) => item.taxStability === filterValues.value.taxStability)
   }
 
   pagination.total = filtered.length
