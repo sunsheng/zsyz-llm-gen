@@ -35,16 +35,39 @@
       />
     </div>
 
-    <!-- ChartGrid 2列 -->
-    <div v-loading="loading" class="chart-grid">
-      <div class="chart-panel">
-        <h4 class="chart-panel__title">各环节集群潜力</h4>
-        <BaseChart :option="barOption" height="360px" />
-      </div>
-      <div class="chart-panel">
-        <h4 class="chart-panel__title">协同度分布</h4>
-        <BaseChart :option="pieOption" height="360px" />
-      </div>
+    <!-- 产业链缺口热力图 -->
+    <div v-loading="loading" class="chart-panel">
+      <h4 class="chart-panel__title">产业链缺口热力图</h4>
+      <BaseChart :option="gapHeatmapOption" height="360px" />
+    </div>
+
+    <!-- 补链企业推荐表格 -->
+    <div class="table-panel">
+      <h4 class="chart-panel__title">补链企业推荐</h4>
+      <el-table :data="recommendTableData" stripe style="width: 100%">
+        <el-table-column prop="segment" label="缺口环节" min-width="120" />
+        <el-table-column prop="gapLevel" label="缺口程度" width="100">
+          <template #default="{ row }">
+            <el-tag :type="gapLevelTag(row.gapLevel)" size="small">{{
+              gapLevelLabel(row.gapLevel)
+            }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="enterprise" label="推荐企业" min-width="160" />
+        <el-table-column prop="industry" label="所属行业" width="130" />
+        <el-table-column prop="matchScore" label="匹配度" width="90">
+          <template #default="{ row }">
+            <span
+              :style="{
+                color:
+                  row.matchScore >= 85 ? '#4ECB73' : row.matchScore >= 70 ? '#FBD437' : '#F2637B',
+              }"
+            >
+              {{ row.matchScore }}%
+            </span>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
   </div>
 </template>
@@ -56,12 +79,10 @@ import PageHeader from '@/components/common/PageHeader.vue'
 import StatCard from '@/components/common/StatCard.vue'
 import BaseChart from '@/components/charts/BaseChart.vue'
 import { fetchEcoSynergyItems } from '@/api/modules/investApi'
-import type { EcoSynergyItem } from '@/api/types/invest'
+import type { EcoSynergyItem, Priority } from '@/api/types/invest'
 
 const loading = ref(false)
 const items = ref<EcoSynergyItem[]>([])
-
-const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
 const statData = reactive({
   gapCount: 0,
@@ -69,61 +90,94 @@ const statData = reactive({
   clusterIndex: 0,
 })
 
-// 柱状图: 各环节集群潜力
-const barOption = computed<EChartsOption>(() => {
+// 缺口热力图: 横向柱状图，颜色表示缺口程度
+const gapHeatmapOption = computed<EChartsOption>(() => {
   const names = items.value.map((i) => i.chainGap)
-  const clusterData = items.value.map((i) => i.clusterPotential)
   const synergyData = items.value.map((i) => i.synergyScore)
+  const clusterData = items.value.map((i) => i.clusterPotential)
+  // 缺口程度 = 100 - 协同度
+  const gapData = items.value.map((i) => 100 - i.synergyScore)
+
   return {
-    color: chartColors,
-    tooltip: { trigger: 'axis' },
-    legend: { data: ['集群潜力', '协同度'] },
-    grid: { left: 50, right: 20, top: 40, bottom: 40 },
-    xAxis: { type: 'category', data: names, axisLabel: { rotate: 20 } },
-    yAxis: { type: 'value', max: 100 },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'shadow' },
+    },
+    legend: { data: ['缺口程度', '协同度', '集群潜力'] },
+    grid: { left: 100, right: 30, top: 40, bottom: 30 },
+    xAxis: { type: 'value', max: 100 },
+    yAxis: {
+      type: 'category',
+      data: names,
+      axisLabel: { fontSize: 12 },
+    },
     series: [
       {
-        name: '集群潜力',
+        name: '缺口程度',
         type: 'bar',
-        barMaxWidth: 32,
-        data: clusterData,
+        barMaxWidth: 24,
+        data: gapData.map((val, idx) => ({
+          value: val,
+          itemStyle: {
+            color: val >= 30 ? '#F2637B' : val >= 15 ? '#FBD437' : '#C0C4CC',
+          },
+        })),
       },
       {
         name: '协同度',
         type: 'bar',
-        barMaxWidth: 32,
+        barMaxWidth: 24,
         data: synergyData,
+        itemStyle: { color: '#1889E8' },
+      },
+      {
+        name: '集群潜力',
+        type: 'bar',
+        barMaxWidth: 24,
+        data: clusterData,
+        itemStyle: { color: '#36CBCB' },
       },
     ],
   }
 })
 
-// 饼图: 协同度分布
-const pieOption = computed<EChartsOption>(() => {
-  // 按协同度区间分组
-  const high = items.value.filter((i) => i.synergyScore >= 85).length
-  const medium = items.value.filter((i) => i.synergyScore >= 70 && i.synergyScore < 85).length
-  const low = items.value.filter((i) => i.synergyScore < 70).length
-  const data = [
-    { name: '高协同(≥85)', value: high },
-    { name: '中协同(70-84)', value: medium },
-    { name: '低协同(<70)', value: low },
-  ]
-  return {
-    color: [chartColors[2], chartColors[0], chartColors[4]],
-    tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
-    legend: { orient: 'vertical', right: 10, top: 'center' },
-    series: [
-      {
-        type: 'pie',
-        radius: ['40%', '70%'],
-        center: ['40%', '50%'],
-        data,
-        label: { formatter: '{b}\n{d}%' },
-      },
-    ],
-  }
+// 补链企业推荐表格数据
+interface RecommendRow {
+  segment: string
+  gapLevel: Priority
+  enterprise: string
+  industry: string
+  matchScore: number
+}
+
+const recommendTableData = computed<RecommendRow[]>(() => {
+  const rows: RecommendRow[] = []
+  const industries = ['高端装备制造', '前沿新材料', '数字经济', '新能源', '生物医药']
+  items.value.forEach((item) => {
+    const gapLevel: Priority =
+      item.synergyScore < 70 ? 'urgent' : item.synergyScore < 85 ? 'important' : 'normal'
+    item.recommendedEnterprises.forEach((ent, idx) => {
+      rows.push({
+        segment: item.chainGap,
+        gapLevel,
+        enterprise: ent,
+        industry: industries[idx % industries.length],
+        matchScore: Math.floor(Math.random() * 25 + 75),
+      })
+    })
+  })
+  return rows
 })
+
+function gapLevelLabel(level: Priority) {
+  const map: Record<Priority, string> = { urgent: '紧急', important: '重要', normal: '一般' }
+  return map[level] || level
+}
+
+function gapLevelTag(level: Priority) {
+  const map: Record<Priority, string> = { urgent: 'danger', important: 'warning', normal: 'info' }
+  return map[level] as 'danger' | 'warning' | 'info'
+}
 
 async function loadData() {
   loading.value = true
@@ -161,15 +215,17 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 
-.chart-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
 .chart-panel {
   padding: 20px;
+  margin-bottom: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+
+.table-panel {
+  padding: 20px;
+  margin-bottom: 20px;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;

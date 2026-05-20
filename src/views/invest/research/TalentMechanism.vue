@@ -64,7 +64,8 @@
               v-for="opt in availabilityOptions"
               :key="opt.value"
               class="availability-card"
-              :class="{ 'availability-card--active': currentExpert.availability === opt.value }"
+              :class="{ 'availability-card--active': selectedAvailability === opt.value }"
+              @click="selectAvailability(opt.value)"
             >
               <el-icon :size="24" :color="opt.iconColor"><component :is="opt.icon" /></el-icon>
               <div class="availability-card__text">
@@ -113,6 +114,7 @@ import type { TalentShareItem } from '@/api/types/invest'
 const loading = ref(false)
 const talentItems = ref<TalentShareItem[]>([])
 const selectedId = ref('')
+const selectedAvailability = ref('')
 
 const currentExpert = computed(() => {
   if (!selectedId.value) return null
@@ -159,6 +161,13 @@ function complianceLabel(status: string): string {
 
 function handleSelect() {
   // Expert info is computed from selectedId
+  if (currentExpert.value) {
+    selectedAvailability.value = currentExpert.value.availability
+  }
+}
+
+function selectAvailability(value: string) {
+  selectedAvailability.value = value
 }
 
 async function loadData() {
@@ -167,6 +176,7 @@ async function loadData() {
     talentItems.value = await fetchTalentShareItems()
     if (talentItems.value.length > 0) {
       selectedId.value = talentItems.value[0].id
+      selectedAvailability.value = talentItems.value[0].availability
     }
   } finally {
     loading.value = false
@@ -262,9 +272,14 @@ onMounted(() => {
   align-items: center;
   padding: 14px;
   text-align: center;
+  cursor: pointer;
   border: 1px solid $border-color-lighter;
   border-radius: $radius-base;
   transition: all 200ms ease;
+
+  &:hover {
+    border-color: $color-primary;
+  }
 
   &--active {
     background: #ecf5ff;

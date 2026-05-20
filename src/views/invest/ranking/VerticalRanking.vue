@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, watch, onMounted } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import SearchFilterBar from '@/components/common/SearchFilterBar.vue'
 import PaginationBar from '@/components/common/PaginationBar.vue'
@@ -124,7 +124,7 @@ const filters: FilterField[] = [
 
 const loading = ref(false)
 const detailLoading = ref(false)
-const rankingList = ref<RankingItem[]>([])
+const allData = ref<RankingItem[]>([])
 const enterpriseList = ref<RankingEnterprise[]>([])
 const expandedId = ref<string | null>(null)
 const searchKeyword = ref('')
@@ -132,9 +132,35 @@ const filterValues = ref<Record<string, unknown>>({})
 
 const pagination = reactive({ current: 1, total: 0, pageSize: 20 })
 
+const filteredList = computed(() => {
+  let list = allData.value
+
+  if (searchKeyword.value) {
+    const kw = searchKeyword.value.toLowerCase()
+    list = list.filter((item) => item.name.toLowerCase().includes(kw))
+  }
+
+  const filters = filterValues.value
+  if (filters.category) {
+    list = list.filter((item) => item.category === filters.category)
+  }
+  if (filters.industry) {
+    list = list.filter((item) => item.industry === filters.industry)
+  }
+  if (filters.publishOrg) {
+    list = list.filter((item) => item.publishOrg === filters.publishOrg)
+  }
+
+  return list
+})
+
+watch(filteredList, (list) => {
+  pagination.total = list.length
+})
+
 const pagedList = computed(() => {
   const start = (pagination.current - 1) * pagination.pageSize
-  return rankingList.value.slice(start, start + pagination.pageSize)
+  return filteredList.value.slice(start, start + pagination.pageSize)
 })
 
 function categoryLabel(cat: RankingCategory) {
@@ -161,7 +187,7 @@ async function loadData() {
   loading.value = true
   try {
     const data = await fetchRankingItems(12)
-    rankingList.value = data
+    allData.value = data
     pagination.total = data.length
   } finally {
     loading.value = false
@@ -186,26 +212,22 @@ async function toggleDetail(item: RankingItem) {
 function handleSearch(keyword: string) {
   searchKeyword.value = keyword
   pagination.current = 1
-  loadData()
 }
 
 function handleFilter(filters: Record<string, unknown>) {
   filterValues.value = filters
   pagination.current = 1
-  loadData()
 }
 
 function handleReset() {
   searchKeyword.value = ''
   filterValues.value = {}
   pagination.current = 1
-  loadData()
 }
 
 function handlePageChange(page: number, pageSize: number) {
   pagination.current = page
   pagination.pageSize = pageSize
-  loadData()
 }
 
 onMounted(() => {

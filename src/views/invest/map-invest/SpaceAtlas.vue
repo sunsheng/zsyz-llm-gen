@@ -122,6 +122,8 @@ function drawEdges() {
 
   const markers: any[] = []
   const lines: any[] = []
+  const volumeMarkers: any[] = []
+  const drawnNames = new Set<string>()
 
   displayEdges.value.forEach((edge) => {
     const color = typeColors[edge.type] || '#1889E8'
@@ -137,10 +139,84 @@ function drawEdges() {
     })
     lines.push(line)
 
+    // 端点标记 - from
+    const fromKey = `${edge.from[0]},${edge.from[1]}`
+    if (!drawnNames.has(fromKey) && edge.fromName) {
+      drawnNames.add(fromKey)
+      const fromMarker = new maptalks.Marker(edge.from, {
+        symbol: {
+          markerType: 'ellipse',
+          markerFill: color,
+          markerFillOpacity: 0.9,
+          markerLineColor: '#fff',
+          markerLineWidth: 1,
+          markerWidth: 10,
+          markerHeight: 10,
+          textName: edge.fromName,
+          textSize: 11,
+          textFill: '#333',
+          textHaloFill: '#fff',
+          textHaloRadius: 1,
+          textDx: 14,
+          textDy: -4,
+          textFaceSize: 11,
+        },
+      })
+      markers.push(fromMarker)
+    }
+
+    // 端点标记 - to
+    const toKey = `${edge.to[0]},${edge.to[1]}`
+    if (!drawnNames.has(toKey) && edge.toName) {
+      drawnNames.add(toKey)
+      const toMarker = new maptalks.Marker(edge.to, {
+        symbol: {
+          markerType: 'ellipse',
+          markerFill: color,
+          markerFillOpacity: 0.9,
+          markerLineColor: '#fff',
+          markerLineWidth: 1,
+          markerWidth: 10,
+          markerHeight: 10,
+          textName: edge.toName,
+          textSize: 11,
+          textFill: '#333',
+          textHaloFill: '#fff',
+          textHaloRadius: 1,
+          textDx: 14,
+          textDy: -4,
+          textFaceSize: 11,
+        },
+      })
+      markers.push(toMarker)
+    }
+
+    // 运量标签
+    const midLon = (edge.from[0] + edge.to[0]) / 2
+    const midLat = (edge.from[1] + edge.to[1]) / 2
+    const volMarker = new maptalks.Marker([midLon, midLat], {
+      symbol: {
+        markerType: 'ellipse',
+        markerFill: '#fff',
+        markerFillOpacity: 0.85,
+        markerLineColor: color,
+        markerLineWidth: 1,
+        markerWidth: 4,
+        markerHeight: 4,
+        textName: `${edge.volume}单位`,
+        textSize: 10,
+        textFill: color,
+        textFaceSize: 10,
+        textDy: -10,
+      },
+    })
+    volumeMarkers.push(volMarker)
+
+    // 堵点标记 with InfoWindow
     if (edge.bottleneck && bottleneckVisible.value) {
-      const midLon = (edge.from[0] + edge.to[0]) / 2
-      const midLat = (edge.from[1] + edge.to[1]) / 2
-      const marker = new maptalks.Marker([midLon, midLat], {
+      const bMidLon = midLon + 0.005
+      const bMidLat = midLat + 0.005
+      const bottleneckMarker = new maptalks.Marker([bMidLon, bMidLat], {
         symbol: {
           markerType: 'pin',
           markerFill: '#F2637B',
@@ -148,13 +224,34 @@ function drawEdges() {
           markerHeight: 36,
         },
       })
-      markers.push(marker)
+      // 设置信息弹窗
+      const desc = edge.bottleneckDesc || '该环节存在供应链堵点，需关注'
+      const infoContent = `<div style="padding:8px;min-width:160px;">
+        <div style="font-weight:bold;margin-bottom:4px;color:#F2637B;">堵点预警</div>
+        <div style="font-size:12px;color:#666;margin-bottom:4px;">${edge.fromName} → ${edge.toName}</div>
+        <div style="font-size:12px;color:#333;">${desc}</div>
+      </div>`
+      try {
+        bottleneckMarker.setInfoWindow({
+          title: '堵点信息',
+          content: infoContent,
+          autoPan: true,
+          width: 220,
+        })
+      } catch {
+        // InfoWindow API may vary
+      }
+      markers.push(bottleneckMarker)
     }
   })
 
   if (lines.length) {
     const lineLayer = new maptalks.VectorLayer('edges-lines', lines)
     ;(mapInstance as any).addLayer(lineLayer)
+  }
+  if (volumeMarkers.length) {
+    const volLayer = new maptalks.VectorLayer('edges-volumes', volumeMarkers)
+    ;(mapInstance as any).addLayer(volLayer)
   }
   if (markers.length) {
     const markerLayer = new maptalks.VectorLayer('edges-markers', markers)

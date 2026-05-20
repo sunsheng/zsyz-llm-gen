@@ -43,6 +43,7 @@
               v-for="item in filteredResources"
               :key="item.industryName"
               class="result-item"
+              :class="{ 'is-active': activeIndustry === item.industryName }"
               @click="locateResource(item)"
             >
               <div class="result-item__name">{{ item.industryName }}</div>
@@ -64,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import MaptalksMap from '@/components/map/MaptalksMap.vue'
@@ -75,6 +76,23 @@ import type { MapResourceData } from '@/api/types/invest'
 
 const chartColors = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const resourceTypeIcons: Record<string, string> = {
+  port: '⚓',
+  railway: '🚄',
+  university: '🎓',
+  mineral: '⛏',
+  highway: '🛣',
+}
+
+const resourceTypeLabels: Record<string, string> = {
+  port: '港口',
+  railway: '铁路枢纽',
+  university: '高校/科研',
+  mineral: '矿产',
+  highway: '高速枢纽',
+}
+
 const mapRef = ref()
 const loading = ref(false)
 const resources = ref<MapResourceData[]>([])
@@ -82,8 +100,10 @@ const selectedIndustries = ref<string[]>([])
 const activeMetric = ref<'outputValue' | 'enterpriseCount' | 'patentDensity'>('outputValue')
 const heatmapVisible = ref(true)
 const keyword = ref('')
+const activeIndustry = ref<string | null>(null)
 
 let mapInstance: any = null
+let maptalksLib: any = null
 
 const industryOptions = computed(() => resources.value.map((r) => r.industryName))
 
@@ -105,11 +125,20 @@ const filteredResources = computed(() => {
 })
 
 const legendItems = computed(() => {
-  if (!filteredResources.value.length) return []
-  return filteredResources.value.map((r, i) => ({
-    label: r.industryName,
-    color: chartColors[i % chartColors.length],
-  }))
+  const items: { label: string; color: string }[] = []
+  if (!filteredResources.value.length) return items
+  filteredResources.value.forEach((r, i) => {
+    items.push({ label: r.industryName, color: chartColors[i % chartColors.length] })
+  })
+  // Add key resource types to legend
+  const types = new Set<string>()
+  filteredResources.value.forEach((r) => {
+    r.keyResources?.forEach((kr) => types.add(kr.type))
+  })
+  types.forEach((t) => {
+    items.push({ label: resourceTypeLabels[t] || t, color: '#666' })
+  })
+  return items
 })
 
 function formatMetric(item: MapResourceData) {
@@ -119,52 +148,203 @@ function formatMetric(item: MapResourceData) {
   return val.toString()
 }
 
-function onMapReady(map: any) {
-  mapInstance = map
-  drawMarkers()
+function getMetricWeight(item: MapResourceData): number {
+  const val = item[activeMetric.value]
+  if (activeMetric.value === 'outputValue') return val / 500000
+  if (activeMetric.value === 'enterpriseCount') return val / 230
+  return val / 60
 }
 
-function drawMarkers() {
+function onMapReady(map: any) {
+  mapInstance = map
+  import('maptalks').then((mt) => {
+    maptalksLib = mt
+    drawMarkers()
+  })
+}
+
+function clearLayers() {
   if (!mapInstance) return
-  // Clear existing layers
   try {
     const layers = (mapInstance as any).getLayers?.() || []
     layers.forEach((l: any) => l?.remove?.())
   } catch {
     // ignore
   }
+}
 
-  const maptalks = (window as any).maptalks || {}
-  if (!maptalks.Marker) return
+function drawMarkers() {
+  if (!mapInstance || !maptalksLib) return
+  clearLayers()
 
-  filteredResources.value.forEach((r, i) => {
+  const mt = maptalksLib
+  const list = filteredResources.value
+  const isActive = (name: string) => activeIndustry.value === name
+
+  // Draw heatmap layer
+  if (heatmapVisible.value && list.length) {
+    drawHeatmapLayer(mt, list)
+  }
+
+  // Draw industry markers and key resources
+  list.forEach((r, i) => {
     const color = chartColors[i % chartColors.length]
-    const marker = new maptalks.Marker(r.center, {
-      properties: { name: r.industryName },
+    const selected = isActive(r.industryName)
+    const _weight = getMetricWeight(r)
+    const baseSize = Math.max(20, r.radius / 5)
+    const markerSize = selected ? baseSize * 1.5 : baseSize
+    const marker = new mt.Marker(r.center, {
+      properties: { name: r.industryName, type: 'industry' },
       symbol: {
         markerType: 'ellipse',
         markerFill: color,
-        markerFillOpacity: 0.7,
-        markerLineColor: '#fff',
-        markerLineWidth: 2,
-        markerWidth: Math.max(20, r.radius / 5),
-        markerHeight: Math.max(20, r.radius / 5),
+        markerFillOpacity: selected ? 0.9 : 0.7,
+        markerLineColor: selected ? '#fff' : color,
+        markerLineWidth: selected ? 3 : 2,
+        markerWidth: markerSize,
+        markerHeight: markerSize,
       },
     })
 
-    const layer = new maptalks.VectorLayer(`resource-${i}`, [marker], { visible: true })
-    ;(mapInstance as any).addLayer(layer)
+    // InfoWindow for the industry marker
+    const infoContent = `<div style="font-size:13px;line-height:1.6">
+      <strong>${r.industryName}</strong><br/>
+      企业数: ${r.enterpriseCount}<br/>
+      产值: ${(r.outputValue / 10000).toFixed(1)}万<br/>
+      专利密度: ${r.patentDensity.toFixed(1)}
+    </div>`
+
+    const markers: any[] = [marker]
+
+    // Draw enterprise density scatter points around the industry center
+    if (selected) {
+      const count = Math.min(r.enterpriseCount, 20)
+      for (let j = 0; j < count; j++) {
+        const angle = (Math.PI * 2 * j) / count
+        const dist = (Math.random() * 0.5 + 0.5) * r.radius * 0.003
+        const lng = r.center[0] + dist * Math.cos(angle)
+        const constLatFactor = Math.cos((r.center[1] * Math.PI) / 180)
+        const lat = r.center[1] + (dist * Math.sin(angle)) / constLatFactor
+        markers.push(
+          new mt.Marker([lng, lat], {
+            symbol: {
+              markerType: 'ellipse',
+              markerFill: color,
+              markerFillOpacity: 0.5,
+              markerLineColor: 'transparent',
+              markerLineWidth: 0,
+              markerWidth: 6,
+              markerHeight: 6,
+            },
+          }),
+        )
+      }
+    }
+
+    const industryLayer = new mt.VectorLayer(`resource-${i}`, markers, { visible: true })
+    mapInstance.addLayer(industryLayer)
+
+    // Show info window when selected
+    if (selected) {
+      marker.setInfoWindow({
+        content: infoContent,
+        autoPan: true,
+        width: 180,
+        title: r.industryName,
+      })
+      marker.openInfoWindow()
+    }
+
+    // Draw key resource markers
+    if (r.keyResources?.length) {
+      const krMarkers = r.keyResources.map(
+        (kr) =>
+          new mt.Marker(kr.location, {
+            properties: { name: kr.name, type: kr.type },
+            symbol: {
+              markerType: 'pin',
+              markerFill: '#fff',
+              markerFillOpacity: 1,
+              markerLineColor: '#666',
+              markerLineWidth: 1.5,
+              markerWidth: 24,
+              markerHeight: 30,
+              textName: kr.name,
+              textSize: 11,
+              textFill: '#333',
+              textHaloFill: '#fff',
+              textHaloRadius: 1,
+              textDy: -20,
+              textWeight: 'bold',
+            },
+          }),
+      )
+
+      const krLayer = new mt.VectorLayer(`key-resource-${i}`, krMarkers, {
+        visible: selected || !activeIndustry.value,
+      })
+      mapInstance.addLayer(krLayer)
+    }
   })
 }
 
-function locateResource(item: MapResourceData) {
-  if (mapInstance && (mapInstance as any).setCenter) {
-    ;(mapInstance as any).setCenter(item.center)
-    ;(mapInstance as any).setZoom(14)
-  }
+function drawHeatmapLayer(mt: any, list: MapResourceData[]) {
+  // Use CanvasLayer to render a heatmap-like visualization
+  const canvasLayer = new mt.CanvasLayer('heatmap', {
+    visible: true,
+    draw: (ctx: CanvasRenderingContext2D, view: any) => {
+      if (!view || !view.extent) return
+      list.forEach((r, i) => {
+        const color = chartColors[i % chartColors.length]
+        const coord = new mt.Coordinate(r.center[0], r.center[1])
+        const pixel = mapInstance.coordinateToContainerPoint(coord)
+        if (!pixel) return
+
+        const weight = getMetricWeight(r)
+        const radius = Math.max(30, r.radius * 1.5) * weight
+        const isActiveItem = activeIndustry.value === r.industryName
+
+        const gradient = ctx.createRadialGradient(
+          pixel.x,
+          pixel.y,
+          0,
+          pixel.x,
+          pixel.y,
+          radius * (isActiveItem ? 1.5 : 1),
+        )
+
+        // Parse hex color to rgb for gradient
+        const hex = color.replace('#', '')
+        const rr = parseInt(hex.substring(0, 2), 16)
+        const gg = parseInt(hex.substring(2, 4), 16)
+        const bb = parseInt(hex.substring(4, 6), 16)
+
+        gradient.addColorStop(0, `rgba(${rr},${gg},${bb},${isActiveItem ? 0.6 : 0.4})`)
+        gradient.addColorStop(0.5, `rgba(${rr},${gg},${bb},${isActiveItem ? 0.3 : 0.15})`)
+        gradient.addColorStop(1, `rgba(${rr},${gg},${bb},0)`)
+
+        ctx.fillStyle = gradient
+        ctx.beginPath()
+        ctx.arc(pixel.x, pixel.y, radius * (isActiveItem ? 1.5 : 1), 0, Math.PI * 2)
+        ctx.fill()
+      })
+    },
+  })
+  mapInstance.addLayer(canvasLayer)
 }
 
-watch([filteredResources, heatmapVisible], () => {
+function locateResource(item: MapResourceData) {
+  activeIndustry.value = activeIndustry.value === item.industryName ? null : item.industryName
+
+  if (mapInstance) {
+    mapInstance.setCenter(item.center)
+    mapInstance.setZoom(activeIndustry.value ? 13 : 11)
+  }
+
+  nextTick(() => drawMarkers())
+}
+
+watch([filteredResources, heatmapVisible, activeMetric], () => {
   drawMarkers()
 })
 
@@ -216,9 +396,16 @@ onMounted(async () => {
   padding: 10px 12px;
   cursor: pointer;
   border-bottom: 1px solid $border-color-lighter;
+  border-left: 3px solid transparent;
+  transition: all 0.2s;
 
   &:hover {
     background: $bg-hover;
+  }
+
+  &.is-active {
+    background: rgba($color-primary, 0.08);
+    border-left-color: $color-primary;
   }
 
   &:last-child {

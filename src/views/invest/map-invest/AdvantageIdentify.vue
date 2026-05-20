@@ -1,105 +1,151 @@
 <template>
   <div class="page-container">
     <PageHeader title="优势环节识别" subtitle="区域产业优势环节识别分析" />
-    <div class="map-layout">
-      <div class="map-main">
-        <MaptalksMap ref="mapRef" @ready="onMapReady" />
-        <MapControlPanel title="优势环节筛选">
-          <div class="filter-section">
-            <div class="filter-label">指标权重调节</div>
-            <div class="slider-group">
-              <div class="slider-item">
-                <span class="slider-item__label">产值占比</span>
-                <el-slider
-                  v-model="weights.outputShare"
-                  :max="100"
-                  :step="5"
-                  show-input-size="small"
-                />
+
+    <!-- KPI 卡片行 -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-card__value advantage-color">{{ advantageCount }}</div>
+        <div class="kpi-card__label">高优势环节数</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card__value primary-color">{{ avgScore.toFixed(1) }}</div>
+        <div class="kpi-card__label">平均综合得分</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card__value primary-color">{{ avgOutputShare.toFixed(1) }}%</div>
+        <div class="kpi-card__label">平均产值占比</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card__value primary-color">{{ maxPatentLink }}</div>
+        <div class="kpi-card__label">专利密度最高环节</div>
+      </div>
+    </div>
+
+    <!-- 筛选条件 -->
+    <div class="filter-bar">
+      <div class="filter-bar__sliders">
+        <div class="filter-item">
+          <span class="filter-item__label">产值占比权重</span>
+          <el-slider v-model="weights.outputShare" :max="100" :step="5" style="width: 120px" />
+          <span class="filter-item__value">{{ weights.outputShare }}</span>
+        </div>
+        <div class="filter-item">
+          <span class="filter-item__label">专利密度权重</span>
+          <el-slider v-model="weights.patentDensity" :max="100" :step="5" style="width: 120px" />
+          <span class="filter-item__value">{{ weights.patentDensity }}</span>
+        </div>
+        <div class="filter-item">
+          <span class="filter-item__label">市场份额权重</span>
+          <el-slider v-model="weights.marketShare" :max="100" :step="5" style="width: 120px" />
+          <span class="filter-item__value">{{ weights.marketShare }}</span>
+        </div>
+      </div>
+      <div class="filter-bar__right">
+        <div class="filter-item">
+          <span class="filter-item__label">优势阈值</span>
+          <el-slider v-model="threshold" :max="100" :step="5" style="width: 120px" />
+          <span class="filter-item__value">{{ threshold }}</span>
+        </div>
+        <el-input
+          v-model="keyword"
+          placeholder="搜索环节名称"
+          clearable
+          :prefix-icon="Search"
+          style="width: 200px"
+        />
+      </div>
+    </div>
+
+    <!-- 图表行：雷达图 + 横向柱状图 -->
+    <div class="chart-row">
+      <div class="chart-card">
+        <div class="chart-card__title">各环节多指标对比</div>
+        <BaseChart :option="radarOption" height="360px" />
+      </div>
+      <div class="chart-card">
+        <div class="chart-card__title">综合得分排名</div>
+        <BaseChart :option="barOption" height="360px" />
+      </div>
+    </div>
+
+    <!-- 环节详情卡片 -->
+    <div class="detail-section">
+      <div class="detail-section__title">环节详情对比</div>
+      <div v-loading="loading" class="detail-grid">
+        <div
+          v-for="link in filteredLinks"
+          :key="link.linkName"
+          class="detail-card"
+          :class="{ 'detail-card--advantage': link.compositeScore >= threshold }"
+        >
+          <div class="detail-card__header">
+            <span class="detail-card__name">{{ link.linkName }}</span>
+            <el-tag :type="link.compositeScore >= threshold ? 'success' : 'info'" size="small">
+              {{ link.compositeScore >= threshold ? '优势' : '一般' }}
+            </el-tag>
+          </div>
+          <div class="detail-card__score">
+            <ScoreRing :value="Math.round(link.compositeScore)" :size="56" :stroke-width="5" />
+            <span class="detail-card__score-label">综合得分</span>
+          </div>
+          <div class="detail-card__metrics">
+            <div class="metric">
+              <div class="metric__label">产值占比</div>
+              <div class="metric__bar">
+                <div class="metric__bar-fill" :style="{ width: link.outputShare + '%' }"></div>
               </div>
-              <div class="slider-item">
-                <span class="slider-item__label">专利密度</span>
-                <el-slider
-                  v-model="weights.patentDensity"
-                  :max="100"
-                  :step="5"
-                  show-input-size="small"
-                />
+              <div class="metric__value">{{ link.outputShare.toFixed(1) }}%</div>
+            </div>
+            <div class="metric">
+              <div class="metric__label">专利密度</div>
+              <div class="metric__bar">
+                <div
+                  class="metric__bar-fill metric__bar-fill--patent"
+                  :style="{ width: Math.min(link.patentDensity, 100) + '%' }"
+                ></div>
               </div>
-              <div class="slider-item">
-                <span class="slider-item__label">市场份额</span>
-                <el-slider
-                  v-model="weights.marketShare"
-                  :max="100"
-                  :step="5"
-                  show-input-size="small"
-                />
+              <div class="metric__value">{{ link.patentDensity.toFixed(1) }}</div>
+            </div>
+            <div class="metric">
+              <div class="metric__label">市场份额</div>
+              <div class="metric__bar">
+                <div
+                  class="metric__bar-fill metric__bar-fill--market"
+                  :style="{ width: link.marketShare + '%' }"
+                ></div>
               </div>
+              <div class="metric__value">{{ link.marketShare.toFixed(1) }}%</div>
             </div>
           </div>
-          <div class="filter-section">
-            <div class="filter-label">优势阈值</div>
-            <el-slider v-model="threshold" :max="100" :step="5" show-input-size="small" />
-            <div class="threshold-hint">综合得分 ≥ {{ threshold }} 显示为优势环节</div>
-          </div>
-          <div class="filter-section">
-            <el-input
-              v-model="keyword"
-              placeholder="搜索环节名称"
-              clearable
-              :prefix-icon="Search"
-            />
-          </div>
-          <div v-loading="loading" class="link-list">
-            <div
-              v-for="link in filteredLinks"
-              :key="link.linkName"
-              class="link-item"
-              :class="{ 'link-item--advantage': link.compositeScore >= threshold }"
-              @click="locateLink(link)"
-            >
-              <div class="link-item__name">{{ link.linkName }}</div>
-              <div class="link-item__score">
-                综合得分:
-                <span class="link-item__score-value">{{ link.compositeScore.toFixed(1) }}</span>
-              </div>
-              <div class="link-item__details">
-                <span>产值: {{ link.outputShare.toFixed(1) }}%</span>
-                <span>专利: {{ link.patentDensity.toFixed(1) }}</span>
-                <span>市场: {{ link.marketShare.toFixed(1) }}%</span>
-              </div>
-            </div>
-            <el-empty
-              v-if="!filteredLinks.length && !loading"
-              description="暂无数据"
-              :image-size="60"
-            />
-          </div>
-        </MapControlPanel>
-        <MapLegend :items="legendItems" />
+        </div>
+        <el-empty
+          v-if="!filteredLinks.length && !loading"
+          description="暂无数据"
+          :image-size="60"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Search } from '@element-plus/icons-vue'
+import type { EChartsOption } from 'echarts'
 import PageHeader from '@/components/common/PageHeader.vue'
-import MaptalksMap from '@/components/map/MaptalksMap.vue'
-import MapControlPanel from '@/components/map/MapControlPanel.vue'
-import MapLegend from '@/components/map/MapLegend.vue'
+import BaseChart from '@/components/charts/BaseChart.vue'
+import ScoreRing from '@/components/business/ScoreRing.vue'
 import { fetchAdvantageLinks } from '@/api/modules/investApi'
 import type { AdvantageLink } from '@/api/types/invest'
 
-const mapRef = ref()
+const CHART_COLORS = ['#1889E8', '#36CBCB', '#4ECB73', '#FBD437', '#F2637B', '#975FE5']
+
 const loading = ref(false)
 const links = ref<AdvantageLink[]>([])
 const weights = ref({ outputShare: 40, patentDensity: 30, marketShare: 30 })
 const threshold = ref(60)
 const keyword = ref('')
-
-let mapInstance: any = null
 
 const filteredLinks = computed(() => {
   let list = links.value
@@ -110,75 +156,88 @@ const filteredLinks = computed(() => {
   return list
 })
 
-const legendItems = computed(() => [
-  { label: '优势环节 (≥阈值)', color: '#4ECB73' },
-  { label: '一般环节 (<阈值)', color: '#909399' },
-])
+// KPI 计算
+const advantageCount = computed(
+  () => links.value.filter((l) => l.compositeScore >= threshold.value).length,
+)
 
-function locateLink(_link: AdvantageLink) {
-  if (!mapInstance) return
-  // Pan to center as a visual indicator
-  const center = (mapInstance as any).getCenter?.()
-  if (center) {
-    ;(mapInstance as any).animateTo(
-      { center: [center.x + 0.01, center.y + 0.005] },
-      { duration: 500 },
-    )
-  }
-}
+const avgScore = computed(() => {
+  if (!links.value.length) return 0
+  return links.value.reduce((s, l) => s + l.compositeScore, 0) / links.value.length
+})
 
-function onMapReady(map: any) {
-  mapInstance = map
-  drawMarkers()
-}
+const avgOutputShare = computed(() => {
+  if (!links.value.length) return 0
+  return links.value.reduce((s, l) => s + l.outputShare, 0) / links.value.length
+})
 
-function drawMarkers() {
-  if (!mapInstance) return
-  try {
-    const layers = (mapInstance as any).getLayers?.() || []
-    layers.forEach((l: any) => l?.remove?.())
-  } catch {
-    // ignore
-  }
+const maxPatentLink = computed(() => {
+  if (!links.value.length) return '-'
+  const max = links.value.reduce((a, b) => (a.patentDensity > b.patentDensity ? a : b))
+  return max.linkName
+})
 
-  const maptalks = (window as any).maptalks || {}
-  if (!maptalks.Marker || !maptalks.VectorLayer) return
-
-  const center = (mapInstance as any).getCenter?.()
-  if (!center) return
-
-  const markers = filteredLinks.value.map((link, i) => {
-    const isAdvantage = link.compositeScore >= threshold.value
-    const color = isAdvantage ? '#4ECB73' : '#909399'
-    // Spread markers around map center for visual display
-    const offsetX = ((i % 3) - 1) * 0.02
-    const offsetY = (Math.floor(i / 3) - 1) * 0.015
-
-    return new maptalks.Marker([center.x + offsetX, center.y + offsetY], {
-      properties: { name: link.linkName, score: link.compositeScore },
-      symbol: {
-        markerType: 'pin',
-        markerFill: color,
-        markerWidth: 30,
-        markerHeight: 40,
-        textName: link.linkName,
-        textSize: 12,
-        textFill: '#303133',
-        textDy: -44,
-        textHaloFill: '#fff',
-        textHaloRadius: 2,
+// 雷达图 option
+const radarOption = computed<EChartsOption>(() => {
+  const topLinks = filteredLinks.value.slice(0, 6)
+  return {
+    tooltip: { trigger: 'item' },
+    legend: {
+      bottom: 0,
+      data: topLinks.map((l) => l.linkName),
+      textStyle: { fontSize: 11 },
+    },
+    radar: {
+      indicator: [
+        { name: '产值占比', max: 100 },
+        { name: '专利密度', max: 100 },
+        { name: '市场份额', max: 100 },
+      ],
+      shape: 'circle' as const,
+      splitNumber: 4,
+      axisName: { fontSize: 12, color: '#606266' },
+    },
+    series: [
+      {
+        type: 'radar',
+        data: topLinks.map((l, i) => ({
+          value: [l.outputShare, Math.min(l.patentDensity, 100), l.marketShare],
+          name: l.linkName,
+          lineStyle: { color: CHART_COLORS[i % CHART_COLORS.length] },
+          areaStyle: { color: CHART_COLORS[i % CHART_COLORS.length], opacity: 0.15 },
+          itemStyle: { color: CHART_COLORS[i % CHART_COLORS.length] },
+        })),
       },
-    })
-  })
-
-  if (markers.length) {
-    const layer = new maptalks.VectorLayer('advantage-markers', markers)
-    ;(mapInstance as any).addLayer(layer)
+    ],
   }
-}
+})
 
-watch([filteredLinks, threshold], () => {
-  drawMarkers()
+// 横向柱状图 option
+const barOption = computed<EChartsOption>(() => {
+  const sorted = [...filteredLinks.value].sort((a, b) => a.compositeScore - b.compositeScore)
+  return {
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' as const } },
+    grid: { left: 100, right: 30, top: 10, bottom: 20 },
+    xAxis: { type: 'value' as const, max: 100, name: '得分' },
+    yAxis: {
+      type: 'category' as const,
+      data: sorted.map((l) => l.linkName),
+      axisLabel: { fontSize: 12 },
+    },
+    series: [
+      {
+        type: 'bar',
+        data: sorted.map((l) => ({
+          value: l.compositeScore,
+          itemStyle: {
+            color: l.compositeScore >= threshold.value ? '#4ECB73' : '#C0C4CC',
+          },
+        })),
+        barWidth: 18,
+        label: { show: true, position: 'right', fontSize: 11, formatter: '{c}' },
+      },
+    ],
+  }
 })
 
 onMounted(async () => {
@@ -196,106 +255,217 @@ onMounted(async () => {
   padding: 20px;
 }
 
-.map-layout {
-  height: calc(100vh - 160px);
+// KPI 卡片
+.kpi-row {
+  display: flex;
+  gap: $spacing-base;
+  margin-bottom: $spacing-lg;
 }
 
-.map-main {
-  position: relative;
-  height: 100%;
-  overflow: hidden;
+.kpi-card {
+  flex: 1;
+  padding: $spacing-lg;
+  text-align: center;
   background: $bg-card;
   border-radius: $radius-base;
   box-shadow: $shadow-card;
 }
 
-.filter-section {
-  margin-bottom: 16px;
+.kpi-card__value {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  line-height: 1.2;
 }
 
-.filter-label {
-  margin-bottom: 8px;
-  font-size: 13px;
-  font-weight: $font-weight-medium;
-  color: $text-regular;
+.kpi-card__label {
+  margin-top: $spacing-xs;
+  font-size: $font-size-sm;
+  color: $text-secondary;
 }
 
-.slider-group {
+.advantage-color {
+  color: #4ecb73;
+}
+
+.primary-color {
+  color: $color-primary;
+}
+
+// 筛选栏
+.filter-bar {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-base $spacing-lg;
+  margin-bottom: $spacing-lg;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
 }
 
-.slider-item {
+.filter-bar__sliders {
+  display: flex;
+  gap: $spacing-xl;
+}
+
+.filter-bar__right {
+  display: flex;
+  gap: $spacing-lg;
+  align-items: center;
+}
+
+.filter-item {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
-.slider-item__label {
+.filter-item__label {
   flex-shrink: 0;
-  width: 70px;
-  font-size: 12px;
-  color: $text-secondary;
+  font-size: $font-size-xs;
+  color: $text-regular;
+  white-space: nowrap;
 }
 
-.slider-item :deep(.el-slider) {
+.filter-item__value {
+  flex-shrink: 0;
+  width: 28px;
+  font-size: $font-size-xs;
+  color: $text-secondary;
+  text-align: right;
+}
+
+// 图表行
+.chart-row {
+  display: flex;
+  gap: $spacing-base;
+  margin-bottom: $spacing-lg;
+}
+
+.chart-card {
   flex: 1;
+  padding: $spacing-lg;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
 }
 
-.threshold-hint {
-  margin-top: 4px;
-  font-size: 12px;
-  color: $text-secondary;
-}
-
-.link-list {
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.link-item {
-  padding: 10px 12px;
-  cursor: pointer;
-  border-bottom: 1px solid $border-color-lighter;
-  border-left: 3px solid transparent;
-
-  &:hover {
-    background: $bg-hover;
-  }
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.link-item--advantage {
-  background: rgba(78, 203, 115, 0.04);
-  border-left-color: #4ecb73;
-}
-
-.link-item__name {
-  font-size: 14px;
+.chart-card__title {
+  margin-bottom: $spacing-md;
+  font-size: $font-size-md;
   font-weight: $font-weight-medium;
   color: $text-primary;
 }
 
-.link-item__score {
-  margin-top: 4px;
-  font-size: 12px;
+// 详情区域
+.detail-section {
+  padding: $spacing-lg;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+
+.detail-section__title {
+  margin-bottom: $spacing-lg;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $text-primary;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: $spacing-base;
+}
+
+.detail-card {
+  padding: $spacing-base;
+  border: 1px solid $border-color-lighter;
+  border-radius: $radius-base;
+  transition: box-shadow $transition-fast;
+
+  &:hover {
+    box-shadow: $shadow-dropdown;
+  }
+}
+
+.detail-card--advantage {
+  background: rgba(78, 203, 115, 0.03);
+  border-left: 3px solid #4ecb73;
+}
+
+.detail-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.detail-card__name {
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $text-primary;
+}
+
+.detail-card__score {
+  display: flex;
+  gap: $spacing-sm;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.detail-card__score-label {
+  font-size: $font-size-xs;
   color: $text-secondary;
 }
 
-.link-item__score-value {
-  font-weight: $font-weight-semibold;
-  color: $color-primary;
+.detail-card__metrics {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
 }
 
-.link-item__details {
+.metric {
   display: flex;
-  gap: 8px;
-  margin-top: 4px;
-  font-size: 11px;
-  color: $text-placeholder;
+  gap: $spacing-sm;
+  align-items: center;
+}
+
+.metric__label {
+  flex-shrink: 0;
+  width: 60px;
+  font-size: $font-size-xs;
+  color: $text-secondary;
+}
+
+.metric__bar {
+  flex: 1;
+  height: 6px;
+  overflow: hidden;
+  background: $border-color-lighter;
+  border-radius: 3px;
+}
+
+.metric__bar-fill {
+  height: 100%;
+  background: $color-primary;
+  border-radius: 3px;
+  transition: width $transition-base;
+}
+
+.metric__bar-fill--patent {
+  background: #36cbcb;
+}
+
+.metric__bar-fill--market {
+  background: #fbd437;
+}
+
+.metric__value {
+  flex-shrink: 0;
+  width: 50px;
+  font-size: $font-size-xs;
+  color: $text-regular;
+  text-align: right;
 }
 </style>

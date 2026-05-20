@@ -6,6 +6,20 @@
       <StatCard v-for="card in kpiCards" :key="card.key" v-bind="card" />
     </div>
 
+    <div class="rule-panel">
+      <h4 class="rule-panel__title">波动检测规则</h4>
+      <div class="rule-panel__content">
+        <div class="rule-item">
+          <span class="rule-item__label">横向波动规则：</span>
+          <span class="rule-item__desc">跨榜单排名差异 ≥ 20位</span>
+        </div>
+        <div class="rule-item">
+          <span class="rule-item__label">纵向波动规则：</span>
+          <span class="rule-item__desc">季度排名下降 ≥ 15位</span>
+        </div>
+      </div>
+    </div>
+
     <div class="chart-grid">
       <div class="chart-panel">
         <h4 class="chart-panel__title">排名对比散点图</h4>
@@ -14,6 +28,10 @@
       <div class="chart-panel">
         <h4 class="chart-panel__title">波动趋势</h4>
         <BaseChart :option="trendOption" height="320px" />
+      </div>
+      <div class="chart-panel">
+        <h4 class="chart-panel__title">横向 vs 纵向波动分布</h4>
+        <BaseChart :option="hvScatterOption" height="320px" />
       </div>
     </div>
 
@@ -52,6 +70,22 @@
           </template>
         </el-table-column>
         <el-table-column prop="reason" label="预警原因" min-width="220" />
+        <el-table-column prop="triggerRule" label="触发规则" width="110">
+          <template #default="{ row }">
+            <el-tag
+              :type="
+                row.triggerRule === '双向波动'
+                  ? 'danger'
+                  : row.triggerRule === '横向波动'
+                    ? 'warning'
+                    : 'info'
+              "
+              size="small"
+            >
+              {{ row.triggerRule }}
+            </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="industry" label="行业" width="120">
           <template #default="{ row }">
             <el-tag size="small" type="info">{{ row.industry }}</el-tag>
@@ -100,6 +134,7 @@ const tableData = ref<FluctuationWarningItem[]>([])
 const pagination = reactive({ current: 1, total: 0, pageSize: 20 })
 const scatterOption = ref({})
 const trendOption = ref({})
+const hvScatterOption = ref({})
 
 function applyPagination() {
   pagination.total = allData.value.length
@@ -242,6 +277,70 @@ function updateCharts(data: FluctuationWarningItem[]) {
       },
     ],
   }
+
+  // 横向 vs 纵向波动散点图（按触发规则分组）
+  const horizontalData = data.filter(
+    (d) => d.triggerRule === '横向波动' || d.triggerRule === '双向波动',
+  )
+  const verticalData = data.filter(
+    (d) => d.triggerRule === '纵向波动' || d.triggerRule === '双向波动',
+  )
+  const bothData = data.filter((d) => d.triggerRule === '双向波动')
+
+  hvScatterOption.value = {
+    color: chartColors,
+    tooltip: {
+      formatter: (params: any) => {
+        const d = params.data
+        return `${d[3]}<br/>横向波动: ${d[0]}位<br/>纵向波动: ${d[1]}位<br/>触发规则: ${d[4]}`
+      },
+    },
+    legend: { data: ['横向波动触发', '纵向波动触发', '双向波动触发'] },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: { name: '横向波动(位)', type: 'value', splitLine: { show: true } },
+    yAxis: { name: '纵向波动(位)', type: 'value', splitLine: { show: true } },
+    series: [
+      {
+        name: '横向波动触发',
+        type: 'scatter',
+        symbolSize: 12,
+        data: horizontalData
+          .filter((d) => d.triggerRule === '横向波动')
+          .map((d) => [d.horizontalFluctuation, d.verticalFluctuation, 1, d.name, d.triggerRule]),
+        itemStyle: { color: '#FBD437' },
+      },
+      {
+        name: '纵向波动触发',
+        type: 'scatter',
+        symbolSize: 12,
+        data: verticalData
+          .filter((d) => d.triggerRule === '纵向波动')
+          .map((d) => [d.horizontalFluctuation, d.verticalFluctuation, 1, d.name, d.triggerRule]),
+        itemStyle: { color: '#36CBCB' },
+      },
+      {
+        name: '双向波动触发',
+        type: 'scatter',
+        symbolSize: 16,
+        data: bothData.map((d) => [
+          d.horizontalFluctuation,
+          d.verticalFluctuation,
+          1,
+          d.name,
+          d.triggerRule,
+        ]),
+        itemStyle: { color: '#F2637B' },
+        markLine: {
+          silent: true,
+          lineStyle: { type: 'dashed', color: '#999' },
+          data: [
+            { xAxis: 20, label: { formatter: '横向阈值20', position: 'end' } },
+            { yAxis: 15, label: { formatter: '纵向阈值15', position: 'end' } },
+          ],
+        },
+      },
+    ],
+  }
 }
 
 function handlePageChange(current: number, pageSize: number) {
@@ -292,5 +391,39 @@ onMounted(() => {
 .result-count {
   font-size: 14px;
   color: $text-secondary;
+}
+.rule-panel {
+  padding: 20px;
+  margin-bottom: 20px;
+  background: $bg-card;
+  border-radius: $radius-base;
+  box-shadow: $shadow-card;
+}
+.rule-panel__title {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+.rule-panel__content {
+  display: flex;
+  gap: 40px;
+}
+.rule-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.rule-item__label {
+  font-size: 14px;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+}
+.rule-item__desc {
+  padding: 2px 12px;
+  font-size: 14px;
+  color: $text-secondary;
+  background: #f0f7ff;
+  border-radius: 4px;
 }
 </style>

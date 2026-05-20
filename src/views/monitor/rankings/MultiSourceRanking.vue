@@ -35,6 +35,29 @@
           </template>
         </el-table-column>
         <el-table-column prop="period" label="时间周期" width="100" />
+        <el-table-column prop="riskLevel" label="风险预警" width="100">
+          <template #default="{ row }">
+            <el-tag
+              :type="
+                row.riskLevel === 'low'
+                  ? 'success'
+                  : row.riskLevel === 'medium'
+                    ? 'warning'
+                    : 'danger'
+              "
+              size="small"
+            >
+              {{
+                row.riskLevel === 'low'
+                  ? '低风险'
+                  : row.riskLevel === 'medium'
+                    ? '中风险'
+                    : '高风险'
+              }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="valueLinkage" label="价值联动" width="100" />
       </el-table>
       <PaginationBar
         :current="pagination.current"

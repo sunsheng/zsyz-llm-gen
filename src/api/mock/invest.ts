@@ -48,62 +48,9 @@ import type {
   ChainPosition,
 } from '@/api/types/invest'
 
+import { companyNames, industries, regions } from './shared-data'
+
 // ===== 基础数据池 =====
-const industries = [
-  '高端装备制造',
-  '前沿新材料',
-  '数字经济',
-  '新能源',
-  '生物医药',
-  '时尚产业',
-  '现代服务业',
-  '电子信息',
-]
-
-const regions = ['成都', '德阳', '绵阳', '凯州新城', '宜宾', '泸州', '南充', '达州', '内江', '乐山']
-
-const companyNames = [
-  '四川凯州精密机械有限公司',
-  '德阳东方汽轮机有限公司',
-  '绵阳九洲电器集团',
-  '成都京东方光电科技',
-  '宜宾五粮液集团',
-  '泸州老窖股份有限公司',
-  '南充三环电子有限公司',
-  '达州瓮福化工',
-  '内江白马电厂',
-  '乐山福华化工',
-  '四川宏华石油设备',
-  '德阳国机重装',
-  '绵阳长虹电子',
-  '成都极米科技',
-  '宜宾天原集团',
-  '泸州北方化工',
-  '南充燕京啤酒',
-  '达州钢铁集团',
-  '内江金鸿曲轴',
-  '乐山永祥股份',
-  '成都硅宝科技',
-  '德阳明日宇航',
-  '绵阳攀长钢',
-  '宜宾丝丽雅集团',
-  '泸州郎酒集团',
-  '南充东风汽车',
-  '达州华景机电',
-  '内江百科科技',
-  '乐山明星电缆',
-  '四川航天拓鑫',
-  '成都彩虹电器',
-  '德阳思益科技',
-  '绵阳富临精工',
-  '宜宾中核建中',
-  '泸州长江机械',
-  '南充六合集团',
-  '达州利森水泥',
-  '内江方向绝缘',
-  '乐山中芯半导体',
-  '四川新锂想科技',
-]
 
 const chainSegments = [
   '原材料加工',
@@ -284,6 +231,56 @@ export function getMockRecommendTargets(count = 12): RecommendTarget[] {
 // ===== 8.2 产业地图招商 =====
 
 export function getMockMapResources(count = 6): MapResourceData[] {
+  const resourceMap: Record<
+    number,
+    Array<{
+      name: string
+      type: 'port' | 'railway' | 'university' | 'mineral' | 'highway'
+      location: [number, number]
+    }>
+  > = {
+    0: [
+      { name: '德阳火车站', type: 'railway', location: [104.12, 31.08] },
+      { name: '成绵高速枢纽', type: 'highway', location: [104.18, 31.12] },
+      { name: '西南交通大学', type: 'university', location: [104.08, 31.02] },
+    ],
+    1: [
+      { name: '凯州新城货运站', type: 'railway', location: [104.28, 30.92] },
+      { name: '四川大学', type: 'university', location: [104.32, 30.88] },
+      { name: '成南高速入口', type: 'highway', location: [104.22, 30.96] },
+    ],
+    2: [
+      { name: '绵阳科技城站', type: 'railway', location: [104.42, 31.18] },
+      { name: '电子科技大学', type: 'university', location: [104.38, 31.22] },
+      { name: '京昆高速绵阳段', type: 'highway', location: [104.48, 31.14] },
+    ],
+    3: [
+      { name: '凯州新能源产业园站', type: 'railway', location: [104.58, 30.78] },
+      { name: '德阳天然气枢纽', type: 'mineral', location: [104.52, 30.82] },
+      { name: '成都理工大学', type: 'university', location: [104.62, 30.74] },
+    ],
+    4: [
+      { name: '泸州港', type: 'port', location: [104.72, 30.68] },
+      { name: '泸州医学院', type: 'university', location: [104.68, 30.72] },
+      { name: '隆黄铁路', type: 'railway', location: [104.76, 30.64] },
+    ],
+    5: [
+      { name: '宜宾港', type: 'port', location: [104.88, 30.58] },
+      { name: '川南矿产集散中心', type: 'mineral', location: [104.82, 30.62] },
+      { name: '宜毕高速', type: 'highway', location: [104.92, 30.54] },
+    ],
+    6: [
+      { name: '南充物流港', type: 'port', location: [105.0, 30.72] },
+      { name: '兰渝铁路南充站', type: 'railway', location: [104.96, 30.76] },
+      { name: '西南石油大学', type: 'university', location: [105.02, 30.68] },
+    ],
+    7: [
+      { name: '达州货运北站', type: 'railway', location: [104.38, 30.88] },
+      { name: '达州天然气田', type: 'mineral', location: [104.42, 30.84] },
+      { name: '包茂高速达州段', type: 'highway', location: [104.34, 30.92] },
+    ],
+  }
+
   return Array.from({ length: count }, (_, i) => ({
     industryName: industries[i % industries.length],
     enterpriseCount: Math.floor(Math.random() * 200 + 30),
@@ -291,17 +288,34 @@ export function getMockMapResources(count = 6): MapResourceData[] {
     patentDensity: Math.floor(Math.random() * 50 + 10),
     center: [104.0 + i * 0.15, 30.5 + i * 0.1] as [number, number],
     radius: Math.random() * 20 + 10,
+    keyResources: resourceMap[i] || resourceMap[i % 8],
   }))
 }
 
 export function getMockSpaceAtlasEdges(count = 10): SpaceAtlasEdge[] {
   const types: SpaceAtlasEdge['type'][] = ['logistics', 'supply', 'service']
+  const edgeNames = [
+    { fromName: '四川凯州精密机械有限公司', toName: '德阳东方汽轮机有限公司' },
+    { fromName: '德阳国机重装', toName: '绵阳九洲电器集团' },
+    { fromName: '成都京东方光电科技', toName: '绵阳长虹电子' },
+    { fromName: '宜宾天原集团', toName: '泸州北方化工' },
+    { fromName: '四川宏华石油设备', toName: '德阳明日宇航' },
+    { fromName: '乐山永祥股份', toName: '乐山中芯半导体' },
+    { fromName: '南充三环电子有限公司', toName: '达州瓮福化工' },
+    { fromName: '成都极米科技', toName: '成都硅宝科技' },
+    { fromName: '宜宾五粮液集团', toName: '宜宾丝丽雅集团' },
+    { fromName: '绵阳富临精工', toName: '绵阳攀长钢' },
+  ]
+  const bottleneckDescs = ['核心零部件供应不足，月缺口约200件', '物流通道拥堵，平均运输延迟3天']
   return Array.from({ length: count }, (_, i) => ({
-    from: [104.0 + Math.random() * 0.8, 30.5 + Math.random() * 0.6] as [number, number],
-    to: [104.2 + Math.random() * 0.8, 30.6 + Math.random() * 0.6] as [number, number],
+    from: [104.0 + i * 0.08, 30.5 + i * 0.06] as [number, number],
+    to: [104.2 + i * 0.08, 30.6 + i * 0.06] as [number, number],
+    fromName: edgeNames[i % edgeNames.length].fromName,
+    toName: edgeNames[i % edgeNames.length].toName,
     type: types[i % types.length],
     volume: Math.floor(Math.random() * 100 + 20),
     bottleneck: i % 5 === 0,
+    bottleneckDesc: i % 5 === 0 ? bottleneckDescs[i % bottleneckDescs.length] : undefined,
   }))
 }
 
@@ -489,21 +503,57 @@ export function getMockIncentivePolicies(count = 8): IncentivePolicy[] {
 
 export function getMockRankingItems(count = 8): RankingItem[] {
   const categories: RankingItem['category'][] = ['industry', 'regional', 'scale']
-  const categoryLabels: Record<RankingItem['category'], string> = {
-    industry: '行业类',
-    regional: '区域类',
-    scale: '规模类',
+  const rankingNames: Record<RankingItem['category'], string[]> = {
+    industry: [
+      '中国高端装备制造企业百强',
+      '全球新能源企业500强',
+      '中国生物医药创新企业50强',
+      '中国电子信息竞争力百强',
+      '全国新材料行业领军企业榜',
+      '中国数字经济创新企业100强',
+      '中国绿色制造企业50强',
+      '中国智能制造标杆企业榜',
+    ],
+    regional: [
+      '成渝地区双城经济圈企业100强',
+      '四川省制造业企业100强',
+      '德阳市纳税企业50强',
+      '西部开发区综合实力榜',
+      '川南经济区产业领军榜',
+      '成都平原经济区创新榜',
+      '四川省民营企业100强',
+      '凯州新城产业贡献榜',
+    ],
+    scale: [
+      '中国企业500强',
+      '中国制造业企业500强',
+      '中国服务业企业500强',
+      '中国民营企业500强',
+      '中国跨国公司100大',
+      '中国大企业创新100强',
+      '中国企业成长100强',
+      '中国新经济企业500强',
+    ],
   }
-  return Array.from({ length: count }, (_, i) => ({
-    id: `rank-${i + 1}`,
-    name: `${categoryLabels[categories[i % categories.length]]}榜单${i + 1}`,
-    category: categories[i % categories.length],
-    industry: industries[i % industries.length],
-    region: regions[i % regions.length],
-    publishOrg: i % 2 === 0 ? '中国企联' : '工信部',
-    publishDate: `2025-${String((i % 12) + 1).padStart(2, '0')}-01`,
-    enterpriseCount: Math.floor(Math.random() * 300 + 50),
-  }))
+  const publishOrgs: Record<RankingItem['category'], string[]> = {
+    industry: ['中国企联', '工信部', '中国工程院', '科技部'],
+    regional: ['四川省经信厅', '德阳市政府', '成渝经济圈秘书处', '西部发展研究院'],
+    scale: ['中国企联', '国家统计局', '全国工商联', '国务院国资委'],
+  }
+  return Array.from({ length: count }, (_, i) => {
+    const cat = categories[i % categories.length]
+    const nameList = rankingNames[cat]
+    return {
+      id: `rank-${i + 1}`,
+      name: nameList[i % nameList.length],
+      category: cat,
+      industry: industries[i % industries.length],
+      region: regions[i % regions.length],
+      publishOrg: publishOrgs[cat][i % publishOrgs[cat].length],
+      publishDate: `2025-${String((i % 12) + 1).padStart(2, '0')}-01`,
+      enterpriseCount: Math.floor(Math.random() * 300 + 50),
+    }
+  })
 }
 
 export function getMockRankingEnterprises(rankingId: string, count = 20): RankingEnterprise[] {
@@ -523,15 +573,28 @@ export function getMockRankingEnterprises(rankingId: string, count = 20): Rankin
 export function getMockBrandLinkages(count = 6): BrandLinkage[] {
   const types: BrandLinkage['type'][] = ['rank-publish', 'city-tour', 'forum']
   const statuses: BrandLinkage['status'][] = ['planned', 'ongoing', 'completed']
-  const typeLabels: Record<BrandLinkage['type'], string> = {
-    'rank-publish': '榜单发布',
-    'city-tour': '城市巡回',
-    forum: '论坛峰会',
+  const activityNames: Record<BrandLinkage['type'], string[]> = {
+    'rank-publish': [
+      '中国高端装备制造百强榜联合发布',
+      '成渝新材料产业50强联合发布',
+      '四川省生物医药创新榜发布',
+    ],
+    'city-tour': ['凯州新城产业推介·深圳站', '德阳高端装备巡展·上海站', '绵阳科技城路演·北京站'],
+    forum: [
+      '成渝双城经济圈产业协同峰会',
+      '西部新材料产业发展论坛',
+      '数字经济赋能制造业转型升级论坛',
+    ],
+  }
+  const partnerOrgs: Record<BrandLinkage['type'], string[]> = {
+    'rank-publish': ['赛迪顾问', '投中网', '中国企联'],
+    'city-tour': ['德阳市商务局', '凯州新城管委会', '四川省招商局'],
+    forum: ['中国工程院', '国家发改委', '工信部'],
   }
   return Array.from({ length: count }, (_, i) => ({
     id: `bl-${i + 1}`,
-    activityName: `${typeLabels[types[i % types.length]]}活动${i + 1}`,
-    partnerOrg: i % 2 === 0 ? '中国企联' : '省政府',
+    activityName: activityNames[types[i % types.length]][i % 3],
+    partnerOrg: partnerOrgs[types[i % types.length]][i % 3],
     type: types[i % types.length],
     date: `2025-${String((i % 12) + 1).padStart(2, '0')}-${String((i % 28) + 1).padStart(2, '0')}`,
     invitedCount: Math.floor(Math.random() * 100 + 20),
@@ -644,7 +707,18 @@ export function getMockInvestProjectsDetailed(count = 10): InvestProject[] {
   ]
   return Array.from({ length: count }, (_, i) => ({
     id: `proj-${i + 1}`,
-    name: `${industries[i % industries.length]}产业基地项目`,
+    name: [
+      '凯州新城高端装备智能制造基地',
+      '天府新区新材料产业孵化园',
+      '绵阳科技城电子信息产业园',
+      '宜宾动力电池全产业链基地',
+      '德阳清洁能源装备制造基地',
+      '成都生物医药创新研发中心',
+      '泸州白酒产业转型升级项目',
+      '南充丝纺服装产业基地',
+      '达州天然气综合利用项目',
+      '乐山光伏硅材料产业基地',
+    ][i % 10],
     industry: industries[i % industries.length],
     type: ['新建', '扩建', '改建'][i % 3],
     investmentAmount: Math.floor(Math.random() * 100000 + 5000),
@@ -688,10 +762,20 @@ export function getMockResearchInstitutionsDetailed(count = 8): ResearchInstitut
 }
 
 export function getMockTechTransferItems(count = 6): TechTransferItem[] {
+  const technologyNames = [
+    '高效晶硅太阳能电池制备技术',
+    '碳纤维复合材料成型工艺',
+    '第三代半导体碳化硅外延技术',
+    'mRNA疫苗规模化生产技术',
+    '工业互联网边缘计算架构',
+    '智能网联汽车自动驾驶算法',
+    '高温合金精密铸造技术',
+    '量子保密通信组网技术',
+  ]
   return Array.from({ length: count }, (_, i) => ({
     id: `tech-${i + 1}`,
     institutionName: institutionNames[i % institutionNames.length],
-    technologyName: `${industries[i % industries.length]}核心技术${i + 1}`,
+    technologyName: technologyNames[i % technologyNames.length],
     technologyChain: ['基础研究', '应用研发', '产品原型', '市场化'].slice(i % 4),
     industryFit: Math.floor(Math.random() * 30 + 70),
     commercializableStage: ['应用研发', '产品原型', '市场化'][i % 3],
@@ -702,10 +786,30 @@ export function getMockTechTransferItems(count = 6): TechTransferItem[] {
 export function getMockTalentShareItems(count = 8): TalentShareItem[] {
   const availabilities: TalentShareItem['availability'][] = ['monthly', 'quarterly', 'annual']
   const compliances: TalentShareItem['complianceStatus'][] = ['approved', 'pending', 'restricted']
+  const expertNames = [
+    '张维明',
+    '李承运',
+    '王建国',
+    '刘永清',
+    '陈晓峰',
+    '赵志远',
+    '周明哲',
+    '吴瑞华',
+  ]
+  const expertFields = [
+    '微电子',
+    '生物医药',
+    '新材料',
+    '智能制造',
+    '新能源',
+    '信息技术',
+    '高端装备',
+    '节能环保',
+  ]
   return Array.from({ length: count }, (_, i) => ({
     id: `talent-${i + 1}`,
-    expertName: `专家${i + 1}`,
-    field: industries[i % industries.length],
+    expertName: expertNames[i % expertNames.length],
+    field: expertFields[i % expertFields.length],
     institution: institutionNames[i % institutionNames.length],
     availability: availabilities[i % availabilities.length],
     enterpriseMatch: randomItems(companyNames.slice(0, 6), 2),
@@ -796,7 +900,14 @@ export function getMockParkChainSynergies(count = 6): ParkChainSynergy[] {
     weakSegment: chainSegments[i % chainSegments.length],
     localRate: Math.floor(Math.random() * 40 + 10),
     recommendedEnterprises: randomItems(companyNames.slice(0, 10), 3),
-    chainOwnerReward: `链主奖励方案${i + 1}`,
+    chainOwnerReward: [
+      '链主企业本地采购补贴计划',
+      '核心零部件国产化奖励',
+      '产业链协同创新专项基金',
+      '链主企业人才引进配套奖励',
+      '供应链本地化配套扶持',
+      '产业集群培育专项奖励',
+    ][i % 6],
     synergyScore: Math.floor(Math.random() * 30 + 70),
   }))
 }

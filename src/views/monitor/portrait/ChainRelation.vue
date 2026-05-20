@@ -36,12 +36,20 @@
           <h4 class="card-title">关系详情</h4>
           <el-table :data="edges" stripe border style="width: 100%" max-height="400">
             <el-table-column prop="relationType" label="关系" width="90" />
-            <el-table-column label="关联企业" min-width="140">
+            <el-table-column label="关联企业" min-width="120">
               <template #default="{ row }">
                 {{ getTargetName(row) }}
               </template>
             </el-table-column>
-            <el-table-column prop="weight" label="强度" width="80">
+            <el-table-column label="订单占比(%)" width="100">
+              <template #default="{ row }"> {{ getOrderShare(row) }}% </template>
+            </el-table-column>
+            <el-table-column label="专利引用" width="90">
+              <template #default="{ row }">
+                {{ getPatentCitations(row) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="weight" label="强度" width="70">
               <template #default="{ row }">
                 <span :style="{ color: row.weight >= 60 ? '#1889e8' : '#909399' }">
                   {{ row.weight }}
@@ -49,6 +57,9 @@
               </template>
             </el-table-column>
           </el-table>
+          <div class="control-formula">
+            控制力指数 = 订单占比×0.4 + 专利引用归一化×0.3 + 供应链地位×0.3
+          </div>
         </div>
       </div>
     </div>
@@ -78,6 +89,16 @@ const categoryColors: Record<string, string> = {
 function getTargetName(edge: ChainRelationEdge) {
   const targetId = edge.source === 'core-1' ? edge.target : edge.source
   return nodes.value.find((n) => n.id === targetId)?.name ?? targetId
+}
+
+function getOrderShare(edge: ChainRelationEdge) {
+  const targetId = edge.source === 'core-1' ? edge.target : edge.source
+  return nodes.value.find((n) => n.id === targetId)?.orderShare ?? '-'
+}
+
+function getPatentCitations(edge: ChainRelationEdge) {
+  const targetId = edge.source === 'core-1' ? edge.target : edge.source
+  return nodes.value.find((n) => n.id === targetId)?.patentCitations ?? '-'
 }
 
 async function loadData() {
@@ -249,6 +270,12 @@ onMounted(() => {
   font-size: 16px;
   font-weight: $font-weight-semibold;
   color: $text-primary;
+}
+.control-formula {
+  padding: 10px 0 0;
+  font-size: 12px;
+  color: $text-secondary;
+  text-align: center;
 }
 .graph-container {
   width: 100%;

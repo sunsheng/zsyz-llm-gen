@@ -60,13 +60,21 @@ export interface MapResourceData {
   patentDensity: number
   center: [number, number]
   radius: number
+  keyResources?: Array<{
+    name: string
+    type: 'port' | 'railway' | 'university' | 'mineral' | 'highway'
+    location: [number, number]
+  }>
 }
 export interface SpaceAtlasEdge {
   from: [number, number]
   to: [number, number]
+  fromName: string
+  toName: string
   type: 'logistics' | 'supply' | 'service'
   volume: number
   bottleneck: boolean
+  bottleneckDesc?: string
 }
 export interface AdvantageLink {
   linkName: string

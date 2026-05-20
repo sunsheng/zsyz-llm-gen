@@ -117,14 +117,40 @@ const filters: FilterField[] = [
 ]
 
 const loading = ref(false)
-const tableData = ref<InvestProject[]>([])
+const allData = ref<InvestProject[]>([])
+const searchKeyword = ref('')
+const filterValues = ref<Record<string, unknown>>({})
 const detailVisible = ref(false)
 const detailData = ref<Partial<InvestProject>>({})
 const pagination = reactive({ current: 1, total: 0, pageSize: 10 })
 
+const filteredList = computed(() => {
+  let list = allData.value
+  const keyword = searchKeyword.value.trim().toLowerCase()
+  if (keyword) {
+    list = list.filter((item) => item.name.toLowerCase().includes(keyword))
+  }
+  const industry = filterValues.value.industry as string
+  if (industry) {
+    list = list.filter((item) => item.industry === industry)
+  }
+  const status = filterValues.value.status as string
+  if (status) {
+    list = list.filter((item) => item.status === status)
+  }
+  const amountRange = filterValues.value.amountRange as string
+  if (amountRange) {
+    const [minStr, maxStr] = amountRange.split('-')
+    const min = Number(minStr)
+    const max = maxStr ? Number(maxStr) : Infinity
+    list = list.filter((item) => item.investmentAmount >= min && item.investmentAmount < max)
+  }
+  return list
+})
+
 const pagedData = computed(() => {
   const start = (pagination.current - 1) * pagination.pageSize
-  return tableData.value.slice(start, start + pagination.pageSize)
+  return filteredList.value.slice(start, start + pagination.pageSize)
 })
 
 const statusMap: Record<string, { label: string; type: string }> = {
@@ -153,11 +179,16 @@ async function loadData() {
   loading.value = true
   try {
     const data = await fetchInvestProjectsDetailed(20)
-    tableData.value = data
-    pagination.total = data.length
+    allData.value = data
   } finally {
     loading.value = false
   }
+}
+
+// 同步 filteredList 总数到 pagination
+const filteredTotal = computed(() => filteredList.value.length)
+function syncPagination() {
+  pagination.total = filteredTotal.value
 }
 
 function handleDetail(row: any) {
@@ -165,29 +196,34 @@ function handleDetail(row: any) {
   detailVisible.value = true
 }
 
-function handleSearch(_keyword: string) {
+function handleSearch(keyword: string) {
+  searchKeyword.value = keyword
   pagination.current = 1
-  loadData()
+  syncPagination()
 }
 
-function handleFilter(_filters: Record<string, unknown>) {
+function handleFilter(filters: Record<string, unknown>) {
+  filterValues.value = { ...filters }
   pagination.current = 1
-  loadData()
+  syncPagination()
 }
 
 function handleReset() {
+  searchKeyword.value = ''
+  filterValues.value = {}
   pagination.current = 1
-  loadData()
+  syncPagination()
 }
 
 function handlePageChange(current: number, pageSize: number) {
   pagination.current = current
   pagination.pageSize = pageSize
-  loadData()
+  syncPagination()
 }
 
-onMounted(() => {
-  loadData()
+onMounted(async () => {
+  await loadData()
+  syncPagination()
 })
 </script>
 

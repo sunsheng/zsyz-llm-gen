@@ -47,16 +47,6 @@
           </template>
         </el-table-column>
         <el-table-column prop="contactInfo" label="联系方式" width="150" />
-        <el-table-column label="操作" width="120" fixed="right">
-          <template #default="{ row }">
-            <el-button type="primary" link size="small" @click="handleContact(row)">
-              联系
-            </el-button>
-            <el-button type="primary" link size="small" @click="handleDetail(row)">
-              详情
-            </el-button>
-          </template>
-        </el-table-column>
       </el-table>
     </div>
 
@@ -161,14 +151,6 @@ function handleReset() {
 function handlePageChange(current: number, pageSize: number) {
   pagination.current = current
   pagination.pageSize = pageSize
-}
-
-function handleContact(_row: ResourceMatch) {
-  // 联系企业 - 预留
-}
-
-function handleDetail(_row: ResourceMatch) {
-  // 查看详情 - 预留
 }
 
 async function loadData() {
